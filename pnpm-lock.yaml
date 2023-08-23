@@ -24,7 +24,7 @@ devDependencies:
     version: 17.1.0
   tslib:
     specifier: ^2.6.1
-    version: 2.6.1
+    version: 2.6.2
   typed-html:
     specifier: ^3.0.1
     version: 3.0.1
@@ -1756,8 +1756,8 @@ packages:
       strip-bom: 3.0.0
     dev: true
 
-  /tslib@2.6.1:
-    resolution: {integrity: sha512-t0hLfiEKfMUoqhG+U1oid7Pva4bbDPHYfJNiB7BiIjRkj1pyC++4N3huJfqY6aRH6VTB0rvtzQwjM4K6qpfOig==}
+  /tslib@2.6.2:
+    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
     dev: true
 
   /type-check@0.4.0:
