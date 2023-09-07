@@ -487,6 +487,7 @@ declare namespace JSX {
     figure: HtmlTag
     footer: HtmlTag
     form: HtmlFormTag
+    hgroup: HtmlTag
     h1: HtmlTag
     h2: HtmlTag
     h3: HtmlTag
