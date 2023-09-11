@@ -227,7 +227,7 @@ Generates:
 Often you will have a "template" html with doctype, things on the head, body and so on... The layout is also a very good component to be compiled. Here is a effective example on how to do it:.
 
 ```tsx
-export const Layout = html.compile((p: html.PropsWithChildren) => (
+export const Layout = html.compile((p: html.PropsWithChildren<{ head: string }>) => (
   <>
     {'<!doctype html>'}
     <html lang="en">
