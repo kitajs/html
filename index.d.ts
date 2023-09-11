@@ -138,9 +138,11 @@ declare namespace Html {
    * @returns {Function} the compiled template function
    * @this {void}
    */
-  export function compile<P extends { [K in keyof P]: string }>(
+  export function compile<
+    P extends { [K in keyof P]: K extends 'children' ? Children : string }
+  >(
     this: void,
-    component: Component<P>,
+    cleanComponent: Component<P>,
     strict?: boolean,
     separator?: string
   ): Component<P>

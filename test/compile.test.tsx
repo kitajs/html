@@ -1,8 +1,8 @@
 import assert from 'node:assert'
 import test from 'node:test'
-import Html, { PropsWithChildren } from '../index'
+import Html from '../index'
 
-type Props = PropsWithChildren<{ color: string }>
+type Props = Html.PropsWithChildren<{ color: string }>
 
 function Component({ color, children }: Props) {
   return (
@@ -23,8 +23,22 @@ test('compiled component', () => {
   )
 })
 
+test('compiled with children', () => {
+  const Compiled =
+    Html.compile<Html.PropsWithChildren<{ color: string }>>(Component)
+
+  assert.equal(
+    <Compiled color="red">
+      <>1</>
+      <>2</>
+    </Compiled>,
+    // Should not complain, just transform to string as any other array [1, 2] => '1,2'
+    '<div><div class="a" style="color:red;"></div><div class="b" style="color:red;"></div>1 2</div>'
+  )
+})
+
 test('compiled component with props', () => {
-  const Compiled = Html.compile(Component)
+  const Compiled = Html.compile<Props>(Component)
 
   assert.equal(
     <Compiled color="red">1</Compiled>,

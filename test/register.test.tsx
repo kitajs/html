@@ -2,7 +2,7 @@ import HtmlModule from '../index'
 import assert from 'node:assert'
 import test from 'node:test'
 
-test('Register adds Html to the global namespace', async () => {
+test('registers Html to the global namespace', async () => {
   // This should not be defined yet
   assert.equal(typeof Html, 'undefined')
 

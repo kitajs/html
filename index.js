@@ -367,8 +367,16 @@ function compile (htmlFn, strict = true, separator = '/*\x00*/') {
       // Adds the property to the set of known properties.
       properties.add(name)
 
+      const isChildren = name === 'children'
+      let access = `args[${separator}\`${name.toString()}\`${separator}]`
+
+      // Adds support to render multiple children
+      if (isChildren) {
+        access = `Array.isArray(${access}) ? ${access}.join(${separator}\` \`${separator}) : ${access}`
+      }
+
       // Uses ` to avoid content being escaped.
-      return `\`${separator} + (args[${separator}\`${name.toString()}\`${separator}] || ${strict ? `throwPropertyNotFound(${separator}\`${name.toString()}\`${separator})` : `${separator}\`\`${separator}`}) + ${separator}\``
+      return `\`${separator} + (${access} || ${strict && !isChildren ? `throwPropertyNotFound(${separator}\`${name.toString()}\`${separator})` : `${separator}\`\`${separator}`}) + ${separator}\``
     }
   }))
 
@@ -417,6 +425,7 @@ function compile (htmlFn, strict = true, separator = '/*\x00*/') {
     `return \`${body}\``
     )
   }
+
 
   // eslint-disable-next-line no-new-func
   return Function('args',

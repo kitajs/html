@@ -274,7 +274,7 @@ This mode works just like prepared statements in SQL. Compiled components can gi
 ```tsx
 import Html from '@kitajs/html'
 
-function Component(props: PropsWithChildren<{ name: string }>) {
+function Component(props: Html.PropsWithChildren<{ name: string }>) {
   return <div>Hello {props.name}</div>
 }
 
