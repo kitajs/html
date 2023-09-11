@@ -426,7 +426,6 @@ function compile (htmlFn, strict = true, separator = '/*\x00*/') {
     )
   }
 
-
   // eslint-disable-next-line no-new-func
   return Function('args',
     // Adds a empty args object when it is not present
