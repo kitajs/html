@@ -1,6 +1,6 @@
 {
   "name": "@kitajs/html",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Fast and type safe HTML templates using TypeScript.",
   "main": "index.js",
   "types": "index.d.ts",

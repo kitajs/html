@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import test from 'node:test'
-import html from '../index'
+import Html from '../index'
 
 test('boolean attributes', () => {
   // https://www.w3.org/TR/html5/infrastructure.html#boolean-attributes

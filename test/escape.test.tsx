@@ -1,9 +1,9 @@
 import assert from 'node:assert'
 import test from 'node:test'
-import html from '../index'
+import Html from '../index'
 
 const unsafeTag = '<script tag="1">alert(1)</script>'
-const safeTag = html.escapeHtml(unsafeTag)
+const safeTag = Html.escapeHtml(unsafeTag)
 
 test('escapes content', () => {
   assert.equal(<>{unsafeTag}</>, <>{unsafeTag}</>)
@@ -39,7 +39,7 @@ test('escapes deep children', () => {
       </div>
     </>,
     <>
-      <div>{html.escapeHtml(<div>{unsafeTag}</div>)}</div>
+      <div>{Html.escapeHtml(<div>{unsafeTag}</div>)}</div>
     </>
   )
 })
@@ -71,17 +71,17 @@ test('always escapes attributes', () => {
 test('always escapeHtml', () => {
   const date = new Date()
 
-  assert.equal(html.escapeHtml(date), date.toISOString())
-  assert.equal(html.escapeHtml(null), 'null')
-  assert.equal(html.escapeHtml(undefined), 'undefined')
-  assert.equal(html.escapeHtml(true), 'true')
-  assert.equal(html.escapeHtml(false), 'false')
-  assert.equal(html.escapeHtml(0), '0')
-  assert.equal(html.escapeHtml(1), '1')
-  assert.equal(html.escapeHtml(1.1), '1.1')
-  assert.equal(html.escapeHtml(''), '')
-  assert.equal(html.escapeHtml('string'), 'string')
-  assert.equal(html.escapeHtml([]), '')
-  assert.equal(html.escapeHtml([1, 2, 3]), '1,2,3')
-  assert.equal(html.escapeHtml({}), '[object Object]')
+  assert.equal(Html.escapeHtml(date), date.toISOString())
+  assert.equal(Html.escapeHtml(null), 'null')
+  assert.equal(Html.escapeHtml(undefined), 'undefined')
+  assert.equal(Html.escapeHtml(true), 'true')
+  assert.equal(Html.escapeHtml(false), 'false')
+  assert.equal(Html.escapeHtml(0), '0')
+  assert.equal(Html.escapeHtml(1), '1')
+  assert.equal(Html.escapeHtml(1.1), '1.1')
+  assert.equal(Html.escapeHtml(''), '')
+  assert.equal(Html.escapeHtml('string'), 'string')
+  assert.equal(Html.escapeHtml([]), '')
+  assert.equal(Html.escapeHtml([1, 2, 3]), '1,2,3')
+  assert.equal(Html.escapeHtml({}), '[object Object]')
 })

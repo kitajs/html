@@ -1,12 +1,12 @@
 import assert from 'node:assert'
 import test from 'node:test'
-import html from '../index'
+import Html from '../index'
 
-const Header: html.Component<any> = ({ children, ...attributes }) => (
+const Header: Html.Component<any> = ({ children, ...attributes }) => (
   <h1 {...attributes}>{children}</h1>
 )
 
-function Button({ children, ...attributes }: html.PropsWithChildren<any>) {
+function Button({ children, ...attributes }: Html.PropsWithChildren<any>) {
   return (
     <button type="button" class="original-class" {...attributes}>
       {children}
@@ -17,7 +17,7 @@ function Button({ children, ...attributes }: html.PropsWithChildren<any>) {
 function AssertChildren({
   children,
   expect
-}: html.PropsWithChildren<{ expect: any }>) {
+}: Html.PropsWithChildren<{ expect: any }>) {
   assert.deepEqual(children, expect)
   return <div>{children}</div>
 }

@@ -1,3 +1,3 @@
-export function HelloWorld(html: { createElement: Function }, name: string) {
+export function HelloWorld(Html: { createElement: Function }, name: string) {
   return <div>Hello {name}!</div>
 }

@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import test from 'node:test'
-import html from '../index'
+import Html from '../index'
 
 test('should encode " as &#34', () => {
   assert.equal(<div class={'"'}></div>, '<div class="&#34;"></div>')

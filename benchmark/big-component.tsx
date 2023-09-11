@@ -1,4 +1,4 @@
-export function BigComponent(html: { createElement: Function }, name: string) {
+export function BigComponent(Html: { createElement: Function }, name: string) {
   return (
     <div>
       <meta charset="utf-8" />

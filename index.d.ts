@@ -10,7 +10,7 @@
  * @link https://www.npmjs.com/package/@kitajs/html
  * @link https://kitajs.github.io/html/
  */
-declare namespace html {
+declare namespace Html {
   /**
    * A const used to represent a html fragment.
    */
@@ -170,4 +170,4 @@ declare namespace html {
   ) => JSX.Element
 }
 
-export = html
+export = Html

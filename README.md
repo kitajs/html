@@ -15,13 +15,13 @@
 
 <div align="center">
   <pre>
-  <h1>🏛️<br />KitaJS HTML</h1>
+  <h1>🏛️<br />KitaJS Html</h1>
   </pre>
   <br />
 </div>
 
 <h3 align="center">
-  <code>KitaJS HTML</code> is a 0 dependencies, fast and concise HTML generator for JavaScript with JSX syntax.
+  <code>@kitajs/html</code> is a no dependencies, fast and concise package to generate HTML through JavaScript with JSX syntax.
   <br />
   <br />
 </h3>
@@ -69,15 +69,17 @@ Install `@kitajs/html` with your favorite package manager, import it into the to
 {
   "compilerOptions": {
     "jsx": "react",
-    "jsxFactory": "html.createElement",
-    "jsxFragmentFactory": "html.Fragment"
+    "jsxFactory": "Html.createElement",
+    "jsxFragmentFactory": "Html.Fragment"
   }
 }
 ```
 
 ```jsx
-// Always remember to import html from '@kitajs/html'
-import html from '@kitajs/html'
+// Unique import to the top of your main.ts file.
+import '@kitajs/html/register'
+// Or import it directly everywhere you need it.
+import Html from '@kitajs/html'
 
 // Using as a simple html builder
 console.log(<div>Hello World</div>) // '<div>Hello World</div>'
@@ -103,7 +105,7 @@ fs.writeFileSync(
 )
 
 // Also as a component library
-function Layout({ name, children }: html.PropsWithChildren<{ name: string }>) {
+function Layout({ name, children }: Html.PropsWithChildren<{ name: string }>) {
   return (
     <html>
       <head>
@@ -140,7 +142,7 @@ const html = <div>Hello World!<div> ✅
 
 ## Sanitization
 
-This package aims to be a HTML builder, **_not an HTML sanitizer_**. This means that no HTML content is escaped by default. However we provide a custom attribute called **_`safe`_** that will sanitize everything inside of it. You can also use the exported `html.escapeHtml` function to escape other contents arbitrarily.
+This package aims to be a HTML builder, **_not an HTML sanitizer_**. This means that no HTML content is escaped by default. However we provide a custom attribute called **_`safe`_** that will sanitize everything inside of it. You can also use the exported `Html.escapeHtml` function to escape other contents arbitrarily.
 
 ```jsx
 // Attributes are always escaped by default
@@ -154,8 +156,8 @@ This package aims to be a HTML builder, **_not an HTML sanitizer_**. This means 
 ```
 
 ```jsx
-// Manual escaping with html.escapeHtml
-<div>{'<a></a>' + html.escapeHtml('<a></a>')}</div> // <div><a></a>&lt;a&gt;&lt;/a&gt;</div>
+// Manual escaping with Html.escapeHtml
+<div>{'<a></a>' + Html.escapeHtml('<a></a>')}</div> // <div><a></a>&lt;a&gt;&lt;/a&gt;</div>
 ```
 
 ```jsx
@@ -227,7 +229,7 @@ Generates:
 Often you will have a "template" html with doctype, things on the head, body and so on... The layout is also a very good component to be compiled. Here is a effective example on how to do it:.
 
 ```tsx
-export const Layout = html.compile((p: html.PropsWithChildren<{ head: string }>) => (
+export const Layout = html.compile((p: Html.PropsWithChildren<{ head: string }>) => (
   <>
     {'<!doctype html>'}
     <html lang="en">
@@ -265,20 +267,18 @@ support unclean components / props processing.
 This mode works just like prepared statements in SQL. Compiled components can give up to [**2000**](#performance) times faster html generation. This is a opt-in feature that you may not be able to use everywhere!
 
 ```tsx
-import html from '@kitajs/html'
+import Html from '@kitajs/html'
 
 function Component(props: PropsWithChildren<{ name: string }>) {
   return <div>Hello {props.name}</div>
 }
 
-const compiled = html.compile(Component)
+const compiled = Html.compile<typeof Component>(Component)
 
 compiled({ name: 'World' })
 // <div>Hello World</div>
 
-const compiled = html.compile((p: { name: string }) => (
-  <div>Hello {p.name}</div>
-))
+const compiled = Html.compile((p) => <div>Hello {p.name}</div>)
 
 compiled({ name: 'World' })
 // <div>Hello World</div>
@@ -287,7 +287,7 @@ compiled({ name: 'World' })
 Properties passed for compiled components **ARE NOT** what will be passed as argument to the generated function.
 
 ```tsx
-const compiled = html.compile((t: { asd: number }) => {
+const compiled = Html.compile((t) => {
   // THIS WILL NOT print 123, but a string used by .compile instead
   console.log(t.asd)
   return <div></div>
@@ -489,10 +489,10 @@ This package just aims to be a drop in replacement syntax for JSX, and it works 
 Gets transpiled by tsc to plain javascript:
 
 ```js
-html.createElement(
+Html.createElement(
   'ol',
   { start: 2 },
-  [1, 2].map((i) => html.createElement('li', null, i))
+  [1, 2].map((i) => Html.createElement('li', null, i))
 )
 ```
 
@@ -510,7 +510,7 @@ This package emits HTML as a compact string, useful for over the wire environmen
 HTML to be pretty printed, you can use an external JS library to do so, like [html-prettify](https://www.npmjs.com/package/html-prettify).
 
 ```jsx
-import html from '@kitajs/html'
+import Html from '@kitajs/html'
 import prettify from 'html-prettify'
 
 const html = (

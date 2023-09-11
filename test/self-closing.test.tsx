@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import test from 'node:test'
-import html from '../index'
+import Html from '../index'
 
 test('self-closing html tags', () => {
   assert.equal('<area/>', <area></area>)

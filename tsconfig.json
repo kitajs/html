@@ -2,8 +2,8 @@
   "compilerOptions": {
     "target": "ESNext",
     "jsx": "react",
-    "jsxFactory": "html.createElement",
-    "jsxFragmentFactory": "html.Fragment",
+    "jsxFactory": "Html.createElement",
+    "jsxFragmentFactory": "Html.Fragment",
     "module": "CommonJS",
     "moduleResolution": "node",
     "incremental": true,
@@ -32,8 +32,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "skipDefaultLibCheck": true,
-    "skipLibCheck": true
+    "skipDefaultLibCheck": true
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.d.ts"],
   "exclude": ["node_modules", "dist"]

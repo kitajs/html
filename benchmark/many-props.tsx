@@ -1,4 +1,4 @@
-export function ManyProps(html: { createElement: Function }, name: string) {
+export function ManyProps(Html: { createElement: Function }, name: string) {
   return (
     <div
       accesskey="a"
