@@ -138,7 +138,7 @@ declare namespace html {
    * @returns {Function} the compiled template function
    * @this {void}
    */
-  export function compile<P extends { [K in keyof P]: string | number | boolean }>(
+  export function compile<P extends { [K in keyof P]: string }>(
     this: void,
     component: Component<P>,
     strict?: boolean,
