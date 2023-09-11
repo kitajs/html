@@ -57,19 +57,8 @@ function Component({ color, children }: Props) {
   )
 }
 
-test('compiled component proxy', () => {
-  const Compiled = html.compile<typeof Component>((t) => (
-    <Component color={t.color}>{t.children}</Component>
-  ))
-
-  assert.equal(
-    <Compiled color="red">1</Compiled>,
-    '<div><div class="a" style="color:red;"></div><div class="b" style="color:red;"></div>1</div>'
-  )
-})
-
 test('compiled component', () => {
-  const Compiled = html.compile<typeof Component>(Component)
+  const Compiled = html.compile(Component)
 
   assert.equal(
     <Compiled color="red">1</Compiled>,
@@ -78,16 +67,7 @@ test('compiled component', () => {
 })
 
 test('compiled component with props', () => {
-  const Compiled = html.compile<Props>(Component)
-
-  assert.equal(
-    <Compiled color="red">1</Compiled>,
-    '<div><div class="a" style="color:red;"></div><div class="b" style="color:red;"></div>1</div>'
-  )
-})
-
-test('compiled component with props', () => {
-  const Compiled = html.compile<['color', 'children']>(Component)
+  const Compiled = html.compile(Component)
 
   assert.equal(
     <Compiled color="red">1</Compiled>,
@@ -96,7 +76,7 @@ test('compiled component with props', () => {
 })
 
 test('compiled handmade component', () => {
-  const Compiled = html.compile<Props>(({ color, children }) => (
+  const Compiled = html.compile(({ color, children }: Props) => (
     <div>
       <div class="a" style={{ color }}></div>
       <div class="b" style={{ color }}></div>
@@ -111,7 +91,7 @@ test('compiled handmade component', () => {
 })
 
 test('compiled strict', () => {
-  const Compiled = html.compile<Props>(({ color, children }) => (
+  const Compiled = html.compile(({ color, children }: Props) => (
     <div>
       <div class="a" style={{ color }}></div>
       <div class="b" style={{ color }}></div>
@@ -133,8 +113,8 @@ test('compiled strict', () => {
 })
 
 test('compiled not strict', () => {
-  const Compiled = html.compile<Props>(
-    ({ color, children }) => (
+  const Compiled = html.compile(
+    ({ color, children }: Props) => (
       <div>
         <div class="a" style={{ color }}></div>
         <div class="b" style={{ color }}></div>

@@ -227,7 +227,7 @@ Generates:
 Often you will have a "template" html with doctype, things on the head, body and so on... The layout is also a very good component to be compiled. Here is a effective example on how to do it:.
 
 ```tsx
-export const Layout = html.compile<html.PropsWithChildren>((p) => (
+export const Layout = html.compile((p: html.PropsWithChildren) => (
   <>
     {'<!doctype html>'}
     <html lang="en">
@@ -271,12 +271,14 @@ function Component(props: PropsWithChildren<{ name: string }>) {
   return <div>Hello {props.name}</div>
 }
 
-compiled = html.compile<typeof Component>(Component)
+const compiled = html.compile(Component)
 
 compiled({ name: 'World' })
 // <div>Hello World</div>
 
-compiled = html.compile((p) => <div>Hello {p.name}</div>)
+const compiled = html.compile((p: { name: string }) => (
+  <div>Hello {p.name}</div>
+))
 
 compiled({ name: 'World' })
 // <div>Hello World</div>
@@ -285,7 +287,7 @@ compiled({ name: 'World' })
 Properties passed for compiled components **ARE NOT** what will be passed as argument to the generated function.
 
 ```tsx
-compiled = html.compile((t) => {
+const compiled = html.compile((t: { asd: number }) => {
   // THIS WILL NOT print 123, but a string used by .compile instead
   console.log(t.asd)
   return <div></div>

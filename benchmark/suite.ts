@@ -49,7 +49,7 @@ const TypedHtml = require('typed-html')
 // }
 
 export function bench(name: string, runs: number, fn: Function) {
-  const compiled = Kita.compile<['name']>((p) => fn(Kita, p.name))
+  const compiled = Kita.compile((p: { name: string }) => fn(Kita, p.name))
 
   function kita() {
     void fn(Kita, name)

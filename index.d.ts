@@ -132,32 +132,22 @@ declare namespace html {
    * html = <Unclean repeat="a" n={5} />
    * ```
    *
-   * @param {(proxy: any) => string} htmlFn
+   * @param {Function} htmlComponent the *clean* component to compile.
    * @param {boolean} [strict=true] if we should throw an error when a property is not found.
    * @param {string | undefined} [separator] the string used to interpolate and separate parameters
-   * @returns {function} the compiled template function
+   * @returns {Function} the compiled template function
    * @this {void}
    */
-  export function compile<
-    P extends
-      | Record<string, any>
-      | string[]
-      | ((args: Record<string, string>) => JSX.Element) = {}
-  >(
+  export function compile<P extends StringPropsOnly<P>>(
     this: void,
-    factory: (
-      args: Record<
-        P extends string[]
-          ? P[number]
-          : P extends (args: infer U) => JSX.Element
-          ? keyof U
-          : keyof P,
-        string
-      >
-    ) => JSX.Element,
+    component: Component<P>,
     strict?: boolean,
     separator?: string
-  ): typeof factory
+  ): Component<P>
+
+  type StringPropsOnly<P> = {
+    [K in keyof P]: string
+  }
 
   /**
    * Here for interop with `preact` and many build systems.
