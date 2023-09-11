@@ -145,10 +145,6 @@ declare namespace Html {
     separator?: string
   ): Component<P>
 
-  type StringPropsOnly<P> = {
-    [K in keyof P]: string
-  }
-
   /**
    * Here for interop with `preact` and many build systems.
    */
