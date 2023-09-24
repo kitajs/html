@@ -44,6 +44,7 @@
 - [Migrating from HTML](#migrating-from-html)
   - [Base HTML templates](#base-html-templates)
   - [Htmx](#htmx)
+  - [Hotwire Turbo](#hotwire-turbo)
 - [Compiling HTML](#compiling-html)
   - [Clean Components](#clean-components)
 - [Fragments](#fragments)
@@ -330,6 +331,34 @@ const html = (
   <div hx-get="/api" hx-trigger="click" hx-target="#target">
     Click me!
   </div>
+)
+```
+
+<br />
+
+### Hotwire Turbo
+
+This project supports the usage of [Turbo Hotwire](https://turbo.hotwired.dev/). We provide a separate export
+that you can use to provide type definitions for the elements and attributes used with Turbo Hotwire.
+
+You just need to add this triple slash directive to the top of your file:
+
+```tsx
+/// <reference types="@kitajs/html/hotwire-turbo.d.ts" />
+
+import '@kitajs/html/register'
+
+const html = (
+  // Type checking and intellisense for all HTMX attributes
+  <turbo-frame id="messages">
+    <a href="/messages/expanded">
+      Show all expanded messages in this frame.
+    </a>
+
+    <form action="/messages">
+      Show response from this form within this frame.
+    </form>
+  </turbo-frame>
 )
 ```
 
