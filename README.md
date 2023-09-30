@@ -304,7 +304,7 @@ entire upper tree will also be async.
 
 ### Suspense component
 
-The only problem when rendering templates is that you must wait the whole template to be
+The only problem when rendering templates is that you must wait for the whole template to be
 rendered before sending it to the client. This is not a problem for small templates, but
 it can be a problem for large templates.
 
