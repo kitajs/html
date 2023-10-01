@@ -495,11 +495,18 @@ declare namespace Htmx {
 
     /**
      * The element or elements to disable during requests. Accepts CSS selectors.
-     *
+     * This extensions functionality has been folded into the core of htmx via the hx-disabled-elt attribute
      * @see https://htmx.org/extensions/disable-element/
      */
     ['hx-disable-element']?: 'self' | AnyStr;
 
+    /**
+     * The element or elements to disable during requests. Accepts CSS selectors.
+     *
+     * @see https://htmx.org/attributes/hx-disabled-elt/
+     */
+    ['hx-disabled-elt']?: 'this' | AnyStr;
+  
     /**
      * The strategy for merging new head content.
      *
