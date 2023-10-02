@@ -18,7 +18,7 @@ devDependencies:
     version: 1.0.9(prettier@3.0.3)
   '@types/node':
     specifier: ^20.4.2
-    version: 20.7.2
+    version: 20.8.1
   benny:
     specifier: ^3.7.1
     version: 3.7.1
@@ -184,8 +184,8 @@ packages:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
     dev: true
 
-  /@types/node@20.7.2:
-    resolution: {integrity: sha512-RcdC3hOBOauLP+r/kRt27NrByYtDjsXyAuSbR87O6xpsvi763WI+5fbSIvYJrXnt9w4RuxhV6eAXfIs7aaf/FQ==}
+  /@types/node@20.8.1:
+    resolution: {integrity: sha512-iN6stS2QGMl50pjH0h/dIfmcEUogljAreQZ+cubPw3ISWp5fJrZw9NOh/sDHJfw92A41hCU+Ls5zTIsNYzcnuA==}
     dev: true
 
   /@types/prettier@3.0.0:
