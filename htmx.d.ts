@@ -513,5 +513,12 @@ declare namespace Htmx {
      * @see https://htmx.org/extensions/head-support/
      */
     ['hx-head']?: 'merge' | 'append' | 're-eval';
+
+    /**
+     * Hyperscript expression
+     *
+     * @see https://hyperscript.org/
+     */
+    _?: string;
   }
 }
