@@ -161,7 +161,7 @@ function styleToString(style) {
   const keys = Object.keys(style);
   const length = keys.length;
 
-  let key, value, end, start, type;
+  let key, value, end, start;
   let index = 0;
   let result = '';
 
@@ -169,51 +169,44 @@ function styleToString(style) {
     key = keys[index];
     // @ts-expect-error - this indexing is safe.
     value = style[key];
-    type = typeof value;
 
-    if (type === 'string') {
-      end = value.indexOf('"');
+    if (value === null || value === undefined) {
+      continue;
+    }
 
-      // This is a optimization to avoid having to look twice for the " character.
-      // And make the loop already start in the middle
-      if (end === -1) {
-        // @ts-expect-error - this indexing is safe.
-        result += toKebabCase(key) + ':' + value + ';';
-        continue;
-      } else {
-        // @ts-expect-error - this indexing is safe.
-        result += toKebabCase(key) + ':';
+    // @ts-expect-error - this indexing is safe.
+    result += toKebabCase(key) + ':';
+
+    // Only needs escaping when the value is a string.
+    if (typeof value !== 'string') {
+      result += value.toString() + ';';
+      continue;
+    }
+
+    end = value.indexOf('"');
+
+    // This is a optimization to avoid having to look twice for the " character.
+    // And make the loop already start in the middle
+    if (end === -1) {
+      result += value + ';';
+      continue;
+    }
+
+    const length = value.length;
+    start = 0;
+
+    // Escapes double quotes to be used inside attributes
+    // Faster than using regex
+    // https://jsperf.app/kakihu
+    for (; end < length; end++) {
+      if (value[end] === '"') {
+        result += value.slice(start, end) + '&#34;';
+        start = end + 1;
       }
-
-      const length = value.length;
-      start = 0;
-
-      // Escapes double quotes to be used inside attributes
-      // Faster than using regex
-      // https://jsperf.app/kakihu
-      for (; end < length; end++) {
-        if (value[end] === '"') {
-          result += value.slice(start, end) + '&#34;';
-          start = end + 1;
-        }
-      }
-
-      // Appends the remaining string.
-      result += value.slice(start, end) + ';';
-      continue;
     }
 
-    if (type === 'number') {
-      // @ts-expect-error - this indexing is safe.
-      result += toKebabCase(key) + ':' + value + (value === 0 ? ';' : 'px;');
-      continue;
-    }
-
-    if (type === 'object' && value !== null) {
-      // @ts-expect-error - this indexing is safe.
-      result += toKebabCase(key) + ':' + value.toString() + ';';
-      continue;
-    }
+    // Appends the remaining string.
+    result += value.slice(start, end) + ';';
   }
 
   return result;
@@ -383,7 +376,7 @@ function createElement(name, attrs, ...children) {
 
   // Calls the element creator function if the name is a function
   if (typeof name === 'function') {
-    // We at least need to pass the children to the function component. We may receive null if this
+    // We at least need to pass the children to the function component. We may receive null if this 
     // component was called without any children.
     if (!hasAttrs) {
       attrs = { children: children.length > 1 ? children : children[0] };
