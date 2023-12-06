@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@kitajs/ts-html-plugin':
     specifier: '>=1.2.0'
-    version: 1.2.0(@kitajs/html@3.0.2)(typescript@5.3.2)
+    version: 1.2.0(@kitajs/html@3.0.2)(typescript@5.3.3)
   csstype:
     specifier: ^3.1.2
     version: 3.1.2
@@ -15,7 +15,7 @@ dependencies:
 devDependencies:
   '@arthurfiorette/prettier-config':
     specifier: ^1.0.11
-    version: 1.0.12(prettier@3.1.0)(typescript@5.3.2)
+    version: 1.0.12(prettier@3.1.0)(typescript@5.3.3)
   '@types/jsdom':
     specifier: ^21.1.5
     version: 21.1.6
@@ -54,7 +54,7 @@ devDependencies:
     version: 3.0.1
   typescript:
     specifier: ^5.2.2
-    version: 5.3.2
+    version: 5.3.3
 
 packages:
 
@@ -87,7 +87,7 @@ packages:
       fast-deep-equal: 3.1.3
     dev: true
 
-  /@arthurfiorette/prettier-config@1.0.12(prettier@3.1.0)(typescript@5.3.2):
+  /@arthurfiorette/prettier-config@1.0.12(prettier@3.1.0)(typescript@5.3.3):
     resolution: {integrity: sha512-jR36bHWLVv71FuKkU9XYeBe6ry/AN98EDh0WVyfo3QwjJFbhpeElFTS4nluwxeXfu6nJ8/Hv8bJf6cYeXzfeoA==}
     hasBin: true
     peerDependencies:
@@ -95,7 +95,7 @@ packages:
     dependencies:
       prettier: 3.1.0
       prettier-plugin-jsdoc: 1.1.1(prettier@3.1.0)
-      prettier-plugin-organize-imports: 3.2.3(prettier@3.1.0)(typescript@5.3.2)
+      prettier-plugin-organize-imports: 3.2.3(prettier@3.1.0)(typescript@5.3.3)
       prettier-plugin-packagejson: 2.4.6(prettier@3.1.0)
     transitivePeerDependencies:
       - '@volar/vue-language-plugin-pug'
@@ -135,11 +135,11 @@ packages:
     peerDependencies:
       '@kitajs/ts-html-plugin': '>=1.1'
     dependencies:
-      '@kitajs/ts-html-plugin': 1.2.0(@kitajs/html@3.0.2)(typescript@5.3.2)
+      '@kitajs/ts-html-plugin': 1.2.0(@kitajs/html@3.0.2)(typescript@5.3.3)
       csstype: 3.1.2
     dev: false
 
-  /@kitajs/ts-html-plugin@1.2.0(@kitajs/html@3.0.2)(typescript@5.3.2):
+  /@kitajs/ts-html-plugin@1.2.0(@kitajs/html@3.0.2)(typescript@5.3.3):
     resolution: {integrity: sha512-Bi+rcFRZ7eHrQIf38fShQ2/KzQ72si+w21FbkcJmPIyO4UXZQeN6F6EmwDW1UNUHOj9itP1XqvAnFEWT+qIT0w==}
     hasBin: true
     peerDependencies:
@@ -149,7 +149,7 @@ packages:
       '@kitajs/html': 3.0.2(@kitajs/ts-html-plugin@1.2.0)
       chalk: 4.1.2
       tslib: 2.6.2
-      typescript: 5.3.2
+      typescript: 5.3.3
       yargs: 17.7.2
     dev: false
 
@@ -1325,7 +1325,7 @@ packages:
       - supports-color
     dev: true
 
-  /prettier-plugin-organize-imports@3.2.3(prettier@3.1.0)(typescript@5.3.2):
+  /prettier-plugin-organize-imports@3.2.3(prettier@3.1.0)(typescript@5.3.3):
     resolution: {integrity: sha512-KFvk8C/zGyvUaE3RvxN2MhCLwzV6OBbFSkwZ2OamCrs9ZY4i5L77jQ/w4UmUr+lqX8qbaqVq6bZZkApn+IgJSg==}
     peerDependencies:
       '@volar/vue-language-plugin-pug': ^1.0.4
@@ -1339,7 +1339,7 @@ packages:
         optional: true
     dependencies:
       prettier: 3.1.0
-      typescript: 5.3.2
+      typescript: 5.3.3
     dev: true
 
   /prettier-plugin-packagejson@2.4.6(prettier@3.1.0):
@@ -1605,8 +1605,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /typescript@5.3.2:
-    resolution: {integrity: sha512-6l+RyNy7oAHDfxC4FzSJcz9vnjTKxrLpDG5M2Vu4SHRVNg6xzqZp6LYSR9zjqQTu8DU/f5xwxUdADOkbrIX2gQ==}
+  /typescript@5.3.3:
+    resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
