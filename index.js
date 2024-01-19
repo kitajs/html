@@ -264,6 +264,16 @@ function attributesToString(attributes) {
     } else if (key === 'style') {
       result += ' style="' + styleToString(value) + '"';
       continue;
+    } else if (key === 'attrs') {
+      const regexAttributes = /\s*(\S+)=["']([^"']+)["']|\s*(\S+)=([^&\s]+)\s*/g
+      let resultAttrs = '';
+      let match;
+      while ((match = regexAttributes.exec(value)) !== null) {
+        const [_, attribute, value] = match;
+        resultAttrs += " " + attribute + "=\"" + value + "\"";
+      };
+      result += resultAttrs ;
+      continue;
     }
 
     type = typeof value;
@@ -466,11 +476,10 @@ function compile(htmlFn, strict = true, separator = '/*\x00*/') {
           }
 
           // Uses ` to avoid content being escaped.
-          return `\`${separator} + (${access} || ${
-            strict && !isChildren
+          return `\`${separator} + (${access} || ${strict && !isChildren
               ? `throwPropertyNotFound(${separator}\`${name.toString()}\`${separator})`
               : `${separator}\`\`${separator}`
-          }) + ${separator}\``;
+            }) + ${separator}\``;
         }
       }
     )

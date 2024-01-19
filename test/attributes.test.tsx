@@ -76,4 +76,11 @@ describe('Attributes', () => {
       '<div class="a b c d f g h i j"></div>'
     );
   });
+
+  test('attrs property', () => {
+    assert.equal(
+      <div attrs={`x-transition:enter="transition ease-out duration-30" x-test.ing="fn"`} />,
+      '<div x-transition:enter="transition ease-out duration-30" x-test.ing="fn"></div>'
+    );
+  })
 });

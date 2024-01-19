@@ -41,7 +41,7 @@ declare namespace JSX {
     tabindex?: undefined | number | string;
     title?: undefined | string;
     translate?: undefined | string | boolean;
-
+    attrs?: undefined | string;
     /** A css style attribute which also supports a `csstype` object. */
     style?: undefined | string | CSSProperties;
 
