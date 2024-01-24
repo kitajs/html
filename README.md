@@ -518,7 +518,7 @@ context in the first place. The `rid` is needed to make the context async safe.
 
 The only way to maintain data consistency across concurrent renders without attaching a
 request locator (`rid`), is by using
-(ALS)[https://nodejs.org/api/async_context.html#class-asynclocalstorage]. However, this
+[ALS](https://nodejs.org/api/async_context.html#class-asynclocalstorage). However, this
 approach introduces a lot of overhead and a significant performance penalty.
 
 Our recommendation is to use props. If you want to avoid prop drilling, you can use a
