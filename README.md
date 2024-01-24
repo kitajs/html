@@ -558,7 +558,6 @@ function SomeLayoutPage(
 
 function SubMenu(props: { user?: User }) {
   // do thing with the user, maybe check if the user is logged in
-  const isLoggedIn = !!props.user;
   return <nav>...</nav>;
 }
 
