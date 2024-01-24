@@ -535,7 +535,6 @@ function Doctype(props: Html.PropsWithChildren<{ head: JSX.Element; title?: stri
         <head>
           <meta charset="UTF-8" />
           <title>{props.title || 'Hello World!'}</title>
-          {props.head}
         </head>
         <body>{props.children}</body>
       </html>
