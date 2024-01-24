@@ -526,7 +526,6 @@ composition style of writing components. This is a common pattern in other JSX-b
 libraries, and it works well with this library too.
 
 ```tsx
-// Layout.tsx
 function Doctype(props: Html.PropsWithChildren<{ head: JSX.Element; title?: string }>) {
   return (
     <>
