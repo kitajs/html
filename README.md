@@ -533,7 +533,6 @@ function Doctype(props: Html.PropsWithChildren<{ head: JSX.Element; title?: stri
       {'<!doctype html>'}
       <html lang="en">
         <head>
-          <meta charset="UTF-8" />
           <title>{props.title || 'Hello World!'}</title>
         </head>
         <body>{props.children}</body>
