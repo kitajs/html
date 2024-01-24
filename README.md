@@ -557,7 +557,7 @@ function SomeLayoutPage(
 
 function SubMenu(props: { user?: User }) {
   // do thing with the user, maybe check if the user is logged in
-  return <nav>...</nav>;
+  return <nav>{props.user ? 'Logged in' : 'Logged out'}</nav>;
 }
 
 // Example Request handler using the above components
