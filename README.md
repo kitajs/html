@@ -526,50 +526,16 @@ composition style of writing components. This is a common pattern in other JSX-b
 libraries, and it works well with this library too.
 
 ```tsx
-function Doctype(props: Html.PropsWithChildren<{ head: JSX.Element; title?: string }>) {
-  return (
-    <>
-      {'<!doctype html>'}
-      <html lang="en">
-        <head>
-          <title>{props.title || 'Hello World!'}</title>
-        </head>
-        <body>{props.children}</body>
-      </html>
-    </>
-  );
-}
-
-function SomeLayoutPage(
-  props: Html.PropsWithChildren<{ leftSection: JSX.Element; topSection: JSX.Element }>
-) {
-  return (
-    <div>
-      <div>{props.topSection}</div>
-      <div>{props.leftSection}</div>
-      <div>{props.children}</div>
-    </div>
-  );
-}
-
-function SubMenu(props: { user?: User }) {
-  // do thing with the user, maybe check if the user is logged in
-  return <nav>{props.user ? 'Logged in' : 'Logged out'}</nav>;
-}
-
-// Example Request handler using the above components
-app.get('/', (request, response) => {
-  return (
-    <Doctype title="Home">
-      <SomeLayoutPage
-        leftSection={<SubMenu url={request.url} />}
-        topSection={<YourNavbar user={request.user} />}
-      >
-        <div>Home page</div>
-      </SomeLayoutPage>
-    </Doctype>
-  );
-});
+// Drills only the required properties.
+app.get('/', (request, response) => (
+  <YourDoctype title="Home">
+    <YourLayout loggedIn={!!request.user} lang={request.headers['accept-language']}>
+      <YourNavbar user={request.user} />
+      <YourContent />
+      <YourSubMenu path={request.url} username={request.user?.name} />
+    </YourLayout>
+  </YourDoctype>
+));
 ```
 
 </br>
