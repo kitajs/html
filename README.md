@@ -527,7 +527,6 @@ libraries, and it works well with this library too.
 
 ```tsx
 // Layout.tsx
-
 function Doctype(props: Html.PropsWithChildren<{ head: JSX.Element; title?: string }>) {
   return (
     <>
