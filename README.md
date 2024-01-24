@@ -564,7 +564,6 @@ function SubMenu(props: { user?: User }) {
 }
 
 // Example Request handler using the above components
-
 app.get('/', (request, response) => {
   response.send(
     <Doctype title="Home" head={<link rel="stylesheet" href="/style.css" />}>
