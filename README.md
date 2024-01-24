@@ -50,6 +50,7 @@
   - [Suspense component](#suspense-component)
   - [Error boundaries](#error-boundaries)
   - [Why JSX.Element is a Promise?](#why-jsxelement-is-a-promise)
+  - [Why there is no `context` API?](#why-there-is-no-context-api)
 - [Migrating from HTML](#migrating-from-html)
   - [Htmx](#htmx)
   - [Hotwire Turbo](#hotwire-turbo)
@@ -496,6 +497,89 @@ if (html instanceof Promise) {
 ```
 
 <br />
+
+### Why there is no `context` API?
+
+We choose to not provide a `context` API. Here the reasons why:
+
+This library only outputs strings (or Promises that resolve to strings), we don't manage
+lifecycle or state. So the main selling point to having a `context` API is to avoid
+[prop drilling](https://www.geeksforgeeks.org/what-is-prop-drilling-and-how-to-avoid-it).
+
+A context Api would need to use a request identifier (internally called `rid`) to be safe
+to access asynchronously. Take for example two requests that are being processed at the
+same time, both of them use some async components. If we use a global context without
+scoping it behind some sort of `rid`, the second request would override the context of the
+first request. So for the first request, some part of the rendering (the non async part)
+would use the correct context, but then the other section inside the async component would
+use the context of the second request. **This is bad.**. Each component that uses context
+would need to receive the `rid` as a prop. This will defeat the purpose of having a
+context in the first place. The `rid` is needed to make the context async safe.
+
+The only way to maintain data consistency across concurrent renders without attaching a
+request locator (`rid`), is by using
+(ALS)[https://nodejs.org/api/async_context.html#class-asynclocalstorage]. However, this
+approach introduces a lot of overhead and a significant performance penalty.
+
+Our recommendation is to use props. If you want to avoid prop drilling, you can use a
+composition style of writing components. This is a common pattern in other JSX-based
+libraries, and it works well with this library too.
+
+```tsx
+// Layout.tsx
+
+function Doctype(props: Html.PropsWithChildren<{ head: JSX.Element; title?: string }>) {
+  return (
+    <>
+      {'<!doctype html>'}
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>{props.title || 'Hello World!'}</title>
+          {props.head}
+        </head>
+        <body>{props.children}</body>
+      </html>
+    </>
+  );
+}
+
+function SomeLayoutPage(
+  props: Html.PropsWithChildren<{ leftSection: JSX.Element; topSection: JSX.Element }>
+) {
+  return (
+    <div>
+      <div>{props.topSection}</div>
+      <div>{props.leftSection}</div>
+      <div>{props.children}</div>
+    </div>
+  );
+}
+
+function SubMenu(props: { user?: User }) {
+  // do thing with the user, maybe check if the user is logged in
+  const isLoggedIn = !!props.user;
+  return <nav>...</nav>;
+}
+
+// Example Request handler using the above components
+
+app.get('/', (request, response) => {
+  response.send(
+    <Doctype title="Home" head={<link rel="stylesheet" href="/style.css" />}>
+      <SomeLayoutPage
+        leftSection={<SubMenu url={request.url} />}
+        topSection={<YourNavbar user={request.user} />}
+      >
+        <div>Home page</div>
+      </SomeLayoutPage>
+    </Doctype>
+  );
+});
+```
+
+</br>
 
 ## Migrating from HTML
 
