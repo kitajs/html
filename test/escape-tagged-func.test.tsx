@@ -6,6 +6,10 @@ const unsafeTag = '<script tag="1">alert(1)</script>';
 const safeTag = Html.escape`${unsafeTag}`;
 
 describe('HTML Escaping', () => {
+  test('e is the same as escape', () => {
+    assert.equal(Html.e, Html.escape);
+  });
+
   test('escapes content', () => {
     assert.equal(<>{unsafeTag}</>, <>{unsafeTag}</>);
   });

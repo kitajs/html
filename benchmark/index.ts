@@ -37,8 +37,6 @@ assert.equal(
     .join('')
 );
 
-
-
 // Ensures that Kitajs/html and ghtml produce the same output
 assert.equal(
   ManyComponents(KitaHtml, 'Hello World!'),

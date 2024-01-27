@@ -201,8 +201,8 @@ issues in your code editor and enhance your code's security.
 This package sanitizes every attribute by default. However, since the resulting element is
 always a string, it's impossible to differentiate an HTML element created by a `<tag>` or
 from user input. This necessitates the use of the provided [`safe`](#the-safe-attribute)
-or manual invocation of `Html.escapeHtml`. Or you can also use the `Html.escape` template
-function.
+or manual invocation of `Html.escapeHtml`. Or you can also use the `Html.escape` or its
+alias `e` template function.
 
 ```tsx
 <div>⚠️ This will NOT be escaped and WILL expose you to XSS</div>
@@ -212,14 +212,17 @@ function.
 <div>{Html.escapeHtml('This WILL be escaped')}</div>
 ```
 
-or using the `Html.escape` template function:
+or using the `Html.escape` or its alias `e` template function:
 
 ```tsx
+import { e } from '@kitajs/html';
+
 <div>⚠️ This will NOT be escaped and WILL expose you to XSS</div>
 
 <div attr="This WILL be escaped"></div>
 <div safe>This WILL be escaped</div>
 <div>{Html.escape`This WILL be escaped`}</div>
+<div>{e`This WILL be escaped`}</div>
 ```
 
 Here's an example of how this is **DANGEROUS** for your application:
