@@ -125,8 +125,8 @@ describe('HTML Escaping', () => {
     );
 
     assert.equal(Html.escapeHtml('What does 😊 mean?'), 'What does 😊 mean?');
-    const output = Html.escapeHtml('<What does 😊');
-    assert.equal(output, '&lt;What does 😊');
+
+    assert.equal(Html.escapeHtml('<What does 😊'), '&lt;What does 😊');
     assert.equal(
       Html.escapeHtml('<div>What does 😊 mean in text?'),
       '&lt;div>What does 😊 mean in text?'

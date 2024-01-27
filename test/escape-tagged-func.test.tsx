@@ -123,8 +123,7 @@ describe('HTML Escaping', () => {
     );
 
     assert.equal(Html.escape`What does 😊 mean?`, 'What does 😊 mean?');
-    const output = Html.escape`<What does 😊`;
-    assert.equal(output, '&lt;What does 😊');
+    assert.equal(Html.escape`<What does 😊`, '&lt;What does 😊');
     assert.equal(
       Html.escape`<div>What does 😊 mean in text?`,
       '&lt;div>What does 😊 mean in text?'
