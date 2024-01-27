@@ -13,6 +13,20 @@
 export function isUpper(this: void, input: string, index: number): boolean;
 
 /**
+ * Tag function that escapes the given string pieces and interpolates the given values.
+ * Internally it uses {@linkcode escapeHtml} to escape the values.
+ *
+ * @param {TemplateStringsArray} the Template string.
+ * @returns {string} The escaped string.
+ * @this {void}
+ */
+export function escape(
+  this: void,
+  strPieces: TemplateStringsArray,
+  ...values: Array<any>
+): string;
+
+/**
  * Escapes a string for safe use as HTML text content. If the value is not a string, it is
  * coerced to one with its own `toString()` method.
  *

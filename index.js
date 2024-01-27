@@ -46,6 +46,17 @@ function toKebabCase(camel) {
   return kebab;
 }
 
+/** @type {import('.').escape} */
+function escape(strPieces, ...values) {
+  return strPieces.reduce(function (result, strPiece, index) {
+    let correspondingValue = values[index];
+    if (correspondingValue === undefined) {
+      return result + escapeHtml(strPiece);
+    }
+    return result + escapeHtml(strPiece) + escapeHtml(correspondingValue);
+  }, '');
+}
+
 /** @type {import('.').escapeHtml} */
 let escapeHtml = function (value) {
   if (typeof value !== 'string') {
@@ -534,6 +545,7 @@ function compile(htmlFn, strict = true, separator = '/*\x00*/') {
 }
 
 const Html = {
+  escape,
   escapeHtml,
   isVoidElement,
   attributesToString,
