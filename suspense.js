@@ -77,6 +77,168 @@ const SuspenseScript = /* html */ `
   // Removes line breaks added for readability
   .replace(/\n\s*/g, '');
 
+const SuspenseScriptBuffer = Buffer.from(SuspenseScript, 'utf8');
+
+/** @type {import('./suspense').SuspenseGenerator} */
+function SuspenseGenerator(props) {
+  // There's no actual way of knowing if this component is being
+  // rendered inside a renderToString call, so we have to rely on
+  // this simple check: If the First Suspense render is called without
+  // `enabled` being true, it means no renderToString was called before.
+  // This is not 100% accurate, but it's the best estimation we can do.
+  if (!SUSPENSE_ROOT.enabled) {
+    throw new Error('Cannot use SuspenseGenerator outside of a `renderToStream` call.');
+  }
+
+  if (!props.rid) {
+    throw new Error('SuspenseGenerator requires a `rid` to be specified.');
+  }
+
+  let data = SUSPENSE_ROOT.requests.get(props.rid);
+
+  if (!data) {
+    throw new Error('No request data was found for the provided `rid`.');
+  }
+ 
+  // Gets the current run number for this yielded value
+  let run = ++data.running;
+  
+  const generator = Symbol.asyncIterator in props.source ? props.source[Symbol.asyncIterator]() :  props.source[Symbol.iterator]();
+ 
+  generator
+    .next()
+    .then(
+      /** @param {IteratorResult<any, void>} next */
+      function appendStreamTemplate(next) {
+        // Source closed
+        if (!next.value) {
+          return;
+        }
+
+        // Maps the value if a map function was provided
+        if (props.map) {
+          if (typeof next.value.then === 'function') {
+            next.value = next.value.then(props.map);
+          } else {
+            next.value = props.map(next.value);
+          }
+        }
+
+        // Resolves the value if it's a promise
+        if (typeof next.value.then === 'function') {
+          return next.value.then(appendAsync);
+        } else {
+          return appendAsync(next.value);
+        }
+
+        /**
+         * @param {string} html
+         * @returns {Promise<IteratorResult<any, void>> | void}
+         */
+        function appendAsync(html) {
+          // Reloads the request data as it may have been closed
+          data = SUSPENSE_ROOT.requests.get(props.rid);
+
+          // Stream was probably already closed/cleared out.
+          if (!data) {
+            return;
+          }
+
+          // Deref is not a expensive call,
+          const stream = data.stream.deref();
+
+          // Stream was probably already closed/cleared out.
+          if (!stream || stream.closed) {
+            throw new Error('Stream was already closed.');
+          } 
+          
+         
+
+          // Append the buffer to the batch
+          // batch.push(Buffer.from(html, 'utf8'));
+
+          // Batch limit not reached yet, no need to flush
+          if () {
+            return;
+          }
+
+          batch.unshift(
+            Buffer.from(
+              // prettier-ignore
+              '<template id="N:' + run + '" data-gr>',
+              'utf8'
+            )
+          );
+          batch.push(
+            Buffer.from(
+              // prettier-ignore
+              '</template><script id="S:' + run + '" data-gs>$KITA_RC(' + run + ')</script>',
+              'utf8'
+            )
+          );
+
+          // Concatenates the suspense script to save a TCP round-trip.
+          if (SUSPENSE_ROOT.autoScript && data.sent === false) {
+            batch.unshift(SuspenseScriptBuffer);
+            data.sent = true;
+          }
+
+          // Writes the chunk
+          stream.write(batch);
+          batched = 0;
+          batch = '';
+
+          if (!next.done) {
+            // Recursively calls the next value
+            return props.source.next().then(appendStreamTemplate);
+          }
+
+          return undefined;
+        }
+      }
+    )
+    .catch(function writeFatalError(error) {
+      if (data) {
+        const stream = data.stream.deref();
+
+        // stream.emit returns true if there's a listener
+        // so we can safely ignore the error
+        if (stream && stream.emit('error', error)) {
+          return;
+        }
+      }
+      /* c8 ignore next 2 */
+      // Nothing else to do if no catch or listener was found
+      console.error(error);
+    })
+    .finally(function clearRequestData() {
+      // Reloads the request data as it may have been closed
+      data = SUSPENSE_ROOT.requests.get(props.rid);
+
+      if (!data) {
+        return;
+      }
+
+      // reduces current suspense id
+      if (data.running > 1) {
+        data.running -= 1;
+
+        // Last suspense component, runs cleanup
+      } else {
+        const stream = data.stream.deref();
+
+        if (stream && !stream.closed) {
+          stream.end();
+        }
+
+        // Removes the current state
+        SUSPENSE_ROOT.requests.delete(props.rid);
+      }
+    });
+
+  return '<template id="B:' + run + '" data-gf></template>';
+}
+
 /** @type {import('./suspense').Suspense} */
 function Suspense(props) {
   // There's no actual way of knowing if this component is being
@@ -214,19 +376,26 @@ function Suspense(props) {
       return;
     }
 
-    // Writes the suspense script if its the first
-    // suspense component in this request data. This way following
-    // templates+scripts can be executed
+    // prettier-ignore (reuses the result variable)
+    result =
+      '<template id="N:' +
+      run +
+      '" data-gr>' +
+      result +
+      '</template><script id="S:' +
+      run +
+      '" data-gs>$KITA_RC(' +
+      run +
+      ')</script>';
+
+    // Concatenates the suspense script to save a TCP round-trip.
     if (SUSPENSE_ROOT.autoScript && data.sent === false) {
-      stream.write(SuspenseScript);
+      result = SuspenseScript + result;
       data.sent = true;
     }
 
     // Writes the chunk
-    stream.write(
-      // prettier-ignore
-      '<template id="N:' + run + '" data-sr>' + result + '</template><script id="S:' + run + '" data-ss>$KITA_RC(' + run + ')</script>'
-    );
+    stream.write(result);
   }
 }
 
@@ -320,7 +489,7 @@ function renderToStream(factory, rid) {
 }
 
 /** @type {import('./suspense').renderToString} */
-async function renderToString(factory, rid) {
+function renderToString(factory, rid) {
   // Enables suspense if it's not enabled yet
   if (SUSPENSE_ROOT.enabled === false) {
     SUSPENSE_ROOT.enabled = true;
@@ -358,6 +527,9 @@ async function renderToString(factory, rid) {
     return new Promise((res, rej) => {
       stream.once('finish', () => res(finalHtml));
       stream.once('error', rej);
+    }).finally(() => {
+      //@ts-expect-error - We know it's rid
+      SUSPENSE_ROOT.requests.delete(rid);
     });
   } catch (renderError) {
     // Could not generate even the loading template.
@@ -372,6 +544,7 @@ async function renderToString(factory, rid) {
 }
 
 module.exports.Suspense = Suspense;
+module.exports.SuspenseGenerator = SuspenseGenerator;
 module.exports.pipeHtml = pipeHtml;
 module.exports.renderToStream = renderToStream;
 module.exports.renderToString = renderToString;

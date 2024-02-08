@@ -66,26 +66,36 @@ export type RequestData = {
 export function Suspense(props: SuspenseProps): JSX.Element;
 
 /**
+ * A component that keeps injecting html while the generator is running.
+ *
+ * The `rid` prop is the one {@linkcode renderToStream} returns, this way the suspense
+ * knows which request it belongs to.
+ */
+export function SuspenseGenerator<T>(props: SuspenseGeneratorProps<T>): JSX.Element;
+
+/**
  * Transforms a component tree who may contain `Suspense` components into a stream of
  * HTML.
  *
  * @example
  *
  * ```tsx
- * // Simple nodejs webserver to render html http.createServer((req, res)
- * => { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+ * // Simple nodejs webserver to render html
  *
- *     const stream = renderToStream(r => <AppWithSuspense rid={r} />)
+ * http
+ *   .createServer((req, res) => {
+ *     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+ *     const stream = renderToStream((r) => <AppWithSuspense rid={r} />);
+ *     stream.pipe(res);
+ *   })
+ *   .listen(1227);
  *
- *     stream.pipe(res)
+ * // Prints out the rendered stream
+ * const stream = renderToStream((r) => <AppWithSuspense rid={r} />);
  *
- * }).listen(1227)
- *
- * // Prints out the rendered stream const stream = renderToStream(r => <AppWithSuspense
- * rid={r} />)
- *
- * For await (const html of stream) { console.log(html.toString()) }
- *
+ * for await (const html of stream) {
+ *   console.log(html.toString());
+ * }
  * ```
  *
  * @param factory The component tree to render.
@@ -159,6 +169,39 @@ export interface SuspenseProps {
    * components. Please use {@linkcode ErrorBoundary} to catch them instead.
    */
   catch?: JSX.Element | ((error: unknown) => JSX.Element);
+}
+
+export interface SuspenseGeneratorProps<T> {
+  /** The request id is used to identify the request for this suspense. */
+  rid: number | string;
+
+  /** The request id is used to identify the request for this suspense. */
+  source:
+    | AsyncGenerator<PromiseLike<T> | T, void>
+    | AsyncIterable<PromiseLike<T> | T>
+    | Generator<PromiseLike<T> | T, void>
+    | Iterable<PromiseLike<T> | T>;
+
+  /**
+   * The cork threshold for batching components during rendering. Batching rows instead of
+   * streaming each one reduces the network overhead by using fewer TCP round-trips to
+   * send the same amount of data. However, it may increase the time to first byte, as the
+   * server will wait for the entire batch to be ready before sending it.
+   *
+   * Adjusting this threshold allows controlling the number of items a stream should wait
+   * for before uncorking, optimizing the balance between network efficiency and time to
+   * first byte.
+   *
+   * @default 0 (no batching)
+   */
+  corkThreshold?: number;
+
+  /**
+   * The map function to render each component as soon as a new value is yielded.
+   *
+   * @default value => value
+   */
+  map?: (value: T) => JSX.Element | PromiseLike<JSX.Element>;
 }
 
 /**

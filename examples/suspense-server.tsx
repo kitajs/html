@@ -1,55 +1,52 @@
 import http from 'http';
 import { setTimeout } from 'timers/promises';
-import Html, { PropsWithChildren } from '../index';
-import { Suspense, renderToStream } from '../suspense';
-
-async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
-  await setTimeout(ms * 2);
-  return Html.contentsToString([children || String(ms)]);
-}
+import Html from '../index';
+import { SuspenseGenerator, pipeHtml } from '../suspense';
 
 function renderLayout(rid: number | string) {
   return (
     <html>
-      <div>
-        {Array.from({ length: 5 }, (_, i) => (
-          <Suspense rid={rid} fallback={<div>{i} FIuter</div>}>
-            <div>Outer {i}!</div>
-
-            <SleepForMs ms={i % 2 === 0 ? i * 2500 : i * 5000}>
-              <Suspense rid={rid} fallback={<div>{i} FInner!</div>}>
-                <SleepForMs ms={i * 5000}>
-                  <div>Inner {i}!</div>
-                </SleepForMs>
-              </Suspense>
-            </SleepForMs>
-          </Suspense>
-        ))}
-      </div>
+      <body>
+        <SuspenseGenerator rid={rid} source={SleepGenerator()} />
+      </body>
     </html>
   );
 }
 
+async function* SleepGenerator() {
+  for (let i = 0; i < 10; i++) {
+    await setTimeout(i * 200);
+    yield 'Slept for ' + i * 200 + 'ms';
+  }
+}
+
+SUSPENSE_ROOT.enabled = true;
+
 http
-  .createServer((req, response) => {
+  .createServer((req, rep) => {
     // This simple webserver only has a index.html file
     if (req.url !== '/' && req.url !== '/index.html') {
-      response.end();
+      rep.statusCode = 404;
+      rep.statusMessage = 'Not Found';
+      rep.end();
       return;
     }
 
+    // Creates the request map
+    const id = SUSPENSE_ROOT.requestCounter++;
+    SUSPENSE_ROOT.requests.set(id, {
+      stream: new WeakRef(rep),
+      running: 0,
+      sent: false
+    });
+
     // ⚠️ Charset utf8 is important to avoid old browsers utf7 xss attacks
-    response.setHeader('Content-Type', 'text/html; charset=utf-8');
+    rep.writeHead(200, 'OK', { 'content-type': 'text/html; charset=utf-8' });
 
-    // Creates the html stream
-    const htmlStream = renderToStream(renderLayout);
+    rep.flushHeaders;
 
-    // Pipes it into the response
-    htmlStream.pipe(response);
-
-    // If its an express or fastify server, just use
-    // response.type('text/html; charset=utf-8').send(htmlStream);
+    pipeHtml(renderLayout(id), rep, id);
   })
   .listen(8080, () => {
-    console.log('Listening to http://localhost:8080');
+    console.log('Listening to http://localhost:8080 ' + Math.random());
   });

@@ -19,12 +19,12 @@ function toKebabCase(camel) {
 
   const length = camel.length;
 
-  let start = 0;
-  let end = 0;
-  let kebab = '';
-  let prev = true;
-  let curr = isUpper(camel, 0);
-  let next;
+  let start = 0,
+    end = 0,
+    kebab = '',
+    prev = true,
+    curr = isUpper(camel, 0),
+    next;
 
   for (; end < length; end++) {
     next = isUpper(camel, end + 1);
@@ -46,6 +46,27 @@ function toKebabCase(camel) {
   return kebab;
 }
 
+/** @type {import('.').escape} */
+function escape(strings, ...values) {
+  const stringsLength = strings.length,
+    valuesLength = values.length;
+
+  let index = 0,
+    result = '';
+
+  for (; index < stringsLength; index++) {
+    result += strings[index];
+
+    if (index < valuesLength) {
+      result += values[index];
+    }
+  }
+
+  // Escape the entire string at once.
+  // This is faster than escaping each piece individually.
+  return escapeHtml(result);
+}
+
 /** @type {import('.').escapeHtml} */
 let escapeHtml = function (value) {
   if (typeof value !== 'string') {
@@ -59,10 +80,10 @@ let escapeHtml = function (value) {
   }
 
   const length = value.length;
-  let escaped = '';
 
-  let start = 0;
-  let end = 0;
+  let escaped = '',
+    start = 0,
+    end = 0;
 
   // Escapes double quotes to be used inside attributes
   // Faster than using regex
@@ -139,8 +160,8 @@ function styleToString(style) {
 
     const length = style.length;
 
-    let escaped = '';
-    let start = 0;
+    let escaped = '',
+      start = 0;
 
     // Escapes double quotes to be used inside attributes
     // Faster than using regex
@@ -158,12 +179,15 @@ function styleToString(style) {
     return escaped;
   }
 
-  const keys = Object.keys(style);
-  const length = keys.length;
+  const keys = Object.keys(style),
+    length = keys.length;
 
-  let key, value, end, start;
-  let index = 0;
-  let result = '';
+  let key,
+    value,
+    end,
+    start,
+    index = 0,
+    result = '';
 
   for (; index < length; index++) {
     key = keys[index];
@@ -217,9 +241,15 @@ function attributesToString(attributes) {
   const keys = Object.keys(attributes);
   const length = keys.length;
 
-  let key, value, type, end, start, classItems, valueLength;
-  let result = '';
-  let index = 0;
+  let key,
+    value,
+    type,
+    end,
+    start,
+    classItems,
+    valueLength,
+    result = '',
+    index = 0;
 
   for (; index < length; index++) {
     key = keys[index];
@@ -345,10 +375,10 @@ function attributesToString(attributes) {
  * @returns {any}
  */
 function contentsToString(contents, escape) {
-  let length = contents.length;
-  let result = '';
-  let content;
-  let index = 0;
+  let length = contents.length,
+    result = '',
+    content,
+    index = 0;
 
   for (; index < length; index++) {
     content = contents[index];
