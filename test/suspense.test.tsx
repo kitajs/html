@@ -51,16 +51,16 @@ describe('Suspense', () => {
         </Suspense>
       )),
       <>
-        <div id="B:1" data-sf>
+        <div id="B1" data-sf>
           <div>1</div>
         </div>
 
         {SuspenseScript}
 
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           2
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>
@@ -75,16 +75,16 @@ describe('Suspense', () => {
         </Suspense>
       )),
       <>
-        <div id="B:1" data-sf>
+        <div id="B1" data-sf>
           <div>1</div>
         </div>
 
         {SuspenseScript}
 
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           2
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>
@@ -117,16 +117,16 @@ describe('Suspense', () => {
           assert.equal(
             res,
             <>
-              <div id="B:1" data-sf>
+              <div id="B1" data-sf>
                 <div>1</div>
               </div>
 
               {SuspenseScript}
 
-              <template id="N:1" data-sr>
+              <template id="N1" data-sr>
                 2
               </template>
-              <script id="S:1" data-ss>
+              <script id="S1" data-ss>
                 $KITA_RC(1)
               </script>
             </>
@@ -145,16 +145,16 @@ describe('Suspense', () => {
           </Suspense>
         )),
         <>
-          <div id="B:1" data-sf>
+          <div id="B1" data-sf>
             <div>1</div>
           </div>
 
           {SuspenseScript}
 
-          <template id="N:1" data-sr>
+          <template id="N1" data-sr>
             2
           </template>
-          <script id="S:1" data-ss>
+          <script id="S1" data-ss>
             $KITA_RC(1)
           </script>
         </>
@@ -181,37 +181,37 @@ describe('Suspense', () => {
       )),
       <>
         <div>
-          <div id="B:1" data-sf>
+          <div id="B1" data-sf>
             <div>1</div>
           </div>
-          <div id="B:2" data-sf>
+          <div id="B2" data-sf>
             <div>2</div>
           </div>
-          <div id="B:3" data-sf>
+          <div id="B3" data-sf>
             <div>3</div>
           </div>
         </div>
 
         {SuspenseScript}
 
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           4
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
 
-        <template id="N:2" data-sr>
+        <template id="N2" data-sr>
           5
         </template>
-        <script id="S:2" data-ss>
+        <script id="S2" data-ss>
           $KITA_RC(2)
         </script>
 
-        <template id="N:3" data-sr>
+        <template id="N3" data-sr>
           6
         </template>
-        <script id="S:3" data-ss>
+        <script id="S3" data-ss>
           $KITA_RC(3)
         </script>
       </>
@@ -240,204 +240,204 @@ describe('Suspense', () => {
     assert.deepEqual(results, [
       <>
         <div>
-          <div id="B:1" data-sf>
+          <div id="B1" data-sf>
             <div>9 loading</div>
           </div>
-          <div id="B:2" data-sf>
+          <div id="B2" data-sf>
             <div>8 loading</div>
           </div>
-          <div id="B:3" data-sf>
+          <div id="B3" data-sf>
             <div>7 loading</div>
           </div>
-          <div id="B:4" data-sf>
+          <div id="B4" data-sf>
             <div>6 loading</div>
           </div>
-          <div id="B:5" data-sf>
+          <div id="B5" data-sf>
             <div>5 loading</div>
           </div>
-          <div id="B:6" data-sf>
+          <div id="B6" data-sf>
             <div>4 loading</div>
           </div>
-          <div id="B:7" data-sf>
+          <div id="B7" data-sf>
             <div>3 loading</div>
           </div>
-          <div id="B:8" data-sf>
+          <div id="B8" data-sf>
             <div>2 loading</div>
           </div>
-          <div id="B:9" data-sf>
+          <div id="B9" data-sf>
             <div>1 loading</div>
           </div>
         </div>
 
         {SuspenseScript}
 
-        <template id="N:9" data-sr>
+        <template id="N9" data-sr>
           1
         </template>
-        <script id="S:9" data-ss>
+        <script id="S9" data-ss>
           $KITA_RC(9)
         </script>
-        <template id="N:8" data-sr>
+        <template id="N8" data-sr>
           2
         </template>
-        <script id="S:8" data-ss>
+        <script id="S8" data-ss>
           $KITA_RC(8)
         </script>
-        <template id="N:7" data-sr>
+        <template id="N7" data-sr>
           3
         </template>
-        <script id="S:7" data-ss>
+        <script id="S7" data-ss>
           $KITA_RC(7)
         </script>
-        <template id="N:6" data-sr>
+        <template id="N6" data-sr>
           4
         </template>
-        <script id="S:6" data-ss>
+        <script id="S6" data-ss>
           $KITA_RC(6)
         </script>
-        <template id="N:5" data-sr>
+        <template id="N5" data-sr>
           5
         </template>
-        <script id="S:5" data-ss>
+        <script id="S5" data-ss>
           $KITA_RC(5)
         </script>
-        <template id="N:4" data-sr>
+        <template id="N4" data-sr>
           6
         </template>
-        <script id="S:4" data-ss>
+        <script id="S4" data-ss>
           $KITA_RC(4)
         </script>
-        <template id="N:3" data-sr>
+        <template id="N3" data-sr>
           7
         </template>
-        <script id="S:3" data-ss>
+        <script id="S3" data-ss>
           $KITA_RC(3)
         </script>
-        <template id="N:2" data-sr>
+        <template id="N2" data-sr>
           8
         </template>
-        <script id="S:2" data-ss>
+        <script id="S2" data-ss>
           $KITA_RC(2)
         </script>
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           9
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>,
 
       <>
         <div>
-          <div id="B:1" data-sf>
+          <div id="B1" data-sf>
             <div>4 loading</div>
           </div>
-          <div id="B:2" data-sf>
+          <div id="B2" data-sf>
             <div>3 loading</div>
           </div>
-          <div id="B:3" data-sf>
+          <div id="B3" data-sf>
             <div>2 loading</div>
           </div>
-          <div id="B:4" data-sf>
+          <div id="B4" data-sf>
             <div>1 loading</div>
           </div>
         </div>
 
         {SuspenseScript}
 
-        <template id="N:4" data-sr>
+        <template id="N4" data-sr>
           1
         </template>
-        <script id="S:4" data-ss>
+        <script id="S4" data-ss>
           $KITA_RC(4)
         </script>
-        <template id="N:3" data-sr>
+        <template id="N3" data-sr>
           2
         </template>
-        <script id="S:3" data-ss>
+        <script id="S3" data-ss>
           $KITA_RC(3)
         </script>
-        <template id="N:2" data-sr>
+        <template id="N2" data-sr>
           3
         </template>
-        <script id="S:2" data-ss>
+        <script id="S2" data-ss>
           $KITA_RC(2)
         </script>
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           4
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>,
 
       <>
         <div>
-          <div id="B:1" data-sf>
+          <div id="B1" data-sf>
             <div>7 loading</div>
           </div>
-          <div id="B:2" data-sf>
+          <div id="B2" data-sf>
             <div>6 loading</div>
           </div>
-          <div id="B:3" data-sf>
+          <div id="B3" data-sf>
             <div>5 loading</div>
           </div>
-          <div id="B:4" data-sf>
+          <div id="B4" data-sf>
             <div>4 loading</div>
           </div>
-          <div id="B:5" data-sf>
+          <div id="B5" data-sf>
             <div>3 loading</div>
           </div>
-          <div id="B:6" data-sf>
+          <div id="B6" data-sf>
             <div>2 loading</div>
           </div>
-          <div id="B:7" data-sf>
+          <div id="B7" data-sf>
             <div>1 loading</div>
           </div>
         </div>
 
         {SuspenseScript}
 
-        <template id="N:7" data-sr>
+        <template id="N7" data-sr>
           1
         </template>
-        <script id="S:7" data-ss>
+        <script id="S7" data-ss>
           $KITA_RC(7)
         </script>
-        <template id="N:6" data-sr>
+        <template id="N6" data-sr>
           2
         </template>
-        <script id="S:6" data-ss>
+        <script id="S6" data-ss>
           $KITA_RC(6)
         </script>
-        <template id="N:5" data-sr>
+        <template id="N5" data-sr>
           3
         </template>
-        <script id="S:5" data-ss>
+        <script id="S5" data-ss>
           $KITA_RC(5)
         </script>
-        <template id="N:4" data-sr>
+        <template id="N4" data-sr>
           4
         </template>
-        <script id="S:4" data-ss>
+        <script id="S4" data-ss>
           $KITA_RC(4)
         </script>
-        <template id="N:3" data-sr>
+        <template id="N3" data-sr>
           5
         </template>
-        <script id="S:3" data-ss>
+        <script id="S3" data-ss>
           $KITA_RC(3)
         </script>
-        <template id="N:2" data-sr>
+        <template id="N2" data-sr>
           6
         </template>
-        <script id="S:2" data-ss>
+        <script id="S2" data-ss>
           $KITA_RC(2)
         </script>
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           7
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>
@@ -463,16 +463,16 @@ describe('Suspense', () => {
         </Suspense>
       )),
       <>
-        <div id="B:1" data-sf>
+        <div id="B1" data-sf>
           <div>1</div>
         </div>
 
         {SuspenseScript}
 
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           <div>2</div>
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>
@@ -489,13 +489,13 @@ describe('Suspense', () => {
         </Suspense>
       )),
       <>
-        <div id="B:1" data-sf>
+        <div id="B1" data-sf>
           <div>1</div>
         </div>
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           <div>2</div>
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>
@@ -529,7 +529,7 @@ describe('Suspense', () => {
     assert.equal(
       chunks[0].toString(),
       <div>
-        <div id="B:1" data-sf>
+        <div id="B1" data-sf>
           <div>2</div>
         </div>
       </div>
@@ -539,10 +539,10 @@ describe('Suspense', () => {
       chunks[1].toString(),
       <>
         {SuspenseScript}
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           <div>1</div>
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>
@@ -597,14 +597,14 @@ describe('Suspense', () => {
       )),
 
       <>
-        <div id="B:1" data-sf>
+        <div id="B1" data-sf>
           <div>1</div>
         </div>
         {SuspenseScript}
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           <div>2</div>
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>
@@ -637,31 +637,31 @@ describe('Suspense', () => {
       }),
       <>
         <div>
-          <div id="B:2" data-sf>
+          <div id="B2" data-sf>
             <div>1</div>
           </div>
         </div>
 
         {SuspenseScript}
 
-        <template id="N:2" data-sr>
+        <template id="N2" data-sr>
           <div>2</div>
           <div>3</div>
           <div>
-            <div id="B:1" data-sf>
+            <div id="B1" data-sf>
               <div>4</div>
             </div>
           </div>
         </template>
-        <script id="S:2" data-ss>
+        <script id="S2" data-ss>
           $KITA_RC(2)
         </script>
 
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           <div>5</div>
           <div>6</div>
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>
@@ -694,33 +694,33 @@ describe('Suspense', () => {
       }),
       <>
         <div>
-          <div id="B:2" data-sf>
+          <div id="B2" data-sf>
             <div>1</div>
           </div>
         </div>
 
         {SuspenseScript}
 
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           <div>5</div>
           <div>6</div>
         </template>
 
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
 
-        <template id="N:2" data-sr>
+        <template id="N2" data-sr>
           <div>2</div>
           <div>3</div>
           <div>
-            <div id="B:1" data-sf>
+            <div id="B1" data-sf>
               <div>4</div>
             </div>
           </div>
         </template>
 
-        <script id="S:2" data-ss>
+        <script id="S2" data-ss>
           $KITA_RC(2)
         </script>
       </>
@@ -750,107 +750,107 @@ describe('Suspense', () => {
       html,
       <>
         <div>
-          <div id="B:2" data-sf>
+          <div id="B2" data-sf>
             <div>0 fb outer</div>
           </div>
-          <div id="B:4" data-sf>
+          <div id="B4" data-sf>
             <div>1 fb outer</div>
           </div>
-          <div id="B:6" data-sf>
+          <div id="B6" data-sf>
             <div>2 fb outer</div>
           </div>
-          <div id="B:8" data-sf>
+          <div id="B8" data-sf>
             <div>3 fb outer</div>
           </div>
-          <div id="B:10" data-sf>
+          <div id="B10" data-sf>
             <div>4 fb outer</div>
           </div>
         </div>
 
         {SuspenseScript}
 
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           <div>Inner 0!</div>
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
 
-        <template id="N:2" data-sr>
+        <template id="N2" data-sr>
           <div>Outer 0!</div>
-          <div id="B:1" data-sf>
+          <div id="B1" data-sf>
             <div>0 fb inner!</div>
           </div>
         </template>
-        <script id="S:2" data-ss>
+        <script id="S2" data-ss>
           $KITA_RC(2)
         </script>
 
-        <template id="N:3" data-sr>
+        <template id="N3" data-sr>
           <div>Inner 1!</div>
         </template>
-        <script id="S:3" data-ss>
+        <script id="S3" data-ss>
           $KITA_RC(3)
         </script>
 
-        <template id="N:4" data-sr>
+        <template id="N4" data-sr>
           <div>Outer 1!</div>
-          <div id="B:3" data-sf>
+          <div id="B3" data-sf>
             <div>1 fb inner!</div>
           </div>
         </template>
-        <script id="S:4" data-ss>
+        <script id="S4" data-ss>
           $KITA_RC(4)
         </script>
 
-        <template id="N:6" data-sr>
+        <template id="N6" data-sr>
           <div>Outer 2!</div>
-          <div id="B:5" data-sf>
+          <div id="B5" data-sf>
             <div>2 fb inner!</div>
           </div>
         </template>
-        <script id="S:6" data-ss>
+        <script id="S6" data-ss>
           $KITA_RC(6)
         </script>
 
-        <template id="N:5" data-sr>
+        <template id="N5" data-sr>
           <div>Inner 2!</div>
         </template>
-        <script id="S:5" data-ss>
+        <script id="S5" data-ss>
           $KITA_RC(5)
         </script>
 
-        <template id="N:10" data-sr>
+        <template id="N10" data-sr>
           <div>Outer 4!</div>
-          <div id="B:9" data-sf>
+          <div id="B9" data-sf>
             <div>4 fb inner!</div>
           </div>
         </template>
-        <script id="S:10" data-ss>
+        <script id="S10" data-ss>
           $KITA_RC(10)
         </script>
 
-        <template id="N:7" data-sr>
+        <template id="N7" data-sr>
           <div>Inner 3!</div>
         </template>
-        <script id="S:7" data-ss>
+        <script id="S7" data-ss>
           $KITA_RC(7)
         </script>
 
-        <template id="N:8" data-sr>
+        <template id="N8" data-sr>
           <div>Outer 3!</div>
-          <div id="B:7" data-sf>
+          <div id="B7" data-sf>
             <div>3 fb inner!</div>
           </div>
         </template>
-        <script id="S:8" data-ss>
+        <script id="S8" data-ss>
           $KITA_RC(8)
         </script>
 
-        <template id="N:9" data-sr>
+        <template id="N9" data-sr>
           <div>Inner 4!</div>
         </template>
-        <script id="S:9" data-ss>
+        <script id="S9" data-ss>
           $KITA_RC(9)
         </script>
       </>
@@ -960,7 +960,7 @@ describe('Suspense errors', () => {
         // Second stream would be the suspense result, which errors out
         assert.equal(
           data.toString(),
-          <div id="B:1" data-sf>
+          <div id="B1" data-sf>
             <div>1</div>
           </div>
         );
@@ -991,15 +991,15 @@ describe('Suspense errors', () => {
         </Suspense>
       )),
       <>
-        <div id="B:1" data-sf>
+        <div id="B1" data-sf>
           <div>1</div>
         </div>
 
         {SuspenseScript}
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           <div>3</div>
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>
@@ -1017,16 +1017,16 @@ describe('Suspense errors', () => {
         </Suspense>
       )),
       <>
-        <div id="B:1" data-sf>
+        <div id="B1" data-sf>
           <div>1</div>
         </div>
 
         {SuspenseScript}
 
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           <div>3</div>
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>
@@ -1058,7 +1058,7 @@ describe('Suspense errors', () => {
 
     assert.equal(
       firstChunk.toString(),
-      <div id="B:1" data-sf>
+      <div id="B1" data-sf>
         <div>1</div>
       </div>
     );
@@ -1098,16 +1098,16 @@ describe('Suspense errors', () => {
     assert.equal(
       html,
       <>
-        <div id="B:1" data-sf>
+        <div id="B1" data-sf>
           <div>1</div>
         </div>
 
         {SuspenseScript}
 
-        <template id="N:1" data-sr>
+        <template id="N1" data-sr>
           <div>2</div>
         </template>
-        <script id="S:1" data-ss>
+        <script id="S1" data-ss>
           $KITA_RC(1)
         </script>
       </>

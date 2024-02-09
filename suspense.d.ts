@@ -1,4 +1,4 @@
-import type { Readable, Writable } from 'stream';
+import type { PipelineSource, Readable, Writable } from 'stream';
 import type { Children } from './';
 
 declare global {
@@ -71,7 +71,11 @@ export function Suspense(props: SuspenseProps): JSX.Element;
  * The `rid` prop is the one {@linkcode renderToStream} returns, this way the suspense
  * knows which request it belongs to.
  */
-export function SuspenseGenerator<T>(props: SuspenseGeneratorProps<T>): JSX.Element;
+export function SuspenseGenerator<T>(
+  props: T extends string | Buffer
+    ? SuspenseGeneratorProps<T>
+    : SuspenseObjectGeneratorProps<T>
+): JSX.Element;
 
 /**
  * Transforms a component tree who may contain `Suspense` components into a stream of
@@ -176,32 +180,12 @@ export interface SuspenseGeneratorProps<T> {
   rid: number | string;
 
   /** The request id is used to identify the request for this suspense. */
-  source:
-    | AsyncGenerator<PromiseLike<T> | T, void>
-    | AsyncIterable<PromiseLike<T> | T>
-    | Generator<PromiseLike<T> | T, void>
-    | Iterable<PromiseLike<T> | T>;
+  source: PipelineSource<T>;
+}
 
-  /**
-   * The cork threshold for batching components during rendering. Batching rows instead of
-   * streaming each one reduces the network overhead by using fewer TCP round-trips to
-   * send the same amount of data. However, it may increase the time to first byte, as the
-   * server will wait for the entire batch to be ready before sending it.
-   *
-   * Adjusting this threshold allows controlling the number of items a stream should wait
-   * for before uncorking, optimizing the balance between network efficiency and time to
-   * first byte.
-   *
-   * @default 0 (no batching)
-   */
-  corkThreshold?: number;
-
-  /**
-   * The map function to render each component as soon as a new value is yielded.
-   *
-   * @default value => value
-   */
-  map?: (value: T) => JSX.Element | PromiseLike<JSX.Element>;
+export interface SuspenseObjectGeneratorProps<T> extends SuspenseGeneratorProps<T> {
+  /** The map function to render each component as soon as a new value is yielded. */
+  map: (value: T, encoding?: unknown) => JSX.Element | PromiseLike<JSX.Element>;
 }
 
 /**

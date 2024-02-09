@@ -1,22 +1,63 @@
 import http from 'http';
 import { setTimeout } from 'timers/promises';
 import Html from '../index';
-import { SuspenseGenerator, pipeHtml } from '../suspense';
+import { Suspense, SuspenseGenerator, pipeHtml } from '../suspense';
 
 function renderLayout(rid: number | string) {
   return (
     <html>
       <body>
-        <SuspenseGenerator rid={rid} source={SleepGenerator()} />
+        <Suspense rid={rid} fallback={<div>Carregando tabela 1...</div>}>
+          <Tabela />
+        </Suspense>
+        <hr />
+        <Suspense rid={rid} fallback={<div>Carregando tabela 2...</div>}>
+          <Tabela />
+        </Suspense>
+        <hr />
+        <Suspense rid={rid} fallback={<div>Carregando tabela 3...</div>}>
+          <Tabela />
+        </Suspense>
+        <hr />
+        <Suspense rid={rid} fallback={<div>Carregando gerador...</div>}>
+          <Gerador rid={rid} />
+        </Suspense>
       </body>
     </html>
   );
 }
 
+async function Tabela() {
+  // conecta no banco
+  await setTimeout(Math.random() * 500);
+  return (
+    <div>
+      <h2>Tabela</h2>
+      <div>Dado 1</div>
+      <div>Dado 1</div>
+      <div>Dado 1</div>
+    </div>
+  );
+}
+
+async function Gerador({ rid }: Html.PropsWithChildren<{ rid: number | string }>) {
+  // conecta no banco
+  await setTimeout(1000);
+
+  return (
+    <div>
+      <h2>Gerador</h2>
+      <div style={{ maxHeight: '500px' ,overflow:'scroll'}}>
+        <SuspenseGenerator rid={rid} source={SleepGenerator()} />
+      </div>
+    </div>
+  );
+}
+
 async function* SleepGenerator() {
-  for (let i = 0; i < 10; i++) {
-    await setTimeout(i * 200);
-    yield 'Slept for ' + i * 200 + 'ms';
+  for (let i = 0; i < 5_000; i++) {
+    // await setTimeout(500);
+    yield <div>{Math.random()}</div>;
   }
 }
 
@@ -42,8 +83,6 @@ http
 
     // ⚠️ Charset utf8 is important to avoid old browsers utf7 xss attacks
     rep.writeHead(200, 'OK', { 'content-type': 'text/html; charset=utf-8' });
-
-    rep.flushHeaders;
 
     pipeHtml(renderLayout(id), rep, id);
   })

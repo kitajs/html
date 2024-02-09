@@ -1,5 +1,5 @@
 const { contentsToString } = require('./index');
-const { PassThrough, Writable } = require('stream');
+const { PassThrough, Writable, pipeline, Transform } = require('stream');
 
 // Avoids double initialization in case this file is not cached by
 // module bundlers.
@@ -27,13 +27,16 @@ if (!globalThis.SUSPENSE_ROOT) {
 const SuspenseScript = /* html */ `
       <script id="kita-html-suspense">
         /*! Apache-2.0 https://kita.js.org */
-        function $KITA_RC(i){
+        // i is the id of the template
+        // g is the flag append element before instead of replacing
+        function $KITA_RC(i,g){
           // simple aliases
           var d=document,q=d.querySelector.bind(d),
             // div sent as the fallback wrapper
-            v=q('div[id="B:'+i+'"][data-sf]'),
+            v=q((g?'template':'div')+'#B'+i+'[data-sf]'),
             // template and script sent after promise finishes
-            t=q('template[id="N:'+i+'"][data-sr]'),s=q('script[id="S:'+i+'"][data-ss]'),
+            t=q('template#N'+i+'[data-sr]'),
+            s=q('script#S'+i+'[data-ss]'),
             // fragment created to avoid inserting element one by one
             f=d.createDocumentFragment(),
             // used by iterators
@@ -48,7 +51,9 @@ const SuspenseScript = /* html */ `
               f.appendChild(c);
 
             // replaces the div and removes the script and template
-            v.parentNode.replaceChild(f,v);
+            if(g) v.parentNode.insertBefore(f,v);
+            else v.parentNode.replaceChild(f,v);
+
             t.remove();
             s.remove();
 
@@ -63,7 +68,7 @@ const SuspenseScript = /* html */ `
               for(c=0;c<r.length;c++)
                 if(r[c]!=t)
                   // let j as true while at least on $KITA_RC call returns true
-                  j=$KITA_RC(r[c].id.slice(2))?!0:j;
+                  j=$KITA_RC(r[c].id.slice(2),g)?!0:j;
             }while(j)
 
             // we know at least the original template was substituted
@@ -76,8 +81,6 @@ const SuspenseScript = /* html */ `
   .replace(/^\s*\/\/.*/gm, '')
   // Removes line breaks added for readability
   .replace(/\n\s*/g, '');
-
-const SuspenseScriptBuffer = Buffer.from(SuspenseScript, 'utf8');
 
 /** @type {import('./suspense').SuspenseGenerator} */
 function SuspenseGenerator(props) {
@@ -99,106 +102,83 @@ function SuspenseGenerator(props) {
   if (!data) {
     throw new Error('No request data was found for the provided `rid`.');
   }
- 
+
+  // Deref is not a expensive call,
+  const stream = data.stream.deref();
+
+  // Stream was probably already closed/cleared out.
+  if (!stream || stream.closed) {
+    throw new Error('Stream was already closed.');
+  }
+
+  const hasMap = 'map' in props;
+
   // Gets the current run number for this yielded value
-  let run = ++data.running;
-  
-  const generator = Symbol.asyncIterator in props.source ? props.source[Symbol.asyncIterator]() :  props.source[Symbol.iterator]();
- 
-  generator
-    .next()
-    .then(
-      /** @param {IteratorResult<any, void>} next */
-      function appendStreamTemplate(next) {
-        // Source closed
-        if (!next.value) {
-          return;
-        }
+  const run = ++data.running;
 
-        // Maps the value if a map function was provided
-        if (props.map) {
-          if (typeof next.value.then === 'function') {
-            next.value = next.value.then(props.map);
-          } else {
-            next.value = props.map(next.value);
-          }
-        }
+  pipeline(
+    // Using pipeline is good because it broader the compatibility
+    // with iterators, generators and streams.
+    props.source,
 
-        // Resolves the value if it's a promise
-        if (typeof next.value.then === 'function') {
-          return next.value.then(appendAsync);
+    new Transform({
+      // When a mapper is not defined, we can ensure the original stream will be
+      // of type string or buffer
+      objectMode: hasMap,
+
+      transform(chunk, encoding, callback) {
+        chunk = hasMap ? props.map(chunk, encoding) : chunk.toString('utf8');
+
+        // Handles promise recursively
+        if (chunk instanceof Promise) {
+          return chunk.then(pushTemplate, callback);
         } else {
-          return appendAsync(next.value);
+          return pushTemplate(chunk);
         }
 
-        /**
-         * @param {string} html
-         * @returns {Promise<IteratorResult<any, void>> | void}
-         */
-        function appendAsync(html) {
-          // Reloads the request data as it may have been closed
-          data = SUSPENSE_ROOT.requests.get(props.rid);
+        /** @param {string} html */
+        function pushTemplate(html) {
+          const data = SUSPENSE_ROOT.requests.get(props.rid);
 
-          // Stream was probably already closed/cleared out.
           if (!data) {
-            return;
+            return callback(
+              new Error('No request data was found for the provided `rid`.')
+            );
           }
 
-          // Deref is not a expensive call,
-          const stream = data.stream.deref();
+          // prettier-ignore
+          html = '<template id="N' + run + '" data-sr>' + html + '</template><script id="S' + run + '" data-ss>$KITA_RC(' + run + ',1)</script>'
 
-          // Stream was probably already closed/cleared out.
-          if (!stream || stream.closed) {
-            throw new Error('Stream was already closed.');
-          } 
-          
-         
-
-          // Append the buffer to the batch
-          // batch.push(Buffer.from(html, 'utf8'));
-
-          // Batch limit not reached yet, no need to flush
-          if () {
-            return;
-          }
-
-          batch.unshift(
-            Buffer.from(
-              // prettier-ignore
-              '<template id="N:' + run + '" data-gr>',
-              'utf8'
-            )
-          );
-          batch.push(
-            Buffer.from(
-              // prettier-ignore
-              '</template><script id="S:' + run + '" data-gs>$KITA_RC(' + run + ')</script>',
-              'utf8'
-            )
-          );
-
-          // Concatenates the suspense script to save a TCP round-trip.
+          // Appends the script to the template to save a TCP round-trip.
           if (SUSPENSE_ROOT.autoScript && data.sent === false) {
-            batch.unshift(SuspenseScriptBuffer);
+            html = SuspenseScript + html;
             data.sent = true;
           }
 
-          // Writes the chunk
-          stream.write(batch);
-          batched = 0;
-          batch = '';
-
-          if (!next.done) {
-            // Recursively calls the next value
-            return props.source.next().then(appendStreamTemplate);
-          }
-
-          return undefined;
+          return callback(null, html);
         }
       }
-    )
-    .catch(function writeFatalError(error) {
-      if (data) {
+    }),
+
+    // Pipes the transformed stream to the write stream, probably a
+    // http.ServerResponse or a fs.WriteStream
+    stream,
+
+    function handleFatalError(error) {
+      const data = SUSPENSE_ROOT.requests.get(props.rid);
+
+      if (!data) {
+        /* c8 ignore next 2 */
+        if (error) {
+          // Nothing else to do if no catch or listener was found
+          console.error(error);
+        }
+
+        return;
+      }
+
+      // handles possible error
+      if (error) {
         const stream = data.stream.deref();
 
         // stream.emit returns true if there's a listener
@@ -206,17 +186,6 @@ function SuspenseGenerator(props) {
         if (stream && stream.emit('error', error)) {
           return;
         }
-      }
-      /* c8 ignore next 2 */
-      // Nothing else to do if no catch or listener was found
-      console.error(error);
-    })
-    .finally(function clearRequestData() {
-      // Reloads the request data as it may have been closed
-      data = SUSPENSE_ROOT.requests.get(props.rid);
-
-      if (!data) {
-        return;
       }
 
       // reduces current suspense id
@@ -234,9 +203,10 @@ function SuspenseGenerator(props) {
         // Removes the current state
         SUSPENSE_ROOT.requests.delete(props.rid);
       }
-    });
+    }
+  );
 
-  return '<template id="B:' + run + '" data-gf></template>';
+  return '<template id="B' + run + '" data-sf></template>';
 }
 
 /** @type {import('./suspense').Suspense} */
@@ -348,11 +318,11 @@ function Suspense(props) {
 
   // Keeps string return type
   if (typeof fallback === 'string') {
-    return '<div id="B:' + run + '" data-sf>' + fallback + '</div>';
+    return '<div id="B' + run + '" data-sf>' + fallback + '</div>';
   }
 
   return fallback.then(function resolveCallback(resolved) {
-    return '<div id="B:' + run + '" data-sf>' + resolved + '</div>';
+    return '<div id="B' + run + '" data-sf>' + resolved + '</div>';
   });
 
   /**
@@ -376,17 +346,8 @@ function Suspense(props) {
       return;
     }
 
-    // prettier-ignore (reuses the result variable)
-    result =
-      '<template id="N:' +
-      run +
-      '" data-gr>' +
-      result +
-      '</template><script id="S:' +
-      run +
-      '" data-gs>$KITA_RC(' +
-      run +
-      ')</script>';
+    // prettier-ignore
+    result = '<template id="N' + run + '" data-sr>' + result + '</template><script id="S' + run + '" data-ss>$KITA_RC(' + run + ')</script>';
 
     // Concatenates the suspense script to save a TCP round-trip.
     if (SUSPENSE_ROOT.autoScript && data.sent === false) {
