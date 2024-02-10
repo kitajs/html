@@ -444,6 +444,11 @@ declare namespace JSX {
   interface HtmlDetailsTag extends HtmlTag {
     open?: undefined | boolean;
   }
+  
+  interface HtmlDialogTag extends HtmlTag {
+    open?: undefined | boolean;
+    onclose?: undefined | string;
+  }
 
   interface HtmlSelectTag extends HtmlTag {
     autofocus?: undefined | boolean;
@@ -671,7 +676,7 @@ declare namespace JSX {
     desc: HtmlSvgTag;
     details: HtmlDetailsTag;
     dfn: HtmlTag;
-    dialog: HtmlDetailsTag;
+    dialog: HtmlDialogTag;
     div: HtmlTag;
     dl: HtmlTag;
     dt: HtmlTag;
