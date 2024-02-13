@@ -39,7 +39,7 @@ devDependencies:
     version: 24.0.0
   mitata:
     specifier: ^0.1.6
-    version: 0.1.9
+    version: 0.1.10
   prettier:
     specifier: ^3.2.4
     version: 3.2.5
@@ -1204,8 +1204,8 @@ packages:
       brace-expansion: 1.1.11
     dev: true
 
-  /mitata@0.1.9:
-    resolution: {integrity: sha512-/Nr2NeYkCh9r5GHV8YZ5pZHlIhKx04O4TH2M9Ydk2yQeJnpgtBl20HJQDY34TUq4ozL1MNHajZGjLJm7K5U2Gg==}
+  /mitata@0.1.10:
+    resolution: {integrity: sha512-XeD7Bv4aiNyerNCmD1UIeUOjw6dHnCdZNuCeM9HQd8g+QRUcgX1lPV570LVRsYAAz66lto2XTAu6P8a6FQQ2fg==}
     dev: true
 
   /ms@2.1.2:
