@@ -188,6 +188,7 @@ declare namespace JSX {
     target?: undefined | string;
     type?: undefined | string;
     value?: undefined | string;
+    formaction?: undefined | string;
   }
 
   interface HtmlDataListTag extends HtmlTag {}
