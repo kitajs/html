@@ -105,6 +105,21 @@ To use the `@kitajs/html` package, follow these steps:
    }
    ```
 
+   or you can choose to auto import the jsx runtime by setting the `jsxImportSource` like
+   this:
+
+   ```jsonc
+   // tsconfig.json
+
+   {
+     "compilerOptions": {
+       "jsx": "react-jsx",
+       "jsxImportSource": "@kitajs/html",
+       "plugins": [{ "name": "@kitajs/ts-html-plugin" }]
+     }
+   }
+   ```
+
 3. Append the
    [`xss-scan`](https://github.com/kitajs/ts-html-plugin/tree/main#running-as-cli) command
    into your test script. This CLI comes from @kitajs/ts-html-plugin, which catches XSS
@@ -167,7 +182,8 @@ to generate HTML. Here are two options for importing the `@kitajs/html` package:
    ```
 
 2. **Use the register to add a global namespace**: Import the `register` to globally
-   register all necessary functions for convenience.
+   register all necessary functions for convenience. You don't need to do that if you are
+   using the `jsxImportSource` option in your `tsconfig.json`.
 
    ```tsx
    // Import the register to globally register all needed functions
