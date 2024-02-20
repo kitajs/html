@@ -1,3 +1,7 @@
+// This file is a result from https://alpinejs.dev/
+// Missing something? Please submit a issue report or a PR:
+// https://github.com/kitajs/html
+
 declare namespace JSX {
   interface HtmlTag extends Alpine.Attributes {}
 }
