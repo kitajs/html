@@ -605,6 +605,29 @@ const html = (
 
 <br />
 
+### Alpinejs
+
+[Alpinejs](https://alpinejs.dev/) is commonly used with htmx.
+
+You just need to add this triple slash directive to the top of your file:
+
+```tsx
+/// <reference types="@kitajs/html/alpine.d.ts" />
+
+const html = (
+  // Type checking and intellisense for all HTMX attributes
+   <div x-data="{ open: false }">
+    <button @click="open = true">Expand</button>
+   
+    <span x-show="open">
+        Content...
+    </span>
+   </div>
+);
+```
+
+<br />
+
 ### Hotwire Turbo
 
 This project supports the usage of [Turbo Hotwire](https://turbo.hotwired.dev/). We
