@@ -617,11 +617,7 @@ You just need to add this triple slash directive to the top of your file:
 const html = (
   // Type checking and intellisense for all HTMX attributes
    <div x-data="{ open: false }">
-    <button @click="open = true">Expand</button>
-   
-    <span x-show="open">
-        Content...
-    </span>
+    ...
    </div>
 );
 ```
