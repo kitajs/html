@@ -88,12 +88,6 @@ declare namespace Alpine {
      * @see https://alpinejs.dev/directives/transition
      */
     'x-transition'?: string;
-      /**
-     * Two-way data binding for form elements.
-     *
-     * @see https://alpinejs.dev/directives/model
-     */
-    'x-model'?: string;
 
     /**
      * Adds a side-effect to an element, such as executing a function or modifying data.
