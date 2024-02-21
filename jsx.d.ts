@@ -189,6 +189,12 @@ declare namespace JSX {
     type?: undefined | string;
     value?: undefined | string;
     formaction?: undefined | string;
+    formenctype?: undefined | string;
+    formmethod?: undefined | string;
+    formnovalidate?: undefined | string | boolean;
+    formtarget?: undefined | string;
+    popovertarget?: undefined | string;
+    popovertargetaction?: undefined | string;
   }
 
   interface HtmlDataListTag extends HtmlTag {}
