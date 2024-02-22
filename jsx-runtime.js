@@ -1,43 +1,82 @@
-const { createElement, Fragment } = require('./index');
+const {
+  Fragment,
+  attributesToString,
+  isVoidElement,
+  contentsToString
+} = require('./index');
 
-// This is a helper function to ensure that children is always an array
-/**
- * @type {(
- *   children: import('./index.d.ts').Children
- * ) => import('./index.d.ts').Children[]}
- */
-function safeChildrenArray(children) {
-  if (!children) {
-    return [];
-  }
-  if (Array.isArray(children)) {
-    return children;
-  } else {
-    return [children];
-  }
-}
-
-// The jsx function is the main function that will be used to create elements
-// when the jsx-runtime is used
 /** @type {import('./jsx-runtime').jsx} */
-function jsx(type, { children, ...props }) {
-  if (typeof type === 'string') {
-    // This is needed because the content of the element (aka children)
-    // must be provided as sequential arguments to createElement
-    // so in order to spread it safely we need to ensure that it is an array
-    const childrenArray = safeChildrenArray(children);
-    return createElement(type, props, ...childrenArray);
+function jsx(name, attrs) {
+  // Calls the element creator function if the name is a function
+  if (typeof name === 'function') {
+    return name(attrs);
   }
-  // Is a component function so we must call it
-  return type({
-    ...props,
-    children
+
+  // Switches the tag name when this custom `tag` is present.
+  if (name === 'tag') {
+    name = String(attrs.of);
+    delete attrs.of;
+  }
+
+  const attributes = attributesToString(attrs);
+
+  if (!attrs.children && isVoidElement(name)) {
+    return '<' + name + attributes + '/>';
+  }
+
+  const contents = attrs.children ? contentsToString([attrs.children], attrs.safe) : '';
+
+  // Faster than checking if `children instanceof Promise`
+  // https://jsperf.app/zipuvi
+  if (typeof contents === 'string') {
+    return '<' + name + attributes + '>' + contents + '</' + name + '>';
+  }
+
+  return contents.then(function asyncChildren(child) {
+    return '<' + name + attributes + '>' + child + '</' + name + '>';
   });
 }
 
-// In this case we have no need to distingt between jsxs and jsx
-module.exports.jsxs = jsx;
-module.exports.jsx = jsx;
+/** @type {import('./jsx-runtime').jsxs} */
+function jsxs(name, attrs) {
+  // Calls the element creator function if the name is a function
+  if (typeof name === 'function') {
+    return name(attrs);
+  }
 
-// According to the jsx-runtime spec we must export the fragment element also
-module.exports.Fragment = Fragment;
+  // Switches the tag name when this custom `tag` is present.
+  if (name === 'tag') {
+    name = String(attrs.of);
+    delete attrs.of;
+  }
+
+  const attributes = attributesToString(attrs);
+
+  if (attrs.children.length === 0 && isVoidElement(name)) {
+    return '<' + name + attributes + '/>';
+  }
+
+  const contents = contentsToString(attrs.children, attrs.safe);
+
+  // Faster than checking if `children instanceof Promise`
+  // https://jsperf.app/zipuvi
+  if (typeof contents === 'string') {
+    return '<' + name + attributes + '>' + contents + '</' + name + '>';
+  }
+
+  return contents.then(function asyncChildren(child) {
+    return '<' + name + attributes + '>' + child + '</' + name + '>';
+  });
+}
+
+const JsxRuntime = {
+  jsx,
+  jsxs,
+
+  // According to the jsx-runtime spec we must export the fragment element also
+  Fragment
+};
+
+module.exports = JsxRuntime;
+module.exports.default = JsxRuntime;
+module.exports.default = JsxRuntime;

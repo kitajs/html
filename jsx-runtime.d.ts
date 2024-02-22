@@ -1,15 +1,25 @@
-import type { Children, Fragment, PropsWithChildren } from './index.d.ts';
+import type { Children, Fragment } from './index';
 
-export function safeChildrenArray(children: Children): Array<Children>;
-
+/**
+ * Generates a html string from the given contents.
+ *
+ * // TODO: JSDOC
+ */
 export function jsx(
-  type: string | ((props: PropsWithChildren) => JSX.Element),
-  props: PropsWithChildren
-): Promise<string> | string;
+  this: void,
+  name: string | Function,
+  attributes: { children?: Children; [k: string]: any }
+): JSX.Element;
 
+/**
+ * Generates a html string from the given contents.
+ *
+ * // TODO: JSDOC
+ */
 export function jsxs(
-  type: string | typeof jsx,
-  props: PropsWithChildren
-): Promise<string> | string;
+  this: void,
+  name: string | Function,
+  attributes: { children: Children[]; [k: string]: any }
+): JSX.Element;
 
 export { Fragment };

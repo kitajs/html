@@ -5,10 +5,9 @@
 /**
  * Returns true if the character at the given index is an uppercase character.
  *
- * @param {string} input The string to check.
- * @param {number} index The index of the character to check.
- * @returns {boolean} If the character at the given index is an uppercase character.
- * @this {void}
+ * @param input The string to check.
+ * @param index The index of the character to check.
+ * @returns If the character at the given index is an uppercase character.
  */
 export function isUpper(this: void, input: string, index: number): boolean;
 
@@ -16,10 +15,9 @@ export function isUpper(this: void, input: string, index: number): boolean;
  * Tag function that escapes the given string pieces and interpolates the given values.
  * Internally it uses {@linkcode escapeHtml} to escape the values.
  *
- * @param {TemplateStringsArray} strings Template string.
- * @param {...any} values Values to interpolate.
- * @returns {string} The escaped string.
- * @this {void}
+ * @param strings Template string.
+ * @param values Values to interpolate.
+ * @returns The escaped string.
  */
 export function escape(
   this: void,
@@ -34,28 +32,24 @@ export function escape(
  * If the {@linkcode Bun} runtime is available, this function will be swapped out to
  * {@linkcode Bun.escapeHTML}.
  *
- * @param {unknown} value The value to escape.
- * @returns {string} The escaped string.
- * @this {void}
+ * @param value The value to escape.
+ * @returns The escaped string.
  */
 export function escapeHtml(this: void, value: any): string;
 
 /**
  * Returns true if the element is a html void element.
  *
- * @param {string} tag The name of the element to check.
- * @returns {boolean} If the element is a html void element.
- * @this {void}
+ * @param tag The name of the element to check.
+ * @returns If the element is a html void element.
  */
 export function isVoidElement(this: void, tag: string): boolean;
 
 /**
  * Transforms an object of style attributes into a html style string.
  *
- * @param {object | string} style A record of literal values to use as style attributes or
- *   a string.
- * @returns {string} The generated html style string.
- * @this {void}
+ * @param style A record of literal values to use as style attributes or a string.
+ * @returns The generated html style string.
  */
 export function styleToString(this: void, style: object | string): string;
 
@@ -66,59 +60,49 @@ export function styleToString(this: void, style: object | string): string;
  *
  * @example `a b="c" d="1"`
  *
- * @param {object} attributes A record of literal values to use as attributes.
- * @returns {string} The generated html attributes string.
- * @this {void}
+ * @param attributes A record of literal values to use as attributes.
+ * @returns The generated html attributes string.
  */
 export function attributesToString(this: void, attributes: object): string;
 
 /**
  * Converts a camel cased string to a kebab cased string.
  *
- * @param {string} camel The camel cased string to convert.
- * @this {void}
+ * @param camel The camel cased string to convert.
  */
 export function toKebabCase(this: void, camel: string): string;
 
 /**
  * Generates a html string from the given contents.
  *
- * @param {string | Function} name The name of the element to create or a function that
- *   creates the element.
- * @param {{ children?: object }} [attributes] A record of literal values to use as
- *   attributes. A property named `children` will be used as the children of the element.
- * @param {...string} contents The inner contents of the element.
- * @returns {string} The generated html string.
- * @this {void}
+ * @param name The name of the element to create or a function that creates the element.
+ * @param [attributes] A record of literal values to use as attributes. A property named
+ *   `children` will be used as the children of the element.
+ * @param contents The inner contents of the element.
+ * @returns The generated html string.
  */
-export function createElement<C extends Children[], N extends string | Function>(
+export function createElement(
   this: void,
-  name: N,
+  name: string | Function,
   attributes: PropsWithChildren<any> | null,
-  ...contents: C
-): Promise<string> extends C[number]
-  ? Promise<string>
-  : N extends () => Promise<string>
-    ? Promise<string>
-    : string;
+  ...contents: Children[]
+): JSX.Element;
 
 /**
  * Joins raw string html elements into a single html string.
  *
  * A raw html fragment is just an array of strings, this method concatenates .
  *
- * @param {import('.').Children[]} contents An maybe nested array of strings to
- *   concatenate.
- * @param {boolean} [escape=false] If we should escape the contents before concatenating
- *   them. Default is `false`
- * @returns {string} The concatenated and escaped string of contents.
- * @this {void}
+ * @param contents An maybe nested array of strings to concatenate.
+ * @param escapeIf We should escape the contents before concatenating them. Default is
+ *   `false`
+ * @returns The concatenated and escaped string of contents.
  */
-export function contentsToString<C extends Children[]>(
+export function contentsToString(
   this: void,
-  contents: C,
+  contents: Children[],
   escape?: boolean
-): Promise<string> extends C[number] ? Promise<string> : string;
+): JSX.Element;
 
 /**
  * Compiles a **clean component** into a super fast component. This does not support
@@ -144,11 +128,11 @@ export function contentsToString<C extends Children[]>(
  * <Unclean repeat="a" n={5} />
  * ```
  *
- * @param {Function} htmlComponent The _clean_ component to compile. @param {boolean}
- *   [strict=true] If we should throw an error when a property is not found. Default is
+ * @param htmlComponent The _clean_ component to compile.
+ * @param strict If we should throw an error when a property is not found. Default is
  *   `true`
- * @param {string | undefined} [separator] The string used to interpolate and separate
- *   parameters @returns {Function} The compiled template function @this {void}
+ * @param separator The string used to interpolate and separate parameters
+ * @returns he compiled template function
  */
 export function compile<
   P extends { [K in keyof P]: K extends 'children' ? Children : string }
