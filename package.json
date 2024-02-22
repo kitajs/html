@@ -17,7 +17,6 @@
   "types": "index.d.ts",
   "scripts": {
     "bench": "tsc -p tsconfig.benchmark.json && cp benchmark/package.json dist/benchmark/package.json && cd dist/benchmark && node index.js",
-    "test:exec": "c8 --reporter lcov --reporter text node --trace-warnings --enable-source-maps --test dist/test",
     "format": "prettier --write .",
     "test": "tsc; c8 --reporter lcov --reporter text node --trace-warnings --enable-source-maps --test dist/test",
     "test:only": "tsc; node --trace-warnings --test-only --test dist/test"
