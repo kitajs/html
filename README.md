@@ -51,6 +51,7 @@
   - [Error boundaries](#error-boundaries)
   - [Why JSX.Element is a Promise?](#why-jsxelement-is-a-promise)
   - [Why there is no `context` API?](#why-there-is-no-context-api)
+  - [Alternative way to configure your tsconfig](#alternative-way-to-configure-your-tsconfig)
 - [Migrating from HTML](#migrating-from-html)
   - [Htmx](#htmx)
   - [Hotwire Turbo](#hotwire-turbo)
@@ -91,22 +92,6 @@ To use the `@kitajs/html` package, follow these steps:
 2. Configure your TypeScript project to transpile TSX/JSX into JavaScript and using our
    [LSP Plugin](#editor-intellisense-and-cli-tool). Update your `tsconfig.json` file with
    the following settings:
-
-   ```jsonc
-   // tsconfig.json
-
-   {
-     "compilerOptions": {
-       "jsx": "react",
-       "jsxFactory": "Html.createElement",
-       "jsxFragmentFactory": "Html.Fragment",
-       "plugins": [{ "name": "@kitajs/ts-html-plugin" }]
-     }
-   }
-   ```
-
-   or you can choose to auto import the jsx runtime by setting the `jsxImportSource` like
-   this:
 
    ```jsonc
    // tsconfig.json
@@ -169,33 +154,20 @@ To use the `@kitajs/html` package, follow these steps:
 
 ## Getting Started
 
-After successfully installing and configuring your project, you can start using JSX syntax
-to generate HTML. Here are two options for importing the `@kitajs/html` package:
+After installing the `@kitajs/html` package and configuring your TypeScript project, you
+should be able to use JSX to generate HTML inside your .tsx files.
 
-1. **Import it manually**: Import the package in your TypeScript files where you need it,
-   avoiding global scope pollution.
+```tsx
+const html = (
+  <div>
+    <h1>Hello, world!</h1>
+    <p>Welcome to the KitaJS HTML package.</p>
+  </div>
+);
+```
 
-   ```tsx
-   // my-file.tsx
-
-   console.log(<div>Html import needs to be in scope!</div>);
-   ```
-
-2. **Use the register to add a global namespace**: Import the `register` to globally
-   register all necessary functions for convenience. You don't need to do that if you are
-   using the `jsxImportSource` option in your `tsconfig.json`.
-
-   ```tsx
-   // Import the register to globally register all needed functions
-   import '@kitajs/html/register';
-
-   // another-file.tsx
-   console.log(<div>It works without importing!</div>);
-   ```
-
-Now you can use JSX to generate HTML throughout your project. Always use the `safe`
-attribute or manually call `Html.escapeHtml` to protect against XSS vulnerabilities when
-rendering user input.
+Always use the `safe` attribute or manually call `Html.escapeHtml` to protect against XSS
+vulnerabilities when rendering user input.
 
 Ensuring XSS prevention is vital to guarantee your application's security. You can employ
 the [`@kitajs/ts-html-plugin`](https://github.com/kitajs/ts-html-plugin) to catch XSS
@@ -570,6 +542,36 @@ app.get('/', (request, response) => (
 
 </br>
 
+## Alternative way to configure your tsconfig
+
+Is it possible to use this library using the old `jsx` and `jsxFactory` options in your
+`tsconfig.json` file. This is not recommended, but it is possible.
+
+```json
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "Html.createElement",
+    "jsxFragmentFactory": "Html.Fragment"
+  }
+}
+```
+
+If you choose this approach keep in mind that you will need to manually import the `Html`
+namespace in every file you use JSX.
+
+```tsx
+const html = (
+  <div>
+    <h1>Hello, world!</h1>
+    <p>Welcome to the KitaJS HTML package.</p>
+  </div>
+);
+```
+
+And also there is a light performance penalty when using this approach. It's minimal, but
+it's there.
+
 ## Migrating from HTML
 
 Migrating from plain HTML to JSX can be a pain to convert it all manually, as you will
@@ -619,6 +621,16 @@ const html = (
 );
 ```
 
+Or you can use the type option in your tsconfig to import the types globally:
+
+```json
+{
+  "compilerOptions": {
+    "types": ["@kitajs/html/htmx.d.ts"]
+  }
+}
+```
+
 <br />
 
 ### Alpinejs
@@ -634,6 +646,16 @@ const html = (
   // Type checking and intellisense for all HTMX attributes
   <div x-data="{ open: false }">...</div>
 );
+```
+
+Or you can use the type option in your tsconfig to import the types globally:
+
+```json
+{
+  "compilerOptions": {
+    "types": ["@kitajs/html/alpine.d.ts"]
+  }
+}
 ```
 
 <br />
@@ -657,6 +679,16 @@ const html = (
     <form action="/messages">Show response from this form within this frame.</form>
   </turbo-frame>
 );
+```
+
+Or you can use the type option in your tsconfig to import the types globally:
+
+```json
+{
+  "compilerOptions": {
+    "types": ["@kitajs/html/hotwire-turbo.d.ts"]
+  }
+}
 ```
 
 <br />
