@@ -67,6 +67,7 @@
 - [Performance](#performance)
 - [How it works](#how-it-works)
 - [Format HTML output](#format-html-output)
+- [Deprecating global register (global HTML object)](#deprecating-global-register-global-html-object)
 - [Fork credits](#fork-credits)
 
 <br />
@@ -1064,6 +1065,13 @@ console.log(prettify(html));
 [this PR](https://github.com/kitajs/html/pull/1).
 
 <br />
+
+## Deprecating global register (global HTML object)
+
+The `@kitajs/html/register` import has been deprecated and will be removed in the next
+major version. Please change the way you have configured your project to use this library.
+Refer to the [Getting Started](#installing) section for instructions on how to configure
+your TypeScript project to use this library.
 
 ## Fork credits
 
