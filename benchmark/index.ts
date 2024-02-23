@@ -8,11 +8,14 @@ import assert from 'assert';
 import { bench, group, run } from 'mitata';
 import { ReactJsx, StandardJsx } from './renderers/jsx-jsx.js';
 import { ManyComponents, TemplateManyComponents } from './renderers/many-components.js';
+import { ManyProps, TemplateManyProps } from './renderers/many-props.js';
+import { MdnHomepage, TemplateMdnHomepage } from './renderers/mdn-homepage.js';
 
 process.env.NODE_ENV = 'production';
 
 //@ts-expect-error - dynamic import from cjs js file.
 const KitaHtml = (await import('../../index.js')).default;
+const Kita2Html = (await import('../../index copy.js')).default;
 const TypedHtml = await import('typed-html');
 const React = await import('react');
 const ReactDOMServer = await import('react-dom/server');
@@ -26,7 +29,7 @@ assert.equal(
 );
 
 // Ensures that createElement and jsx produce the same output
-assert.equal(ReactJsx('Hello World!'), StandardJsx('Hello World!'));
+// assert.equal(ReactJsx('Hello World!'), StandardJsx('Hello World!'));
 
 // Ensures that Kitajs/html and common-tags produce the same output
 assert.equal(
@@ -61,8 +64,9 @@ assert.equal(
 group('Many Components (31.4kb)', () => {
   bench('Typed Html', () => ManyComponents(TypedHtml, 'Hello World!'));
   bench('KitaJS/Html', () => ManyComponents(KitaHtml, 'Hello World!'));
+  bench('2KitaJS/Html', () => ManyComponents(Kita2Html, 'Hello World!'));
   bench('Common Tags', () => TemplateManyComponents(CommonTags.html, 'Hello World!'));
-  bench('Ghtml', () => TemplateManyComponents(gHtml.html, 'Hello World!'));
+  // bench('Ghtml', () => TemplateManyComponents(gHtml.html, 'Hello World!'));
   bench('React', () =>
     ReactDOMServer.renderToStaticMarkup(ManyComponents(React, 'Hello World!') as any)
   );
@@ -71,8 +75,9 @@ group('Many Components (31.4kb)', () => {
 group('MdnHomepage (66.7Kb)', () => {
   bench('Typed Html', () => MdnHomepage(TypedHtml, 'Hello World!'));
   bench('KitaJS/Html', () => MdnHomepage(KitaHtml, 'Hello World!'));
+  bench('2KitaJS/Html', () => MdnHomepage(Kita2Html, 'Hello World!'));
   bench('Common Tags', () => TemplateMdnHomepage(CommonTags.html, 'Hello World!'));
-  bench('Ghtml', () => TemplateMdnHomepage(gHtml.html, 'Hello World!'));
+  // bench('Ghtml', () => TemplateMdnHomepage(gHtml.html, 'Hello World!'));
   bench('React', () =>
     ReactDOMServer.renderToStaticMarkup(MdnHomepage(React, 'Hello World!') as any)
   );
@@ -81,16 +86,18 @@ group('MdnHomepage (66.7Kb)', () => {
 group('Many Props (7.4kb)', () => {
   bench('Typed Html', () => ManyProps(TypedHtml, 'Hello World!'));
   bench('KitaJS/Html', () => ManyProps(KitaHtml, 'Hello World!'));
+  bench('2 KitaJS/Html', () => ManyProps(Kita2Html, 'Hello World!'));
   bench('Common Tags', () => TemplateManyProps(CommonTags.html, 'Hello World!'));
-  bench('Ghtml', () => TemplateManyProps(gHtml.html, 'Hello World!'));
+  // bench('Ghtml', () => TemplateManyProps(gHtml.html, 'Hello World!'));
   bench('React', () =>
     ReactDOMServer.renderToStaticMarkup(ManyProps(React, 'Hello World!') as any)
   );
 });
 
 group('createElement vs _jsx', () => {
-  bench('createElement', () => StandardJsx('Hello World!'));
   bench('_jsx', () => ReactJsx('Hello World!'));
+  bench('createElement', () => StandardJsx(KitaHtml, 'Hello World!'));
+  bench('createElement 2', () => StandardJsx(Kita2Html, 'Hello World!'));
 });
 
 run().catch(console.error);

@@ -94,13 +94,27 @@ export function createElement(
  * A raw html fragment is just an array of strings, this method concatenates .
  *
  * @param contents An maybe nested array of strings to concatenate.
- * @param escapeIf We should escape the contents before concatenating them. Default is
+ * @param escape If it should escape the contents before concatenating them. Default is
  *   `false`
  * @returns The concatenated and escaped string of contents.
  */
 export function contentsToString(
   this: void,
   contents: Children[],
+  escape?: boolean
+): JSX.Element;
+
+/**
+ * Transforms a single content into a string.
+ *
+ * @param content The content to transform.
+ * @param escape If it should escape the content before transforming it. Default is
+ *   `false`
+ * @returns The transformed and escaped string of content.
+ */
+export function contentToString(
+  this: void,
+  content: Children,
   escape?: boolean
 ): JSX.Element;
 
@@ -129,7 +143,7 @@ export function contentsToString(
  * ```
  *
  * @param htmlComponent The _clean_ component to compile.
- * @param strict If we should throw an error when a property is not found. Default is
+ * @param strict If it should throw an error when a property is not found. Default is
  *   `true`
  * @param separator The string used to interpolate and separate parameters
  * @returns The compiled template function
@@ -180,6 +194,7 @@ export type Children =
   | boolean
   | null
   | undefined
+  | bigint
   | Promise<Children>
   | Children[];
 

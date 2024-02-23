@@ -2,7 +2,8 @@ const {
   Fragment,
   attributesToString,
   isVoidElement,
-  contentsToString
+  contentsToString,
+  contentToString
 } = require('./index');
 
 /** @type {import('./jsx-runtime').jsx} */
@@ -15,17 +16,19 @@ function jsx(name, attrs) {
   // Switches the tag name when this custom `tag` is present.
   if (name === 'tag') {
     name = String(attrs.of);
-    delete attrs.of;
   }
 
   const attributes = attributesToString(attrs);
 
-  if (!attrs.children && isVoidElement(name)) {
-    return '<' + name + attributes + '/>';
+  if (attrs.children === undefined) {
+    if (isVoidElement(name)) {
+      return '<' + name + attributes + '/>';
+    }
+
+    return '<' + name + attributes + '></' + name + '>';
   }
 
-  const contents =
-    attrs.children !== undefined ? contentsToString([attrs.children], attrs.safe) : '';
+  const contents = contentToString(attrs.children, !!attrs.safe);
 
   // Faster than checking if `children instanceof Promise`
   // https://jsperf.app/zipuvi
@@ -33,7 +36,7 @@ function jsx(name, attrs) {
     return '<' + name + attributes + '>' + contents + '</' + name + '>';
   }
 
-  return contents.then(function asyncChildren(child) {
+  return contents.then(function resolveContents(child) {
     return '<' + name + attributes + '>' + child + '</' + name + '>';
   });
 }
@@ -48,16 +51,19 @@ function jsxs(name, attrs) {
   // Switches the tag name when this custom `tag` is present.
   if (name === 'tag') {
     name = String(attrs.of);
-    delete attrs.of;
   }
 
   const attributes = attributesToString(attrs);
 
-  if (attrs.children.length === 0 && isVoidElement(name)) {
-    return '<' + name + attributes + '/>';
+  if (attrs.children.length === 0) {
+    if (isVoidElement(name)) {
+      return '<' + name + attributes + '/>';
+    }
+
+    return '<' + name + attributes + '></' + name + '>';
   }
 
-  const contents = contentsToString(attrs.children, attrs.safe);
+  const contents = contentsToString(attrs.children, !!attrs.safe);
 
   // Faster than checking if `children instanceof Promise`
   // https://jsperf.app/zipuvi
@@ -65,7 +71,7 @@ function jsxs(name, attrs) {
     return '<' + name + attributes + '>' + contents + '</' + name + '>';
   }
 
-  return contents.then(function asyncChildren(child) {
+  return contents.then(function resolveContents(child) {
     return '<' + name + attributes + '>' + child + '</' + name + '>';
   });
 }

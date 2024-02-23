@@ -1,11 +1,10 @@
 //@ts-nocheck - disable messing with source types
 
-const { Html } = (await import('../../../index.js')).default;
 const { jsx, jsxs } = (await import('../../../jsx-runtime.js')).default;
 
 const big: any = 10347956237904562380n;
 
-export function StandardJsx(name: string) {
+export function StandardJsx(Html: { createElement: any }, name: string) {
   return Html.createElement(
     'div',
     null,

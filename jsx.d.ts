@@ -643,7 +643,7 @@ declare namespace JSX {
   interface IntrinsicAttributes {}
 
   interface ElementChildrenAttribute {
-    children?: undefined | any;
+    children?: undefined | import('./').Children;
   }
 
   interface IntrinsicElements {

@@ -31,7 +31,7 @@ describe('Error Boundary', () => {
   it('should render error boundary as function', async () => {
     const html = await (
       <>
-        <ErrorBoundary catch={(html) => <div>{html}</div>}>
+        <ErrorBoundary catch={(html) => <div>{String(html)}</div>}>
           {Promise.reject('my error')}
         </ErrorBoundary>
       </>

@@ -255,7 +255,7 @@ function attributesToString(attributes) {
     key = keys[index];
 
     // Skips all @kitajs/html specific attributes.
-    if (key === 'children' || key === 'safe') {
+    if (key === 'children' || key === 'safe' || key === 'of') {
       continue;
     }
 
@@ -377,17 +377,15 @@ function attributesToString(attributes) {
 function contentsToString(contents, escape) {
   let length = contents.length;
   let result = '';
-  let content;
-  let index = 0;
 
-  for (; index < length; index++) {
-    content = contents[index];
+  for (let index = 0; index < length; index++) {
+    let content = contents[index];
 
     switch (typeof content) {
-      case 'bigint':
+      case 'string':
       case 'number':
       case 'boolean':
-      case 'string':
+      case 'bigint':
         result += content;
         continue;
     }
@@ -396,24 +394,17 @@ function contentsToString(contents, escape) {
       continue;
     }
 
-    if (Array.isArray(content)) {
-      contents.splice(index--, 1, ...content);
-      length += content.length - 1;
-      continue;
-    }
-
-    // Needed to avoid infinite loop when the content is an invalid value
-    if (!content.then) {
-      throw new Error('Unsupported content type: ' + typeof content);
-    }
-
-    // @ts-expect-error - this is a promise
-    return Promise.all(contents.slice(index)).then(
-      function resolveAsyncContent(resolved) {
+    if (content instanceof Promise) {
+      // @ts-ignore - Type instantiation is excessively deep and possibly infinite.
+      return Promise.all(contents.slice(index)).then(function resolveContents(resolved) {
         resolved.unshift(result);
         return contentsToString(resolved, escape);
-      }
-    );
+      });
+    }
+
+    contents.splice(index--, 1, ...content);
+    length += content.length - 1;
+    continue;
   }
 
   // escapeHtml is faster with longer strings, that's
@@ -423,6 +414,35 @@ function contentsToString(contents, escape) {
   }
 
   return result;
+}
+
+/**
+ * @param {import('./index').Children} content
+ * @param {boolean} safe
+ * @returns {JSX.Element}
+ */
+function contentToString(content, safe) {
+  switch (typeof content) {
+    case 'string':
+      return safe ? escapeHtml(content) : content;
+
+    case 'number':
+    case 'boolean':
+    case 'bigint':
+      return content.toString();
+  }
+
+  if (!content) {
+    return '';
+  }
+
+  if (Array.isArray(content)) {
+    return contentsToString(content, safe);
+  }
+
+  return content.then(function resolveContent(resolved) {
+    return contentToString(resolved, safe);
+  });
 }
 
 /**
@@ -451,26 +471,25 @@ function createElement(name, attrs, ...children) {
   // Switches the tag name when this custom `tag` is present.
   if (hasAttrs && name === 'tag') {
     name = String(attrs.of);
-    delete attrs.of;
   }
 
   const attributes = hasAttrs ? attributesToString(attrs) : '';
 
-  if (children.length === 0 && isVoidElement(name)) {
-    return '<' + name + attributes + '/>';
+  if (children.length === 0) {
+    return isVoidElement(name)
+      ? '<' + name + attributes + '/>'
+      : '<' + name + attributes + '></' + name + '>';
   }
 
   const contents = contentsToString(children, hasAttrs && attrs.safe);
 
-  // Faster than checking if `children instanceof Promise`
-  // https://jsperf.app/zipuvi
-  if (typeof contents === 'string') {
-    return '<' + name + attributes + '>' + contents + '</' + name + '>';
+  if (contents instanceof Promise) {
+    return contents.then(function resolveContents(child) {
+      return '<' + name + attributes + '>' + child + '</' + name + '>';
+    });
   }
 
-  return contents.then(function asyncChildren(child) {
-    return '<' + name + attributes + '>' + child + '</' + name + '>';
-  });
+  return '<' + name + attributes + '>' + contents + '</' + name + '>';
 }
 
 /** @type {import('.').Fragment} */
@@ -580,6 +599,7 @@ const Html = {
   createElement,
   h: createElement,
   contentsToString,
+  contentToString,
   compile,
   Fragment
 };
