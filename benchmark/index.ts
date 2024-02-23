@@ -15,7 +15,7 @@ process.env.NODE_ENV = 'production';
 
 //@ts-expect-error - dynamic import from cjs js file.
 const KitaHtml = (await import('../../index.js')).default;
-const Kita2Html = (await import('../../index copy.js')).default;
+// const Kita2Html = (await import('../../index copy.js')).default;
 const TypedHtml = await import('typed-html');
 const React = await import('react');
 const ReactDOMServer = await import('react-dom/server');
@@ -64,7 +64,7 @@ assert.equal(
 group('Many Components (31.4kb)', () => {
   bench('Typed Html', () => ManyComponents(TypedHtml, 'Hello World!'));
   bench('KitaJS/Html', () => ManyComponents(KitaHtml, 'Hello World!'));
-  bench('2KitaJS/Html', () => ManyComponents(Kita2Html, 'Hello World!'));
+  // bench('2KitaJS/Html', () => ManyComponents(Kita2Html, 'Hello World!'));
   bench('Common Tags', () => TemplateManyComponents(CommonTags.html, 'Hello World!'));
   // bench('Ghtml', () => TemplateManyComponents(gHtml.html, 'Hello World!'));
   bench('React', () =>
@@ -75,7 +75,7 @@ group('Many Components (31.4kb)', () => {
 group('MdnHomepage (66.7Kb)', () => {
   bench('Typed Html', () => MdnHomepage(TypedHtml, 'Hello World!'));
   bench('KitaJS/Html', () => MdnHomepage(KitaHtml, 'Hello World!'));
-  bench('2KitaJS/Html', () => MdnHomepage(Kita2Html, 'Hello World!'));
+  // bench('2KitaJS/Html', () => MdnHomepage(Kita2Html, 'Hello World!'));
   bench('Common Tags', () => TemplateMdnHomepage(CommonTags.html, 'Hello World!'));
   // bench('Ghtml', () => TemplateMdnHomepage(gHtml.html, 'Hello World!'));
   bench('React', () =>
@@ -86,7 +86,7 @@ group('MdnHomepage (66.7Kb)', () => {
 group('Many Props (7.4kb)', () => {
   bench('Typed Html', () => ManyProps(TypedHtml, 'Hello World!'));
   bench('KitaJS/Html', () => ManyProps(KitaHtml, 'Hello World!'));
-  bench('2 KitaJS/Html', () => ManyProps(Kita2Html, 'Hello World!'));
+  // bench('2 KitaJS/Html', () => ManyProps(Kita2Html, 'Hello World!'));
   bench('Common Tags', () => TemplateManyProps(CommonTags.html, 'Hello World!'));
   // bench('Ghtml', () => TemplateManyProps(gHtml.html, 'Hello World!'));
   bench('React', () =>
