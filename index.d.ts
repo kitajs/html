@@ -132,7 +132,7 @@ export function contentsToString(
  * @param strict If we should throw an error when a property is not found. Default is
  *   `true`
  * @param separator The string used to interpolate and separate parameters
- * @returns He compiled template function
+ * @returns The compiled template function
  */
 export function compile<
   P extends { [K in keyof P]: K extends 'children' ? Children : string }

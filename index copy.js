@@ -375,45 +375,40 @@ function attributesToString(attributes) {
  * @returns {any}
  */
 function contentsToString(contents, escape) {
-  let length = contents.length;
-  let result = '';
-  let content;
-  let index = 0;
+  let length = contents.length,
+    result = '',
+    content,
+    index = 0;
 
   for (; index < length; index++) {
     content = contents[index];
 
-    switch (typeof content) {
-      case 'bigint':
-      case 'number':
-      case 'boolean':
-      case 'string':
-        result += content;
+    if (typeof content !== 'string') {
+      // Ignores non 0 falsy values
+      if (!content && content !== 0) {
         continue;
-    }
-
-    if (!content) {
-      continue;
-    }
-
-    if (Array.isArray(content)) {
-      contents.splice(index--, 1, ...content);
-      length += content.length - 1;
-      continue;
-    }
-
-    // Needed to avoid infinite loop when the content is an invalid value
-    if (!content.then) {
-      throw new Error('Unsupported content type: ' + typeof content);
-    }
-
-    // @ts-expect-error - this is a promise
-    return Promise.all(contents.slice(index)).then(
-      function resolveAsyncContent(resolved) {
-        resolved.unshift(result);
-        return contentsToString(resolved, escape);
       }
-    );
+
+      // @ts-expect-error - Also accepts thenable objects, not only promises
+      // https://jsperf.app/zipuvi
+      if (content.then) {
+        // @ts-expect-error - this is a promise
+        return Promise.all(contents.slice(index)).then(
+          function resolveAsyncContent(resolved) {
+            resolved.unshift(result);
+            return contentsToString(resolved, escape);
+          }
+        );
+      }
+
+      if (Array.isArray(content)) {
+        contents.splice(index--, 1, ...content);
+        length += content.length - 1;
+        continue;
+      }
+    }
+
+    result += content;
   }
 
   // escapeHtml is faster with longer strings, that's

@@ -6,9 +6,8 @@
 
 import assert from 'assert';
 import { bench, group, run } from 'mitata';
+import { ReactJsx, StandardJsx } from './renderers/jsx-jsx.js';
 import { ManyComponents, TemplateManyComponents } from './renderers/many-components.js';
-import { ManyProps, TemplateManyProps } from './renderers/many-props.js';
-import { MdnHomepage, TemplateMdnHomepage } from './renderers/mdn-homepage.js';
 
 process.env.NODE_ENV = 'production';
 
@@ -23,9 +22,11 @@ const gHtml = await import('ghtml');
 // Ensures that Kitajs/html and react produce the same output
 assert.equal(
   ReactDOMServer.renderToStaticMarkup(ManyComponents(React, 'Hello World!') as any),
-  // Simply removes spaces and newlines
   ManyComponents(KitaHtml, 'Hello World!')
 );
+
+// Ensures that createElement and jsx produce the same output
+assert.equal(ReactJsx('Hello World!'), StandardJsx('Hello World!'));
 
 // Ensures that Kitajs/html and common-tags produce the same output
 assert.equal(
@@ -85,6 +86,11 @@ group('Many Props (7.4kb)', () => {
   bench('React', () =>
     ReactDOMServer.renderToStaticMarkup(ManyProps(React, 'Hello World!') as any)
   );
+});
+
+group('createElement vs _jsx', () => {
+  bench('createElement', () => StandardJsx('Hello World!'));
+  bench('_jsx', () => ReactJsx('Hello World!'));
 });
 
 run().catch(console.error);
