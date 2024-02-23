@@ -29,7 +29,7 @@ assert.equal(
 );
 
 // Ensures that createElement and jsx produce the same output
-// assert.equal(ReactJsx('Hello World!'), StandardJsx('Hello World!'));
+assert.equal(ReactJsx('Hello World!'), StandardJsx('Hello World!'));
 
 // Ensures that Kitajs/html and common-tags produce the same output
 assert.equal(
