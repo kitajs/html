@@ -24,7 +24,8 @@ function jsx(name, attrs) {
     return '<' + name + attributes + '/>';
   }
 
-  const contents = attrs.children !== undefined ? contentsToString([attrs.children], attrs.safe) : '';
+  const contents =
+    attrs.children !== undefined ? contentsToString([attrs.children], attrs.safe) : '';
 
   // Faster than checking if `children instanceof Promise`
   // https://jsperf.app/zipuvi
