@@ -21,11 +21,9 @@ function jsx(name, attrs) {
   const attributes = attributesToString(attrs);
 
   if (attrs.children === undefined) {
-    if (isVoidElement(name)) {
-      return '<' + name + attributes + '/>';
-    }
-
-    return '<' + name + attributes + '></' + name + '>';
+    return isVoidElement(name)
+      ? '<' + name + attributes + '/>'
+      : '<' + name + attributes + '></' + name + '>';
   }
 
   const contents = contentToString(attrs.children, !!attrs.safe);
@@ -54,11 +52,9 @@ function jsxs(name, attrs) {
   const attributes = attributesToString(attrs);
 
   if (attrs.children.length === 0) {
-    if (isVoidElement(name)) {
-      return '<' + name + attributes + '/>';
-    }
-
-    return '<' + name + attributes + '></' + name + '>';
+    return isVoidElement(name)
+      ? '<' + name + attributes + '/>'
+      : '<' + name + attributes + '></' + name + '>';
   }
 
   const contents = contentsToString(attrs.children, !!attrs.safe);

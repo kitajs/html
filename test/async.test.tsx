@@ -30,3 +30,5 @@ describe('Async components', () => {
     assert(await html, '<div>1</div>');
   });
 });
+
+console.log(<div>{[1, 2].map((i) => 1)} {[1, 2].map((i) => 1)}</div>);

@@ -51,9 +51,10 @@
   - [Error boundaries](#error-boundaries)
   - [Why JSX.Element is a Promise?](#why-jsxelement-is-a-promise)
   - [Why there is no `context` API?](#why-there-is-no-context-api)
-  - [Alternative way to configure your tsconfig](#alternative-way-to-configure-your-tsconfig)
+- [Alternative way to configure your tsconfig](#alternative-way-to-configure-your-tsconfig)
 - [Migrating from HTML](#migrating-from-html)
   - [Htmx](#htmx)
+  - [Alpinejs](#alpinejs)
   - [Hotwire Turbo](#hotwire-turbo)
   - [Base HTML templates](#base-html-templates)
 - [Compiling HTML](#compiling-html)
@@ -68,7 +69,7 @@
 - [How it works](#how-it-works)
 - [Serialization table](#serialization-table)
 - [Format HTML output](#format-html-output)
-- [Deprecating global register (global HTML object)](#deprecating-global-register-global-html-object)
+- [Deprecating global register](#deprecating-global-register)
 - [Fork credits](#fork-credits)
 
 <br />
@@ -195,24 +196,14 @@ or manual invocation of `Html.escapeHtml`. Or you can also use the `Html.escape`
 alias `e` template function.
 
 ```tsx
-<div>⚠️ This will NOT be escaped and WILL expose you to XSS</div>
-
-<div attr="This WILL be escaped"></div>
-<div safe>This WILL be escaped</div>
-<div>{Html.escapeHtml('This WILL be escaped')}</div>
-```
-
-or using the `Html.escape` or its alias `e` template function:
-
-```tsx
 import { e } from '@kitajs/html';
 
 <div>⚠️ This will NOT be escaped and WILL expose you to XSS</div>
 
 <div attr="This WILL be escaped"></div>
 <div safe>This WILL be escaped</div>
-<div>{Html.escape`This WILL be escaped`}</div>
-<div>{e`This WILL be escaped`}</div>
+<div>{Html.escapeHtml('This WILL be escaped')}</div>
+<div>{e`This WILL be escaped: ${someVar}`}</div>
 ```
 
 Here's an example of how this is **DANGEROUS** for your application:
@@ -221,19 +212,27 @@ Here's an example of how this is **DANGEROUS** for your application:
 user = {
   name: 'Bad guy',
   description: '</div><script>getStoredPasswordAndSentToBadGuysServer()</script>'
-}
+};
 
-<div class="user-card">{user.description}</div>
-// Renders this HTML, which will execute malicious code:
-<div class="user-card">
-  <script>getStoredPasswordAndSentToBadGuysServer()</script>
-</div>
+// Executes malicious code:
+input = <div class="user-card">{user.description}</div>;
+output = (
+  <div class="user-card">
+    <script>getStoredPasswordAndSentToBadGuysServer()</script>
+  </div>
+);
 
-<div class="user-card" safe>{user.description}</div>
-// Renders this safe HTML, which will NOT execute any malicious code:
-<div class="user-card">
-  &lt;/div&gt;&lt;script&gt;getStoredPasswordAndSentToBadGuysServer()&lt;/script&gt;
-</div>
+// Does not execute any malicious code:
+input = (
+  <div class="user-card" safe>
+    {user.description}
+  </div>
+);
+output = (
+  <div class="user-card">
+    &lt;/div&gt;&lt;script&gt;getStoredPasswordAndSentToBadGuysServer()&lt;/script&gt;
+  </div>
+);
 ```
 
 <br />
@@ -563,7 +562,9 @@ If you choose this approach keep in mind that you will need to manually import t
 namespace in every file you use JSX.
 
 ```tsx
-const html = (
+import { Html } from '@kitajs/html';
+
+const Html = (
   <div>
     <h1>Hello, world!</h1>
     <p>Welcome to the KitaJS HTML package.</p>
@@ -1019,9 +1020,9 @@ you [tell tsc to transpile](#getting-started) JSX syntax to calls to our own JSX
 Gets transpiled by tsc to plain javascript:
 
 ```js
-const { jsx } = require('@kitajs/html/jsx-runtime');
+const runtime = require('@kitajs/html/jsx-runtime');
 
-jsx('ol', {
+runtime.jsx('ol', {
   start: 2,
   children: [1, 2].map((i) => jsx('li', { children: i }))
 });
@@ -1040,18 +1041,19 @@ Which, when called, returns this string:
 Here is the table that explains how this library handles different types of children,
 describing the inputs and outputs.
 
-| Input Type  | Output Type |
-| ----------- | ----------- |
-| `abc`       | "abc"       |
-| `10`        | "10"        |
-| `true`      | "true"      |
-| `false`     | "false"     |
-| `null`      | ""          |
-| `undefined` | ""          |
-| `[]`        | ""          |
-| `[1, "2"]`  | "12"        |
+> [!IMPORTANT]  
+> Arrays are simply concatenated with no separator.
 
-all that is not represented in the table will be considered not valid children
+| Input Type               | Output Type        |
+| ------------------------ | ------------------ |
+| `<div>{"abc"}</div>`     | `<div>abc</div>`   |
+| `<div>{10}</div>`        | `<div>10</div>`    |
+| `<div>{true}</div>`      | `<div>true</div>`  |
+| `<div>{false}</div>`     | `<div>false</div>` |
+| `<div>{null}</div>`      | `<div></div>`      |
+| `<div>{undefined}</div>` | `<div></div>`      |
+| `<div>{[1, 2]}</div>`    | `<div>12</div>`    |
+| `<div>{123n}</div>`      | `<div>123</div>`   |
 
 <br />
 
@@ -1087,12 +1089,35 @@ console.log(prettify(html));
 
 <br />
 
-## Deprecating global register (global HTML object)
+## Deprecating global register
 
 The `@kitajs/html/register` import has been deprecated and will be removed in the next
 major version. Please change the way you have configured your project to use this library.
-Refer to the [Getting Started](#installing) section for instructions on how to configure
-your TypeScript project to use this library.
+
+Please update your tsconfig to use the new `jsxImportSource` option and remove all
+references to `'@kitajs/html/register'` from your codebase.
+
+```diff
+{
+  "compilerOptions": {
++   "jsx": "react-jsx",
++   "jsxImportSource": "@kitajs/html",
+-   "jsx": "react",
+-   "jsxFactory": "Html.createElement",
+-   "jsxFragmentFactory": "Html.Fragment",
+    "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
+  }
+}
+```
+
+You can also remove all references to `import { Html } from '@kitajs/html'` from your
+codebase.
+
+```diff
+- import { Html } from '@kitajs/html';
+```
+
+<br />
 
 ## Fork credits
 

@@ -1,7 +1,9 @@
 'use strict';
 
-console.warn(
-  'The register.js file is deprecated and will be removed in the next major version. See here https://github.com/kitajs/html?tab=readme-ov-file#deprecating-global-register-global-html-object for more information.'
+process.emitWarning(
+  'The `@kitajs/html/register` import has been DEPRECATED and will be removed in the next major version. See https://github.com/kitajs/html#deprecating-global-register',
+  'DeprecationWarning',
+  'KITAJS_HTML_REGISTER_DEPRECATION'
 );
 
 // Finds the global object (window in browsers)
