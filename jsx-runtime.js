@@ -30,15 +30,13 @@ function jsx(name, attrs) {
 
   const contents = contentToString(attrs.children, !!attrs.safe);
 
-  // Faster than checking if `children instanceof Promise`
-  // https://jsperf.app/zipuvi
-  if (typeof contents === 'string') {
-    return '<' + name + attributes + '>' + contents + '</' + name + '>';
+  if (contents instanceof Promise) {
+    return contents.then(function resolveContents(child) {
+      return '<' + name + attributes + '>' + child + '</' + name + '>';
+    });
   }
 
-  return contents.then(function resolveContents(child) {
-    return '<' + name + attributes + '>' + child + '</' + name + '>';
-  });
+  return '<' + name + attributes + '>' + contents + '</' + name + '>';
 }
 
 /** @type {import('./jsx-runtime').jsxs} */
@@ -65,15 +63,13 @@ function jsxs(name, attrs) {
 
   const contents = contentsToString(attrs.children, !!attrs.safe);
 
-  // Faster than checking if `children instanceof Promise`
-  // https://jsperf.app/zipuvi
-  if (typeof contents === 'string') {
-    return '<' + name + attributes + '>' + contents + '</' + name + '>';
+  if (contents instanceof Promise) {
+    return contents.then(function resolveContents(child) {
+      return '<' + name + attributes + '>' + child + '</' + name + '>';
+    });
   }
 
-  return contents.then(function resolveContents(child) {
-    return '<' + name + attributes + '>' + child + '</' + name + '>';
-  });
+  return '<' + name + attributes + '>' + contents + '</' + name + '>';
 }
 
 const JsxRuntime = {

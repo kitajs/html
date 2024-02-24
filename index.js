@@ -394,17 +394,17 @@ function contentsToString(contents, escape) {
       continue;
     }
 
-    if (content instanceof Promise) {
-      // @ts-ignore - Type instantiation is excessively deep and possibly infinite.
-      return Promise.all(contents.slice(index)).then(function resolveContents(resolved) {
-        resolved.unshift(result);
-        return contentsToString(resolved, escape);
-      });
+    if (Array.isArray(content)) {
+      contents.splice(index--, 1, ...content);
+      length += content.length - 1;
+      continue;
     }
 
-    contents.splice(index--, 1, ...content);
-    length += content.length - 1;
-    continue;
+    // @ts-ignore - Type instantiation is excessively deep and possibly infinite.
+    return Promise.all(contents.slice(index)).then(function resolveContents(resolved) {
+      resolved.unshift(result);
+      return contentsToString(resolved, escape);
+    });
   }
 
   // escapeHtml is faster with longer strings, that's
