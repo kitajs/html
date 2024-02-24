@@ -20,7 +20,7 @@ devDependencies:
     specifier: ^21.1.6
     version: 21.1.6
   '@types/node':
-    specifier: ^20.11.5
+    specifier: ^20.11.20
     version: 20.11.24
   benny:
     specifier: ^3.7.1
@@ -38,10 +38,10 @@ devDependencies:
     specifier: ^24.0.0
     version: 24.0.0
   mitata:
-    specifier: ^0.1.6
+    specifier: ^0.1.11
     version: 0.1.11
   prettier:
-    specifier: ^3.2.4
+    specifier: ^3.2.5
     version: 3.2.5
   react:
     specifier: ^18.2.0
