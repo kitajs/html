@@ -31,7 +31,7 @@ describe('Miscellaneous', () => {
         {true}
         false null undefined 0 NaN true
       </>,
-      '0true' + 'false null undefined 0 NaN true'
+      'false0NaNtrue' + 'false null undefined 0 NaN true'
     );
 
     assert.equal(

@@ -39,6 +39,12 @@ describe('Runtime behavior of JSX', () => {
     // no attributes
     assert.equal(jsx('div', {}), '<div></div>');
 
+    // render tag
+    assert.equal(
+      jsx('tag', { of: 'custom-html-tag' }),
+      '<custom-html-tag></custom-html-tag>'
+    );
+
     // Single child
     assert.equal(jsx(Component, { id: 'test', children: 'Hello' }), 'Hello');
   });
@@ -54,6 +60,12 @@ describe('Runtime behavior of JSX', () => {
       jsxs('div', { id: 'test', children: ['Hello'] }),
       '<div id="test">Hello</div>'
     );
+
+    // epmty childrens
+    assert.equal(jsxs('div', { id: 'test', children: [] }), '<div id="test"></div>');
+
+    // void element
+    assert.equal(jsxs('meta', { children: [] }), '<meta/>');
 
     // Array children
     assert.equal(jsxs(Component, { id: 'test', children: ['Hello'] }), ['Hello']);

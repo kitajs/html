@@ -66,6 +66,7 @@
   - [Allow everything!](#allow-everything)
 - [Performance](#performance)
 - [How it works](#how-it-works)
+- [Serialization table](#serialization-table)
 - [Format HTML output](#format-html-output)
 - [Deprecating global register (global HTML object)](#deprecating-global-register-global-html-object)
 - [Fork credits](#fork-credits)
@@ -1005,8 +1006,7 @@ summary for Many Props (7.4kb)
 ## How it works
 
 This package just aims to be a drop in replacement syntax for JSX, and it works because
-you [tell tsc to transpile](#getting-started) JSX syntax to calls to our own `html`
-namespace.
+you [tell tsc to transpile](#getting-started) JSX syntax to calls to our own JSX-runtime.
 
 ```tsx
 <ol start={2}>
@@ -1019,11 +1019,12 @@ namespace.
 Gets transpiled by tsc to plain javascript:
 
 ```js
-Html.createElement(
-  'ol',
-  { start: 2 },
-  [1, 2].map((i) => Html.createElement('li', null, i))
-);
+const { jsx } = require('@kitajs/html/jsx-runtime');
+
+jsx('ol', {
+  start: 2,
+  children: [1, 2].map((i) => jsx('li', { children: i }))
+});
 ```
 
 Which, when called, returns this string:
@@ -1031,6 +1032,26 @@ Which, when called, returns this string:
 ```js
 '<ol start="2"><li>1</li><li>2</li></ol>';
 ```
+
+<br />
+
+## Serialization table
+
+Here is the table that explains how this library handles different types of children,
+describing the inputs and outputs.
+
+| Input Type  | Output Type |
+| ----------- | ----------- |
+| `abc`       | "abc"       |
+| `10`        | "10"        |
+| `true`      | "true"      |
+| `false`     | "false"     |
+| `null`      | ""          |
+| `undefined` | ""          |
+| `[]`        | ""          |
+| `[1, "2"]`  | "12"        |
+
+all that is not represented in the table will be considered not valid children
 
 <br />
 
