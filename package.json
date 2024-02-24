@@ -18,8 +18,8 @@
   "scripts": {
     "bench": "tsc -p tsconfig.benchmark.json && cp benchmark/package.json dist/benchmark/package.json && cd dist/benchmark && node index.js",
     "format": "prettier --write .",
-    "test": "tsc; c8 --reporter lcov --reporter text node --trace-warnings --enable-source-maps --test dist/test",
-    "test:only": "tsc; node --trace-warnings --test-only --test dist/test"
+    "test": "tsc; c8 --reporter lcov --reporter text node --no-deprecation --enable-source-maps --test dist/test",
+    "test:only": "tsc; node --no-deprecation --test-only --test dist/test"
   },
   "dependencies": {
     "csstype": "^3.1.3"

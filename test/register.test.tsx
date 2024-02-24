@@ -7,8 +7,14 @@ describe('Global instance', () => {
     // This should not be defined yet
     assert.equal(typeof Html, 'undefined');
 
+    // Avoids printing warnings
+    const previous = process.env.NODE_NO_WARNINGS;
+    process.env.NODE_NO_WARNINGS = '1';
+
     // Adds Html to the global namespace
     await import('../register');
+
+    process.env.NODE_NO_WARNINGS = previous;
 
     // Literally the same object
     assert.equal(typeof Html, 'object');

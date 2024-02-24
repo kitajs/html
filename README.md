@@ -1044,16 +1044,18 @@ describing the inputs and outputs.
 > [!IMPORTANT]  
 > Arrays are simply concatenated with no separator.
 
-| Input Type               | Output Type        |
-| ------------------------ | ------------------ |
-| `<div>{"abc"}</div>`     | `<div>abc</div>`   |
-| `<div>{10}</div>`        | `<div>10</div>`    |
-| `<div>{true}</div>`      | `<div>true</div>`  |
-| `<div>{false}</div>`     | `<div>false</div>` |
-| `<div>{null}</div>`      | `<div></div>`      |
-| `<div>{undefined}</div>` | `<div></div>`      |
-| `<div>{[1, 2]}</div>`    | `<div>12</div>`    |
-| `<div>{123n}</div>`      | `<div>123</div>`   |
+| Input Type                 | Output Type           |
+| -------------------------- | --------------------- |
+| `<div>{"abc"}</div>`       | `<div>abc</div>`      |
+| `<div>{10}</div>`          | `<div>10</div>`       |
+| `<div>{NaN}</div>`         | `<div>NaN</div>`      |
+| `<div>{Infinity}</div>`    | `<div>Infinity</div>` |
+| `<div>{true}</div>`        | `<div>true</div>`     |
+| `<div>{false}</div>`       | `<div>false</div>`    |
+| `<div>{null}</div>`        | `<div></div>`         |
+| `<div>{undefined}</div>`   | `<div></div>`         |
+| `<div>{[1, 2, 3]}</div>`   | `<div>12</div>`       |
+| `<div>{BigInt(123)}</div>` | `<div>123</div>`      |
 
 <br />
 

@@ -29,9 +29,21 @@ describe('Miscellaneous', () => {
         {0}
         {NaN}
         {true}
-        false null undefined 0 NaN true
+        {Infinity}
+        {-Infinity}
+        {123n}
       </>,
-      'false0NaNtrue' + 'false null undefined 0 NaN true'
+      <>
+        <>false</>
+        <></>
+        <></>
+        <>0</>
+        <>NaN</>
+        <>true</>
+        <>Infinity</>
+        <>-Infinity</>
+        <>123</>
+      </>
     );
 
     assert.equal(
