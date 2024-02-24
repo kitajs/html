@@ -68,7 +68,7 @@ group('Many Components (31.4kb)', () => {
   bench('React', () =>
     ReactDOMServer.renderToStaticMarkup(ManyComponents(React, 'Hello World!') as any)
   );
-  // bench('Ghtml', () => TemplateManyComponents(gHtml.html, 'Hello World!'));
+  bench('Ghtml', () => TemplateManyComponents(gHtml.html, 'Hello World!'));
   // bench('2KitaJS/Html', () => ManyComponents(Kita2Html, 'Hello World!'));
 });
 
@@ -79,7 +79,7 @@ group('MdnHomepage (66.7Kb)', () => {
   bench('React', () =>
     ReactDOMServer.renderToStaticMarkup(MdnHomepage(React, 'Hello World!') as any)
   );
-  // bench('Ghtml', () => TemplateMdnHomepage(gHtml.html, 'Hello World!'));
+  bench('Ghtml', () => TemplateMdnHomepage(gHtml.html, 'Hello World!'));
   // bench('2KitaJS/Html', () => MdnHomepage(Kita2Html, 'Hello World!'));
 });
 
@@ -90,14 +90,14 @@ group('Many Props (7.4kb)', () => {
   bench('React', () =>
     ReactDOMServer.renderToStaticMarkup(ManyProps(React, 'Hello World!') as any)
   );
-  // bench('Ghtml', () => TemplateManyProps(gHtml.html, 'Hello World!'));
+  bench('Ghtml', () => TemplateManyProps(gHtml.html, 'Hello World!'));
   // bench('2 KitaJS/Html', () => ManyProps(Kita2Html, 'Hello World!'));
 });
 
 group('createElement vs _jsx', () => {
   bench('_jsx', () => ReactJsx('Hello World!'));
   bench('createElement', () => StandardJsx(KitaHtml, 'Hello World!'));
-  bench('createElement 2', () => StandardJsx(Kita2Html, 'Hello World!'));
+  // bench('createElement 2', () => StandardJsx(Kita2Html, 'Hello World!'));
 });
 
 run().catch(console.error);
