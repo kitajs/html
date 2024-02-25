@@ -1054,7 +1054,7 @@ describing the inputs and outputs.
 | `<div>{false}</div>`       | `<div>false</div>`    |
 | `<div>{null}</div>`        | `<div></div>`         |
 | `<div>{undefined}</div>`   | `<div></div>`         |
-| `<div>{[1, 2, 3]}</div>`   | `<div>12</div>`       |
+| `<div>{[1, 2, 3]}</div>`   | `<div>123</div>`      |
 | `<div>{BigInt(123)}</div>` | `<div>123</div>`      |
 
 <br />
