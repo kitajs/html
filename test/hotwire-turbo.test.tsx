@@ -2,7 +2,6 @@
 //
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
-import Html from '../';
 
 describe('Turbo', () => {
   it('should return turbo frames correctly', async () => {

@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "jsx": "react",
-    "jsxFactory": "Html.createElement",
-    "jsxFragmentFactory": "Html.Fragment",
+    "jsx": "react-jsx",
+    "jsxImportSource": "..",
     "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
     "module": "CommonJS",
     "moduleResolution": "node",

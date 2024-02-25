@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import test, { describe } from 'node:test';
-import Html, { styleToString } from '../index';
+import { styleToString } from '../index';
 
 describe('Style', () => {
   test('camel case property', () => {

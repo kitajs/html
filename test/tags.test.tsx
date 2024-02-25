@@ -1,6 +1,5 @@
 import assert from 'node:assert';
 import test, { describe } from 'node:test';
-import Html from '..';
 
 describe('Tags', () => {
   test('Self-closing html tags', () => {

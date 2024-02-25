@@ -1,7 +1,6 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
 import { setTimeout } from 'timers/promises';
-import Html from '../';
 import { ErrorBoundary, isTimeoutError } from '../error-boundary';
 
 describe('Error Boundary', () => {
