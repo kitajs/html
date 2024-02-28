@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "dist",
+    "module": "Node16",
+    "target": "ESNext",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@kitajs/html"
+  },
+  "include": ["renderers", "index.ts"],
+  "exclude": ["dist"]
+}

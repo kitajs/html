@@ -78,4 +78,3 @@ const JsxRuntime = {
 
 module.exports = JsxRuntime;
 module.exports.default = JsxRuntime;
-module.exports.default = JsxRuntime;

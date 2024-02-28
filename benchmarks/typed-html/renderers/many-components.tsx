@@ -1,4 +1,6 @@
-export function ManyComponents(Html: { createElement: Function }, name: string) {
+import * as elements from 'typed-html';
+
+export function ManyComponents(name: string) {
   return (
     <div>
       <div>

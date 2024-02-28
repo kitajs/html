@@ -34,5 +34,5 @@
     "skipDefaultLibCheck": true
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.d.ts", "node_modules/csstype"],
-  "exclude": ["node_modules", "dist", "coverage", "benchmark"]
+  "exclude": ["node_modules", "dist", "coverage", "benchmarks"]
 }

@@ -1,0 +1,17 @@
+{
+  "name": "benchmark-runner",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "benchmark-kitajs": "workspace:*",
+    "benchmark-react": "workspace:*",
+    "benchmark-templates": "workspace:*",
+    "benchmark-typed-html": "workspace:*",
+    "common-tags": "^1.8.2",
+    "ghtml": "^1.0.1",
+    "mitata": "^0.1.11",
+    "react-dom": "^18.2.0"
+  }
+}

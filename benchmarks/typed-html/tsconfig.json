@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "dist",
+    "module": "Node16",
+    "target": "ESNext",
+    "jsx": "react",
+    "jsxFactory": "elements.createElement"
+  },
+  "include": ["renderers", "index.ts"],
+  "exclude": ["dist"]
+}
