@@ -1,0 +1,8 @@
+*
+
+# source & type files
+!dist/*
+
+!SECURITY.md
+!LICENSE
+!README.md
