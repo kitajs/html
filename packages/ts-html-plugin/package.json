@@ -20,7 +20,6 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "dev": "tsc -p tsconfig.build.json --watch",
-    "format": "prettier --write .",
     "prepack": "npm run build",
     "test": "node --require @swc-node/register --test test/**/*.test.ts",
     "test-procedure": "pnpm build && pnpm install && pnpm test"
@@ -42,6 +41,5 @@
   "peerDependencies": {
     "@kitajs/html": "workspace:^",
     "typescript": "^5.2.2"
-  },
-  "packageManager": "pnpm@8.7.5"
+  }
 }

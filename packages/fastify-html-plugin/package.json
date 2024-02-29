@@ -1,0 +1,41 @@
+{
+  "name": "@kitajs/fastify-html-plugin",
+  "version": "1.0.0",
+  "description": "A Fastify plugin to add support for @kitajs/html",
+  "homepage": "https://github.com/kitajs/fastify-html-plugin#readme",
+  "bugs": {
+    "url": "https://github.com/kitajs/fastify-html-plugin/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kitajs/fastify-html-plugin.git"
+  },
+  "license": "MIT",
+  "author": "Arthur Fiorette <kita@arthur.place>",
+  "type": "commonjs",
+  "main": "index.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "test": "tsd && c8 --reporter lcov --reporter text node -r @swc-node/register --test test/**/*.test.tsx",
+    "test:watch": "c8 --reporter lcov --reporter text node -r @swc-node/register --test --watch test/**/*.test.tsx"
+  },
+  "dependencies": {
+    "fastify-plugin": "^4.0.0"
+  },
+  "devDependencies": {
+    "@fastify/formbody": "^7.4.0",
+    "@swc-node/register": "^1.6.8",
+    "@swc/helpers": "^0.5.3",
+    "@types/jsdom": "^21.1.6",
+    "@types/node": "^20.11.5",
+    "c8": "^9.1.0",
+    "fastify": "^4.0.0-rc.2",
+    "jsdom": "^24.0.0",
+    "tsd": "^0.30.4",
+    "tslib": "^2.6.2"
+  },
+  "peerDependencies": {
+    "@kitajs/html": "workspace:^",
+    "@kitajs/ts-html-plugin": "workspace:^"
+  }
+}

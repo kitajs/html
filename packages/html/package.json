@@ -17,7 +17,6 @@
   "types": "index.d.ts",
   "scripts": {
     "bench": "pnpm --filter \"benchmark-*\" build && pnpm --filter \"benchmark-runner\" start",
-    "format": "prettier --write .",
     "test": "tsc; c8 --reporter lcov --reporter text node --no-deprecation --enable-source-maps --test dist/test",
     "test:only": "tsc; node --no-deprecation --test-only --test dist/test"
   },
@@ -33,9 +32,13 @@
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "@kitajs/ts-html-plugin": ">=1.3.3"
+    "@kitajs/ts-html-plugin": "workspace:^"
   },
-  "packageManager": "pnpm@8.7.5",
+  "peerDependenciesMeta": {
+    "@kitajs/ts-html-plugin": {
+      "optional": true
+    }
+  },
   "engines": {
     "node": ">=12"
   }
