@@ -1,5 +1,6 @@
 {
-  "name": "benchmark-typed-html",
+  "name": "@kitajs/bench-html-typed-html",
+  "private": true,
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc"

@@ -1,5 +1,6 @@
 {
-  "name": "benchmark-templates",
+  "name": "@kitajs/bench-html-templates",
+  "private": true,
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc"
@@ -7,5 +8,8 @@
   "dependencies": {
     "tslib": "^2.6.2",
     "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.20"
   }
 }

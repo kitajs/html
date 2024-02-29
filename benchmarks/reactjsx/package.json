@@ -1,5 +1,6 @@
 {
-  "name": "benchmark-react",
+  "name": "@kitajs/bench-html-reactjsx",
+  "private": true,
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc"
@@ -10,6 +11,7 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@types/node": "^20.11.20",
     "@types/react": "^18.2.60"
   }
 }

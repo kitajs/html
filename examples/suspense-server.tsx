@@ -1,7 +1,7 @@
 import http from 'http';
 import { setTimeout } from 'timers/promises';
 import Html, { PropsWithChildren } from '../index';
-import { Suspense, renderToStream } from '../suspense';
+import { Suspense, renderToStream } from '../packages/html/suspense';
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
   await setTimeout(ms * 2);

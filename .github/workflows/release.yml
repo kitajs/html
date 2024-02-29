@@ -1,0 +1,57 @@
+name: Release Flow
+
+on:
+  push:
+    branches: [main]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # https://github.com/actions/checkout/issues/1471
+      - name: Fetch tags
+        run: git fetch --prune --unshallow --tags
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+
+      - name: Setup node and restore cached dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup kita binary
+        run: pnpm link .
+        working-directory: packages/cli
+
+      - name: Build
+        run: pnpm build
+
+      - name: Create Release Pull Request or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm ci:version
+          commit: 'chore: update versions'
+          title: 'Release plan'
+
+          # https://github.com/changesets/action/issues/246
+          # https://github.com/changesets/changesets/pull/674
+          publish: pnpm ci:publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.AUTOMERGE_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

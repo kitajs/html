@@ -1,14 +1,14 @@
 {
-  "name": "benchmark-runner",
+  "name": "@kitajs/bench-html-runner",
   "type": "module",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "benchmark-kitajs": "workspace:*",
-    "benchmark-react": "workspace:*",
-    "benchmark-templates": "workspace:*",
-    "benchmark-typed-html": "workspace:*",
+    "@kitajs/bench-html-kitajs": "workspace:*",
+    "@kitajs/bench-html-reactjsx": "workspace:*",
+    "@kitajs/bench-html-templates": "workspace:*",
+    "@kitajs/bench-html-typed-html": "workspace:*",
     "common-tags": "^1.8.2",
     "ghtml": "^1.0.1",
     "mitata": "^0.1.11",

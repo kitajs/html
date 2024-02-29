@@ -1,13 +1,18 @@
-name: Code CI
+name: CI Flow
 
 on:
   push:
-  pull_request:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
   build:
-    name: Build and test code
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    name: CI flow ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
 
     steps:
       - name: Checkout
@@ -25,10 +30,15 @@ jobs:
       - name: Install packages
         run: pnpm install --frozen-lockfile
 
+      - name: Build
+        run: pnpm build
+
       - name: Test
         run: pnpm test
 
-      - name: Codecov upload
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: Publish to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          # Codecov backend may be unstable
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}

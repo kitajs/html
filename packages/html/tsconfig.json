@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "jsx": "react-jsx",
-    "jsxImportSource": "@kitajs/html",
+    "jsxImportSource": "..",
     "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
     "module": "CommonJS",
     "moduleResolution": "node",

@@ -5,6 +5,9 @@
     "module": "Node16",
     "target": "ESNext",
     "jsx": "react-jsx",
+    "moduleResolution": "Node16",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "jsxImportSource": "@kitajs/html"
   },
   "include": ["renderers", "index.ts"],
