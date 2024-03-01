@@ -19,7 +19,7 @@ describe('Async components', () => {
     assert(await (<Async>{1}</Async>), '<div>1</div>');
   });
 
-  test('Children', async () => {
+  test('Child', async () => {
     const html = (
       <Sync>
         <Async>{1}</Async>
@@ -28,5 +28,21 @@ describe('Async components', () => {
 
     assert.ok(html instanceof Promise);
     assert(await html, '<div>1</div>');
+  });
+
+  test('Children', async () => {
+    const html = (
+      <div>
+        <Async>
+          {1} {2}
+        </Async>
+        <Async>
+          {3} {4}
+        </Async>
+      </div>
+    );
+
+    assert.ok(html instanceof Promise);
+    assert(await html, '<div>1234</div>');
   });
 });

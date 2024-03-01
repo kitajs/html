@@ -17,6 +17,18 @@ describe('Util', () => {
       ''
     );
 
+    for (const i of [
+      undefined,
+      Promise.resolve(undefined),
+      [undefined, Promise.resolve(undefined)],
+      null,
+      Promise.resolve(null),
+      [null, Promise.resolve(null)],
+      [[[[[[[]]]]]]]
+    ]) {
+      assert.equal(await Html.contentToString(i), '');
+    }
+
     assert.equal(await Html.contentsToString([]), '');
   });
 

@@ -6,6 +6,14 @@ import { jsx, jsxs } from '../jsx-runtime';
 
 describe('Runtime behavior of JSX', () => {
   test('createElement', () => {
+    function Component(props: any) {
+      return <div {...props}></div>;
+    }
+
+    async function AsyncComponent() {
+      return Promise.resolve('<div>1</div>');
+    }
+
     assert.strictEqual(createElement, h);
 
     // children
@@ -19,6 +27,32 @@ describe('Runtime behavior of JSX', () => {
 
     // no attributes
     assert.equal(createElement('div', null), '<div></div>');
+
+    // render Component
+    assert.equal(createElement(Component, null), '<div></div>');
+    assert.equal(createElement(Component, {}, 'child'), '<div>child</div>');
+    assert.equal(
+      createElement(Component, null, 'child ', 'child2'),
+      '<div>child child2</div>'
+    );
+    assert.equal(
+      createElement(Component, {}, 'child ', 'child2'),
+      '<div>child child2</div>'
+    );
+
+    // render tag
+    assert.equal(
+      createElement('tag', { of: 'custom-html-tag' }),
+      '<custom-html-tag></custom-html-tag>'
+    );
+
+    // render async Component
+    assert.ok(
+      createElement('div', null, createElement(AsyncComponent, null)) instanceof Promise
+    );
+
+    // void element
+    assert.equal(createElement('meta', null), '<meta/>');
   });
 
   test('jsx', () => {

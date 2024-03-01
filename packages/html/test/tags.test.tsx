@@ -22,6 +22,13 @@ describe('Tags', () => {
     assert.equal(<tag of="div" attr />, '<div attr></div>');
 
     assert.equal(<tag of="div" attr></tag>, '<div attr></div>');
+    assert.equal(
+      <tag of="div" attr>
+        <div></div>
+        <div></div>
+      </tag>,
+      '<div attr><div></div><div></div></div>'
+    );
 
     assert.equal(
       <tag of="div" attr>
