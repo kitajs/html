@@ -2,14 +2,16 @@
   "name": "@kitajs/html",
   "version": "3.1.2",
   "description": "Fast and type safe HTML templates using TypeScript.",
+  "homepage": "https://github.com/kitajs/html/tree/master/packages/html#readme",
   "bugs": "https://github.com/kitajs/html/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kitajs/html.git"
+    "url": "git+https://github.com/kitajs/html.git",
+    "directory": "packages/html"
   },
   "funding": "https://github.com/kitajs/html?sponsor=1",
-  "license": "Apache-2.0",
-  "author": "arthurfiorette <npm@arthur.place>",
+  "license": "MIT",
+  "author": "Arthur Fiorette <kita@arthur.place>",
   "sideEffects": [
     "register.js"
   ],

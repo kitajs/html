@@ -2,14 +2,14 @@
   "name": "@kitajs/fastify-html-plugin",
   "version": "1.0.0",
   "description": "A Fastify plugin to add support for @kitajs/html",
-  "homepage": "https://github.com/kitajs/fastify-html-plugin#readme",
-  "bugs": {
-    "url": "https://github.com/kitajs/fastify-html-plugin/issues"
-  },
+  "homepage": "https://github.com/kitajs/html/tree/master/packages/fastify-html-plugin#readme",
+  "bugs": "https://github.com/kitajs/html/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kitajs/fastify-html-plugin.git"
+    "url": "git+https://github.com/kitajs/html.git",
+    "directory": "packages/fastify-html-plugin"
   },
+  "funding": "https://github.com/kitajs/html?sponsor=1",
   "license": "MIT",
   "author": "Arthur Fiorette <kita@arthur.place>",
   "type": "commonjs",
