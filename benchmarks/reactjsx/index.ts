@@ -1,3 +1,3 @@
 export * from './renderers/many-components';
 export * from './renderers/many-props';
-export * from './renderers/mdn-homepage';
+export * from './renderers/real-world';

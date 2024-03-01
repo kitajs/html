@@ -8,6 +8,7 @@ import StringTemplateRenderers from '@kitajs/bench-html-templates';
 import TypedHtmlRenderers from '@kitajs/bench-html-typed-html';
 
 import CommonTags from 'common-tags';
+import * as gHtml from 'ghtml';
 import ReactDOMServer from 'react-dom/server';
 import { assertHtml } from './assertions.js';
 
@@ -25,9 +26,9 @@ group('Many Components (31.4kb)', () => {
   bench('Common Tags', () =>
     StringTemplateRenderers.TemplateManyComponents(CommonTags.html, 'Hello World!')
   );
-  // bench('Ghtml', () =>
-  //   StringTemplateRenderers.TemplateManyComponents(gHtml.html, 'Hello World!')
-  // );
+  bench('Ghtml', () =>
+    StringTemplateRenderers.TemplateManyComponents(gHtml.html, 'Hello World!')
+  );
 });
 
 group('Many Props (7.4kb)', () => {
@@ -41,25 +42,23 @@ group('Many Props (7.4kb)', () => {
   bench('Common Tags', () =>
     StringTemplateRenderers.TemplateManyProps(CommonTags.html, 'Hello World!')
   );
-  // bench('Ghtml', () =>
-  //   StringTemplateRenderers.TemplateManyProps(gHtml.html, 'Hello World!')
-  // );
+  bench('Ghtml', () =>
+    StringTemplateRenderers.TemplateManyProps(gHtml.html, 'Hello World!')
+  );
 });
 
 group('MdnHomepage (66.7Kb)', () => {
-  bench('KitaJS/Html', () => KitaHtmlJSXRuntimeRenderers.MdnHomepage('Hello World!'));
-  bench('Typed Html', () => TypedHtmlRenderers.MdnHomepage('Hello World!'));
+  bench('KitaJS/Html', () => KitaHtmlJSXRuntimeRenderers.RealWorldPage('Hello World!'));
+  bench('Typed Html', () => TypedHtmlRenderers.RealWorldPage('Hello World!'));
   bench('React', () =>
     ReactDOMServer.renderToStaticMarkup(
-      ReactJSXRuntimeRenderers.MdnHomepage('Hello World!')
+      ReactJSXRuntimeRenderers.RealWorldPage('Hello World!')
     )
   );
   bench('Common Tags', () =>
-    StringTemplateRenderers.TemplateMdnHomepage(CommonTags.html, 'Hello World!')
+    StringTemplateRenderers.RealWorldPage(CommonTags.html, 'Hello World!')
   );
-  // bench('Ghtml', () =>
-  //   StringTemplateRenderers.TemplateMdnHomepage(gHtml.html, 'Hello World!')
-  // );
+  bench('Ghtml', () => StringTemplateRenderers.RealWorldPage(gHtml.html, 'Hello World!'));
 });
 
 run().catch(console.error);
