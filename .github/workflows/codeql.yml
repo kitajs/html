@@ -2,10 +2,10 @@ name: 'CodeQL'
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     paths: ['**.js', '**.jsx', '**.ts', '**.tsx']
   pull_request:
-    branches: [main]
+    branches: [master]
   schedule:
     - cron: '0 0/12 * * *'
 
