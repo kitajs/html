@@ -34,12 +34,11 @@ jobs:
       - name: Install packages
         run: pnpm install --frozen-lockfile
 
-      - name: Setup kita binary
-        run: pnpm link .
-        working-directory: packages/cli
-
       - name: Build
         run: pnpm build
+
+      - name: Link build
+        run: pnpm install --frozen-lockfile
 
       - name: Create Release Pull Request or Publish
         id: changesets
