@@ -82,4 +82,26 @@ describe('React integration', () => {
     assert.equal(<div class="b" className="d"></div>, '<div class="b"></div>');
     assert.equal(<div className="a" class="b"></div>, '<div class="b"></div>');
   });
+
+  test('Reserved `key` attribute', () => {
+    function Test({ key }: { key: number }) {
+      // ensure the below component call does not passed key
+      assert.equal(key, undefined);
+
+      return (
+        <div
+          //@ts-expect-error - key is reserved
+          key={key}
+        ></div>
+      );
+    }
+
+    assert.equal(
+      <Test
+        //@ts-expect-error - key is reserved
+        key={1}
+      />,
+      '<div></div>'
+    );
+  });
 });

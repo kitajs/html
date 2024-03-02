@@ -640,7 +640,18 @@ declare namespace JSX {
 
   interface HtmlVideoTag extends MediaEvents {}
 
-  interface IntrinsicAttributes {}
+  interface IntrinsicAttributes {
+    /**
+     * In `react-jsx`, the `'key'` attribute serves as a reserved attribute name.
+     * Consequently, the `'key'` attribute is not included in the properties parameter of
+     * any component or element.
+     *
+     * **If you intend to utilize a similar property, please opt for an alternate name.**
+     *
+     * @see https://github.com/reactjs/rfcs/pull/107
+     */
+    key?: never;
+  }
 
   interface ElementChildrenAttribute {
     children?: undefined | import('./').Children;
