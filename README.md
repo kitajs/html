@@ -27,3 +27,7 @@
 - [@kitajs/html](./packages/html)
 - [@kitajs/ts-html-plugin](./packages/ts-html-plugin)
 - [@kitajs/fastify-html-plugin](./packages/fastify-html-plugin)
+
+## Performance & Benchmarks
+
+See the [benchmark](./benchmarks) section for more information.

@@ -1,8 +1,8 @@
 # Benchmark
 
-The `RealWorldPage` benchmark holds the most importante, representing a realistic workload
-scenario. _Other benchmarks serve specific purposes, such as measuring the speed of
-creating individual elements or handling attribute injection and escaping._
+The `RealWorldPage` benchmark is the most meaningful since it represents a realistic
+workload scenario. _Other benchmarks serve specific purposes, such as measuring the speed
+of creating individual elements or handling attribute injection and escaping._
 
 It's essential to emphasize that all benchmarks aim for impartiality. Any perceived bias
 towards a particular library should be promptly reported, and corrective actions will be
@@ -15,7 +15,7 @@ Feel free to reach out if you have any concerns or suggestions for improving the
 benchmarking process. Your feedback is invaluable in ensuring the fairness and accuracy of
 our comparisons.
 
-Also feel free to contribute benchmarks for any library you're interested in by opening a
+Also, feel free to contribute benchmarks for any library you're interested in by opening a
 pull request (PR). If you need assistance or wish to suggest a library for benchmarking,
 don't hesitate to open an issue.
 
