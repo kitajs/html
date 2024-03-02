@@ -129,28 +129,28 @@ importers:
         specifier: ^7.4.0
         version: 7.4.0
       '@swc-node/register':
-        specifier: ^1.6.8
+        specifier: ^1.8.0
         version: 1.8.0(@swc/core@1.4.2)(@swc/types@0.1.5)(typescript@5.3.3)
       '@swc/helpers':
-        specifier: ^0.5.3
+        specifier: ^0.5.6
         version: 0.5.6
       '@types/jsdom':
         specifier: ^21.1.6
         version: 21.1.6
       '@types/node':
-        specifier: ^20.11.5
-        version: 20.11.20
+        specifier: ^20.11.24
+        version: 20.11.24
       c8:
         specifier: ^9.1.0
         version: 9.1.0
       fastify:
-        specifier: ^4.0.0-rc.2
+        specifier: ^4.26.1
         version: 4.26.1
       jsdom:
         specifier: ^24.0.0
         version: 24.0.0
       tsd:
-        specifier: ^0.30.4
+        specifier: ^0.30.7
         version: 0.30.7
       tslib:
         specifier: ^2.6.2

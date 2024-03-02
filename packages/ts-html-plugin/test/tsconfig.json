@@ -3,14 +3,5 @@
   "compilerOptions": {
     "plugins": [{ "name": "self" }]
   },
-  "include": [
-    "**/*.tsx",
-    "warn.test.ts",
-    "unsafe-tags.test.ts",
-    "safe.test.ts",
-    "operators.test.ts",
-    "double-escape.test.ts",
-    "component-xss.test.ts",
-    "arrays.test.ts"
-  ]
+  "include": ["**/*.tsx", "*.test.ts"]
 }

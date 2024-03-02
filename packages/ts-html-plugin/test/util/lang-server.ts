@@ -20,7 +20,7 @@ const TEST_FILE = path.join(__dirname, 'index.tsx');
 const ROOT = path.join(__dirname, '..');
 
 export const TEST_HELPERS = /* tsx */ `
-  import Html, { PropsWithChildren, e } from '@kitajs/html';
+  import Html, { type PropsWithChildren, e } from '@kitajs/html';
 
   const date = new Date();
   const safeString: string = 'safe';
@@ -40,7 +40,7 @@ export const TEST_HELPERS = /* tsx */ `
   // just to avoid unused variable error
   if (process.env.NEVER) {
     console.log({
-      date, e
+      date, e, Html,
       safeString,
       promiseHtml,
       promiseNumber,

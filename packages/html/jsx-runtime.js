@@ -1,3 +1,5 @@
+/// <reference path="./jsx.d.ts" />
+
 const {
   Fragment,
   attributesToString,
