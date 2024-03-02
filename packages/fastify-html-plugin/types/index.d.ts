@@ -67,7 +67,7 @@ declare module 'fastify' {
      * @param html The HTML to send.
      * @returns The response.
      */
-    streamHtml(this: this, html: JSX.Element): this | Promise<this>;
+    streamHtml(this: this, html: JSX.Element): this;
 
     /**
      * This function is called internally by the `streamHtml` getter.

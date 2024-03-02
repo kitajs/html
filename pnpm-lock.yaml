@@ -196,30 +196,27 @@ importers:
         specifier: ^2.6.2
         version: 2.6.2
       typescript:
-        specifier: ^5.2.2
+        specifier: ^5.3.3
         version: 5.3.3
       yargs:
         specifier: ^17.7.2
         version: 17.7.2
     devDependencies:
       '@swc-node/register':
-        specifier: ^1.6.8
+        specifier: ^1.8.0
         version: 1.8.0(@swc/core@1.4.2)(@swc/types@0.1.5)(typescript@5.3.3)
       '@swc/helpers':
-        specifier: ^0.5.3
+        specifier: ^0.5.6
         version: 0.5.6
       '@types/node':
-        specifier: ^20.9.2
-        version: 20.11.20
+        specifier: ^20.11.24
+        version: 20.11.24
       '@types/yargs':
-        specifier: ^17.0.31
+        specifier: ^17.0.32
         version: 17.0.32
       fast-defer:
         specifier: ^1.1.8
         version: 1.1.8
-      prettier:
-        specifier: ^3.1.0
-        version: 3.2.5
       self:
         specifier: file:.
         version: file:packages/ts-html-plugin(@kitajs/html@packages+html)(typescript@5.3.3)
@@ -4144,7 +4141,7 @@ packages:
     hasBin: true
     peerDependencies:
       '@kitajs/html': workspace:^
-      typescript: ^5.2.2
+      typescript: ^5.3.3
     dependencies:
       '@kitajs/html': link:packages/html
       chalk: 4.1.2

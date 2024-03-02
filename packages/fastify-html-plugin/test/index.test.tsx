@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import test, { describe } from 'node:test';
 import { setImmediate } from 'node:timers/promises';
 import { fastifyKitaHtml } from '..';
-import { CONTENT_TYPE_HEADER, CONTENT_TYPE_VALUE } from '../lib/constants';
+import { CONTENT_TYPE_VALUE } from '../lib/constants';
 
 describe('reply.html()', () => {
   test('renders html', async () => {
@@ -15,7 +15,7 @@ describe('reply.html()', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+    assert.strictEqual(res.headers['content-type'], CONTENT_TYPE_VALUE);
     assert.strictEqual(res.body, '<div>Hello from JSX!</div>');
   });
 
@@ -30,7 +30,7 @@ describe('reply.html()', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+    assert.strictEqual(res.headers['content-type'], CONTENT_TYPE_VALUE);
     assert.strictEqual(res.body, '<div>Hello from async JSX!</div>');
   });
 
@@ -46,16 +46,13 @@ describe('reply.html()', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 500);
-    assert.strictEqual(
-      res.headers[CONTENT_TYPE_HEADER],
-      'application/json; charset=utf-8'
-    );
+    assert.strictEqual(res.headers['content-type'], 'application/json; charset=utf-8');
     assert.deepStrictEqual(res.json(), {
       statusCode: 500,
-      code: 'FST_ERR_REP_INVALID_PAYLOAD_TYPE',
+      code: 'ERR_INVALID_ARG_TYPE',
       error: 'Internal Server Error',
       message:
-        "Attempted to send payload of invalid type 'number'. Expected a string or Buffer."
+        'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received type number (12345)'
     });
   });
 
@@ -71,16 +68,13 @@ describe('reply.html()', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 500);
-    assert.strictEqual(
-      res.headers[CONTENT_TYPE_HEADER],
-      'application/json; charset=utf-8'
-    );
+    assert.strictEqual(res.headers['content-type'], 'application/json; charset=utf-8');
     assert.deepStrictEqual(res.json(), {
       statusCode: 500,
-      code: 'FST_ERR_REP_INVALID_PAYLOAD_TYPE',
+      code: 'ERR_INVALID_ARG_TYPE',
       error: 'Internal Server Error',
       message:
-        "Attempted to send payload of invalid type 'number'. Expected a string or Buffer."
+        'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received type number (12345)'
     });
   });
 });

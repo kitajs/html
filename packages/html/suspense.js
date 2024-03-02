@@ -228,12 +228,12 @@ async function pipeHtml(html, stream, rid) {
     stream.push(await html);
   } catch (error) {
     // Emits the error down the stream or
-    // prints it to the console if there's no
-    // listener (default node impl always has a listener)
+    // rethrows if there's no listener
+    // (default node impl always has a listener)
 
     /* c8 ignore next 4 */
     if (stream.emit('error', error) === false) {
-      console.error(error);
+      throw error;
     }
   } finally {
     const request = SUSPENSE_ROOT.requests.get(rid);

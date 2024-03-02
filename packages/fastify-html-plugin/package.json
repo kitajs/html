@@ -37,5 +37,10 @@
   "peerDependencies": {
     "@kitajs/html": "workspace:^",
     "@kitajs/ts-html-plugin": "workspace:^"
+  },
+  "peerDependenciesMeta": {
+    "@kitajs/ts-html-plugin": {
+      "optional": true
+    }
   }
 }

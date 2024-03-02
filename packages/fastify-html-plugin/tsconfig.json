@@ -9,5 +9,5 @@
     "outDir": "dist",
     "plugins": [{ "name": "@kitajs/ts-html-plugin" }]
   },
-  "include": ["src", "test"]
+  "include": ["lib", "test", "index.js"]
 }

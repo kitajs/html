@@ -12,7 +12,7 @@ import assert from 'node:assert';
 import { afterEach, describe, test } from 'node:test';
 import { setTimeout } from 'node:timers/promises';
 import { fastifyKitaHtml } from '..';
-import { CONTENT_TYPE_HEADER, CONTENT_TYPE_VALUE } from '../lib/constants';
+import { CONTENT_TYPE_VALUE } from '../lib/constants';
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
   await setTimeout(ms * 2);
@@ -40,7 +40,7 @@ describe('Suspense', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+    assert.strictEqual(res.headers['content-type'], CONTENT_TYPE_VALUE);
     assert.strictEqual(res.body, '<div></div>');
   });
 
@@ -59,7 +59,7 @@ describe('Suspense', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+    assert.strictEqual(res.headers['content-type'], CONTENT_TYPE_VALUE);
     assert.strictEqual(res.body, '<div>2</div>');
   });
 
@@ -78,7 +78,7 @@ describe('Suspense', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+    assert.strictEqual(res.headers['content-type'], CONTENT_TYPE_VALUE);
     assert.strictEqual(
       res.body,
       <>
@@ -113,7 +113,7 @@ describe('Suspense', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+    assert.strictEqual(res.headers['content-type'], CONTENT_TYPE_VALUE);
     assert.strictEqual(
       res.body,
       <>
@@ -148,7 +148,7 @@ describe('Suspense', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+    assert.strictEqual(res.headers['content-type'], CONTENT_TYPE_VALUE);
     assert.strictEqual(res.body, '<div>2</div>');
   });
 
@@ -170,7 +170,7 @@ describe('Suspense', () => {
       promises.push(
         app.inject({ method: 'GET', url: '/' }).then((res) => {
           assert.strictEqual(res.statusCode, 200);
-          assert.strictEqual(res.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+          assert.strictEqual(res.headers['content-type'], CONTENT_TYPE_VALUE);
           assert.strictEqual(
             res.body,
             <>
@@ -210,7 +210,7 @@ describe('Suspense', () => {
     for (let i = 0; i < 10; i++) {
       const res = await app.inject({ method: 'GET', url: '/' });
       assert.strictEqual(res.statusCode, 200);
-      assert.strictEqual(res.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+      assert.strictEqual(res.headers['content-type'], CONTENT_TYPE_VALUE);
       assert.strictEqual(
         res.body,
         <>
@@ -256,7 +256,7 @@ describe('Suspense', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+    assert.strictEqual(res.headers['content-type'], CONTENT_TYPE_VALUE);
 
     assert.strictEqual(
       res.body,
@@ -334,7 +334,7 @@ describe('Suspense', () => {
       const seconds = +result.headers.seconds!;
 
       assert.strictEqual(result.statusCode, 200);
-      assert.strictEqual(result.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+      assert.strictEqual(result.headers['content-type'], CONTENT_TYPE_VALUE);
       assert.strictEqual(
         result.body,
         <>
@@ -378,10 +378,7 @@ describe('Suspense', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 500);
-    assert.strictEqual(
-      res.headers[CONTENT_TYPE_HEADER],
-      'application/json; charset=utf-8'
-    );
+    assert.strictEqual(res.headers['content-type'], 'application/json; charset=utf-8');
     assert.deepStrictEqual(res.json(), {
       statusCode: 500,
       error: 'Internal Server Error',
@@ -416,7 +413,7 @@ describe('Suspense', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+    assert.strictEqual(res.headers['content-type'], CONTENT_TYPE_VALUE);
 
     await t.test('Html stream', () => {
       assert.strictEqual(
@@ -565,13 +562,13 @@ describe('Suspense', () => {
       )
     );
 
-    try {
-      await app.inject({ method: 'GET', url: '/' });
-      assert.fail('should throw');
-      // biome-ignore lint/suspicious/noExplicitAny: this is a test
-    } catch (error: any) {
-      assert.equal(error.message, 'component failed');
-    }
+    const res = await app.inject({ method: 'GET', url: '/' });
+
+    assert.deepStrictEqual(res.json(), {
+      error: 'Internal Server Error',
+      message: 'component failed',
+      statusCode: 500
+    });
   });
 
   test('tests suspense with function error boundary', async () => {
@@ -598,7 +595,7 @@ describe('Suspense', () => {
     const res = await app.inject({ method: 'GET', url: '/' });
 
     assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers[CONTENT_TYPE_HEADER], CONTENT_TYPE_VALUE);
+    assert.strictEqual(res.headers['content-type'], CONTENT_TYPE_VALUE);
     assert.strictEqual(
       res.body,
       <>
