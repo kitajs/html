@@ -279,7 +279,13 @@ export function isSafeAttribute(
       (type.aliasSymbol.parent?.escapedName === 'Html' ||
         // @ts-expect-error - When using export as namespace X, parent.escapedName ends up
         // as a complete (without resolving symlinks) quoted import path to its original file.
-        type.aliasSymbol.parent?.escapedName.endsWith('@kitajs/html/index"'))
+        type.aliasSymbol.parent?.escapedName.endsWith('@kitajs/html/index"') ||
+        // This is needed because of the resolved path of the parent if is installed with pnpm is a symlink
+        // that ts resolves to the original file path, so the path is not related to the node_modules but instead
+        // is absolute to the file system (this is only here because of the monorepo setup, it is not needed when used as a package)
+        (process.env.KITAJS_TESTING === 'true' &&
+          // @ts-expect-error - When using export as namespace X, parent.escapedName ends up
+          type.aliasSymbol.parent?.escapedName.endsWith('packages/html/index"')))
     ) {
       return true;
     }

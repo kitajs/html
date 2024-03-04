@@ -22,8 +22,8 @@
     "build": "tsc -p tsconfig.build.json",
     "dev": "tsc -p tsconfig.build.json --watch",
     "prepack": "npm run build",
-    "test": "node --require @swc-node/register --test test/**/*.test.ts",
-    "test-procedure": "pnpm build && pnpm install && pnpm test"
+    "test": "pnpm build && pnpm install && pnpm test-exec",
+    "test-exec": "node --require @swc-node/register --test test/**/*.test.ts"
   },
   "dependencies": {
     "chalk": "^4.1.2",

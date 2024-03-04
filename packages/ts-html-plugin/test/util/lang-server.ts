@@ -71,7 +71,11 @@ export class TSLangServer {
   ) {
     this.server = fork(require.resolve('typescript/lib/tsserver'), {
       cwd: projectPath,
-      stdio: ['pipe', 'pipe', 'pipe', 'ipc']
+      stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
+      env: {
+        TSS_LOG: debug ? `-level verbose -file ${projectPath}/tss.log` : undefined,
+        KITAJS_TESTING: 'true'
+      }
     });
 
     this.exitPromise = deferred();

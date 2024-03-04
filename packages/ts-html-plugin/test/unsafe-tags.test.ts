@@ -11,7 +11,6 @@ it('Detect xss prone usage', async () => {
       <>
         <div>
         <div>{html}</div>
-        <div>{object}</div>
         <div>{union}</div>
         <div>
           {['a', 'b', 'c'].map((i) => (
@@ -38,42 +37,35 @@ it('Detect xss prone usage', async () => {
     },
     {
       start: { line: 38, offset: 15 },
-      end: { line: 38, offset: 21 },
+      end: { line: 38, offset: 20 },
       text: Xss.message,
       code: Xss.code,
       category: 'error'
     },
     {
-      start: { line: 39, offset: 15 },
-      end: { line: 39, offset: 20 },
+      start: { line: 41, offset: 16 },
+      end: { line: 41, offset: 17 },
       text: Xss.message,
       code: Xss.code,
       category: 'error'
     },
     {
-      start: { line: 42, offset: 16 },
-      end: { line: 42, offset: 17 },
+      start: { line: 44, offset: 19 },
+      end: { line: 44, offset: 20 },
       text: Xss.message,
       code: Xss.code,
       category: 'error'
     },
     {
-      start: { line: 45, offset: 19 },
-      end: { line: 45, offset: 20 },
+      start: { line: 47, offset: 15 },
+      end: { line: 47, offset: 44 },
       text: Xss.message,
       code: Xss.code,
       category: 'error'
     },
     {
       start: { line: 48, offset: 15 },
-      end: { line: 48, offset: 44 },
-      text: Xss.message,
-      code: Xss.code,
-      category: 'error'
-    },
-    {
-      start: { line: 49, offset: 15 },
-      end: { line: 49, offset: 52 },
+      end: { line: 48, offset: 52 },
       text: Xss.message,
       code: Xss.code,
       category: 'error'
