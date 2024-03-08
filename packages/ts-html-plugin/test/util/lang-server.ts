@@ -74,7 +74,7 @@ export class TSLangServer {
       stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
       env: {
         TSS_LOG: debug ? `-level verbose -file ${projectPath}/tss.log` : undefined,
-        KITAJS_TESTING: 'true'
+        KITA_TS_HTML_PLUGIN_TESTING: 'true'
       }
     });
 

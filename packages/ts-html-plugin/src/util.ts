@@ -283,7 +283,7 @@ export function isSafeAttribute(
         // This is needed because of the resolved path of the parent if is installed with pnpm is a symlink
         // that ts resolves to the original file path, so the path is not related to the node_modules but instead
         // is absolute to the file system (this is only here because of the monorepo setup, it is not needed when used as a package)
-        (process.env.KITAJS_TESTING === 'true' &&
+        (process.env.KITA_TS_HTML_PLUGIN_TESTING === 'true' &&
           // @ts-expect-error - When using export as namespace X, parent.escapedName ends up
           type.aliasSymbol.parent?.escapedName.endsWith('packages/html/index"')))
     ) {
