@@ -897,19 +897,20 @@ describe('Suspense errors', () => {
     );
   });
 
-  it('tests sync errors are thrown', () => {
-    assert.throws(() => {
-      renderToStream((r) => (
+  it('tests sync errors are thrown', async () => {
+    assert.rejects(
+      renderToString((r) => (
         <Suspense rid={r} fallback={<div>fallback</div>}>
           <Throw />
         </Suspense>
-      ));
-    }, /test/);
+      )),
+      /test/
+    );
   });
 
-  it('test sync errors after suspense', () => {
+  it('test sync errors after suspense', async () => {
     try {
-      renderToStream((r) => (
+      await renderToString((r) => (
         <div>
           {/* Throws after suspense registration */}
           <Suspense rid={r} fallback={<div>fallback</div>}>
