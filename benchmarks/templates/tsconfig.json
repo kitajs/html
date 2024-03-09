@@ -5,7 +5,9 @@
     "module": "Node16",
     "target": "ESNext",
     "jsx": "react-jsx",
-    "jsxImportSource": "@kitajs/html"
+    "jsxImportSource": "@kitajs/html",
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["renderers", "index.ts"],
   "exclude": ["dist"]

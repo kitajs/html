@@ -2,7 +2,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "dist",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["renderers", "index.ts"],
   "exclude": ["node_modules", "dist"]
