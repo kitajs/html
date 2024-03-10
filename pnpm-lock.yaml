@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@arthurfiorette/prettier-config':
         specifier: ^1.0.12
-        version: 1.0.12(prettier@3.2.5)(typescript@5.3.3)
+        version: 1.0.12(prettier@3.2.5)(typescript@5.4.2)
       '@changesets/changelog-github':
         specifier: ^0.5.0
         version: 0.5.0
@@ -27,8 +27,8 @@ importers:
         specifier: ^3.2.5
         version: 3.2.5
       typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
+        specifier: ^5.4.2
+        version: 5.4.2
 
   benchmarks/kitajs:
     dependencies:
@@ -58,8 +58,8 @@ importers:
         specifier: ^20.11.20
         version: 20.11.20
       '@types/react':
-        specifier: ^18.2.60
-        version: 18.2.61
+        specifier: ^18.2.64
+        version: 18.2.64
 
   benchmarks/runner:
     dependencies:
@@ -130,7 +130,7 @@ importers:
         version: 7.4.0
       '@swc-node/register':
         specifier: ^1.8.0
-        version: 1.8.0(@swc/core@1.4.2)(@swc/types@0.1.5)(typescript@5.3.3)
+        version: 1.8.0(@swc/core@1.4.2)(@swc/types@0.1.5)(typescript@5.4.2)
       '@swc/helpers':
         specifier: ^0.5.6
         version: 0.5.6
@@ -223,7 +223,7 @@ importers:
 
 packages:
 
-  /@arthurfiorette/prettier-config@1.0.12(prettier@3.2.5)(typescript@5.3.3):
+  /@arthurfiorette/prettier-config@1.0.12(prettier@3.2.5)(typescript@5.4.2):
     resolution: {integrity: sha512-jR36bHWLVv71FuKkU9XYeBe6ry/AN98EDh0WVyfo3QwjJFbhpeElFTS4nluwxeXfu6nJ8/Hv8bJf6cYeXzfeoA==}
     hasBin: true
     peerDependencies:
@@ -231,7 +231,7 @@ packages:
     dependencies:
       prettier: 3.2.5
       prettier-plugin-jsdoc: 1.1.1(prettier@3.2.5)
-      prettier-plugin-organize-imports: 3.2.3(prettier@3.2.5)(typescript@5.3.3)
+      prettier-plugin-organize-imports: 3.2.3(prettier@3.2.5)(typescript@5.4.2)
       prettier-plugin-packagejson: 2.4.6(prettier@3.2.5)
     transitivePeerDependencies:
       - '@volar/vue-language-plugin-pug'
@@ -621,6 +621,25 @@ packages:
       - supports-color
     dev: true
 
+  /@swc-node/register@1.8.0(@swc/core@1.4.2)(@swc/types@0.1.5)(typescript@5.4.2):
+    resolution: {integrity: sha512-8K3589HoBSmVmrEVrtr4K5sWEithpGDzcFGic81OW0A9sZY38IV5EGRODQWCk0SBDyLhaF+pid120vJAtsHo1A==}
+    peerDependencies:
+      '@swc/core': '>= 1.3'
+      typescript: '>= 4.3'
+    dependencies:
+      '@swc-node/core': 1.12.0(@swc/core@1.4.2)(@swc/types@0.1.5)
+      '@swc-node/sourcemap-support': 0.4.0
+      '@swc/core': 1.4.2(@swc/helpers@0.5.6)
+      colorette: 2.0.20
+      debug: 4.3.4
+      pirates: 4.0.6
+      tslib: 2.6.2
+      typescript: 5.4.2
+    transitivePeerDependencies:
+      - '@swc/types'
+      - supports-color
+    dev: true
+
   /@swc-node/sourcemap-support@0.4.0:
     resolution: {integrity: sha512-weuRmYTO+4yOtHtPZHXlPdA1dJJJp3QOoZAFZ6uZidu992F2X5v1fQdnb26xs1o3Ex/e2sYhRyY5R6NGNuoATQ==}
     dependencies:
@@ -834,8 +853,8 @@ packages:
     resolution: {integrity: sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==}
     dev: true
 
-  /@types/react@18.2.61:
-    resolution: {integrity: sha512-NURTN0qNnJa7O/k4XUkEW2yfygA+NxS0V5h1+kp9jPwhzZy95q3ADoGMP0+JypMhrZBTTgjKAUlTctde1zzeQA==}
+  /@types/react@18.2.64:
+    resolution: {integrity: sha512-MlmPvHgjj2p3vZaxbQgFUQFvD8QiZwACfGqEdDSWou5yISWxDQ4/74nCAwsUiX7UFLKZz3BbVSPj+YxeoGGCfg==}
     dependencies:
       '@types/prop-types': 15.7.11
       '@types/scheduler': 0.16.8
@@ -3084,7 +3103,7 @@ packages:
       - supports-color
     dev: true
 
-  /prettier-plugin-organize-imports@3.2.3(prettier@3.2.5)(typescript@5.3.3):
+  /prettier-plugin-organize-imports@3.2.3(prettier@3.2.5)(typescript@5.4.2):
     resolution: {integrity: sha512-KFvk8C/zGyvUaE3RvxN2MhCLwzV6OBbFSkwZ2OamCrs9ZY4i5L77jQ/w4UmUr+lqX8qbaqVq6bZZkApn+IgJSg==}
     peerDependencies:
       '@volar/vue-language-plugin-pug': ^1.0.4
@@ -3098,7 +3117,7 @@ packages:
         optional: true
     dependencies:
       prettier: 3.2.5
-      typescript: 5.3.3
+      typescript: 5.4.2
     dev: true
 
   /prettier-plugin-packagejson@2.4.6(prettier@3.2.5):
@@ -3863,6 +3882,12 @@ packages:
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  /typescript@5.4.2:
+    resolution: {integrity: sha512-+2/g0Fds1ERlP6JsakQQDXjZdZMM+rqpamFZJEKh4kwTIn3iDkgKtby0CeNd5ATNZ4Ry1ax15TMx0W2V+miizQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true
 
   /unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
