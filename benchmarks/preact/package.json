@@ -6,7 +6,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "preact": "^10.19.6",
+    "preact": "^10.19.7",
     "tslib": "^2.6.2",
     "typescript": "^5.4.2"
   },
