@@ -23,7 +23,7 @@ jobs:
         run: git fetch --prune --unshallow --tags
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
 
       - name: Setup node and restore cached dependencies
         uses: actions/setup-node@v4
