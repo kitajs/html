@@ -45,8 +45,8 @@ importers:
   benchmarks/preact:
     dependencies:
       preact:
-        specifier: ^10.19.7
-        version: 10.19.7
+        specifier: ^10.20.0
+        version: 10.20.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -55,11 +55,11 @@ importers:
         version: 5.4.2
     devDependencies:
       '@types/node':
-        specifier: ^20.11.29
-        version: 20.11.29
+        specifier: ^20.11.30
+        version: 20.11.30
       '@types/react':
-        specifier: ^18.2.64
-        version: 18.2.64
+        specifier: ^18.2.67
+        version: 18.2.67
 
   benchmarks/react:
     dependencies:
@@ -74,11 +74,11 @@ importers:
         version: 5.4.2
     devDependencies:
       '@types/node':
-        specifier: ^20.11.29
-        version: 20.11.29
+        specifier: ^20.11.30
+        version: 20.11.30
       '@types/react':
-        specifier: ^18.2.64
-        version: 18.2.64
+        specifier: ^18.2.67
+        version: 18.2.67
 
   benchmarks/reactjsx:
     dependencies:
@@ -93,11 +93,11 @@ importers:
         version: 5.4.2
     devDependencies:
       '@types/node':
-        specifier: ^20.11.29
-        version: 20.11.29
+        specifier: ^20.11.30
+        version: 20.11.30
       '@types/react':
-        specifier: ^18.2.64
-        version: 18.2.64
+        specifier: ^18.2.67
+        version: 18.2.67
 
   benchmarks/runner:
     dependencies:
@@ -135,8 +135,8 @@ importers:
         specifier: ^0.1.11
         version: 0.1.11
       preact-render-to-string:
-        specifier: ^6.4.0
-        version: 6.4.0(preact@10.19.7)
+        specifier: ^6.4.1
+        version: 6.4.1(preact@10.20.0)
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
@@ -151,8 +151,8 @@ importers:
         version: 5.4.2
     devDependencies:
       '@types/node':
-        specifier: ^20.11.29
-        version: 20.11.29
+        specifier: ^20.11.30
+        version: 20.11.30
 
   benchmarks/typed-html:
     dependencies:
@@ -172,7 +172,7 @@ importers:
         specifier: ^2.6.2
         version: 2.6.2
       typescript:
-        specifier: ^5.3.3
+        specifier: ^5.4.2
         version: 5.4.2
       vhtml:
         specifier: ^2.2.0
@@ -871,7 +871,7 @@ packages:
   /@types/jsdom@21.1.6:
     resolution: {integrity: sha512-/7kkMsC+/kMs7gAYmmBR9P0vGTnOoLhQhyhQJSlXGI5bzTHp6xdo0TtKWQAsz6pmSAeVqKSbqeyP6hytqr9FDw==}
     dependencies:
-      '@types/node': 20.11.29
+      '@types/node': 20.11.30
       '@types/tough-cookie': 4.0.5
       parse5: 7.1.2
     dev: true
@@ -904,6 +904,12 @@ packages:
       undici-types: 5.26.5
     dev: true
 
+  /@types/node@20.11.30:
+    resolution: {integrity: sha512-dHM6ZxwlmuZaRmUPfv1p+KrdD1Dci04FbdEm/9wEMouFqxYoFl5aMkt0VMAUtYRQDyYvD41WJLukhq/ha3YuTw==}
+    dependencies:
+      undici-types: 5.26.5
+    dev: true
+
   /@types/normalize-package-data@2.4.4:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
     dev: true
@@ -912,8 +918,8 @@ packages:
     resolution: {integrity: sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==}
     dev: true
 
-  /@types/react@18.2.64:
-    resolution: {integrity: sha512-MlmPvHgjj2p3vZaxbQgFUQFvD8QiZwACfGqEdDSWou5yISWxDQ4/74nCAwsUiX7UFLKZz3BbVSPj+YxeoGGCfg==}
+  /@types/react@18.2.67:
+    resolution: {integrity: sha512-vkIE2vTIMHQ/xL0rgmuoECBCkZFZeHr49HeWSc24AptMbNRo7pwSBvj73rlJJs9fGKj0koS+V7kQB1jHS0uCgw==}
     dependencies:
       '@types/prop-types': 15.7.11
       '@types/scheduler': 0.16.8
@@ -3191,17 +3197,17 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /preact-render-to-string@6.4.0(preact@10.19.7):
-    resolution: {integrity: sha512-pzDwezZaLbK371OiJjXDsZJwVOALzFX5M1wEh2Kr0pEApq5AV6bRH/DFbA/zNA7Lck/duyREPQLLvzu2G6hEQQ==}
+  /preact-render-to-string@6.4.1(preact@10.20.0):
+    resolution: {integrity: sha512-oHKIFIv+/N0i3fNRF4ANMr2I93maycuXK78ERJ0vUW+nz6MXXMO6mTOFxp3itvSVBS/GXtLAy2jio3ZPeD8lZQ==}
     peerDependencies:
       preact: '>=10'
     dependencies:
-      preact: 10.19.7
+      preact: 10.20.0
       pretty-format: 3.8.0
     dev: false
 
-  /preact@10.19.7:
-    resolution: {integrity: sha512-IJOW6cQN1fwfC17HfNOqUtAGyB8wAYshuC+jG1JiL/1+sC4yVyuA3IcF0N9vdodMJjW/lbuEF5qFsJqGNcbHbw==}
+  /preact@10.20.0:
+    resolution: {integrity: sha512-wU7iZw2BjsaKDal3pDRDy/HpPB6cuFOnVUCcw9aIPKG98+ZrXx3F+szkos8BVME5bquyKDKvRlOJFG8kMkcAbg==}
     dev: false
 
   /preferred-pm@3.1.3:
