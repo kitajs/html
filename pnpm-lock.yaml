@@ -203,8 +203,8 @@ importers:
         specifier: ^21.1.6
         version: 21.1.6
       '@types/node':
-        specifier: ^20.11.29
-        version: 20.11.29
+        specifier: ^20.11.30
+        version: 20.11.30
       c8:
         specifier: ^9.1.0
         version: 9.1.0
@@ -234,8 +234,8 @@ importers:
         specifier: ^21.1.6
         version: 21.1.6
       '@types/node':
-        specifier: ^20.11.29
-        version: 20.11.29
+        specifier: ^20.11.30
+        version: 20.11.30
       c8:
         specifier: ^9.1.0
         version: 9.1.0
@@ -274,8 +274,8 @@ importers:
         specifier: ^0.5.6
         version: 0.5.6
       '@types/node':
-        specifier: ^20.11.29
-        version: 20.11.29
+        specifier: ^20.11.30
+        version: 20.11.30
       '@types/yargs':
         specifier: ^17.0.32
         version: 17.0.32
@@ -896,12 +896,6 @@ packages:
 
   /@types/node@12.20.55:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
-    dev: true
-
-  /@types/node@20.11.29:
-    resolution: {integrity: sha512-P99thMkD/1YkCvAtOd6/zGedKNA0p2fj4ZpjCzcNiSCBWgm3cNRTBfa/qjFnsKkkojxu4vVLtWpesnZ9+ap+gA==}
-    dependencies:
-      undici-types: 5.26.5
     dev: true
 
   /@types/node@20.11.30:
