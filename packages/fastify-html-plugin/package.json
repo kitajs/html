@@ -1,6 +1,6 @@
 {
   "name": "@kitajs/fastify-html-plugin",
-  "version": "4.0.0-next.0",
+  "version": "4.0.0-next.1",
   "description": "A Fastify plugin to add support for @kitajs/html",
   "homepage": "https://github.com/kitajs/html/tree/master/packages/fastify-html-plugin#readme",
   "bugs": "https://github.com/kitajs/html/issues",

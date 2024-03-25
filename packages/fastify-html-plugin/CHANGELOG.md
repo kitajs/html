@@ -1,5 +1,14 @@
 # @kitajs/fastify-html-plugin
 
+## 4.0.0-next.1
+
+### Patch Changes
+
+- Updated dependencies
+  [[`f00a024`](https://github.com/kitajs/html/commit/f00a024b7c289ae5543442c3c6cd4d1d0373e386)]:
+  - @kitajs/ts-html-plugin@4.0.0-next.1
+  - @kitajs/html@4.0.0-next.1
+
 ## 4.0.0-next.0
 
 ### Major Changes

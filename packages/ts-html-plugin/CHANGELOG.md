@@ -1,5 +1,17 @@
 # @kitajs/ts-html-plugin
 
+## 4.0.0-next.1
+
+### Patch Changes
+
+- [#158](https://github.com/kitajs/html/pull/158)
+  [`f00a024`](https://github.com/kitajs/html/commit/f00a024b7c289ae5543442c3c6cd4d1d0373e386)
+  Thanks [@JacopoPatroclo](https://github.com/JacopoPatroclo)! - Correctly handle self
+  closing jsx elements
+
+- Updated dependencies []:
+  - @kitajs/html@4.0.0-next.1
+
 ## 4.0.0-next.0
 
 ### Major Changes
