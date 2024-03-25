@@ -45,8 +45,8 @@ importers:
   benchmarks/preact:
     dependencies:
       preact:
-        specifier: ^10.20.0
-        version: 10.20.0
+        specifier: ^10.20.1
+        version: 10.20.1
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -136,7 +136,7 @@ importers:
         version: 0.1.11
       preact-render-to-string:
         specifier: ^6.4.1
-        version: 6.4.1(preact@10.20.0)
+        version: 6.4.1(preact@10.20.1)
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
@@ -3185,17 +3185,17 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /preact-render-to-string@6.4.1(preact@10.20.0):
+  /preact-render-to-string@6.4.1(preact@10.20.1):
     resolution: {integrity: sha512-oHKIFIv+/N0i3fNRF4ANMr2I93maycuXK78ERJ0vUW+nz6MXXMO6mTOFxp3itvSVBS/GXtLAy2jio3ZPeD8lZQ==}
     peerDependencies:
       preact: '>=10'
     dependencies:
-      preact: 10.20.0
+      preact: 10.20.1
       pretty-format: 3.8.0
     dev: false
 
-  /preact@10.20.0:
-    resolution: {integrity: sha512-wU7iZw2BjsaKDal3pDRDy/HpPB6cuFOnVUCcw9aIPKG98+ZrXx3F+szkos8BVME5bquyKDKvRlOJFG8kMkcAbg==}
+  /preact@10.20.1:
+    resolution: {integrity: sha512-JIFjgFg9B2qnOoGiYMVBtrcFxHqn+dNXbq76bVmcaHYJFYR4lW67AOcXgAYQQTDYXDOg/kTZrKPNCdRgJ2UJmw==}
     dev: false
 
   /preferred-pm@3.1.3:
