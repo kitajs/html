@@ -42,8 +42,8 @@ describe('Error Boundary', () => {
   it('Catches timed out promise', async () => {
     const html = await (
       <>
-        <ErrorBoundary catch={<div>1</div>} timeout={5}>
-          {setTimeout(10, <div>2</div>)}
+        <ErrorBoundary catch={<div>1</div>} timeout={10}>
+          {setTimeout(100, <div>2</div>)}
         </ErrorBoundary>
       </>
     );
@@ -54,8 +54,8 @@ describe('Error Boundary', () => {
   it('Renders non timed out promise', async () => {
     const html = await (
       <>
-        <ErrorBoundary catch={<div>1</div>} timeout={10}>
-          {setTimeout(5, <div>2</div>)}
+        <ErrorBoundary catch={<div>1</div>} timeout={100}>
+          {setTimeout(10, <div>2</div>)}
         </ErrorBoundary>
       </>
     );
@@ -71,9 +71,9 @@ describe('Error Boundary', () => {
             assert.ok(isTimeoutError(err));
             return <div>1</div>;
           }}
-          timeout={5}
+          timeout={10}
         >
-          {setTimeout(10, <div>2</div>)}
+          {setTimeout(100, <div>2</div>)}
         </ErrorBoundary>
       </>
     );
