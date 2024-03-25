@@ -31,7 +31,7 @@
     "c8": "^9.1.0",
     "jsdom": "^24.0.0",
     "tslib": "^2.6.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3"
   },
   "peerDependencies": {
     "@kitajs/ts-html-plugin": "workspace:^"
