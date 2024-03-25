@@ -1,5 +1,15 @@
 # @kitajs/html
 
+## 4.0.0-next.2
+
+### Patch Changes
+
+- [`d458335`](https://github.com/kitajs/html/commit/d458335a2988a3f9a758afc9e6b29ed91d35eb69)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Updated changeset setup
+
+- Updated dependencies []:
+  - @kitajs/ts-html-plugin@4.0.0-next.2
+
 ## 4.0.0-next.1
 
 ### Patch Changes
