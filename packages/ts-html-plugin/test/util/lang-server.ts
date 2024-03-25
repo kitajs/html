@@ -112,7 +112,7 @@ export class TSLangServer {
     const fileContent = TEST_HELPERS + '\n' + String.raw(content, ...args).trim();
 
     if (this.debug) {
-      console.log(fileContent);
+      console.log(this.strWithLineNumbers(fileContent));
     }
 
     await this.send({
@@ -202,5 +202,12 @@ export class TSLangServer {
     }
 
     return this.exitPromise;
+  }
+
+  strWithLineNumbers(str: string) {
+    return str
+      .split('\n')
+      .map((line, index) => `${index + 1 < 10 ? `0${index + 1}` : index + 1} | ${line}`)
+      .join('\n');
   }
 }

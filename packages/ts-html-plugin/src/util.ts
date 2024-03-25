@@ -15,7 +15,9 @@ const ESCAPE_HTML_REGEX = /^(\w+\.)?(escapeHtml|e|escape)/i;
 
 /** If the node is a JSX element or fragment */
 export function isJsx(ts: typeof TS, node: TS.Node): node is JsxElement | JsxFragment {
-  return ts.isJsxElement(node) || ts.isJsxFragment(node);
+  return (
+    ts.isJsxElement(node) || ts.isJsxFragment(node) || ts.isJsxSelfClosingElement(node)
+  );
 }
 
 export function recursiveDiagnoseJsxElements(
@@ -71,7 +73,7 @@ export function diagnoseJsxElement(
 ): void {
   const file = node.getSourceFile();
 
-  // Validations that does not applies to fragments
+  // Validations that does not applies to fragments or serlf closing elements
   if (ts.isJsxElement(node)) {
     // Script tags should be ignored
     if (node.openingElement.tagName.getText() === 'script') {
@@ -81,7 +83,7 @@ export function diagnoseJsxElement(
     const safeAttribute = getSafeAttribute(node.openingElement);
 
     // Safe mode warnings
-    if (safeAttribute) {
+    if (safeAttribute && node.children) {
       if (
         // Empty element
         node.children.length === 0 ||
@@ -127,6 +129,12 @@ export function diagnoseJsxElement(
 
       return;
     }
+  }
+
+  // If this expression does not have children, we can ignore it
+  // for example it could be a self closing element
+  if (!node.children) {
+    return;
   }
 
   // Look for expressions
