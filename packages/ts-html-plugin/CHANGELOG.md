@@ -1,5 +1,13 @@
 # @kitajs/ts-html-plugin
 
+## 4.0.0-next.3
+
+### Patch Changes
+
+- Updated dependencies
+  [[`d4e1d36`](https://github.com/kitajs/html/commit/d4e1d3616bd32a671ad1ea81d92c948b865e9693)]:
+  - @kitajs/html@4.0.0-next.3
+
 ## 4.0.0-next.2
 
 ### Patch Changes

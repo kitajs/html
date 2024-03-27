@@ -1,5 +1,17 @@
 # @kitajs/html
 
+## 4.0.0-next.3
+
+### Patch Changes
+
+- [#166](https://github.com/kitajs/html/pull/166)
+  [`d4e1d36`](https://github.com/kitajs/html/commit/d4e1d3616bd32a671ad1ea81d92c948b865e9693)
+  Thanks [@aralroca](https://github.com/aralroca)! - Added jsx-dev-runtime to re-enable
+  Bun support in development mode.
+
+- Updated dependencies []:
+  - @kitajs/ts-html-plugin@4.0.0-next.3
+
 ## 4.0.0-next.2
 
 ### Patch Changes
