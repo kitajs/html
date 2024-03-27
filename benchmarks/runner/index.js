@@ -2,6 +2,7 @@ process.env.NODE_ENV = 'production';
 
 import { bench, group, run } from 'mitata';
 
+import JSXTERuntimeRenderers from '@kitajs/bench-html-jsxte';
 import KitaHtmlJSXRuntimeRenderers from '@kitajs/bench-html-kitajs';
 import PreactRuntimeRenderers from '@kitajs/bench-html-preact';
 import ReactRuntimeRenderers from '@kitajs/bench-html-react';
@@ -12,6 +13,7 @@ import VHtmlRenderers from '@kitajs/bench-html-vhtml';
 
 import CommonTags from 'common-tags';
 import * as gHtml from 'ghtml';
+import * as JSXTE from 'jsxte';
 import * as PreactRenderToString from 'preact-render-to-string';
 import ReactDOMServer from 'react-dom/server';
 
@@ -38,6 +40,9 @@ group('Real World Scenario', () => {
     StringTemplateRenderers.RealWorldPage(CommonTags.html, 'Hello World!')
   );
   bench('Ghtml', () => StringTemplateRenderers.RealWorldPage(gHtml.html, 'Hello World!'));
+  bench('JSXTE', () =>
+    JSXTE.renderToHtml(JSXTERuntimeRenderers.RealWorldPage('Hello World!'))
+  );
 });
 
 group('Component Creation', () => {
@@ -63,6 +68,9 @@ group('Component Creation', () => {
   bench('Ghtml', () =>
     StringTemplateRenderers.TemplateManyComponents(gHtml.html, 'Hello World!')
   );
+  bench('JSXTE', () =>
+    JSXTE.renderToHtml(JSXTERuntimeRenderers.ManyComponents('Hello World!'))
+  );
 });
 
 group('Attributes Serialization', () => {
@@ -85,6 +93,9 @@ group('Attributes Serialization', () => {
   );
   bench('Ghtml', () =>
     StringTemplateRenderers.TemplateManyProps(gHtml.html, 'Hello World!')
+  );
+  bench('JSXTE', () =>
+    JSXTE.renderToHtml(JSXTERuntimeRenderers.ManyProps('Hello World!'))
   );
 });
 

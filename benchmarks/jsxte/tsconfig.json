@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "dist",
+    "module": "Node16",
+    "target": "ESNext",
+    "jsx": "react-jsx",
+    "jsxImportSource": "jsxte",
+    "moduleResolution": "Node16",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "declaration": true,
+    "declarationMap": true
+  },
+  "include": ["renderers", "index.ts"],
+  "exclude": ["dist"]
+}

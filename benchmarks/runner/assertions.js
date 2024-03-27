@@ -1,6 +1,7 @@
 import KitaHtmlJSXRuntimeRenderers from '@kitajs/bench-html-kitajs';
 import PreactRuntimeRenderers from '@kitajs/bench-html-preact';
 //import ReactRuntimeRenderers from '@kitajs/bench-html-react'; same as reactjsx
+import JSXTERuntimeRenderers from '@kitajs/bench-html-jsxte';
 import ReactJSXRuntimeRenderers from '@kitajs/bench-html-reactjsx';
 import StringTemplateRenderers from '@kitajs/bench-html-templates';
 import TypedHtmlRenderers from '@kitajs/bench-html-typed-html';
@@ -8,6 +9,7 @@ import VHtmlRenderers from '@kitajs/bench-html-vhtml';
 
 import CommonTags from 'common-tags';
 import * as gHtml from 'ghtml';
+import * as JSXTE from 'jsxte';
 import * as PreactRenderToString from 'preact-render-to-string';
 import ReactDOMServer from 'react-dom/server';
 
@@ -77,5 +79,6 @@ await Promise.all([
   saveHtml(
     'preact',
     PreactRenderToString.render(PreactRuntimeRenderers.RealWorldPage(NAME_VAR))
-  )
+  ),
+  saveHtml('jsxte', JSXTE.renderToHtml(JSXTERuntimeRenderers.RealWorldPage(NAME_VAR)))
 ]);

@@ -30,6 +30,22 @@ importers:
         specifier: ^5.4.3
         version: 5.4.3
 
+  benchmarks/jsxte:
+    dependencies:
+      jsxte:
+        specifier: ^3.3.1
+        version: 3.3.1
+      tslib:
+        specifier: ^2.6.2
+        version: 2.6.2
+      typescript:
+        specifier: ^5.4.3
+        version: 5.4.3
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.30
+        version: 20.11.30
+
   benchmarks/kitajs:
     dependencies:
       '@kitajs/html':
@@ -101,6 +117,9 @@ importers:
 
   benchmarks/runner:
     dependencies:
+      '@kitajs/bench-html-jsxte':
+        specifier: workspace:*
+        version: link:../jsxte
       '@kitajs/bench-html-kitajs':
         specifier: workspace:*
         version: link:../kitajs
@@ -131,6 +150,9 @@ importers:
       html-minifier:
         specifier: ^4.0.0
         version: 4.0.0
+      jsxte:
+        specifier: ^3.3.1
+        version: 3.3.1
       mitata:
         specifier: ^0.1.11
         version: 0.1.11
@@ -2497,6 +2519,10 @@ packages:
     optionalDependencies:
       graceful-fs: 4.2.11
     dev: true
+
+  /jsxte@3.3.1:
+    resolution: {integrity: sha512-l6EW11AO9ap1Sjpy5MbX0fnrD15uHfVPlYnyH4/AXY/8T0ECIkdd38sgTFApuuBvoyvrua2H1nV5msnCBiyw0Q==}
+    dev: false
 
   /kind-of@6.0.3:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}

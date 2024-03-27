@@ -7,6 +7,7 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "@kitajs/bench-html-jsxte": "workspace:*",
     "@kitajs/bench-html-kitajs": "workspace:*",
     "@kitajs/bench-html-preact": "workspace:*",
     "@kitajs/bench-html-react": "workspace:*",
@@ -17,6 +18,7 @@
     "common-tags": "^1.8.2",
     "ghtml": "^1.0.1",
     "html-minifier": "^4.0.0",
+    "jsxte": "^3.3.1",
     "mitata": "^0.1.11",
     "preact-render-to-string": "^6.4.1",
     "react-dom": "^18.2.0"
