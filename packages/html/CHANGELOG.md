@@ -1,12 +1,5 @@
 # @kitajs/html
 
-## 4.0.0-next.3
-
-### Minor Changes
-
-- [`bab34f8`](https://github.com/kitajs/html/pull/166/commits/bab34f87a9043b117b528ca3789dcba47fb8ca73)
-  Thanks [@aralroca](https://github.com/aralroca)! - feat: add jsx-dev-runtime
-
 ## 4.0.0-next.2
 
 ### Patch Changes
