@@ -43,8 +43,8 @@ importers:
         version: 5.4.3
     devDependencies:
       '@types/node':
-        specifier: ^20.11.30
-        version: 20.11.30
+        specifier: ^20.12.2
+        version: 20.12.2
 
   benchmarks/kitajs:
     dependencies:
@@ -71,8 +71,8 @@ importers:
         version: 5.4.3
     devDependencies:
       '@types/node':
-        specifier: ^20.11.30
-        version: 20.11.30
+        specifier: ^20.12.2
+        version: 20.12.2
       '@types/react':
         specifier: ^18.2.70
         version: 18.2.70
@@ -90,8 +90,8 @@ importers:
         version: 5.4.3
     devDependencies:
       '@types/node':
-        specifier: ^20.11.30
-        version: 20.11.30
+        specifier: ^20.12.2
+        version: 20.12.2
       '@types/react':
         specifier: ^18.2.70
         version: 18.2.70
@@ -109,8 +109,8 @@ importers:
         version: 5.4.3
     devDependencies:
       '@types/node':
-        specifier: ^20.11.30
-        version: 20.11.30
+        specifier: ^20.12.2
+        version: 20.12.2
       '@types/react':
         specifier: ^18.2.70
         version: 18.2.70
@@ -173,8 +173,8 @@ importers:
         version: 5.4.3
     devDependencies:
       '@types/node':
-        specifier: ^20.11.30
-        version: 20.11.30
+        specifier: ^20.12.2
+        version: 20.12.2
 
   benchmarks/typed-html:
     dependencies:
@@ -225,8 +225,8 @@ importers:
         specifier: ^21.1.6
         version: 21.1.6
       '@types/node':
-        specifier: ^20.11.30
-        version: 20.11.30
+        specifier: ^20.12.2
+        version: 20.12.2
       c8:
         specifier: ^9.1.0
         version: 9.1.0
@@ -256,8 +256,8 @@ importers:
         specifier: ^21.1.6
         version: 21.1.6
       '@types/node':
-        specifier: ^20.11.30
-        version: 20.11.30
+        specifier: ^20.12.2
+        version: 20.12.2
       c8:
         specifier: ^9.1.0
         version: 9.1.0
@@ -296,8 +296,8 @@ importers:
         specifier: ^0.5.7
         version: 0.5.7
       '@types/node':
-        specifier: ^20.11.30
-        version: 20.11.30
+        specifier: ^20.12.2
+        version: 20.12.2
       '@types/yargs':
         specifier: ^17.0.32
         version: 17.0.32
@@ -893,7 +893,7 @@ packages:
   /@types/jsdom@21.1.6:
     resolution: {integrity: sha512-/7kkMsC+/kMs7gAYmmBR9P0vGTnOoLhQhyhQJSlXGI5bzTHp6xdo0TtKWQAsz6pmSAeVqKSbqeyP6hytqr9FDw==}
     dependencies:
-      '@types/node': 20.11.30
+      '@types/node': 20.12.2
       '@types/tough-cookie': 4.0.5
       parse5: 7.1.2
     dev: true
@@ -920,8 +920,8 @@ packages:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
     dev: true
 
-  /@types/node@20.11.30:
-    resolution: {integrity: sha512-dHM6ZxwlmuZaRmUPfv1p+KrdD1Dci04FbdEm/9wEMouFqxYoFl5aMkt0VMAUtYRQDyYvD41WJLukhq/ha3YuTw==}
+  /@types/node@20.12.2:
+    resolution: {integrity: sha512-zQ0NYO87hyN6Xrclcqp7f8ZbXNbRfoGWNcMvHTPQp9UUrwI0mI7XBz+cu7/W6/VClYo2g63B0cjull/srU7LgQ==}
     dependencies:
       undici-types: 5.26.5
     dev: true
