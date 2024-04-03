@@ -1,6 +1,6 @@
 {
   "name": "@kitajs/html",
-  "version": "4.0.0-next.3",
+  "version": "4.0.0",
   "description": "Fast and type safe HTML templates using TypeScript.",
   "homepage": "https://github.com/kitajs/html/tree/master/packages/html#readme",
   "bugs": "https://github.com/kitajs/html/issues",
