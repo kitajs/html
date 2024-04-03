@@ -411,6 +411,8 @@ declare namespace JSX {
     value?: undefined | string;
   }
 
+  interface HtmlPictureTag extends HtmlTag {}
+
   interface HtmlProgressTag extends HtmlTag {
     value?: undefined | string | number;
     max?: undefined | string | number;
@@ -469,6 +471,7 @@ declare namespace JSX {
 
   interface HtmlSourceTag extends HtmlTag {
     src?: undefined | string;
+    srcset?: undefined | string;
     type?: undefined | string;
     media?: undefined | string;
   }
@@ -780,6 +783,7 @@ declare namespace JSX {
     param: HtmlParamTag;
     path: HtmlSvgTag;
     pattern: HtmlSvgTag;
+    picture: HtmlPictureTag;
     polygon: HtmlSvgTag;
     polyline: HtmlSvgTag;
     pre: HtmlTag;
