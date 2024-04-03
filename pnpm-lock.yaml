@@ -203,10 +203,10 @@ importers:
   packages/fastify-html-plugin:
     dependencies:
       '@kitajs/html':
-        specifier: workspace:^4
+        specifier: workspace:^4.1.0
         version: link:../html
       '@kitajs/ts-html-plugin':
-        specifier: workspace:^4
+        specifier: workspace:^4.0.1
         version: link:../ts-html-plugin
       fastify-plugin:
         specifier: ^4.0.0
@@ -271,7 +271,7 @@ importers:
   packages/ts-html-plugin:
     dependencies:
       '@kitajs/html':
-        specifier: workspace:^4
+        specifier: workspace:^4.1.0
         version: link:../html
       chalk:
         specifier: ^4.1.2
@@ -4323,7 +4323,7 @@ packages:
     name: '@kitajs/ts-html-plugin'
     hasBin: true
     peerDependencies:
-      '@kitajs/html': workspace:^4
+      '@kitajs/html': workspace:^4.1.0
       typescript: ^5.3.3
     dependencies:
       '@kitajs/html': link:packages/html

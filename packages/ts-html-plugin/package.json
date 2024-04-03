@@ -1,6 +1,6 @@
 {
   "name": "@kitajs/ts-html-plugin",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "homepage": "https://github.com/kitajs/html/tree/master/packages/ts-html-plugin#readme",
   "bugs": "https://github.com/kitajs/html/issues",
   "repository": {
@@ -39,7 +39,7 @@
     "self": "file:."
   },
   "peerDependencies": {
-    "@kitajs/html": "workspace:^4",
+    "@kitajs/html": "workspace:^4.1.0",
     "typescript": "^5.3.3"
   }
 }

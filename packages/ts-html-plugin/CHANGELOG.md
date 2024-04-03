@@ -1,5 +1,27 @@
 # @kitajs/ts-html-plugin
 
+## 4.0.1
+
+### Patch Changes
+
+- [`fbcb4e8`](https://github.com/kitajs/html/commit/fbcb4e85803560cba4ac459bcd6d1b4dc72776e3)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Improved code with
+  Biome.js lint result
+
+- [`ddccb19`](https://github.com/kitajs/html/commit/ddccb19cba4c7033af6761178e68a416a465c852)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Added node: prefix
+
+- [`52da1cb`](https://github.com/kitajs/html/commit/52da1cb7f3480d7b335abcd35accd0e1608c3928)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Fixed peer dependencies
+
+- Updated dependencies
+  [[`fbcb4e8`](https://github.com/kitajs/html/commit/fbcb4e85803560cba4ac459bcd6d1b4dc72776e3),
+  [`ddccb19`](https://github.com/kitajs/html/commit/ddccb19cba4c7033af6761178e68a416a465c852),
+  [`4f663f8`](https://github.com/kitajs/html/commit/4f663f879e9c696ec50bb40599b41431e60f0b34),
+  [`4ffe38c`](https://github.com/kitajs/html/commit/4ffe38cbff2cfcd5277f064f8c60a240cc2f10ea),
+  [`52da1cb`](https://github.com/kitajs/html/commit/52da1cb7f3480d7b335abcd35accd0e1608c3928)]:
+  - @kitajs/html@4.1.0
+
 ## 4.0.0
 
 ### Major Changes
