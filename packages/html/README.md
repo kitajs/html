@@ -33,7 +33,7 @@
 
 <p align="center">
   <code>@kitajs/html</code> is a <a href="#performance">super fast</a> JSX runtime to generate HTML strings that works everywhere. 
-   <br /><i><a href="https://adonisjs.com">AdonisJS</a>? <i><a href="https://expressjs.com">Express</a>? <a href="https://fastify.dev">Fastify</a>? <a href="https://hono.dev">Hono</a>? <a href="https://bun.sh">Bun</a>? <a href="https://htmx.org/">Htmx</a>?</i>
+   <br /><i><a href="https://adonisjs.com">AdonisJS</a>? <a href="https://expressjs.com">Express</a>? <a href="https://fastify.dev">Fastify</a>? <a href="https://hono.dev">Hono</a>? <a href="https://bun.sh">Bun</a>? <a href="https://htmx.org/">Htmx</a>?</i>
    <br /><br /><b>If your code works with strings, we got you covered.</b>
   <br />
   <br />
