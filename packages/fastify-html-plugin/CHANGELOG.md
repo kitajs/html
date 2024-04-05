@@ -1,5 +1,18 @@
 # @kitajs/fastify-html-plugin
 
+## 4.1.0
+
+### Minor Changes
+
+- [`77d4d05`](https://github.com/kitajs/html/commit/77d4d05c59f988e3115d6e658d42e4d439f6c784)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Improved performance and
+  async support
+
+### Patch Changes
+
+- [`77d4d05`](https://github.com/kitajs/html/commit/77d4d05c59f988e3115d6e658d42e4d439f6c784)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Fixed encapsulation
+
 ## 4.0.1
 
 ### Patch Changes
