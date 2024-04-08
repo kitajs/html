@@ -35,7 +35,7 @@
     "@kitajs/html": "workspace:*",
     "husky": "^9.0.11",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.4"
   },
   "packageManager": "pnpm@8.14.0",
   "engines": {
