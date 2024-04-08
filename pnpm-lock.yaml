@@ -145,8 +145,8 @@ importers:
         specifier: ^1.8.2
         version: 1.8.2
       ghtml:
-        specifier: ^1.0.1
-        version: 1.0.1
+        specifier: ^1.2.0
+        version: 1.2.0
       html-minifier:
         specifier: ^4.0.0
         version: 4.0.0
@@ -1955,8 +1955,8 @@ packages:
       get-intrinsic: 1.2.4
     dev: true
 
-  /ghtml@1.0.1:
-    resolution: {integrity: sha512-UazsDitjsbxCNksuUINln98LE+YNau/AaLJP752+Hac1zhgnwmwPILKSVaiuJ/ET0XvyQ/j8eEkUXUM10YHvMA==}
+  /ghtml@1.2.0:
+    resolution: {integrity: sha512-/+yRj/Rs+d4WkQiOou4yZswSOipaS4Du4eN6/f5UR4fcbxeVbwyv72x+BIZwHPko0RIqND8aRxQDcw1QeQyAQQ==}
     engines: {node: '>=18'}
     dev: false
 
