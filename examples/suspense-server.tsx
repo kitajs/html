@@ -47,7 +47,7 @@ http
     // Pipes it into the response
     htmlStream.pipe(response);
 
-    // If its an express or fastify server, just use
+    // If it's a fastify server just use
     // response.type('text/html; charset=utf-8').send(htmlStream);
   })
   .listen(8080, () => {
