@@ -157,8 +157,8 @@ importers:
         specifier: ^0.1.11
         version: 0.1.11
       preact-render-to-string:
-        specifier: ^6.4.1
-        version: 6.4.1(preact@10.20.1)
+        specifier: ^6.4.2
+        version: 6.4.2(preact@10.20.1)
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
@@ -3203,8 +3203,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /preact-render-to-string@6.4.1(preact@10.20.1):
-    resolution: {integrity: sha512-oHKIFIv+/N0i3fNRF4ANMr2I93maycuXK78ERJ0vUW+nz6MXXMO6mTOFxp3itvSVBS/GXtLAy2jio3ZPeD8lZQ==}
+  /preact-render-to-string@6.4.2(preact@10.20.1):
+    resolution: {integrity: sha512-Sio5SvlyZSAXHuvnMgYzVQd67lNIuQe4uSjJ+2gfpJNC6L8zoHQR5xV7B/EjIqrAYWVyJ2eACkTCxVrIzZi6Vw==}
     peerDependencies:
       preact: '>=10'
     dependencies:
