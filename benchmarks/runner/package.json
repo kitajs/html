@@ -16,7 +16,7 @@
     "@kitajs/bench-html-typed-html": "workspace:*",
     "@kitajs/bench-html-vhtml": "workspace:*",
     "common-tags": "^1.8.2",
-    "ghtml": "^1.2.0",
+    "ghtml": "^1.2.4",
     "html-minifier": "^4.0.0",
     "jsxte": "^3.3.1",
     "mitata": "^0.1.11",
