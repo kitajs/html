@@ -48,6 +48,10 @@ describe('Attributes', () => {
     assert.equal('<form novalidate></form>', <form novalidate></form>);
   });
 
+  test('Undefined', () => {
+    assert.equal('<div></div>', <div hidden={undefined} translate={undefined}></div>);
+  });
+
   test('Dates & Objects', () => {
     const date = new Date();
     assert.equal(<del datetime={date} />, `<del datetime="${date.toISOString()}"></del>`);

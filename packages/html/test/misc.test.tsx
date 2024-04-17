@@ -19,7 +19,7 @@ describe('Miscellaneous', () => {
     assert.equal(<div hx-target="find "></div>, '<div hx-target="find "></div>');
   });
 
-  test('Falsy values', () => {
+  test('Primitive values', () => {
     assert.equal(
       <>
         {false}
@@ -33,12 +33,12 @@ describe('Miscellaneous', () => {
         {123n}
       </>,
       <>
-        <>false</>
+        <></>
         <></>
         <></>
         <>0</>
         <>NaN</>
-        <>true</>
+        <></>
         <>Infinity</>
         <>-Infinity</>
         <>123</>
@@ -46,8 +46,28 @@ describe('Miscellaneous', () => {
     );
 
     assert.equal(
-      <div id="truthy" hidden={false} spellcheck={true} translate={undefined}></div>,
-      '<div id="truthy" spellcheck></div>'
+      <>
+        <div>{false}</div>
+        <div>{null}</div>
+        <div>{undefined}</div>
+        <div>{0}</div>
+        <div>{NaN}</div>
+        <div>{true}</div>
+        <div>{Infinity}</div>
+        <div>{-Infinity}</div>
+        <div>{123n}</div>
+      </>,
+      <>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div>0</div>
+        <div>NaN</div>
+        <div></div>
+        <div>Infinity</div>
+        <div>-Infinity</div>
+        <div>123</div>
+      </>
     );
   });
 

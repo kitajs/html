@@ -386,9 +386,10 @@ function contentsToString(contents, escape) {
     switch (typeof content) {
       case 'string':
       case 'number':
-      case 'boolean':
       case 'bigint':
         result += content;
+        continue;
+      case 'boolean':
         continue;
     }
 
@@ -427,11 +428,11 @@ function contentToString(content, safe) {
   switch (typeof content) {
     case 'string':
       return safe ? escapeHtml(content) : content;
-
     case 'number':
-    case 'boolean':
     case 'bigint':
       return content.toString();
+    case 'boolean':
+      return '';
   }
 
   if (!content) {
