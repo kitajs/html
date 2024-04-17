@@ -29,21 +29,21 @@ declare namespace JSX {
   type CSSProperties = import('csstype').Properties;
 
   interface HtmlTag extends ElementChildrenAttribute, IntrinsicAttributes {
-    accesskey?: undefined | string;
-    contenteditable?: undefined | string;
-    dir?: undefined | string;
-    hidden?: undefined | string | boolean;
-    id?: undefined | number | string;
-    role?: undefined | string;
-    lang?: undefined | string;
-    draggable?: undefined | string | boolean;
-    spellcheck?: undefined | string | boolean;
-    tabindex?: undefined | number | string;
-    title?: undefined | string;
-    translate?: undefined | string | boolean;
+    accesskey?: string;
+    contenteditable?: string;
+    dir?: string;
+    hidden?: string | boolean;
+    id?: number | string;
+    role?: string;
+    lang?: string;
+    draggable?: string | boolean;
+    spellcheck?: string | boolean;
+    tabindex?: number | string;
+    title?: string;
+    translate?: string | boolean;
 
     /** A css style attribute which also supports a `csstype` object. */
-    style?: undefined | string | CSSProperties;
+    style?: string | CSSProperties;
 
     /**
      * When set to true, all inner content (html or not) of this tag will be escaped when
@@ -71,14 +71,14 @@ declare namespace JSX {
      *
      * @see https://github.com/kitajs/html/tree/master/packages/html#sanitization
      */
-    safe?: undefined | boolean;
+    safe?: boolean;
 
     /**
      * Included here to work as a react drop-in replacement
      *
      * @deprecated Please use `class`.
      */
-    className?: undefined | string;
+    className?: string;
 
     /**
      * The html class property. You can use an array to represent conditional class names.
@@ -94,7 +94,7 @@ declare namespace JSX {
      * '<div class="class-a class-b class-c"></div>'
      * ```
      */
-    class?: undefined | string | (string | number | null | boolean | undefined)[];
+    class?: string | (string | number | null | boolean | undefined)[];
 
     /**
      * A custom property that can be used to avoid attributes escaping and allow custom
@@ -116,14 +116,14 @@ declare namespace JSX {
      * '<div a=1 b c=3 "></div>' // does NOT escape
      * ```
      */
-    attrs?: undefined | object | string;
+    attrs?: object | string;
   }
 
   interface HtmlAnchorTag extends HtmlTag {
-    href?: undefined | string;
-    hreflang?: undefined | string;
-    target?: undefined | string;
-    download?: undefined | string;
+    href?: string;
+    hreflang?: string;
+    target?: string;
+    download?: string;
     referrerpolicy?:
       | undefined
       | ''
@@ -136,76 +136,76 @@ declare namespace JSX {
       | 'strict-origin-when-cross-origin'
       | 'unsafe-url'
       | AnyString;
-    ping?: undefined | string;
-    rel?: undefined | string;
-    media?: undefined | string;
-    type?: undefined | string;
+    ping?: string;
+    rel?: string;
+    media?: string;
+    type?: string;
   }
 
   interface HtmlAreaTag extends HtmlTag {
-    alt?: undefined | string;
-    coords?: undefined | string;
-    shape?: undefined | string;
-    href?: undefined | string;
-    target?: undefined | string;
-    ping?: undefined | string;
-    rel?: undefined | string;
-    media?: undefined | string;
-    hreflang?: undefined | string;
-    type?: undefined | string;
+    alt?: string;
+    coords?: string;
+    shape?: string;
+    href?: string;
+    target?: string;
+    ping?: string;
+    rel?: string;
+    media?: string;
+    hreflang?: string;
+    type?: string;
   }
 
   interface HtmlAudioTag extends HtmlTag {
-    src?: undefined | string;
-    autobuffer?: undefined | string;
-    autoplay?: undefined | boolean;
-    preload?: undefined | string;
-    muted?: undefined | boolean;
-    loop?: undefined | boolean;
-    controls?: undefined | string;
+    src?: string;
+    autobuffer?: string;
+    autoplay?: boolean;
+    preload?: string;
+    muted?: boolean;
+    loop?: boolean;
+    controls?: string;
   }
 
   interface BaseTag extends HtmlTag {
-    href?: undefined | string;
-    target?: undefined | string;
+    href?: string;
+    target?: string;
   }
 
   interface HtmlQuoteTag extends HtmlTag {
-    cite?: undefined | string;
+    cite?: string;
   }
 
   interface HtmlBodyTag extends HtmlTag {}
 
   interface HtmlButtonTag extends HtmlTag {
-    action?: undefined | string;
-    autofocus?: undefined | string;
-    disabled?: undefined | boolean;
-    enctype?: undefined | string;
-    form?: undefined | string;
-    method?: undefined | string;
-    name?: undefined | string;
-    novalidate?: undefined | string | boolean;
-    target?: undefined | string;
-    type?: undefined | string;
-    value?: undefined | string;
-    formaction?: undefined | string;
-    formenctype?: undefined | string;
-    formmethod?: undefined | string;
-    formnovalidate?: undefined | string | boolean;
-    formtarget?: undefined | string;
-    popovertarget?: undefined | string;
-    popovertargetaction?: undefined | string;
+    action?: string;
+    autofocus?: string;
+    disabled?: boolean;
+    enctype?: string;
+    form?: string;
+    method?: string;
+    name?: string;
+    novalidate?: string | boolean;
+    target?: string;
+    type?: string;
+    value?: string;
+    formaction?: string;
+    formenctype?: string;
+    formmethod?: string;
+    formnovalidate?: string | boolean;
+    formtarget?: string;
+    popovertarget?: string;
+    popovertargetaction?: string;
   }
 
   interface HtmlDataListTag extends HtmlTag {}
 
   interface HtmlCanvasTag extends HtmlTag {
-    width?: undefined | string;
-    height?: undefined | string;
+    width?: string;
+    height?: string;
   }
 
   interface HtmlTableColTag extends HtmlTag {
-    span?: undefined | string;
+    span?: string;
   }
 
   interface HtmlTableSectionTag extends HtmlTag {}
@@ -213,45 +213,45 @@ declare namespace JSX {
   interface HtmlTableRowTag extends HtmlTag {}
 
   interface DataTag extends HtmlTag {
-    value?: undefined | string;
+    value?: string;
   }
 
   interface HtmlEmbedTag extends HtmlTag, Record<string, any> {
-    src?: undefined | string;
-    type?: undefined | string;
-    width?: undefined | string;
-    height?: undefined | string;
+    src?: string;
+    type?: string;
+    width?: string;
+    height?: string;
   }
 
   interface HtmlFieldSetTag extends HtmlTag {
-    disabled?: undefined | boolean;
-    form?: undefined | string;
-    name?: undefined | string;
+    disabled?: boolean;
+    form?: string;
+    name?: string;
   }
 
   interface HtmlFormTag extends HtmlTag {
-    'accept-charset'?: undefined | string;
-    action?: undefined | string;
-    autocomplete?: undefined | string;
-    enctype?: undefined | string;
-    method?: undefined | string;
-    name?: undefined | string;
-    novalidate?: undefined | string | boolean;
-    target?: undefined | string;
+    'accept-charset'?: string;
+    action?: string;
+    autocomplete?: string;
+    enctype?: string;
+    method?: string;
+    name?: string;
+    novalidate?: string | boolean;
+    target?: string;
   }
 
   interface HtmlHtmlTag extends HtmlTag {
-    manifest?: undefined | string;
+    manifest?: string;
   }
 
   interface HtmlIFrameTag extends HtmlTag {
-    allow?: undefined | string;
-    allowfullscreen?: undefined | boolean;
-    allowpaymentrequest?: undefined | boolean;
-    credentialless?: undefined | boolean;
-    height?: undefined | string;
-    loading?: undefined | string;
-    name?: undefined | string;
+    allow?: string;
+    allowfullscreen?: boolean;
+    allowpaymentrequest?: boolean;
+    credentialless?: boolean;
+    height?: string;
+    loading?: string;
+    name?: string;
     referrerpolicy?:
       | undefined
       | ''
@@ -264,277 +264,278 @@ declare namespace JSX {
       | 'strict-origin-when-cross-origin'
       | 'unsafe-url'
       | AnyString;
-    sandbox?: undefined | boolean;
-    src?: undefined | string;
-    srcdoc?: undefined | string;
-    seamless?: undefined | string;
-    width?: undefined | string;
+    sandbox?: boolean;
+    src?: string;
+    srcdoc?: string;
+    seamless?: string;
+    width?: string;
   }
 
   interface HtmlImageTag extends HtmlTag {
-    alt?: undefined | string;
-    src?: undefined | string;
-    crossorigin?: undefined | string;
-    usemap?: undefined | string;
-    ismap?: undefined | string;
-    width?: undefined | number | string;
-    height?: undefined | number | string;
+    alt?: string;
+    src?: string;
+    crossorigin?: string;
+    usemap?: string;
+    ismap?: string;
+    width?: number | string;
+    height?: number | string;
     decoding?: 'sync' | 'async' | 'auto' | AnyString;
     loading?: 'eager' | 'lazy' | AnyString;
     srcset?: string;
   }
 
   interface HtmlInputTag extends HtmlTag {
-    accept?: undefined | string;
-    action?: undefined | string;
-    alt?: undefined | string;
-    autocomplete?: undefined | string;
-    autofocus?: undefined | string;
-    checked?: undefined | boolean;
-    disabled?: undefined | boolean;
-    enctype?: undefined | string;
-    form?: undefined | string;
-    height?: undefined | string;
-    list?: undefined | string;
-    max?: undefined | number | string;
-    minlength?: undefined | number | string;
-    maxlength?: undefined | number | string;
-    method?: undefined | string;
-    min?: undefined | number | string;
-    multiple?: undefined | boolean;
-    name?: undefined | string;
-    novalidate?: undefined | boolean;
-    pattern?: undefined | string;
-    placeholder?: undefined | string;
-    readonly?: undefined | boolean;
-    required?: undefined | boolean;
-    size?: undefined | string;
-    src?: undefined | string;
-    step?: undefined | string;
-    target?: undefined | string;
-    type?: undefined | string;
-    value?: undefined | string;
-    width?: undefined | string;
+    accept?: string;
+    action?: string;
+    alt?: string;
+    autocomplete?: string;
+    autofocus?: string;
+    checked?: boolean;
+    disabled?: boolean;
+    enctype?: string;
+    form?: string;
+    height?: string;
+    list?: string;
+    max?: number | string;
+    minlength?: number | string;
+    maxlength?: number | string;
+    method?: string;
+    min?: number | string;
+    multiple?: boolean;
+    name?: string;
+    novalidate?: boolean;
+    pattern?: string;
+    placeholder?: string;
+    readonly?: boolean;
+    required?: boolean;
+    size?: string;
+    src?: string;
+    step?: string;
+    target?: string;
+    type?: string;
+    value?: string;
+    width?: string;
   }
 
   interface HtmlModTag extends HtmlTag {
-    cite?: undefined | string;
-    datetime?: undefined | string | Date;
+    cite?: string;
+    datetime?: string | Date;
   }
 
   interface KeygenTag extends HtmlTag {
-    autofocus?: undefined | string;
-    challenge?: undefined | string;
-    disabled?: undefined | boolean;
-    form?: undefined | string;
-    keytype?: undefined | string;
-    name?: undefined | string;
+    autofocus?: string;
+    challenge?: string;
+    disabled?: boolean;
+    form?: string;
+    keytype?: string;
+    name?: string;
   }
 
   interface HtmlLabelTag extends HtmlTag {
-    form?: undefined | string;
-    for?: undefined | string;
+    form?: string;
+    for?: string;
   }
 
   interface HtmlLITag extends HtmlTag {
-    value?: undefined | string | number;
+    value?: string | number;
   }
 
   interface HtmlLinkTag extends HtmlTag {
-    href?: undefined | string;
-    crossorigin?: undefined | string;
-    rel?: undefined | string;
-    as?: undefined | string;
-    media?: undefined | string;
-    hreflang?: undefined | string;
-    type?: undefined | string;
-    sizes?: undefined | string;
-    integrity?: undefined | string;
+    href?: string;
+    crossorigin?: string;
+    rel?: string;
+    as?: string;
+    media?: string;
+    hreflang?: string;
+    type?: string;
+    sizes?: string;
+    integrity?: string;
   }
 
   interface HtmlMapTag extends HtmlTag {
-    name?: undefined | string;
+    name?: string;
   }
 
   interface HtmlMetaTag extends HtmlTag {
-    name?: undefined | string;
-    property?: undefined | string;
-    'http-equiv'?: undefined | string;
-    content?: undefined | string;
-    charset?: undefined | string;
+    name?: string;
+    property?: string;
+    'http-equiv'?: string;
+    content?: string;
+    charset?: string;
   }
 
   interface HtmlMeterTag extends HtmlTag {
-    value?: undefined | string | number;
-    min?: undefined | string | number;
-    max?: undefined | string | number;
-    low?: undefined | string | number;
-    high?: undefined | string | number;
-    optimum?: undefined | string | number;
+    value?: string | number;
+    min?: string | number;
+    max?: string | number;
+    low?: string | number;
+    high?: string | number;
+    optimum?: string | number;
   }
 
   interface HtmlObjectTag extends HtmlTag {
-    data?: undefined | string;
-    type?: undefined | string;
-    name?: undefined | string;
-    usemap?: undefined | string;
-    form?: undefined | string;
-    width?: undefined | string;
-    height?: undefined | string;
+    data?: string;
+    type?: string;
+    name?: string;
+    usemap?: string;
+    form?: string;
+    width?: string;
+    height?: string;
   }
 
   interface HtmlOListTag extends HtmlTag {
-    reversed?: undefined | string;
-    start?: undefined | string | number;
+    reversed?: string;
+    start?: string | number;
   }
 
   interface HtmlOptgroupTag extends HtmlTag {
-    disabled?: undefined | boolean;
-    label?: undefined | string;
+    disabled?: boolean;
+    label?: string;
   }
 
   interface HtmlOptionTag extends HtmlTag {
-    disabled?: undefined | boolean;
-    label?: undefined | string;
-    selected?: undefined | boolean;
-    value?: undefined | string;
+    disabled?: boolean;
+    label?: string;
+    selected?: boolean;
+    value?: string;
   }
 
   interface HtmlOutputTag extends HtmlTag {
-    for?: undefined | string;
-    form?: undefined | string;
-    name?: undefined | string;
+    for?: string;
+    form?: string;
+    name?: string;
   }
 
   interface HtmlParamTag extends HtmlTag {
-    name?: undefined | string;
-    value?: undefined | string;
+    name?: string;
+    value?: string;
   }
 
   interface HtmlPictureTag extends HtmlTag {}
 
   interface HtmlProgressTag extends HtmlTag {
-    value?: undefined | string | number;
-    max?: undefined | string | number;
+    value?: string | number;
+    max?: string | number;
   }
 
   interface HtmlCommandTag extends HtmlTag {
-    type?: undefined | string;
-    label?: undefined | string;
-    icon?: undefined | string;
-    disabled?: undefined | boolean;
-    checked?: undefined | string;
-    radiogroup?: undefined | string;
-    default?: undefined | string;
+    type?: string;
+    label?: string;
+    icon?: string;
+    disabled?: boolean;
+    checked?: string;
+    radiogroup?: string;
+    default?: string;
   }
 
   interface HtmlLegendTag extends HtmlTag {}
 
   interface HtmlBrowserButtonTag extends HtmlTag {
-    type?: undefined | string;
+    type?: string;
   }
 
   interface HtmlMenuTag extends HtmlTag {
-    type?: undefined | string;
-    label?: undefined | string;
+    type?: string;
+    label?: string;
   }
 
   interface HtmlScriptTag extends HtmlTag {
-    src?: undefined | string;
-    type?: undefined | string;
-    charset?: undefined | string;
-    async?: undefined | boolean;
-    defer?: undefined | boolean;
-    crossorigin?: undefined | string;
-    integrity?: undefined | string;
-    text?: undefined | string;
+    src?: string;
+    type?: string;
+    charset?: string;
+    async?: boolean;
+    defer?: boolean;
+    crossorigin?: string;
+    integrity?: string;
+    text?: string;
   }
 
   interface HtmlDetailsTag extends HtmlTag {
-    open?: undefined | boolean;
+    open?: boolean;
   }
 
   interface HtmlDialogTag extends HtmlTag {
-    open?: undefined | boolean;
-    onclose?: undefined | string;
+    open?: boolean;
+    onclose?: string;
   }
 
-  interface HtmlSelectTag extends HtmlTag {
-    autofocus?: undefined | boolean;
-    disabled?: undefined | boolean;
-    form?: undefined | string;
-    multiple?: undefined | string;
-    name?: undefined | string;
-    required?: undefined | boolean;
-    size?: undefined | string;
+  interface HtmlSelectTag extends HtmlTag, FormEvents {
+    autofocus?: boolean;
+    disabled?: boolean;
+    form?: string;
+    multiple?: string;
+    name?: string;
+    required?: boolean;
+    size?: string;
+    autocomplete?: string;
   }
 
   interface HtmlSourceTag extends HtmlTag {
-    src?: undefined | string;
-    srcset?: undefined | string;
-    type?: undefined | string;
-    media?: undefined | string;
+    src?: string;
+    srcset?: string;
+    type?: string;
+    media?: string;
   }
 
   interface HtmlStyleTag extends HtmlTag {
-    media?: undefined | string;
-    type?: undefined | string;
-    disabled?: undefined | boolean;
-    scoped?: undefined | string;
+    media?: string;
+    type?: string;
+    disabled?: boolean;
+    scoped?: string;
   }
 
   interface HtmlTableTag extends HtmlTag {}
 
   interface HtmlTableDataCellTag extends HtmlTag {
-    colspan?: undefined | string | number;
-    rowspan?: undefined | string | number;
-    headers?: undefined | string;
+    colspan?: string | number;
+    rowspan?: string | number;
+    headers?: string;
   }
 
   interface HtmlTextAreaTag extends HtmlTag {
-    autofocus?: undefined | string;
-    cols?: undefined | string;
-    dirname?: undefined | string;
-    disabled?: undefined | boolean;
-    form?: undefined | string;
-    maxlength?: undefined | number | string;
-    minlength?: undefined | number | string;
-    name?: undefined | string;
-    placeholder?: undefined | string;
-    readonly?: undefined | boolean;
-    required?: undefined | boolean;
-    rows?: undefined | string;
-    wrap?: undefined | string;
+    autofocus?: string;
+    cols?: string;
+    dirname?: string;
+    disabled?: boolean;
+    form?: string;
+    maxlength?: number | string;
+    minlength?: number | string;
+    name?: string;
+    placeholder?: string;
+    readonly?: boolean;
+    required?: boolean;
+    rows?: string;
+    wrap?: string;
   }
 
   interface HtmlTableHeaderCellTag extends HtmlTag {
-    colspan?: undefined | string | number;
-    rowspan?: undefined | string | number;
-    headers?: undefined | string;
-    scope?: undefined | string;
+    colspan?: string | number;
+    rowspan?: string | number;
+    headers?: string;
+    scope?: string;
   }
 
   interface HtmlTimeTag extends HtmlTag {
-    datetime?: undefined | string | Date;
+    datetime?: string | Date;
   }
 
   interface HtmlTrackTag extends HtmlTag {
-    default?: undefined | string;
-    kind?: undefined | string;
-    label?: undefined | string;
-    src?: undefined | string;
-    srclang?: undefined | string;
+    default?: string;
+    kind?: string;
+    label?: string;
+    src?: string;
+    srclang?: string;
   }
 
   interface HtmlVideoTag extends HtmlTag {
-    src?: undefined | string;
-    poster?: undefined | string;
-    autobuffer?: undefined | string;
-    autoplay?: undefined | boolean;
-    loop?: undefined | boolean;
-    controls?: undefined | boolean;
-    width?: undefined | string;
-    height?: undefined | string;
+    src?: string;
+    poster?: string;
+    autobuffer?: string;
+    autoplay?: boolean;
+    loop?: boolean;
+    controls?: boolean;
+    width?: string;
+    height?: string;
   }
 
   // We allow any attributes on svg because its hard to keep track of them all.
@@ -545,60 +546,60 @@ declare namespace JSX {
   }
 
   interface HtmlBodyTag {
-    onafterprint?: undefined | string;
-    onbeforeprint?: undefined | string;
-    onbeforeonload?: undefined | string;
-    onblur?: undefined | string;
-    onerror?: undefined | string;
-    onfocus?: undefined | string;
-    onhaschange?: undefined | string;
-    onload?: undefined | string;
-    onmessage?: undefined | string;
-    onoffline?: undefined | string;
-    ononline?: undefined | string;
-    onpagehide?: undefined | string;
-    onpageshow?: undefined | string;
-    onpopstate?: undefined | string;
-    onredo?: undefined | string;
-    onresize?: undefined | string;
-    onstorage?: undefined | string;
-    onundo?: undefined | string;
-    onunload?: undefined | string;
+    onafterprint?: string;
+    onbeforeprint?: string;
+    onbeforeonload?: string;
+    onblur?: string;
+    onerror?: string;
+    onfocus?: string;
+    onhaschange?: string;
+    onload?: string;
+    onmessage?: string;
+    onoffline?: string;
+    ononline?: string;
+    onpagehide?: string;
+    onpageshow?: string;
+    onpopstate?: string;
+    onredo?: string;
+    onresize?: string;
+    onstorage?: string;
+    onundo?: string;
+    onunload?: string;
   }
 
   interface HtmlTag {
-    oncontextmenu?: undefined | string;
-    onkeydown?: undefined | string;
-    onkeypress?: undefined | string;
-    onkeyup?: undefined | string;
-    onclick?: undefined | string;
-    ondblclick?: undefined | string;
-    ondrag?: undefined | string;
-    ondragend?: undefined | string;
-    ondragenter?: undefined | string;
-    ondragleave?: undefined | string;
-    ondragover?: undefined | string;
-    ondragstart?: undefined | string;
-    ondrop?: undefined | string;
-    onmousedown?: undefined | string;
-    onmousemove?: undefined | string;
-    onmouseout?: undefined | string;
-    onmouseover?: undefined | string;
-    onmouseup?: undefined | string;
-    onmousewheel?: undefined | string;
-    onscroll?: undefined | string;
+    oncontextmenu?: string;
+    onkeydown?: string;
+    onkeypress?: string;
+    onkeyup?: string;
+    onclick?: string;
+    ondblclick?: string;
+    ondrag?: string;
+    ondragend?: string;
+    ondragenter?: string;
+    ondragleave?: string;
+    ondragover?: string;
+    ondragstart?: string;
+    ondrop?: string;
+    onmousedown?: string;
+    onmousemove?: string;
+    onmouseout?: string;
+    onmouseover?: string;
+    onmouseup?: string;
+    onmousewheel?: string;
+    onscroll?: string;
   }
 
   interface FormEvents {
-    onblur?: undefined | string;
-    onchange?: undefined | string;
-    onfocus?: undefined | string;
-    onformchange?: undefined | string;
-    onforminput?: undefined | string;
-    oninput?: undefined | string;
-    oninvalid?: undefined | string;
-    onselect?: undefined | string;
-    onsubmit?: undefined | string;
+    onblur?: string;
+    onchange?: string;
+    onfocus?: string;
+    onformchange?: string;
+    onforminput?: string;
+    oninput?: string;
+    oninvalid?: string;
+    onselect?: string;
+    onsubmit?: string;
   }
 
   interface HtmlInputTag extends FormEvents {}
@@ -608,29 +609,29 @@ declare namespace JSX {
   interface HtmlFormTag extends FormEvents {}
 
   interface MediaEvents {
-    onabort?: undefined | string;
-    oncanplay?: undefined | string;
-    oncanplaythrough?: undefined | string;
-    ondurationchange?: undefined | string;
-    onemptied?: undefined | string;
-    onended?: undefined | string;
-    onerror?: undefined | string;
-    onloadeddata?: undefined | string;
-    onloadedmetadata?: undefined | string;
-    onloadstart?: undefined | string;
-    onpause?: undefined | string;
-    onplay?: undefined | string;
-    onplaying?: undefined | string;
-    onprogress?: undefined | string;
-    onratechange?: undefined | string;
-    onreadystatechange?: undefined | string;
-    onseeked?: undefined | string;
-    onseeking?: undefined | string;
-    onstalled?: undefined | string;
-    onsuspend?: undefined | string;
-    ontimeupdate?: undefined | string;
-    onvolumechange?: undefined | string;
-    onwaiting?: undefined | string;
+    onabort?: string;
+    oncanplay?: string;
+    oncanplaythrough?: string;
+    ondurationchange?: string;
+    onemptied?: string;
+    onended?: string;
+    onerror?: string;
+    onloadeddata?: string;
+    onloadedmetadata?: string;
+    onloadstart?: string;
+    onpause?: string;
+    onplay?: string;
+    onplaying?: string;
+    onprogress?: string;
+    onratechange?: string;
+    onreadystatechange?: string;
+    onseeked?: string;
+    onseeking?: string;
+    onstalled?: string;
+    onsuspend?: string;
+    ontimeupdate?: string;
+    onvolumechange?: string;
+    onwaiting?: string;
   }
 
   interface HtmlAudioTag extends MediaEvents {}
@@ -657,7 +658,7 @@ declare namespace JSX {
   }
 
   interface ElementChildrenAttribute {
-    children?: undefined | import('./').Children;
+    children?: import('./').Children;
   }
 
   interface IntrinsicElements {
