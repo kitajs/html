@@ -9,7 +9,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "tslib": "^2.6.2",
-    "typescript": "^5.4.4"
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
