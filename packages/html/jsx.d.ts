@@ -31,6 +31,7 @@ declare namespace JSX {
   interface HtmlTag extends ElementChildrenAttribute, IntrinsicAttributes {
     accesskey?: undefined | string;
     contenteditable?: undefined | string;
+    inputmode?: undefined | 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url';
     dir?: undefined | string;
     hidden?: undefined | string | boolean;
     id?: undefined | number | string;
