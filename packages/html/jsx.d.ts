@@ -41,7 +41,7 @@ declare namespace JSX {
       | 'search'
       | 'email'
       | 'url'
-      | (string & {});
+      | AnyString;
     dir?: undefined | string;
     hidden?: undefined | string | boolean;
     id?: undefined | number | string;
