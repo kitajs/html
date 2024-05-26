@@ -19,7 +19,7 @@
   "exports": {
     ".": "./index.js",
     "./jsx-runtime": "./jsx-runtime.js",
-    "./jsx-dev-runtime": "./jsx-runtime.js",
+    "./jsx-dev-runtime": "./jsx-dev-runtime.js",
     "./package.json": "./package.json",
     "./suspense": "./suspense.js",
     "./register": "./register.js",
