@@ -157,8 +157,8 @@ importers:
         specifier: ^0.1.11
         version: 0.1.11
       preact-render-to-string:
-        specifier: ^6.4.2
-        version: 6.4.2(preact@10.22.0)
+        specifier: ^6.5.3
+        version: 6.5.3(preact@10.22.0)
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
@@ -1819,8 +1819,8 @@ packages:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
     engines: {node: '>= 0.4'}
 
-  preact-render-to-string@6.4.2:
-    resolution: {integrity: sha512-Sio5SvlyZSAXHuvnMgYzVQd67lNIuQe4uSjJ+2gfpJNC6L8zoHQR5xV7B/EjIqrAYWVyJ2eACkTCxVrIzZi6Vw==}
+  preact-render-to-string@6.5.3:
+    resolution: {integrity: sha512-TWRSivNYMB3DMcFvrhwdGFkfSvPhUkd5r1q5q+1oQA21wnfEaxJe2X5U1BqLsuOA/v79sFRkg+qSeDkMHOqdvQ==}
     peerDependencies:
       preact: '>=10'
 
@@ -1871,9 +1871,6 @@ packages:
   pretty-format@29.7.0:
     resolution: {integrity: sha512-Pdlw/oPxN+aXdmM9R00JVC9WVFoCLTKJvDVLgmJ+qAffBMxsV85l/Lu7sNx4zSzPyoL2euImuEwHhOXdEgNFZQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-
-  pretty-format@3.8.0:
-    resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}
 
   process-warning@2.3.2:
     resolution: {integrity: sha512-n9wh8tvBe5sFmsqlg+XQhaQLumwpqoAUruLwjCopgTmUBjJ/fjtBsJzKleCaIGBOMXYEhp1YfKl4d7rJ5ZKJGA==}
@@ -4271,10 +4268,9 @@ snapshots:
 
   possible-typed-array-names@1.0.0: {}
 
-  preact-render-to-string@6.4.2(preact@10.22.0):
+  preact-render-to-string@6.5.3(preact@10.22.0):
     dependencies:
       preact: 10.22.0
-      pretty-format: 3.8.0
 
   preact@10.22.0: {}
 
@@ -4315,8 +4311,6 @@ snapshots:
       '@jest/schemas': 29.6.3
       ansi-styles: 5.2.0
       react-is: 18.2.0
-
-  pretty-format@3.8.0: {}
 
   process-warning@2.3.2: {}
 
