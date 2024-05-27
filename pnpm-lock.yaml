@@ -261,9 +261,6 @@ importers:
       jsdom:
         specifier: ^24.0.0
         version: 24.0.0
-      tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
