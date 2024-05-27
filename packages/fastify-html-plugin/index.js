@@ -17,7 +17,7 @@ const kAutoDoctype = Symbol.for('fastify-kita-html.autoDoctype');
  * >}
  */
 function plugin(fastify, opts, next) {
-  fastify.decorateReply(kAutoDoctype, (opts.autoDoctype ??= true));
+  fastify.decorateReply(kAutoDoctype, opts.autoDoctype ?? true);
   fastify.decorateReply('html', html);
   return next();
 }
@@ -63,12 +63,9 @@ function handleHtml(htmlStr, reply) {
   const requestData = SUSPENSE_ROOT.requests.get(reply.request.id);
 
   if (requestData === undefined) {
-    return (
-      reply
-        // Should be safe to use .length instead of Buffer.byteLength here
-        .header('content-length', handleHtml.length)
-        .send(htmlStr)
-    );
+    return reply
+      .header('content-length', Buffer.byteLength(htmlStr, 'utf-8'))
+      .send(htmlStr);
   }
 
   requestData.stream.push(htmlStr);
