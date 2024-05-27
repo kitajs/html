@@ -72,8 +72,8 @@ npm install @kitajs/ts-html-plugin
 
 ## Getting Started
 
-Install `@kitajs/html` alongside `@kitajs/ts-html-plugin` with your
-favorite package manager, and put this inside your `tsconfig.json`.
+Install `@kitajs/html` alongside `@kitajs/ts-html-plugin` with your favorite package
+manager, and put this inside your `tsconfig.json`.
 
 ```jsonc
 // tsconfig.json
