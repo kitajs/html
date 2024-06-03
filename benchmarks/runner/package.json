@@ -20,7 +20,7 @@
     "html-minifier": "^4.0.0",
     "jsxte": "^3.3.1",
     "mitata": "^0.1.11",
-    "preact-render-to-string": "^6.5.3",
+    "preact-render-to-string": "^6.5.4",
     "react-dom": "^18.3.1"
   }
 }
