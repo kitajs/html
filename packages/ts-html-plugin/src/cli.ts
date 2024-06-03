@@ -35,7 +35,7 @@ Examples:
 Exit codes:
   0 - No XSS vulnerabilities were found
   1 - XSS vulnerabilities were found
-  2 - Only XSS warnings were found
+  2 - Only warnings were found
 
 `.trim();
 
@@ -43,7 +43,7 @@ function readCompilerOptions(tsconfigPath: string) {
   const { config, error } = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
 
   if (error) {
-    throw error;
+    return { errors: [error] };
   }
 
   const { options, errors, fileNames } = ts.parseJsonConfigFileContent(
@@ -70,7 +70,7 @@ function prettyPrintErrorCount(diagnostics: ts.Diagnostic[], root: string) {
       continue;
     }
 
-    const file = files.get(diagnostic.file.fileName)!;
+    const file = files.get(diagnostic.file.fileName);
 
     if (file !== undefined) {
       files.set(diagnostic.file.fileName, file + 1);
@@ -208,7 +208,7 @@ async function main() {
     }
 
     ts.forEachChild(source, function loopSourceNodes(node) {
-      recursiveDiagnoseJsxElements(ts as any, node, typeChecker, diagnostics);
+      recursiveDiagnoseJsxElements(ts, node, typeChecker, diagnostics);
     });
   }
 

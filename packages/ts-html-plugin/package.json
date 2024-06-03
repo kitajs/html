@@ -12,6 +12,7 @@
   "license": "MIT",
   "author": "Arthur Fiorette <kita@arthur.place>",
   "sideEffects": false,
+  "type": "commonjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -31,9 +32,9 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@swc-node/register": "^1.9.0",
-    "@swc/helpers": "^0.5.8",
-    "@types/node": "^20.12.5",
+    "@swc-node/register": "^1.9.1",
+    "@swc/helpers": "^0.5.11",
+    "@types/node": "^20.12.12",
     "@types/yargs": "^17.0.32",
     "fast-defer": "^1.1.8",
     "self": "file:."

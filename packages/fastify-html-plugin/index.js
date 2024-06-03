@@ -2,11 +2,7 @@
 
 const fp = require('fastify-plugin');
 const { isTagHtml } = require('./lib/is-tag-html');
-
-// Loads the suspense component if it wasn't already loaded
-if (!globalThis.SUSPENSE_ROOT) {
-  require('@kitajs/html/suspense');
-}
+const { resolveHtmlStream } = require('@kitajs/html/suspense');
 
 /** @type {import('./types/index').kAutoDoctype} */
 const kAutoDoctype = Symbol.for('fastify-kita-html.autoDoctype');
@@ -17,21 +13,20 @@ const kAutoDoctype = Symbol.for('fastify-kita-html.autoDoctype');
  * >}
  */
 function plugin(fastify, opts, next) {
-  // Good defaults
-  opts.autoDoctype ??= true;
-
-  fastify.decorateReply(kAutoDoctype, opts.autoDoctype);
+  fastify.decorateReply(kAutoDoctype, opts.autoDoctype ?? true);
   fastify.decorateReply('html', html);
-
   return next();
 }
 
 /** @type {import('fastify').FastifyReply['html']} */
 function html(htmlStr) {
+  if (typeof htmlStr === 'string') {
+    // @ts-expect-error - generics break the type inference here
+    return handleHtml(htmlStr, this);
+  }
+
   // @ts-expect-error - generics break the type inference here
-  return typeof htmlStr === 'string'
-    ? handleHtml(htmlStr, this)
-    : handleAsyncHtml(htmlStr, this);
+  return handleAsyncHtml(htmlStr, this);
 }
 
 /**
@@ -64,19 +59,17 @@ function handleHtml(htmlStr, reply) {
   const requestData = SUSPENSE_ROOT.requests.get(reply.request.id);
 
   if (requestData === undefined) {
-    return (
-      reply
-        // Should be safe to use .length instead of Buffer.byteLength here
-        .header('content-length', handleHtml.length)
-        .send(htmlStr)
-    );
+    return reply
+      .header('content-length', Buffer.byteLength(htmlStr, 'utf-8'))
+      .send(htmlStr);
   }
-
-  requestData.stream.push(htmlStr);
 
   // Content-length is optional as long as the connection is closed after the response is done
   // https://www.rfc-editor.org/rfc/rfc7230#section-3.3.3
-  return reply.send(requestData.stream);
+  return reply.send(
+    // htmlStr might resolve after one of its suspense components
+    resolveHtmlStream(htmlStr, requestData)
+  );
 }
 
 const fastifyKitaHtml = fp(plugin, {
@@ -99,5 +92,4 @@ const fastifyKitaHtml = fp(plugin, {
 module.exports = fastifyKitaHtml;
 module.exports.default = fastifyKitaHtml; // supersedes fastifyKitaHtml.default = fastifyKitaHtml
 module.exports.fastifyKitaHtml = fastifyKitaHtml; // supersedes fastifyKitaHtml.fastifyKitaHtml = fastifyKitaHtml
-
 module.exports.kAutoDoctype = kAutoDoctype;

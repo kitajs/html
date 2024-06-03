@@ -4,7 +4,10 @@ import type { Children } from '.';
 export function ErrorBoundary(props: ErrorBoundaryProps): JSX.Element;
 
 /** An error thrown by the ErrorBoundary's `timeout` property. */
-export class HtmlTimeout extends Error {}
+export class HtmlTimeout extends Error {
+  /** Throws the error. */
+  static reject(): never;
+}
 
 /**
  * The props for the `ErrorBoundary` component.
@@ -30,4 +33,10 @@ export interface ErrorBoundaryProps {
    * timeout. Use `undefined` or `0` to disable the timeout.
    */
   timeout?: number;
+
+  /**
+   * The error class we should throw if the timeout gets triggered. Defaults to
+   * {@linkcode HtmlTimeout}
+   */
+  error?: { reject(): never };
 }

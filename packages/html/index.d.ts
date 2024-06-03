@@ -118,45 +118,6 @@ export function contentToString(
   escape?: boolean
 ): JSX.Element;
 
-/**
- * Compiles a **clean component** into a super fast component. This does not support
- * unclean components / props processing.
- *
- * A **clean component** is a component that does not process props before applying them
- * to the element. This means that the props are applied to the element as is, and you
- * need to process them before passing them to the component.
- *
- * @example
- *
- * ```tsx
- * // Clean component, render as is
- * function Clean(props: PropsWithChildren<{ repeated: string }>) { return <div>{props.repeated}</div> }
- *
- * // Calculation is done before passing to the component
- * html = <Clean name={'a'.repeat(5)} />
- *
- * // Unclean component, process before render
- * function Unclean(props: { repeat: string; n: number }) { return <div>{props.repeat.repeat(props.n)}</div> }
- *
- * // Calculation is done inside the component, thus cannot be used with .compile() html =
- * <Unclean repeat="a" n={5} />
- * ```
- *
- * @param htmlComponent The _clean_ component to compile.
- * @param strict If it should throw an error when a property is not found. Default is
- *   `true`
- * @param separator The string used to interpolate and separate parameters
- * @returns The compiled template function
- */
-export function compile<
-  P extends { [K in keyof P]: K extends 'children' ? Children : string }
->(
-  this: void,
-  cleanComponent: Component<P>,
-  strict?: boolean,
-  separator?: string
-): Component<P>;
-
 /** Here for interop with `preact` and many build systems. */
 export const h: typeof createElement;
 
@@ -211,13 +172,3 @@ export type Component<T = {}> = (this: void, props: PropsWithChildren<T>) => JSX
  * @link https://www.npmjs.com/package/@kitajs/html
  */
 export const Html: Omit<typeof import('.'), 'Html'>;
-
-/**
- * Fast and type safe HTML templates using JSX syntax.
- *
- * @module Html
- * @license Apache License Version 2.0
- * @link https://github.com/kitajs/html
- * @link https://www.npmjs.com/package/@kitajs/html
- */
-export as namespace Html;

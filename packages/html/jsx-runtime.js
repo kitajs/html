@@ -1,4 +1,6 @@
 /// <reference path="./jsx.d.ts" />
+/// <reference types="./suspense.d.ts" />
+/// <reference types="./error-boundary.d.ts" />
 
 const {
   Fragment,
@@ -17,7 +19,7 @@ function jsx(name, attrs) {
 
   // Switches the tag name when this custom `tag` is present.
   if (name === 'tag') {
-    name = String(attrs.of);
+    name = /** @type {string} */ (attrs.of);
   }
 
   const attributes = attributesToString(attrs);
@@ -48,7 +50,7 @@ function jsxs(name, attrs) {
 
   // Switches the tag name when this custom `tag` is present.
   if (name === 'tag') {
-    name = String(attrs.of);
+    name = /** @type {string} */ (attrs.of);
   }
 
   const attributes = attributesToString(attrs);
@@ -70,13 +72,7 @@ function jsxs(name, attrs) {
   return '<' + name + attributes + '>' + contents + '</' + name + '>';
 }
 
-const JsxRuntime = {
-  jsx,
-  jsxs,
-
-  // According to the jsx-runtime spec we must export the fragment element also
-  Fragment
-};
-
-module.exports = JsxRuntime;
-module.exports.default = JsxRuntime;
+exports.jsx = jsx;
+exports.jsxs = jsxs;
+// According to the jsx-runtime spec we must export the fragment element also
+exports.Fragment = Fragment;

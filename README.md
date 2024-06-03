@@ -1,9 +1,9 @@
-![image](https://github.com/kitajs/html/assets/47537704/edd85ef1-9469-475e-83f8-c6819cf2cc1b)<p align="center">
-   Please consider <a href="https://github.com/sponsors/arthurfiorette" target="_blank">donating</a> to support my open source work ❤️
-  <br />
-  <sup>
-   Help KitaJS grow! Star and share this amazing repository with your friends and co-workers!
-  </sup>
+<p align="center">
+Please consider
+<a href="https://github.com/sponsors/arthurfiorette" target="_blank">donating</a> to
+support my open source work ❤️ <br /> <sup> Help KitaJS grow! Star and share this amazing
+repository with your friends and co-workers! </sup>
+
 </p>
 
 <br />

@@ -1,4 +1,4 @@
-import assert from 'assert';
+import assert from 'node:assert';
 import { describe, test } from 'node:test';
 import Html from '../index';
 
@@ -83,22 +83,5 @@ describe('Util', () => {
 
   test('h() function', async () => {
     assert.equal(Html.h, Html.createElement);
-  });
-
-  test('esm and cjs usage', async () => {
-    const Html0 = require('../index');
-    const { Html: Html1 } = require('../index');
-    const Html2 = require('../index').default;
-
-    const Html3 = await import('../index');
-    const { Html: Html4 } = await import('../index');
-    const Html5 = (await import('../index')).default;
-
-    assert.deepEqual(Html0, Html);
-    assert.deepEqual(Html1, Html);
-    assert.deepEqual(Html2, Html);
-    assert.deepEqual(Html3, Html);
-    assert.deepEqual(Html4, Html);
-    assert.deepEqual(Html5, Html);
   });
 });

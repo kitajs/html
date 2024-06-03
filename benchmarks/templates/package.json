@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "tslib": "^2.6.2",
-    "typescript": "^5.4.4"
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
-    "@types/node": "^20.12.5"
+    "@types/node": "^20.12.12"
   }
 }

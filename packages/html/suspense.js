@@ -1,5 +1,5 @@
 const { contentsToString, contentToString } = require('./index');
-const { Readable } = require('node:stream');
+const { Readable, PassThrough } = require('node:stream');
 
 // Avoids double initialization in case this file is not cached by
 // module bundlers.
@@ -113,7 +113,7 @@ function Suspense(props) {
   // were used and 1 as the first suspense component
   const run = ++data.running;
 
-  children
+  void children
     .then(writeStreamTemplate)
     .catch(function errorRecover(error) {
       // No catch block was specified, so we can
@@ -140,27 +140,22 @@ function Suspense(props) {
       return html.then(writeStreamTemplate);
     })
     .catch(function writeFatalError(error) {
-      // stream.emit returns true if there's a listener
-      // Nothing else to do if no catch or listener was found
-      /* c8 ignore next 3 */
-      if (data?.stream.emit('error', error) === false) {
-        console.error(error);
-      }
+      data.stream.emit('error', error);
     })
     .finally(function clearRequestData() {
       // reduces current suspense id
       if (data && data.running > 1) {
         data.running -= 1;
-
-        // Last suspense component, runs cleanup
-      } else {
-        if (data && !data.stream.closed) {
-          data.stream.push(null);
-        }
-
-        // Removes the current state
-        SUSPENSE_ROOT.requests.delete(props.rid);
+        return;
       }
+
+      // Last suspense component, runs cleanup
+      if (data && !data.stream.closed) {
+        data.stream.push(null);
+      }
+
+      // Removes the current state
+      SUSPENSE_ROOT.requests.delete(props.rid);
     });
 
   // Always will be a single children because multiple
@@ -169,11 +164,11 @@ function Suspense(props) {
 
   // Keeps string return type
   if (typeof fallback === 'string') {
-    return `<div id="B:${run}" data-sf>${fallback}</div>`;
+    return '<div id="B:' + run + '" data-sf>' + fallback + '</div>';
   }
 
   return fallback.then(function resolveCallback(resolved) {
-    return `<div id="B:${run}" data-sf>${resolved}</div>`;
+    return '<div id="B:' + run + '" data-sf>' + resolved + '</div>';
   });
 
   /**
@@ -214,8 +209,17 @@ function renderToStream(html, rid) {
   if (!rid) {
     rid = SUSPENSE_ROOT.requestCounter++;
   } else if (SUSPENSE_ROOT.requests.has(rid)) {
-    // Ensures the request id is unique
-    throw new Error(`The provided Request Id is already in use: ${rid}.`);
+    // Ensures the request id is unique within the current request
+    // error here to keep original stack trace
+    const error = new Error(`The provided Request Id is already in use: ${rid}.`);
+
+    // returns errored stream to avoid throws
+    return new Readable({
+      read() {
+        this.emit('error', error);
+        this.push(null);
+      }
+    });
   }
 
   if (typeof html === 'function') {
@@ -224,7 +228,14 @@ function renderToStream(html, rid) {
     } catch (error) {
       // Avoids memory leaks by removing the request data
       SUSPENSE_ROOT.requests.delete(rid);
-      throw error;
+
+      // returns errored stream to avoid throws
+      return new Readable({
+        read() {
+          this.emit('error', error);
+          this.push(null);
+        }
+      });
     }
   }
 
@@ -237,57 +248,48 @@ function renderToStream(html, rid) {
       return Readable.from([html]);
     }
 
-    const readable = new Readable({ read: noop });
-
-    html.then(
-      (result) => {
-        readable.push(result);
-        readable.push(null); // self closes
-      },
-      (error) => {
-        // stream.emit returns true if there's a listener
-        // Nothing else to do if no catch or listener was found
-        /* c8 ignore next 3 */
-        if (readable.emit('error', error) === false) {
-          console.error(error);
-        }
+    return new Readable({
+      read() {
+        void html
+          .then((result) => {
+            this.push(result);
+            this.push(null);
+          })
+          .catch((error) => {
+            this.emit('error', error);
+          });
       }
-    );
-
-    return readable;
+    });
   }
 
-  if (typeof html === 'string') {
-    requestData.stream.push(html);
-  } else {
-    html.then(
-      (html) => requestData.stream.push(html),
-      (error) => {
-        /* c8 ignore next 6 */
-        // stream.emit returns true if there's a listener
-        // Nothing else to do if no catch or listener was found
-        if (requestData.stream.emit('error', error) === false) {
-          console.error(error);
-        }
-      }
-    );
-  }
-
-  return requestData.stream;
+  return resolveHtmlStream(html, requestData);
 }
 
-/** @type {import('./suspense').renderToString} */
-async function renderToString(factory, rid) {
-  const chunks = [];
-
-  for await (const chunk of renderToStream(factory, rid)) {
-    chunks.push(chunk);
+/** @type {import('./suspense').resolveHtmlStream} */
+function resolveHtmlStream(template, requestData) {
+  // Impossible to sync templates have their
+  // streams being written (sent = true) before the fallback
+  if (typeof template === 'string') {
+    requestData.stream.push(template);
+    return requestData.stream;
   }
 
-  return chunks.join('');
+  const prepended = new PassThrough();
+
+  void template.then(
+    (result) => {
+      prepended.push(result);
+      requestData.stream.pipe(prepended);
+    },
+    (error) => {
+      prepended.emit('error', error);
+    }
+  );
+
+  return prepended;
 }
 
-module.exports.Suspense = Suspense;
-module.exports.renderToStream = renderToStream;
-module.exports.renderToString = renderToString;
-module.exports.SuspenseScript = SuspenseScript;
+exports.Suspense = Suspense;
+exports.renderToStream = renderToStream;
+exports.resolveHtmlStream = resolveHtmlStream;
+exports.SuspenseScript = SuspenseScript;

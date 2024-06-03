@@ -15,7 +15,19 @@
   "sideEffects": [
     "register.js"
   ],
+  "type": "commonjs",
+  "exports": {
+    ".": "./index.js",
+    "./jsx-runtime": "./jsx-runtime.js",
+    "./jsx-dev-runtime": "./jsx-dev-runtime.js",
+    "./package.json": "./package.json",
+    "./suspense": "./suspense.js",
+    "./register": "./register.js",
+    "./error-boundary": "./error-boundary.js",
+    "./*": "./*"
+  },
   "main": "index.js",
+  "module": "index.js",
   "types": "index.d.ts",
   "scripts": {
     "bench": "pnpm --filter \"benchmark-*\" build && pnpm --filter \"benchmark-runner\" start",
@@ -27,11 +39,10 @@
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.6",
-    "@types/node": "^20.12.5",
+    "@types/node": "^20.12.12",
     "c8": "^9.1.0",
     "jsdom": "^24.0.0",
-    "tslib": "^2.6.2",
-    "typescript": "^5.4.4"
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=12"

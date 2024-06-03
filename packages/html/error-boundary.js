@@ -15,7 +15,7 @@ function ErrorBoundary(props) {
   if (props.timeout) {
     children = Promise.race([
       children,
-      setTimeout(props.timeout).then(HtmlTimeout.reject)
+      setTimeout(props.timeout).then((props.error || HtmlTimeout).reject)
     ]);
   }
 
@@ -30,12 +30,13 @@ function ErrorBoundary(props) {
   });
 }
 
+/** @type {import('./error-boundary').HtmlTimeout} */
 class HtmlTimeout extends Error {
-  /** @returns {string} */
+  /** @returns {never} */
   static reject() {
     throw new HtmlTimeout('Children timed out.');
   }
 }
 
-module.exports.ErrorBoundary = ErrorBoundary;
-module.exports.HtmlTimeout = HtmlTimeout;
+exports.ErrorBoundary = ErrorBoundary;
+exports.HtmlTimeout = HtmlTimeout;
