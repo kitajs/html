@@ -55,6 +55,13 @@ describe('Attributes', () => {
     assert.equal(<div test={{}}></div>, '<div test="[object Object]"></div>');
   });
 
+  test('Popover', () => {
+    assert.equal('<div popover="auto"></div>', <div popover="auto"></div>);
+    assert.equal('<div popover="manual"></div>', <div popover="manual"></div>);
+
+    assert.equal('<div popover></div>', <div popover></div>);
+  });
+
   test('class arrays', () => {
     assert.equal(<div class="name" />, '<div class="name"></div>');
     assert.equal(<div class={['name']} />, '<div class="name"></div>');

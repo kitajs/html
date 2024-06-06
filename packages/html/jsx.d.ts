@@ -45,6 +45,7 @@ declare namespace JSX {
     dir?: undefined | string;
     hidden?: undefined | string | boolean;
     id?: undefined | number | string;
+    popover?: undefined | boolean | 'auto' | 'manual';
     role?: undefined | string;
     lang?: undefined | string;
     draggable?: undefined | string | boolean;
