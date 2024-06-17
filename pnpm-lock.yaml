@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@arthurfiorette/prettier-config':
         specifier: ^1.0.12
-        version: 1.0.12(prettier@3.3.0)(typescript@5.4.5)
+        version: 1.0.12(prettier@3.3.2)(typescript@5.4.5)
       '@changesets/changelog-github':
         specifier: ^0.5.0
         version: 0.5.0
@@ -24,8 +24,8 @@ importers:
         specifier: ^9.0.11
         version: 9.0.11
       prettier:
-        specifier: ^3.3.0
-        version: 3.3.0
+        specifier: ^3.3.2
+        version: 3.3.2
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -1866,8 +1866,8 @@ packages:
     engines: {node: '>=10.13.0'}
     hasBin: true
 
-  prettier@3.3.0:
-    resolution: {integrity: sha512-J9odKxERhCQ10OC2yb93583f6UnYutOeiV5i0zEDS7UGTdUt0u+y8erxl3lBKvwo/JHyyoEdXjwp4dke9oyZ/g==}
+  prettier@3.3.2:
+    resolution: {integrity: sha512-rAVeHYMcv8ATV5d508CFdn+8/pHPpXeIid1DdrPwXnaAdH7cqjVbpJaT5eq4yRAFU/lsbwYwSF/n5iNrdJHPQA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -2469,12 +2469,12 @@ packages:
 
 snapshots:
 
-  '@arthurfiorette/prettier-config@1.0.12(prettier@3.3.0)(typescript@5.4.5)':
+  '@arthurfiorette/prettier-config@1.0.12(prettier@3.3.2)(typescript@5.4.5)':
     dependencies:
-      prettier: 3.3.0
-      prettier-plugin-jsdoc: 1.1.1(prettier@3.3.0)
-      prettier-plugin-organize-imports: 3.2.3(prettier@3.3.0)(typescript@5.4.5)
-      prettier-plugin-packagejson: 2.4.6(prettier@3.3.0)
+      prettier: 3.3.2
+      prettier-plugin-jsdoc: 1.1.1(prettier@3.3.2)
+      prettier-plugin-organize-imports: 3.2.3(prettier@3.3.2)(typescript@5.4.5)
+      prettier-plugin-packagejson: 2.4.6(prettier@3.3.2)
     transitivePeerDependencies:
       - '@volar/vue-language-plugin-pug'
       - '@volar/vue-typescript'
@@ -4293,30 +4293,30 @@ snapshots:
       path-exists: 4.0.0
       which-pm: 2.0.0
 
-  prettier-plugin-jsdoc@1.1.1(prettier@3.3.0):
+  prettier-plugin-jsdoc@1.1.1(prettier@3.3.2):
     dependencies:
       binary-searching: 2.0.5
       comment-parser: 1.4.0
       mdast-util-from-markdown: 2.0.0
-      prettier: 3.3.0
+      prettier: 3.3.2
     transitivePeerDependencies:
       - supports-color
 
-  prettier-plugin-organize-imports@3.2.3(prettier@3.3.0)(typescript@5.4.5):
+  prettier-plugin-organize-imports@3.2.3(prettier@3.3.2)(typescript@5.4.5):
     dependencies:
-      prettier: 3.3.0
+      prettier: 3.3.2
       typescript: 5.4.5
 
-  prettier-plugin-packagejson@2.4.6(prettier@3.3.0):
+  prettier-plugin-packagejson@2.4.6(prettier@3.3.2):
     dependencies:
       sort-package-json: 2.6.0
       synckit: 0.8.5
     optionalDependencies:
-      prettier: 3.3.0
+      prettier: 3.3.2
 
   prettier@2.8.8: {}
 
-  prettier@3.3.0: {}
+  prettier@3.3.2: {}
 
   pretty-format@29.7.0:
     dependencies:
