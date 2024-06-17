@@ -216,8 +216,8 @@ importers:
         specifier: ^7.4.0
         version: 7.4.0
       '@swc-node/register':
-        specifier: ^1.9.1
-        version: 1.9.1(@swc/core@1.4.2(@swc/helpers@0.5.11))(@swc/types@0.1.5)(typescript@5.4.5)
+        specifier: ^1.9.2
+        version: 1.9.2(@swc/core@1.4.2(@swc/helpers@0.5.11))(@swc/types@0.1.5)(typescript@5.4.5)
       '@swc/helpers':
         specifier: ^0.5.11
         version: 0.5.11
@@ -284,8 +284,8 @@ importers:
         version: 17.7.2
     devDependencies:
       '@swc-node/register':
-        specifier: ^1.9.1
-        version: 1.9.1(@swc/core@1.4.2(@swc/helpers@0.5.11))(@swc/types@0.1.5)(typescript@5.3.3)
+        specifier: ^1.9.2
+        version: 1.9.2(@swc/core@1.4.2(@swc/helpers@0.5.11))(@swc/types@0.1.5)(typescript@5.3.3)
       '@swc/helpers':
         specifier: ^0.5.11
         version: 0.5.11
@@ -462,8 +462,8 @@ packages:
       '@swc/core': '>= 1.4.13'
       '@swc/types': '>= 0.1'
 
-  '@swc-node/register@1.9.1':
-    resolution: {integrity: sha512-z//TBXJdRWXoISCXlQmVz+NMm8Qm/UvcfKiGC0tSJdfeVYf5EZkGqvk2OiRH4SIJ6OGFfS9T0YrvA2pDKzWtPA==}
+  '@swc-node/register@1.9.2':
+    resolution: {integrity: sha512-BBjg0QNuEEmJSoU/++JOXhrjWdu3PTyYeJWsvchsI0Aqtj8ICkz/DqlwtXbmZVZ5vuDPpTfFlwDBZe81zgShMA==}
     peerDependencies:
       '@swc/core': '>= 1.4.13'
       typescript: '>= 4.3'
@@ -2763,7 +2763,7 @@ snapshots:
       '@swc/core': 1.4.2(@swc/helpers@0.5.11)
       '@swc/types': 0.1.5
 
-  '@swc-node/register@1.9.1(@swc/core@1.4.2(@swc/helpers@0.5.11))(@swc/types@0.1.5)(typescript@5.3.3)':
+  '@swc-node/register@1.9.2(@swc/core@1.4.2(@swc/helpers@0.5.11))(@swc/types@0.1.5)(typescript@5.3.3)':
     dependencies:
       '@swc-node/core': 1.13.1(@swc/core@1.4.2(@swc/helpers@0.5.11))(@swc/types@0.1.5)
       '@swc-node/sourcemap-support': 0.5.0
@@ -2777,7 +2777,7 @@ snapshots:
       - '@swc/types'
       - supports-color
 
-  '@swc-node/register@1.9.1(@swc/core@1.4.2(@swc/helpers@0.5.11))(@swc/types@0.1.5)(typescript@5.4.5)':
+  '@swc-node/register@1.9.2(@swc/core@1.4.2(@swc/helpers@0.5.11))(@swc/types@0.1.5)(typescript@5.4.5)':
     dependencies:
       '@swc-node/core': 1.13.1(@swc/core@1.4.2(@swc/helpers@0.5.11))(@swc/types@0.1.5)
       '@swc-node/sourcemap-support': 0.5.0
