@@ -2,4 +2,4 @@
 '@kitajs/html': minor
 ---
 
-adding type for the role attribute
+Added `role` attribute types
