@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.6",
-    "@types/node": "^20.14.3",
+    "@types/node": "^20.14.8",
     "c8": "^9.1.0",
     "jsdom": "^24.1.0",
     "typescript": "^5.4.5"
