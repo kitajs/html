@@ -145,8 +145,8 @@ importers:
         specifier: ^1.8.2
         version: 1.8.2
       ghtml:
-        specifier: ^1.5.2
-        version: 1.5.2
+        specifier: ^2.0.4
+        version: 2.0.4
       html-minifier:
         specifier: ^4.0.0
         version: 4.0.0
@@ -1044,8 +1044,8 @@ packages:
     resolution: {integrity: sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==}
     engines: {node: '>=10'}
 
-  ghtml@1.5.2:
-    resolution: {integrity: sha512-8GHvNskiAnPxM4b6lLi7mkrTB5gYsXCO/UkRvI8sH40Ih3SBObpVtRzSUIhZK2HQr/5WW2ef+7n5TS2CCaLGtg==}
+  ghtml@2.0.4:
+    resolution: {integrity: sha512-HG6CEU2dBhqOL7KIMWBjJEm1WwMMA3qWS+aWKpdlJFGwQ1a2c/w1Lg2Y0Oku05tLAAdjMa+TC7CXw1fksSvipg==}
     engines: {node: '>=18'}
 
   git-hooks-list@3.1.0:
@@ -3052,7 +3052,7 @@ snapshots:
 
   get-stream@6.0.1: {}
 
-  ghtml@1.5.2: {}
+  ghtml@2.0.4: {}
 
   git-hooks-list@3.1.0: {}
 
