@@ -34,7 +34,7 @@
   "devDependencies": {
     "@swc-node/register": "^1.9.2",
     "@swc/helpers": "^0.5.11",
-    "@types/node": "^20.14.8",
+    "@types/node": "^20.14.9",
     "@types/yargs": "^17.0.32",
     "fast-defer": "^1.1.8",
     "self": "file:."
