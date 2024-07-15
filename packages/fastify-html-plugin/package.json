@@ -32,7 +32,7 @@
     "fastify": "^4.28.1",
     "jsdom": "^24.1.0",
     "tsd": "^0.31.1",
-    "tslib": "^2.6.2"
+    "tslib": "^2.6.3"
   },
   "peerDependencies": {
     "@kitajs/html": "workspace:^4.1.0",

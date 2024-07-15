@@ -36,8 +36,8 @@ importers:
         specifier: ^3.3.1
         version: 3.3.1
       tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
+        specifier: ^2.6.3
+        version: 2.6.3
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
@@ -52,8 +52,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/html
       tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
+        specifier: ^2.6.3
+        version: 2.6.3
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
@@ -64,8 +64,8 @@ importers:
         specifier: ^10.22.1
         version: 10.22.1
       tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
+        specifier: ^2.6.3
+        version: 2.6.3
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
@@ -83,8 +83,8 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1
       tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
+        specifier: ^2.6.3
+        version: 2.6.3
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
@@ -102,8 +102,8 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1
       tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
+        specifier: ^2.6.3
+        version: 2.6.3
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
@@ -166,8 +166,8 @@ importers:
   benchmarks/templates:
     dependencies:
       tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
+        specifier: ^2.6.3
+        version: 2.6.3
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
@@ -179,8 +179,8 @@ importers:
   benchmarks/typed-html:
     dependencies:
       tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
+        specifier: ^2.6.3
+        version: 2.6.3
       typed-html:
         specifier: ^3.0.1
         version: 3.0.1
@@ -191,8 +191,8 @@ importers:
   benchmarks/vhtml:
     dependencies:
       tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
+        specifier: ^2.6.3
+        version: 2.6.3
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
@@ -240,8 +240,8 @@ importers:
         specifier: ^0.31.1
         version: 0.31.1
       tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
+        specifier: ^2.6.3
+        version: 2.6.3
 
   packages/html:
     dependencies:
@@ -274,8 +274,8 @@ importers:
         specifier: ^4.1.2
         version: 4.1.2
       tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
+        specifier: ^2.6.3
+        version: 2.6.3
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -1997,8 +1997,8 @@ packages:
     engines: {node: '>=14.16'}
     hasBin: true
 
-  tslib@2.6.2:
-    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+  tslib@2.6.3:
+    resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
   type-fest@0.18.1:
     resolution: {integrity: sha512-OIAYXk8+ISY+qTOwkHtKqzAuxchoMiD9Udx+FSGQDuiRR+PJKJHc2NJAXlbhkGwTt/4/nKZxELY1w3ReWOL8mw==}
@@ -2407,7 +2407,7 @@ snapshots:
     dependencies:
       '@kitajs/html': link:packages/html
       chalk: 4.1.2
-      tslib: 2.6.2
+      tslib: 2.6.3
       typescript: 5.3.3
       yargs: 17.7.2
 
@@ -2446,7 +2446,7 @@ snapshots:
       is-glob: 4.0.3
       open: 9.1.0
       picocolors: 1.0.0
-      tslib: 2.6.2
+      tslib: 2.6.3
 
   '@sinclair/typebox@0.27.8': {}
 
@@ -2463,7 +2463,7 @@ snapshots:
       colorette: 2.0.20
       debug: 4.3.4
       pirates: 4.0.6
-      tslib: 2.6.2
+      tslib: 2.6.3
       typescript: 5.3.3
     transitivePeerDependencies:
       - '@swc/types'
@@ -2477,7 +2477,7 @@ snapshots:
       colorette: 2.0.20
       debug: 4.3.4
       pirates: 4.0.6
-      tslib: 2.6.2
+      tslib: 2.6.3
       typescript: 5.5.2
     transitivePeerDependencies:
       - '@swc/types'
@@ -2486,7 +2486,7 @@ snapshots:
   '@swc-node/sourcemap-support@0.5.0':
     dependencies:
       source-map-support: 0.5.21
-      tslib: 2.6.2
+      tslib: 2.6.3
 
   '@swc/core-darwin-arm64@1.4.2':
     optional: true
@@ -2539,7 +2539,7 @@ snapshots:
 
   '@swc/helpers@0.5.11':
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.6.3
 
   '@swc/types@0.1.5': {}
 
@@ -3984,7 +3984,7 @@ snapshots:
   synckit@0.8.5:
     dependencies:
       '@pkgr/utils': 2.4.2
-      tslib: 2.6.2
+      tslib: 2.6.3
 
   term-size@2.2.1: {}
 
@@ -4035,7 +4035,7 @@ snapshots:
       path-exists: 4.0.0
       read-pkg-up: 7.0.1
 
-  tslib@2.6.2: {}
+  tslib@2.6.3: {}
 
   type-fest@0.18.1: {}
 
