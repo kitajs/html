@@ -32,7 +32,7 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@swc-node/register": "^1.9.2",
+    "@swc-node/register": "^1.10.9",
     "@swc/helpers": "^0.5.11",
     "@types/node": "^20.14.9",
     "@types/yargs": "^17.0.32",

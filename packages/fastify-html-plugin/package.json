@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@fastify/formbody": "^7.4.0",
-    "@swc-node/register": "^1.9.2",
+    "@swc-node/register": "^1.10.9",
     "@swc/helpers": "^0.5.11",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^20.14.9",
