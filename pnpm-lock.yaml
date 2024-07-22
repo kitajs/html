@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@arthurfiorette/prettier-config':
         specifier: ^1.0.12
-        version: 1.0.12(prettier@3.3.2)(typescript@5.5.2)
+        version: 1.0.12(prettier@3.3.2)(typescript@5.5.3)
       '@changesets/changelog-github':
         specifier: ^0.5.0
         version: 0.5.0
@@ -27,8 +27,8 @@ importers:
         specifier: ^3.3.2
         version: 3.3.2
       typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
+        specifier: ^5.5.3
+        version: 5.5.3
 
   benchmarks/jsxte:
     dependencies:
@@ -39,8 +39,8 @@ importers:
         specifier: ^2.6.3
         version: 2.6.3
       typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
+        specifier: ^5.5.3
+        version: 5.5.3
     devDependencies:
       '@types/node':
         specifier: ^20.14.9
@@ -55,8 +55,8 @@ importers:
         specifier: ^2.6.3
         version: 2.6.3
       typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
+        specifier: ^5.5.3
+        version: 5.5.3
 
   benchmarks/preact:
     dependencies:
@@ -67,8 +67,8 @@ importers:
         specifier: ^2.6.3
         version: 2.6.3
       typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
+        specifier: ^5.5.3
+        version: 5.5.3
     devDependencies:
       '@types/node':
         specifier: ^20.14.9
@@ -86,8 +86,8 @@ importers:
         specifier: ^2.6.3
         version: 2.6.3
       typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
+        specifier: ^5.5.3
+        version: 5.5.3
     devDependencies:
       '@types/node':
         specifier: ^20.14.9
@@ -105,8 +105,8 @@ importers:
         specifier: ^2.6.3
         version: 2.6.3
       typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
+        specifier: ^5.5.3
+        version: 5.5.3
     devDependencies:
       '@types/node':
         specifier: ^20.14.9
@@ -169,8 +169,8 @@ importers:
         specifier: ^2.6.3
         version: 2.6.3
       typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
+        specifier: ^5.5.3
+        version: 5.5.3
     devDependencies:
       '@types/node':
         specifier: ^20.14.9
@@ -185,8 +185,8 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
+        specifier: ^5.5.3
+        version: 5.5.3
 
   benchmarks/vhtml:
     dependencies:
@@ -194,8 +194,8 @@ importers:
         specifier: ^2.6.3
         version: 2.6.3
       typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
+        specifier: ^5.5.3
+        version: 5.5.3
       vhtml:
         specifier: ^2.2.0
         version: 2.2.0
@@ -217,7 +217,7 @@ importers:
         version: 7.4.0
       '@swc-node/register':
         specifier: ^1.10.9
-        version: 1.10.9(@swc/core@1.4.2(@swc/helpers@0.5.12))(@swc/types@0.1.5)(typescript@5.5.2)
+        version: 1.10.9(@swc/core@1.4.2(@swc/helpers@0.5.12))(@swc/types@0.1.5)(typescript@5.5.3)
       '@swc/helpers':
         specifier: ^0.5.12
         version: 0.5.12
@@ -262,8 +262,8 @@ importers:
         specifier: ^24.1.0
         version: 24.1.0
       typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
+        specifier: ^5.5.3
+        version: 5.5.3
 
   packages/ts-html-plugin:
     dependencies:
@@ -2098,8 +2098,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typescript@5.5.2:
-    resolution: {integrity: sha512-NcRtPEOsPFFWjobJEtfihkLCZCXZt/os3zf8nTxjVH3RvTSxjrCamJpbExGvYOF+tFHc3pA65qpdwPbzjohhew==}
+  typescript@5.5.3:
+    resolution: {integrity: sha512-/hreyEujaB0w76zKo6717l3L0o/qEUtRgdvUBvlkhoWeOVMjMuHNHk0BRBzikzuGDqNmPQbg5ifMEqsHLiIUcQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -2238,11 +2238,11 @@ packages:
 
 snapshots:
 
-  '@arthurfiorette/prettier-config@1.0.12(prettier@3.3.2)(typescript@5.5.2)':
+  '@arthurfiorette/prettier-config@1.0.12(prettier@3.3.2)(typescript@5.5.3)':
     dependencies:
       prettier: 3.3.2
       prettier-plugin-jsdoc: 1.1.1(prettier@3.3.2)
-      prettier-plugin-organize-imports: 3.2.3(prettier@3.3.2)(typescript@5.5.2)
+      prettier-plugin-organize-imports: 3.2.3(prettier@3.3.2)(typescript@5.5.3)
       prettier-plugin-packagejson: 2.4.6(prettier@3.3.2)
     transitivePeerDependencies:
       - '@volar/vue-language-plugin-pug'
@@ -2601,7 +2601,7 @@ snapshots:
       - '@swc/types'
       - supports-color
 
-  '@swc-node/register@1.10.9(@swc/core@1.4.2(@swc/helpers@0.5.12))(@swc/types@0.1.5)(typescript@5.5.2)':
+  '@swc-node/register@1.10.9(@swc/core@1.4.2(@swc/helpers@0.5.12))(@swc/types@0.1.5)(typescript@5.5.3)':
     dependencies:
       '@swc-node/core': 1.13.3(@swc/core@1.4.2(@swc/helpers@0.5.12))(@swc/types@0.1.5)
       '@swc-node/sourcemap-support': 0.5.1
@@ -2611,7 +2611,7 @@ snapshots:
       oxc-resolver: 1.10.2
       pirates: 4.0.6
       tslib: 2.6.3
-      typescript: 5.5.2
+      typescript: 5.5.3
     transitivePeerDependencies:
       - '@swc/types'
       - supports-color
@@ -3868,10 +3868,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  prettier-plugin-organize-imports@3.2.3(prettier@3.3.2)(typescript@5.5.2):
+  prettier-plugin-organize-imports@3.2.3(prettier@3.3.2)(typescript@5.5.3):
     dependencies:
       prettier: 3.3.2
-      typescript: 5.5.2
+      typescript: 5.5.3
 
   prettier-plugin-packagejson@2.4.6(prettier@3.3.2):
     dependencies:
@@ -4201,7 +4201,7 @@ snapshots:
 
   typescript@5.3.3: {}
 
-  typescript@5.5.2: {}
+  typescript@5.5.3: {}
 
   uglify-js@3.17.4: {}
 

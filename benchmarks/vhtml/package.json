@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "tslib": "^2.6.3",
-    "typescript": "^5.5.2",
+    "typescript": "^5.5.3",
     "vhtml": "^2.2.0"
   }
 }
