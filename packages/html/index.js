@@ -386,6 +386,8 @@ function contentsToString(contents, escape) {
     switch (typeof content) {
       case 'string':
       case 'number':
+      // Bigint is the only case where it differs from React.
+      // where React renders a empty string and we render the whole number.
       case 'bigint':
         result += content;
         continue;
@@ -403,11 +405,15 @@ function contentsToString(contents, escape) {
       continue;
     }
 
-    // @ts-ignore - Type instantiation is excessively deep and possibly infinite.
-    return Promise.all(contents.slice(index)).then(function resolveContents(resolved) {
-      resolved.unshift(result);
-      return contentsToString(resolved, escape);
-    });
+    if (typeof content.then === 'function') {
+      // @ts-ignore - Type instantiation is excessively deep and possibly infinite.
+      return Promise.all(contents.slice(index)).then(function resolveContents(resolved) {
+        resolved.unshift(result);
+        return contentsToString(resolved, escape);
+      });
+    }
+
+    throw new Error('Objects are not valid as a KitaJSX child');
   }
 
   // escapeHtml is faster with longer strings, that's
@@ -429,6 +435,8 @@ function contentToString(content, safe) {
     case 'string':
       return safe ? escapeHtml(content) : content;
     case 'number':
+    // Bigint is the only case where it differs from React.
+    // where React renders a empty string and we render the whole number.
     case 'bigint':
       return content.toString();
     case 'boolean':
@@ -443,9 +451,13 @@ function contentToString(content, safe) {
     return contentsToString(content, safe);
   }
 
-  return content.then(function resolveContent(resolved) {
-    return contentToString(resolved, safe);
-  });
+  if (typeof content.then === 'function') {
+    return content.then(function resolveContent(resolved) {
+      return contentToString(resolved, safe);
+    });
+  }
+
+  throw new Error('Objects are not valid as a KitaJSX child');
 }
 
 /**

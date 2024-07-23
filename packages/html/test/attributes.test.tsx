@@ -49,7 +49,12 @@ describe('Attributes', () => {
   });
 
   test('Undefined', () => {
-    assert.equal('<div></div>', <div hidden={undefined} translate={undefined}></div>);
+    assert.equal(
+      '<div></div>',
+      <div hidden={undefined} translate={undefined}>
+        {undefined}
+      </div>
+    );
   });
 
   test('Dates & Objects', () => {
