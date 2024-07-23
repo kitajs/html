@@ -1,5 +1,41 @@
 # @kitajs/fastify-html-plugin
 
+## 4.1.1
+
+### Patch Changes
+
+- [`1b1aaf0`](https://github.com/kitajs/html/commit/1b1aaf0bbdefa6b2592e479c648251eb6e317330)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Fixed resolveHtmlStream
+  error handling
+
+- [`6790818`](https://github.com/kitajs/html/commit/6790818c4c694a9816bf7ccddc39779fa3afc8d1)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Added ESM support
+
+- [`715205a`](https://github.com/kitajs/html/commit/715205ac20fc12537fd90d0a55cf406084236e11)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Correct content-length
+  value
+
+- [`88ea4f4`](https://github.com/kitajs/html/commit/88ea4f4e405a96b95103fe000a2d157cbad5b806)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Updated dependencies
+
+- Updated dependencies
+  [[`aa57511`](https://github.com/kitajs/html/commit/aa57511644f2a082739da65591964e34482df2b0),
+  [`af06ac8`](https://github.com/kitajs/html/commit/af06ac88a066c61cf66c0a0667a942a7bf2c5dd9),
+  [`b587b1a`](https://github.com/kitajs/html/commit/b587b1afc4cdc2d6b1d9580ca3a289e1e49edb3d),
+  [`d0f51bc`](https://github.com/kitajs/html/commit/d0f51bcf1ecc6bd57b16247a18415f220fb3082b),
+  [`d529ec0`](https://github.com/kitajs/html/commit/d529ec009041bbf9c88f86eedbe2c9c39973f8ee),
+  [`6790818`](https://github.com/kitajs/html/commit/6790818c4c694a9816bf7ccddc39779fa3afc8d1),
+  [`b42e517`](https://github.com/kitajs/html/commit/b42e517fdd33f87668bfb8dd84e9d5221273b8f5),
+  [`391f315`](https://github.com/kitajs/html/commit/391f3157bb7b7e624c4c2bf061dc464046937fec),
+  [`1b1aaf0`](https://github.com/kitajs/html/commit/1b1aaf0bbdefa6b2592e479c648251eb6e317330),
+  [`6790818`](https://github.com/kitajs/html/commit/6790818c4c694a9816bf7ccddc39779fa3afc8d1),
+  [`e575ef8`](https://github.com/kitajs/html/commit/e575ef8a23b73ff05599d791fb0355f6c8c75386),
+  [`19fe101`](https://github.com/kitajs/html/commit/19fe1019068d2d7b1af52b654e270851ffd38622),
+  [`88ea4f4`](https://github.com/kitajs/html/commit/88ea4f4e405a96b95103fe000a2d157cbad5b806),
+  [`a9adfd4`](https://github.com/kitajs/html/commit/a9adfd4bcf76d9412970789e1255d6dbeb863026)]:
+  - @kitajs/html@4.2.0
+  - @kitajs/ts-html-plugin@4.0.2
+
 ## 4.1.0
 
 ### Minor Changes
