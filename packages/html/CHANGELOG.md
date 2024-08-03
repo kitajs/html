@@ -1,5 +1,12 @@
 # @kitajs/html
 
+## 4.2.1
+
+### Patch Changes
+
+- [`49b9987`](https://github.com/kitajs/html/commit/49b99873ee8c7b29ff6390c1bb83b30d4d2ea757)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Fixed Html export
+
 ## 4.2.0
 
 ### Minor Changes
