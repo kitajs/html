@@ -1,5 +1,13 @@
 # @kitajs/fastify-html-plugin
 
+## 4.1.2
+
+### Patch Changes
+
+- [`cb7950c`](https://github.com/kitajs/html/commit/cb7950c68489ff70dd0b0c130c9b70046c1543ea)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Improved <html> tag
+  detection
+
 ## 4.1.1
 
 ### Patch Changes
