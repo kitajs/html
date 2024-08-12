@@ -61,8 +61,8 @@ importers:
   benchmarks/preact:
     dependencies:
       preact:
-        specifier: ^10.23.1
-        version: 10.23.1
+        specifier: ^10.23.2
+        version: 10.23.2
       tslib:
         specifier: ^2.6.3
         version: 2.6.3
@@ -158,7 +158,7 @@ importers:
         version: 0.1.11
       preact-render-to-string:
         specifier: ^6.5.8
-        version: 6.5.8(preact@10.23.1)
+        version: 6.5.8(preact@10.23.2)
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
@@ -1640,8 +1640,8 @@ packages:
     peerDependencies:
       preact: '>=10'
 
-  preact@10.23.1:
-    resolution: {integrity: sha512-O5UdRsNh4vdZaTieWe3XOgSpdMAmkIYBCT3VhQDlKrzyCm8lUYsk0fmVEvoQQifoOjFRTaHZO69ylrzTW2BH+A==}
+  preact@10.23.2:
+    resolution: {integrity: sha512-kKYfePf9rzKnxOAKDpsWhg/ysrHPqT+yQ7UW4JjdnqjFIeNUnNcEJvhuA8fDenxAGWzUqtd51DfVg7xp/8T9NA==}
 
   preferred-pm@3.1.4:
     resolution: {integrity: sha512-lEHd+yEm22jXdCphDrkvIJQU66EuLojPPtvZkpKIkiD+l0DMThF/niqZKJSoU8Vl7iuvtmzyMhir9LdVy5WMnA==}
@@ -3699,11 +3699,11 @@ snapshots:
     dependencies:
       irregular-plurals: 3.5.0
 
-  preact-render-to-string@6.5.8(preact@10.23.1):
+  preact-render-to-string@6.5.8(preact@10.23.2):
     dependencies:
-      preact: 10.23.1
+      preact: 10.23.2
 
-  preact@10.23.1: {}
+  preact@10.23.2: {}
 
   preferred-pm@3.1.4:
     dependencies:
