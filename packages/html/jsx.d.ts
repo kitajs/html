@@ -496,12 +496,20 @@ declare namespace JSX {
     scoped?: undefined | string;
   }
 
-  interface HtmlTableTag extends HtmlTag {}
+  interface HtmlTableTag extends HtmlTag {
+    align?: undefined | 'left' | 'center' | 'right';
+    border?: undefined | number;
+    cellpadding?: undefined | number | string;
+    cellspacing?: undefined | number | string;
+    width?: undefined | number | string;
+  }
 
   interface HtmlTableDataCellTag extends HtmlTag {
+    align?: undefined | "left" | "center" | "right";
     colspan?: undefined | string | number;
     rowspan?: undefined | string | number;
     headers?: undefined | string;
+    valign?: undefined | "top" | "middle" | "bottom" | "baseline";
   }
 
   interface HtmlTextAreaTag extends HtmlTag {
@@ -525,6 +533,8 @@ declare namespace JSX {
     rowspan?: undefined | string | number;
     headers?: undefined | string;
     scope?: undefined | string;
+    valign?: undefined | "top" | "middle" | "bottom" | "baseline";
+    width?: undefined | number | string;
   }
 
   interface HtmlTimeTag extends HtmlTag {
@@ -650,7 +660,9 @@ declare namespace JSX {
 
   interface HtmlEmbedTag extends MediaEvents {}
 
-  interface HtmlImageTag extends MediaEvents {}
+  interface HtmlImageTag extends MediaEvents {
+    border?: undefined | number;
+  }
 
   interface HtmlObjectTag extends MediaEvents {}
 
