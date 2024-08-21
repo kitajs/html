@@ -509,6 +509,7 @@ declare namespace JSX {
     colspan?: undefined | string | number;
     rowspan?: undefined | string | number;
     headers?: undefined | string;
+    /** @deprecated */ 
     valign?: undefined | "top" | "middle" | "bottom" | "baseline";
   }
 
@@ -533,6 +534,7 @@ declare namespace JSX {
     rowspan?: undefined | string | number;
     headers?: undefined | string;
     scope?: undefined | string;
+    /** @deprecated */ 
     valign?: undefined | "top" | "middle" | "bottom" | "baseline";
     width?: undefined | number | string;
   }
