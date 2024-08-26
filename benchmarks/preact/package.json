@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "preact": "^10.23.2",
-    "tslib": "^2.6.3",
+    "tslib": "^2.7.0",
     "typescript": "^5.5.4"
   },
   "devDependencies": {
