@@ -1,5 +1,17 @@
 # @kitajs/html
 
+## 4.2.2
+
+### Patch Changes
+
+- [#286](https://github.com/kitajs/html/pull/286)
+  [`15c6d98`](https://github.com/kitajs/html/commit/15c6d98dd84541ba07f6b8ea7940b61b93e4be4a)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Added release provenance
+
+- [#275](https://github.com/kitajs/html/pull/275)
+  [`8b43900`](https://github.com/kitajs/html/commit/8b43900b23a7a96adb1f1d49cc25188d27efa002)
+  Thanks [@douglasduteil](https://github.com/douglasduteil)! - add more html attributes
+
 ## 4.2.1
 
 ### Patch Changes
