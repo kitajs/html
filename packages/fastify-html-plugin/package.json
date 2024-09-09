@@ -1,6 +1,6 @@
 {
   "name": "@kitajs/fastify-html-plugin",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "A Fastify plugin to add support for @kitajs/html",
   "homepage": "https://github.com/kitajs/html/tree/master/packages/fastify-html-plugin#readme",
   "bugs": "https://github.com/kitajs/html/issues",
@@ -27,12 +27,12 @@
     "@swc-node/register": "^1.10.9",
     "@swc/helpers": "^0.5.12",
     "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.4.1",
+    "@types/node": "^22.5.2",
     "c8": "^10.1.2",
     "fastify": "^4.28.1",
     "jsdom": "^24.1.1",
     "tsd": "^0.31.1",
-    "tslib": "^2.6.3"
+    "tslib": "^2.7.0"
   },
   "peerDependencies": {
     "@kitajs/html": "workspace:^4.2.0",

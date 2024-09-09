@@ -8,11 +8,11 @@
   },
   "dependencies": {
     "preact": "^10.23.2",
-    "tslib": "^2.6.3",
+    "tslib": "^2.7.0",
     "typescript": "^5.5.4"
   },
   "devDependencies": {
-    "@types/node": "^22.4.1",
-    "@types/react": "^18.3.3"
+    "@types/node": "^22.5.2",
+    "@types/react": "^18.3.4"
   }
 }
