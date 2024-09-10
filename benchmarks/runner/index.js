@@ -14,10 +14,14 @@ import VHtmlRenderers from '@kitajs/bench-html-vhtml';
 import CommonTags from 'common-tags';
 import * as gHtml from 'ghtml';
 import * as JSXTE from 'jsxte';
+import * as Nano from 'nano-jsx';
 import * as PreactRenderToString from 'preact-render-to-string';
 import ReactDOMServer from 'react-dom/server';
 
 import './assertions.js';
+
+// ensure that document is defined for nano-jsx
+Nano.renderSSR();
 
 group('Real World Scenario', () => {
   bench('KitaJS/Html', () => KitaHtmlJSXRuntimeRenderers.RealWorldPage('Hello World!'));
@@ -42,6 +46,9 @@ group('Real World Scenario', () => {
   bench('Ghtml', () => StringTemplateRenderers.RealWorldPage(gHtml.html, 'Hello World!'));
   bench('JSXTE', () =>
     JSXTE.renderToHtml(JSXTERuntimeRenderers.RealWorldPage('Hello World!'))
+  );
+  bench('Nano JSX', () =>
+    StringTemplateRenderers.RealWorldPage(Nano.jsx, 'Hello World!')
   );
 });
 
@@ -71,6 +78,9 @@ group('Component Creation', () => {
   bench('JSXTE', () =>
     JSXTE.renderToHtml(JSXTERuntimeRenderers.ManyComponents('Hello World!'))
   );
+  bench('Nano JSX', () =>
+    StringTemplateRenderers.TemplateManyComponents(Nano.jsx, 'Hello World!')
+  );
 });
 
 group('Attributes Serialization', () => {
@@ -96,6 +106,9 @@ group('Attributes Serialization', () => {
   );
   bench('JSXTE', () =>
     JSXTE.renderToHtml(JSXTERuntimeRenderers.ManyProps('Hello World!'))
+  );
+  bench('Nano JSX', () =>
+    StringTemplateRenderers.TemplateManyProps(Nano.jsx, 'Hello World!')
   );
 });
 

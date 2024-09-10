@@ -156,6 +156,9 @@ importers:
       mitata:
         specifier: ^0.1.14
         version: 0.1.14
+      nano-jsx:
+        specifier: ^0.1.0
+        version: 0.1.0
       preact-render-to-string:
         specifier: ^6.5.9
         version: 6.5.9(preact@10.23.2)
@@ -1488,6 +1491,10 @@ packages:
 
   ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
+
+  nano-jsx@0.1.0:
+    resolution: {integrity: sha512-S4qJM9ayruMdDnn3hiHNK6kq0ZvCaNrDL3RD5jc4AVhmsW1Ufk3xE64Q6xrjAzq1Gff+6VZ5+Au8For4FT/6LA==}
+    engines: {node: '>=16'}
 
   no-case@2.3.2:
     resolution: {integrity: sha512-rmTZ9kz+f3rCvK2TD1Ue/oZlns7OGoIWP4fc3llxxRXlOkHKoWPPWJOfFYpITabSow43QJbRIoHQXtt10VldyQ==}
@@ -3522,6 +3529,8 @@ snapshots:
   mri@1.2.0: {}
 
   ms@2.1.2: {}
+
+  nano-jsx@0.1.0: {}
 
   no-case@2.3.2:
     dependencies:
