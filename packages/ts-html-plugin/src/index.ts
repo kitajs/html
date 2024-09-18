@@ -22,7 +22,7 @@ export = function initHtmlPlugin(modules: { typescript: typeof TS }) {
           return diagnostics;
         }
 
-        const source = program?.getSourceFile(filename);
+        const source = program.getSourceFile(filename);
 
         if (!source) {
           return diagnostics;
