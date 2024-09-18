@@ -209,7 +209,7 @@ importers:
         specifier: workspace:^4.2.2
         version: link:../html
       '@kitajs/ts-html-plugin':
-        specifier: workspace:^4.0.3
+        specifier: workspace:^4.1.0
         version: link:../ts-html-plugin
       fastify-plugin:
         specifier: ^5.0.0
