@@ -20,16 +20,16 @@
     "test:watch": "c8 --reporter lcov --reporter text node -r @swc-node/register --test --watch test/**/*.test.tsx"
   },
   "dependencies": {
-    "fastify-plugin": "^4.0.0"
+    "fastify-plugin": "^5.0.0"
   },
   "devDependencies": {
-    "@fastify/formbody": "^7.4.0",
+    "@fastify/formbody": "^8.0.0",
     "@swc-node/register": "^1.10.9",
-    "@swc/helpers": "^0.5.12",
+    "@swc/helpers": "^0.5.13",
     "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.5.2",
+    "@types/node": "^22.5.5",
     "c8": "^10.1.2",
-    "fastify": "^4.28.1",
+    "fastify": "^5.0.0",
     "jsdom": "^25.0.0",
     "tsd": "^0.31.2",
     "tslib": "^2.7.0"

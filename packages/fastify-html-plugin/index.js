@@ -80,7 +80,7 @@ function handleHtml(htmlStr, reply) {
 }
 
 const fastifyKitaHtml = fp(plugin, {
-  fastify: '4.x',
+  fastify: '4.x || 5.x',
   name: '@kitajs/fastify-html-plugin'
 });
 
