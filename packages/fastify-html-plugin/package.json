@@ -23,7 +23,7 @@
     "fastify-plugin": "^5.0.0"
   },
   "devDependencies": {
-    "@fastify/formbody": "^8.0.0",
+    "@fastify/formbody": "^8.0.1",
     "@swc-node/register": "^1.10.9",
     "@swc/helpers": "^0.5.13",
     "@types/jsdom": "^21.1.7",
