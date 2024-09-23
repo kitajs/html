@@ -20,7 +20,7 @@
     "test:watch": "c8 --reporter lcov --reporter text node -r @swc-node/register --test --watch test/**/*.test.tsx"
   },
   "dependencies": {
-    "fastify-plugin": "^5.0.0"
+    "fastify-plugin": "^5.0.1"
   },
   "devDependencies": {
     "@fastify/formbody": "^8.0.1",
