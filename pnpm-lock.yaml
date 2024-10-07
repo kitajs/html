@@ -145,8 +145,8 @@ importers:
         specifier: ^1.8.2
         version: 1.8.2
       ghtml:
-        specifier: ^3.0.9
-        version: 3.0.9
+        specifier: ^3.0.10
+        version: 3.0.10
       html-minifier:
         specifier: ^4.0.0
         version: 4.0.0
@@ -1108,8 +1108,8 @@ packages:
     resolution: {integrity: sha512-dVKBjfWisLAicarI2Sf+JuBE/DghV4UzNAVe9yhEJuzeREd3JhOTE9cUaJTeSa77fsbQUK3pcOpJfM59+VKZaA==}
     engines: {node: '>=12'}
 
-  ghtml@3.0.9:
-    resolution: {integrity: sha512-2wsziXMxUEm6sjw4Gt+Ye0uvLlGeGJ0LNaTSu2gNhz0gF1yRmWThkHLkQkT322Vs11zTbwiOPBDPQzVeVI5pvA==}
+  ghtml@3.0.10:
+    resolution: {integrity: sha512-gyHUp9CazxRHxV9vb0phCY9PbnSfHw460zFsbZl1jfomxaALJWzFB0QfAiuox2iN1ED/YJAZbXbGM9DCU6lf4w==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -3004,7 +3004,7 @@ snapshots:
 
   get-stdin@9.0.0: {}
 
-  ghtml@3.0.9:
+  ghtml@3.0.10:
     dependencies:
       glob: 10.4.5
 
