@@ -112,7 +112,7 @@ export function renderToStream(
  *
  * // This prepends the html into the stream, handling possible
  * // cases where the html resolved after one of its async children
- * return writeFallback(html, requestData.stream);
+ * return resolveHtmlStream(html, requestData)
  * ```
  *
  * @param fallback The fallback to render while the async children are loading.
