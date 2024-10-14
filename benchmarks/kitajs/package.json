@@ -9,6 +9,6 @@
   "dependencies": {
     "@kitajs/html": "workspace:*",
     "tslib": "^2.7.0",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.3"
   }
 }
