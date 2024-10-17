@@ -2,7 +2,6 @@
 
 import chalk from 'chalk';
 import fs from 'node:fs';
-import { EOL } from 'node:os';
 import path from 'node:path';
 import ts from 'typescript';
 import yargs from 'yargs';
@@ -13,7 +12,7 @@ const { version } = require('../package.json');
 
 const help = `
 
-ts-html-plugin v${version} - A CLI tool & TypeScript LSP for finding XSS vulnerabilities in your TypeScript code.
+@kitajs/ts-html-plugin v${version} - A CLI tool & TypeScript LSP for finding XSS vulnerabilities in your TypeScript code.
 
 Usage: xss-scan         [options] <file> <file>...
        ts-html-plugin   [options] <file> <file>...
@@ -137,9 +136,10 @@ async function main() {
 
   const simplified = !!(args.simplified || args.s);
 
-  const diagnosticFormatter = simplified
-    ? ts.formatDiagnostics
-    : ts.formatDiagnosticsWithColorAndContext;
+  const diagnosticFormatter =
+    !process.stdout.isTTY || simplified
+      ? ts.formatDiagnostics
+      : ts.formatDiagnosticsWithColorAndContext;
 
   if (!fileExists(tsconfigPath)) {
     console.error((!simplified ? chalk.red : String)(`Could not find ${tsconfigPath}`));
@@ -149,9 +149,9 @@ async function main() {
   const tsconfig = readCompilerOptions(tsconfigPath);
 
   const diagnosticHost: ts.FormatDiagnosticsHost = {
-    getCurrentDirectory: () => root,
+    getCurrentDirectory: ts.sys.getCurrentDirectory,
     getCanonicalFileName: (fileName) => fileName,
-    getNewLine: () => EOL
+    getNewLine: () => ts.sys.newLine
   };
 
   if (tsconfig.errors) {

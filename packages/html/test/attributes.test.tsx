@@ -74,9 +74,11 @@ describe('Attributes', () => {
   test('class arrays', () => {
     assert.equal(<div class="name" />, '<div class="name"></div>');
     assert.equal(<div class={['name']} />, '<div class="name"></div>');
+    //@ts-expect-error - This kind of expression is always falsy.
     assert.equal(<div class={['' && 'name']} />, '<div></div>');
 
     assert.equal(
+      //@ts-expect-error - This kind of expression is always falsy.
       <div class={[false && 'a', 'name', null && 'b', 0 && 'c']} />,
       '<div class="name"></div>'
     );

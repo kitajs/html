@@ -1,5 +1,13 @@
 # @kitajs/html
 
+## 4.2.3
+
+### Patch Changes
+
+- [`229b74d`](https://github.com/kitajs/html/commit/229b74da91cd0b1a636c68cde1326bfe3fca3d0b)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Fix suspense script
+  license
+
 ## 4.2.2
 
 ### Patch Changes

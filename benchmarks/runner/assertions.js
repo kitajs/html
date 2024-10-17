@@ -80,5 +80,6 @@ await Promise.all([
     'preact',
     PreactRenderToString.render(PreactRuntimeRenderers.RealWorldPage(NAME_VAR))
   ),
-  saveHtml('jsxte', JSXTE.renderToHtml(JSXTERuntimeRenderers.RealWorldPage(NAME_VAR)))
+  saveHtml('jsxte', JSXTE.renderToHtml(JSXTERuntimeRenderers.RealWorldPage(NAME_VAR))),
+  saveHtml('nano-jsx', JSXTE.renderToHtml(JSXTERuntimeRenderers.RealWorldPage(NAME_VAR)))
 ]);

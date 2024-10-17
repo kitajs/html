@@ -27,7 +27,7 @@ function noop() {}
 // no elements are substituted.
 const SuspenseScript = /* html */ `
       <script id="kita-html-suspense">
-        /*! Apache-2.0 https://kitajs.org */
+        /*! MIT License https://kita.js.org */
         function $KITA_RC(i){
           // simple aliases
           var d=document,q=d.querySelector.bind(d),
@@ -57,11 +57,11 @@ const SuspenseScript = /* html */ `
             r=d.querySelectorAll('template[id][data-sr]');
 
             do{
-              // resets j from previous loop
-              j=0;
+              // resets j & c from previous loop
+              c=j=0;
 
               // loops over every found pending template and 
-              for(c=0;c<r.length;c++)
+              for(;c<r.length;c++)
                 if(r[c]!=t)
                   // let j as true while at least on $KITA_RC call returns true
                   j=$KITA_RC(r[c].id.slice(2))?!0:j;

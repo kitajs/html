@@ -1,7 +1,7 @@
+import Html, { type PropsWithChildren } from '@kitajs/html';
+import { Suspense, renderToStream } from '@kitajs/html/suspense';
 import http from 'node:http';
 import { setTimeout } from 'node:timers/promises';
-import Html, { type PropsWithChildren } from '../packages/html';
-import { Suspense, renderToStream } from '../packages/html/suspense';
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
   await setTimeout(ms * 2);
@@ -13,11 +13,11 @@ function renderLayout(rid: number | string) {
     <html>
       <div>
         {Array.from({ length: 5 }, (_, i) => (
-          <Suspense rid={rid} fallback={<div>{i} FIuter</div>}>
+          <Suspense rid={rid} fallback={<div>{i} Fallback Outer!</div>}>
             <div>Outer {i}!</div>
 
             <SleepForMs ms={i % 2 === 0 ? i * 2500 : i * 5000}>
-              <Suspense rid={rid} fallback={<div>{i} FInner!</div>}>
+              <Suspense rid={rid} fallback={<div>{i} Fallback Inner!</div>}>
                 <SleepForMs ms={i * 5000}>
                   <div>Inner {i}!</div>
                 </SleepForMs>

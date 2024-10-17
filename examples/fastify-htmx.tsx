@@ -4,7 +4,7 @@ import fastifyFormbody from '@fastify/formbody';
 import { Suspense } from '@kitajs/html/suspense';
 import fastify from 'fastify';
 import { setTimeout } from 'node:timers/promises';
-import { fastifyKitaHtml } from '..';
+import { fastifyKitaHtml } from '../packages/fastify-html-plugin/types';
 
 const app = fastify({ logger: true });
 
@@ -84,6 +84,9 @@ app.post(
   (req, rep) => {
     const { username } = req.body as { username: string };
     users.push(username);
+
+    // Safe is required to avoid xss attacks.
+    // Use `xss-scan` CLI to automatically check for forgotten `safe` props.
     rep.html(<li safe>{username}</li>);
   }
 );

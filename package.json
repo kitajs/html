@@ -31,11 +31,11 @@
   "devDependencies": {
     "@arthurfiorette/prettier-config": "^1.0.12",
     "@changesets/changelog-github": "^0.5.0",
-    "@changesets/cli": "^2.27.7",
+    "@changesets/cli": "^2.27.9",
     "@kitajs/html": "workspace:*",
-    "husky": "^9.1.5",
+    "husky": "^9.1.6",
     "prettier": "^3.3.3",
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.3"
   },
   "packageManager": "pnpm@9.1.1",
   "engines": {
