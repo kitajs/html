@@ -1,5 +1,12 @@
 # @kitajs/html
 
+## 4.2.5
+
+### Patch Changes
+
+- [`3b40ece`](https://github.com/kitajs/html/commit/3b40eceb2efa38d4f63fad9a8853532814a195b0)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Improved benchmarks
+
 ## 4.2.4
 
 ### Patch Changes
