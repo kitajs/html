@@ -29,6 +29,8 @@ boxplot(() => {
 });
 
 const footer = `
+Sizes are the final html output based on the same input.
+
 !) Are jsx runtimes that produces different output from React for the same input ⚠️
 
 *) Are template engines, which usually lacks syntax highlighting and intellisense:
