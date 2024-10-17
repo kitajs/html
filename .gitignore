@@ -6,3 +6,5 @@ dist
 coverage
 
 *.log
+
+benchmarks/runner/profile.cpuprofile

@@ -12,10 +12,6 @@
   },
   "license": "MIT",
   "author": "Arthur Fiorette <kita@arthur.place>",
-  "workspaces": [
-    "packages/*",
-    "benchmarks/*"
-  ],
   "scripts": {
     "bench": "pnpm -r --filter \"@kitajs/bench-html-*\" build && pnpm --filter \"@kitajs/bench-html-runner\" start",
     "build": "pnpm -r --aggregate-output build",

@@ -8,8 +8,9 @@
     "jsx": "react",
     "jsxFactory": "elements.createElement",
     "declaration": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "sourceMap": true
   },
-  "include": ["renderers", "index.ts"],
+  "include": ["index.tsx"],
   "exclude": ["dist"]
 }
