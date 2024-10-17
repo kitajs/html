@@ -1,4 +1,39 @@
-# Benchmark
+<h1>Benchmark</h1>
+
+- [Results](#results)
+- [Versions](#versions)
+- [Information](#information)
+- [About KitaJS/Html](#about-kitajshtml)
+- [Runtime Inconsistencies](#runtime-inconsistencies)
+
+## Results
+
+```
+!) Are jsx runtimes that produces different output from React for the same input ⚠️
+
+*) Are template engines, which usually lacks syntax highlighting and intellisense:
+   https://github.com/kitajs/html/blob/master/benchmarks/templates/normal.tsx
+```
+
+<img align=center src="./benchmark.png" alt="benchmark results" />
+
+## Versions
+
+```json
+{
+  "@kitajs/html": "4.2.4",
+  "common-tags": "1.8.2",
+  "ghtml": "3.0.10",
+  "html-minifier": "4.0.0",
+  "jsxte": "3.3.1",
+  "mitata": "1.0.10",
+  "nano-jsx": "0.1.0",
+  "preact-render-to-string": "6.5.11",
+  "react-dom": "18.3.1"
+}
+```
+
+## Information
 
 The `RealWorldPage` benchmark is the most meaningful since it represents a realistic
 workload scenario. _Other benchmarks serve specific purposes, such as measuring the speed
@@ -18,41 +53,6 @@ our comparisons.
 Also, feel free to contribute benchmarks for any library you're interested in by opening a
 pull request (PR). If you need assistance or wish to suggest a library for benchmarking,
 don't hesitate to open an issue.
-
-## Benchmark Results
-
-```txt
-               ┌                                            ┐
-                ┌┬   ╷
-        KitaJs  ││───┤
-                └┴   ╵
-                              ╷┌─┬┐   ╷
-     TypedHtml                ├┤ │├───┤
-                              ╵└─┴┘   ╵
-                                ╷┌┬┐   ╷
-         vHtml                  ├┤│├───┤
-                                ╵└┴┘   ╵
-                        ╷┌┬     ╷
-      ReactJsx          ├┤│─────┤
-                        ╵└┴     ╵
-                    ╷┌──┬               ╷
-        Preact      ├┤  │───────────────┤
-                    ╵└──┴               ╵
-                        ┌─┬       ╷
-         React          │ │───────┤
-                        └─┴       ╵
-                                                    ╷┌┬┐    ╷
-         Jsxte                                      ├┤│├────┤
-                                                    ╵└┴┘    ╵
-                                            ╷┌─┬─┐        ╷
-(T) CommonTags                              ├┤ │ ├────────┤
-                                            ╵└─┴─┘        ╵
-               ┌┬                 ╷
-     (T) Ghtml ││─────────────────┤
-               └┴                 ╵
-               └                                            ┘
-               189.84 µs           2.50 ms            4.81 ms
-```
 
 ## About KitaJS/Html
 
