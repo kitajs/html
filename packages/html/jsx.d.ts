@@ -498,6 +498,8 @@ declare namespace JSX {
 
   interface HtmlTableTag extends HtmlTag {
     align?: undefined | 'left' | 'center' | 'right';
+    /** @deprecated */
+    bgcolor?: undefined | string;
     border?: undefined | number;
     cellpadding?: undefined | number | string;
     cellspacing?: undefined | number | string;
