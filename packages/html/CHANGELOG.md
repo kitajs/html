@@ -1,5 +1,14 @@
 # @kitajs/html
 
+## 4.2.4
+
+### Patch Changes
+
+- [#315](https://github.com/kitajs/html/pull/315)
+  [`97dc5f3`](https://github.com/kitajs/html/commit/97dc5f3435815f81d9583bf818d84b710a728a50)
+  Thanks [@douglasduteil](https://github.com/douglasduteil)! - add deprecated bgcolor
+  attribute on table tag
+
 ## 4.2.3
 
 ### Patch Changes
