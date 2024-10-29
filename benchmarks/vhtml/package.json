@@ -7,8 +7,8 @@
     "build": "tsc"
   },
   "dependencies": {
-    "tslib": "^2.7.0",
-    "typescript": "^5.5.4",
+    "tslib": "^2.8.0",
+    "typescript": "^5.6.3",
     "vhtml": "^2.2.0"
   }
 }

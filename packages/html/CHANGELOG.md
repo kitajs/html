@@ -1,5 +1,22 @@
 # @kitajs/html
 
+## 4.2.4
+
+### Patch Changes
+
+- [#315](https://github.com/kitajs/html/pull/315)
+  [`97dc5f3`](https://github.com/kitajs/html/commit/97dc5f3435815f81d9583bf818d84b710a728a50)
+  Thanks [@douglasduteil](https://github.com/douglasduteil)! - add deprecated bgcolor
+  attribute on table tag
+
+## 4.2.3
+
+### Patch Changes
+
+- [`229b74d`](https://github.com/kitajs/html/commit/229b74da91cd0b1a636c68cde1326bfe3fca3d0b)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Fix suspense script
+  license
+
 ## 4.2.2
 
 ### Patch Changes

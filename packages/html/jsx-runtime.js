@@ -30,7 +30,7 @@ function jsx(name, attrs) {
       : '<' + name + attributes + '></' + name + '>';
   }
 
-  const contents = contentToString(attrs.children, !!attrs.safe);
+  const contents = contentToString(attrs.children, attrs.safe);
 
   if (contents instanceof Promise) {
     return contents.then(function resolveContents(child) {
@@ -61,7 +61,7 @@ function jsxs(name, attrs) {
       : '<' + name + attributes + '></' + name + '>';
   }
 
-  const contents = contentsToString(attrs.children, !!attrs.safe);
+  const contents = contentsToString(attrs.children, attrs.safe);
 
   if (contents instanceof Promise) {
     return contents.then(function resolveContents(child) {

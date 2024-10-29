@@ -85,24 +85,29 @@ export class TSLangServer {
     this.server.stdout?.setEncoding('utf-8');
 
     this.server.stdout?.on('data', (data) => {
-      const obj = JSON.parse(data.split('\n', 3)[2]);
+      try {
+        const obj = JSON.parse(data.split('\n', 3)[2]);
 
-      if (this.debug) {
-        console.dir(obj, { depth: 10 });
-      }
-
-      if (obj.success === false) {
-        this.errorEmitter.emit(obj.type === 'event' ? obj.event : obj.command, obj);
-
-        // Error is fatal, close the server
-        if (!this.isClosed) {
-          this.isClosed = true;
-          this.server.stdin?.end();
+        if (this.debug) {
+          console.dir(obj, { depth: 10 });
         }
-      } else if (obj.type === 'event') {
-        this.responseEventEmitter.emit(obj.event, obj);
-      } else if (obj.type === 'response') {
-        this.responseCommandEmitter.emit(obj.command, obj);
+
+        if (obj.success === false) {
+          this.errorEmitter.emit(obj.type === 'event' ? obj.event : obj.command, obj);
+
+          // Error is fatal, close the server
+          if (!this.isClosed) {
+            this.isClosed = true;
+            this.server.stdin?.end();
+          }
+        } else if (obj.type === 'event') {
+          this.responseEventEmitter.emit(obj.event, obj);
+        } else if (obj.type === 'response') {
+          this.responseCommandEmitter.emit(obj.command, obj);
+        }
+      } catch (error) {
+        console.error(data);
+        this.exitPromise.reject(error);
       }
     });
   }
@@ -112,7 +117,7 @@ export class TSLangServer {
     const fileContent = `${TEST_HELPERS}\n${String.raw(content, ...args).trim()}`;
 
     if (this.debug) {
-      console.log(this.strWithLineNumbers(fileContent));
+      console.log(this.#strWithLineNumbers(fileContent));
     }
 
     await this.send({
@@ -141,23 +146,37 @@ export class TSLangServer {
       }
     });
 
-    return this.waitResponse('semanticDiagnosticsSync');
+    const response: ts.server.protocol.SemanticDiagnosticsSyncResponse =
+      await this.waitResponse('semanticDiagnosticsSync');
+
+    // Filter out TS errors from our template tests that aren't useful
+    // for this unit tests.
+    if (response.body) {
+      //@ts-ignore - TS somehow breaks here
+      response.body = response.body.filter((b) => {
+        switch (b.code) {
+          // This kind of expression is always falsy.
+          case 2873:
+          // This kind of expression is always truthy.
+          case 2872:
+            return false;
+        }
+
+        return true;
+      });
+    }
+
+    return response;
   }
 
   send(command: Omit<Requests, 'seq' | 'type'>) {
     const response = deferred<void>();
 
-    this.server.stdin?.write(this.formatCommand(command), (err) =>
+    this.server.stdin?.write(this.#formatCommand(command), (err) =>
       err ? response.reject(err) : response.resolve()
     );
 
     return response;
-  }
-
-  private formatCommand(command: Omit<Requests, 'seq' | 'type'>) {
-    return `${JSON.stringify(
-      Object.assign({ seq: ++this.sequence, type: 'request' }, command)
-    )}\n`;
   }
 
   waitEvent(eventName: string) {
@@ -203,7 +222,13 @@ export class TSLangServer {
     return this.exitPromise;
   }
 
-  strWithLineNumbers(str: string) {
+  #formatCommand(command: Omit<Requests, 'seq' | 'type'>) {
+    return `${JSON.stringify(
+      Object.assign({ seq: ++this.sequence, type: 'request' }, command)
+    )}\n`;
+  }
+
+  #strWithLineNumbers(str: string) {
     return str
       .split('\n')
       .map((line, index) => `${index + 1 < 10 ? `0${index + 1}` : index + 1} | ${line}`)

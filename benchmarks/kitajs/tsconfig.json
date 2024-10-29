@@ -9,10 +9,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "jsxImportSource": "@kitajs/html",
-    "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
     "declaration": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "sourceMap": true
   },
-  "include": ["renderers", "index.ts"],
+  "include": ["index.tsx"],
   "exclude": ["dist"]
 }

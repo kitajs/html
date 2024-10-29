@@ -498,6 +498,8 @@ declare namespace JSX {
 
   interface HtmlTableTag extends HtmlTag {
     align?: undefined | 'left' | 'center' | 'right';
+    /** @deprecated */
+    bgcolor?: undefined | string;
     border?: undefined | number;
     cellpadding?: undefined | number | string;
     cellspacing?: undefined | number | string;
@@ -505,12 +507,12 @@ declare namespace JSX {
   }
 
   interface HtmlTableDataCellTag extends HtmlTag {
-    align?: undefined | "left" | "center" | "right";
+    align?: undefined | 'left' | 'center' | 'right';
     colspan?: undefined | string | number;
     rowspan?: undefined | string | number;
     headers?: undefined | string;
-    /** @deprecated */ 
-    valign?: undefined | "top" | "middle" | "bottom" | "baseline";
+    /** @deprecated */
+    valign?: undefined | 'top' | 'middle' | 'bottom' | 'baseline';
   }
 
   interface HtmlTextAreaTag extends HtmlTag {
@@ -534,8 +536,8 @@ declare namespace JSX {
     rowspan?: undefined | string | number;
     headers?: undefined | string;
     scope?: undefined | string;
-    /** @deprecated */ 
-    valign?: undefined | "top" | "middle" | "bottom" | "baseline";
+    /** @deprecated */
+    valign?: undefined | 'top' | 'middle' | 'bottom' | 'baseline';
     width?: undefined | number | string;
   }
 
