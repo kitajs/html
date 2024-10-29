@@ -680,6 +680,7 @@ declare namespace JSX {
      *
      * **If you intend to utilize a similar property, please opt for an alternate name.**
      *
+     * @deprecated
      * @see https://github.com/reactjs/rfcs/pull/107
      */
     key?: undefined | never;

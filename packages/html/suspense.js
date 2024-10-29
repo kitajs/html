@@ -1,3 +1,5 @@
+/** @import * as Dts from './suspense' */
+
 const { contentsToString, contentToString } = require('./index');
 const { Readable, PassThrough } = require('node:stream');
 
@@ -14,27 +16,30 @@ if (!globalThis.SUSPENSE_ROOT) {
 
 function noop() {}
 
-/**
- * Simple IE11 compatible replace child scripts to replace the template streamed by the
- * server.
- *
- * As this script is the only residue of this package that is actually sent to the client,
- * it's important to keep it as small as possible and also include the license to avoid
- * legal issues.
- */
+/** @type {typeof Dts.RcInsert} */
+const RcInsert = {
+  REPLACE: 0,
+  APPEND: 1,
+  L_APPEND: 2
+};
+
+/** @type {Dts.SuspenseScript} */
 // Pending data-sr elements are kept pending if their fallback has not yet been
 // rendered, on each render a try to switch all pending data-sr is attempted until
 // no elements are substituted.
 const SuspenseScript = /* html */ `
       <script id="kita-html-suspense">
-        /*! MIT License https://kita.js.org */
-        function $KITA_RC(i){
+        /*! MIT License https://html.kitajs.org */
+        // i is the id of the template
+        // g is the flag append element before instead of replacing (2 means last item)
+        function $KITA_RC(i,g){
           // simple aliases
           var d=document,q=d.querySelector.bind(d),
             // div sent as the fallback wrapper
             v=q('div[id="B:'+i+'"][data-sf]'),
             // template and script sent after promise finishes
-            t=q('template[id="N:'+i+'"][data-sr]'),s=q('script[id="S:'+i+'"][data-ss]'),
+            t=q('template[id="N:'+i+'"][data-sr]'),
+            s=q('script[id="S:'+i+'"][data-ss]'),
             // fragment created to avoid inserting element one by one
             f=d.createDocumentFragment(),
             // used by iterators
@@ -42,16 +47,21 @@ const SuspenseScript = /* html */ `
             // all pending hydrations
             r;
 
-          // if div or template is not found, let this hydration as pending
-          if(t&&v&&s){
+          // if div cannot be found, let this hydration as pending
+          // template is not present when is RcInsert.L_APPEND
+          if(v&&s){
             // appends into the fragment
-            while(c=t.content.firstChild)
+            while(t&&(c=t.content.firstChild))
               f.appendChild(c);
 
-            // replaces the div and removes the script and template
-            v.parentNode.replaceChild(f,v);
-            t.remove();
+            // replaces the div and removes the script and template (insert == 0, so is false)
+            v.parentNode[g?'insertBefore':'replaceChild'](f,v);
+
+            // removes both template and script after being replaced
+            t&&t.remove();
             s.remove();
+            // removes the initial template when the generator finishes
+            g==${RcInsert.L_APPEND}&&v.remove();
 
             // looks for pending templates
             r=d.querySelectorAll('template[id][data-sr]');
@@ -60,12 +70,12 @@ const SuspenseScript = /* html */ `
               // resets j & c from previous loop
               c=j=0;
 
-              // loops over every found pending template and 
+              // loops over every found pending template and
               for(;c<r.length;c++)
                 if(r[c]!=t)
                   // let j as true while at least on $KITA_RC call returns true
-                  j=$KITA_RC(r[c].id.slice(2))?!0:j;
-            }while(j)
+                  j=$KITA_RC(r[c].id.slice(2),g)?!0:j;
+            }while(t&&j)
 
             // we know at least the original template was substituted
             return!0;
@@ -76,9 +86,11 @@ const SuspenseScript = /* html */ `
   // Removes comment lines
   .replace(/^\s*\/\/.*/gm, '')
   // Removes line breaks added for readability
-  .replace(/\n\s*/g, '');
+  .replace(/\n\s*/g, '')
+  // Removes padding spaces
+  .trim();
 
-/** @type {import('./suspense').Suspense} */
+/** @type {typeof Dts.Suspense} */
 function Suspense(props) {
   const children = Array.isArray(props.children)
     ? contentsToString(props.children)
@@ -93,20 +105,7 @@ function Suspense(props) {
     throw new Error('Suspense requires a `rid` to be specified.');
   }
 
-  let data = SUSPENSE_ROOT.requests.get(props.rid);
-
-  if (!data) {
-    // Creating the request data lazily allows
-    // faster render() calls when no suspense
-    // components are used.
-    data = {
-      stream: new Readable({ read: noop }),
-      running: 0,
-      sent: false
-    };
-
-    SUSPENSE_ROOT.requests.set(props.rid, data);
-  }
+  const data = useRequestData(props.rid);
 
   // Gets the current run number for this request
   // Increments first so we can differ 0 as no suspenses
@@ -114,112 +113,110 @@ function Suspense(props) {
   const run = ++data.running;
 
   void children
-    .then(writeStreamTemplate)
+    .then(function pushResult(result) {
+      data.stream.push(createHtmlTemplate(run, data, RcInsert.REPLACE, result));
+    })
     .catch(function errorRecover(error) {
-      // No catch block was specified, so we can
-      // re-throw the error.
-      if (!props.catch) {
-        throw error;
-      }
-
-      let html;
-
-      // Unwraps error handler
-      if (typeof props.catch === 'function') {
-        html = props.catch(error);
-      } else {
-        html = props.catch;
-      }
-
-      // handles if catch block returns a string
-      if (typeof html === 'string') {
-        return writeStreamTemplate(html);
-      }
-
-      // must be a promise
-      return html.then(writeStreamTemplate);
+      return recoverPromiseRejection(data, run, props.catch, RcInsert.REPLACE, error);
     })
     .catch(function writeFatalError(error) {
       data.stream.emit('error', error);
     })
-    .finally(function clearRequestData() {
-      // reduces current suspense id
-      if (data && data.running > 1) {
-        data.running -= 1;
-        return;
-      }
-
-      // Last suspense component, runs cleanup
-      if (data && !data.stream.closed) {
-        data.stream.push(null);
-      }
-
-      // Removes the current state
-      SUSPENSE_ROOT.requests.delete(props.rid);
+    .finally(function final() {
+      clearRequestData(props.rid, data);
     });
 
   // Always will be a single children because multiple
   // root tags aren't a valid JSX syntax
   const fallback = contentToString(props.fallback);
 
-  // Keeps string return type
-  if (typeof fallback === 'string') {
-    return '<div id="B:' + run + '" data-sf>' + fallback + '</div>';
+  if (typeof fallback !== 'string') {
+    return fallback.then((html) => createHtmlFallback(run, html));
   }
 
-  return fallback.then(function resolveCallback(resolved) {
-    return '<div id="B:' + run + '" data-sf>' + resolved + '</div>';
-  });
+  return createHtmlFallback(run, fallback);
+}
 
-  /**
-   * This function may be called by the catch handler in case the error could be handled.
-   *
-   * @param {string} result
-   */
-  function writeStreamTemplate(result) {
-    if (
-      // Ensures the stream is still open (.closed may not be already defined at this point)
-      !SUSPENSE_ROOT.requests.has(props.rid) ||
-      // just to typecheck
-      !data ||
-      // Stream was already closed/cleared out.
-      data.stream.closed
-    ) {
-      return;
+/** @type {typeof Dts.Generator} */
+function Generator(props) {
+  if (!props.rid) {
+    throw new Error('Generator requires a `rid` to be specified.');
+  }
+
+  const data = useRequestData(props.rid);
+
+  // Gets the current run number for this request
+  // Increments first so we can differ 0 as no suspenses
+  // were used and 1 as the first suspense component
+  const run = ++data.running;
+
+  void consume()
+    .catch(function errorRecovery(error) {
+      return recoverPromiseRejection(data, run, props.catch, RcInsert.APPEND, error);
+    })
+    .catch(function writeFatalError(error) {
+      data.stream.emit('error', error);
+    })
+    .finally(function final() {
+      clearRequestData(props.rid, data);
+    });
+
+  return createHtmlFallback(run, '');
+
+  async function consume() {
+    for await (const chunk of props.source) {
+      data.stream.push(
+        createHtmlTemplate(
+          run,
+          data,
+          RcInsert.APPEND,
+          //@ts-expect-error - map is not required
+          props.map ? await props.map(chunk) : chunk
+        )
+      );
     }
 
-    // Writes the suspense script if its the first
-    // suspense component in this request data. This way following
-    // templates+scripts can be executed
-    if (SUSPENSE_ROOT.autoScript && data.sent === false) {
-      data.stream.push(SuspenseScript);
-      data.sent = true;
-    }
-
-    // Writes the chunk
-    data.stream.push(
-      // prettier-ignore
-      `<template id="N:${run}" data-sr>${result}</template><script id="S:${run}" data-ss>$KITA_RC(${run})</script>`
-    );
+    // Emits last item to remove initial template div
+    data.stream.push(createHtmlTemplate(run, data, RcInsert.L_APPEND));
   }
 }
 
-/** @type {import('./suspense').renderToStream} */
+/** @type {typeof Dts.recoverPromiseRejection} */
+async function recoverPromiseRejection(data, run, _catch, mode, error) {
+  // No catch block was specified, so we can
+  // re-throw the error.
+  if (!_catch) {
+    throw error;
+  }
+
+  let html;
+
+  // Unwraps error handler
+  if (typeof _catch === 'function') {
+    html = _catch(error);
+  } else {
+    html = _catch;
+  }
+
+  if (typeof html !== 'string') {
+    html = await html;
+  }
+
+  data.stream.push(createHtmlTemplate(run, data, mode, html));
+}
+
+/**
+ * @type {typeof Dts.renderToStream}
+ * @param {any} html
+ * @param {any} rid
+ */
 function renderToStream(html, rid) {
   if (!rid) {
     rid = SUSPENSE_ROOT.requestCounter++;
   } else if (SUSPENSE_ROOT.requests.has(rid)) {
     // Ensures the request id is unique within the current request
-    // error here to keep original stack trace
-    const error = new Error(`The provided Request Id is already in use: ${rid}.`);
-
-    // returns errored stream to avoid throws
-    return new Readable({
-      read() {
-        this.emit('error', error);
-        this.push(null);
-      }
-    });
+    // error here to keep original stack trace and returns errored stream to avoid throws
+    return errorToReadable(new Error(`The provided Rid is already in use: ${rid}.`));
   }
 
   if (typeof html === 'function') {
@@ -230,12 +227,7 @@ function renderToStream(html, rid) {
       SUSPENSE_ROOT.requests.delete(rid);
 
       // returns errored stream to avoid throws
-      return new Readable({
-        read() {
-          this.emit('error', error);
-          this.push(null);
-        }
-      });
+      return errorToReadable(error);
     }
   }
 
@@ -244,30 +236,15 @@ function renderToStream(html, rid) {
 
   // No suspense was used, just return the HTML as a stream
   if (!requestData) {
-    if (typeof html === 'string') {
-      return Readable.from([html]);
-    }
-
-    return new Readable({
-      read() {
-        void html
-          .then((result) => {
-            this.push(result);
-            this.push(null);
-          })
-          .catch((error) => {
-            this.emit('error', error);
-          });
-      }
-    });
+    return typeof html === 'string' ? Readable.from(html) : promiseToReadable(html);
   }
 
   return resolveHtmlStream(html, requestData);
 }
 
-/** @type {import('./suspense').resolveHtmlStream} */
+/** @type {typeof Dts.resolveHtmlStream} */
 function resolveHtmlStream(template, requestData) {
-  // Impossible to sync templates have their
+  // Due to event loop, its impossible to sync templates have their
   // streams being written (sent = true) before the fallback
   if (typeof template === 'string') {
     requestData.stream.push(template);
@@ -289,7 +266,98 @@ function resolveHtmlStream(template, requestData) {
   return prepended;
 }
 
-exports.Suspense = Suspense;
+/** @type {typeof Dts.useRequestData} */
+function useRequestData(rid) {
+  let data = SUSPENSE_ROOT.requests.get(rid);
+
+  if (!data) {
+    // Creating the request data lazily allows
+    // faster render() calls when no suspense
+    // components are used.
+    data = {
+      stream: new Readable({ read: noop }),
+      running: 0,
+      sent: false
+    };
+
+    SUSPENSE_ROOT.requests.set(rid, data);
+  }
+
+  return data;
+}
+
+/** @type {typeof Dts.clearRequestData} */
+function clearRequestData(rid, data) {
+  // reduces current suspense id
+  if (data.running > 1) {
+    data.running -= 1;
+    return;
+  }
+
+  // Last suspense component, runs cleanup
+  if (!data.stream.closed) {
+    data.stream.push(null);
+  }
+
+  // Removes the current state
+  SUSPENSE_ROOT.requests.delete(rid);
+}
+
+/** @type {typeof Dts.createHtmlTemplate} */
+function createHtmlTemplate(run, data, mode, content) {
+  if (mode !== RcInsert.L_APPEND) {
+    content = `<template id="N:${run}" data-sr>${content}</template><script id="S:${run}" data-ss>$KITA_RC(${mode ? `${run},${mode}` : run})</script>`;
+  } else {
+    content = `<script id="S:${run}" data-ss>$KITA_RC(${run},${mode})</script>`;
+  }
+
+  // Appends the suspense script if its the first suspense component in this
+  // request data. This way following templates+scripts can be executed
+  if (SUSPENSE_ROOT.autoScript && data.sent === false) {
+    data.sent = true;
+    return SuspenseScript + content;
+  }
+
+  return content;
+}
+
+/** @type {typeof Dts.createHtmlFallback} */
+function createHtmlFallback(run, fallback) {
+  return `<div id="B:${run}" data-sf>${fallback}</div>`;
+}
+
+exports.clearRequestData = clearRequestData;
+exports.createHtmlTemplate = createHtmlTemplate;
+exports.createHtmlTemplate = createHtmlTemplate;
+exports.Generator = Generator;
+exports.RcInsert = RcInsert;
+exports.recoverPromiseRejection = recoverPromiseRejection;
 exports.renderToStream = renderToStream;
 exports.resolveHtmlStream = resolveHtmlStream;
+exports.Suspense = Suspense;
 exports.SuspenseScript = SuspenseScript;
+exports.useRequestData = useRequestData;
+
+/** @param {unknown} error */
+function errorToReadable(error) {
+  return new Readable({
+    read() {
+      this.emit('error', error);
+      this.push(null);
+    }
+  });
+}
+
+/** @param {Promise<unknown>} promise */
+function promiseToReadable(promise) {
+  return new Readable({
+    async read() {
+      try {
+        this.push(await promise);
+        this.push(null);
+      } catch (error) {
+        this.emit('error', error);
+      }
+    }
+  });
+}

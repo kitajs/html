@@ -1,5 +1,5 @@
 import type { Readable } from 'node:stream';
-import type { Children } from './';
+import type { Children } from './index';
 
 declare global {
   /**
@@ -12,7 +12,7 @@ declare global {
      * write the HTML, the number of running promises and if the first suspense has
      * already resolved.
      */
-    requests: Map<number | string, RequestData>;
+    requests: Map<Rid, RequestData>;
 
     /**
      * This value is used (and incremented shortly after) when no requestId is provided
@@ -33,6 +33,9 @@ declare global {
     autoScript: boolean;
   };
 }
+
+/** A unique request identifier that can be any literal type. */
+export type Rid = number | string;
 
 /** Everything a suspense needs to know about its request lifecycle. */
 export type RequestData = {
@@ -63,6 +66,14 @@ export type RequestData = {
 export function Suspense(props: SuspenseProps): JSX.Element;
 
 /**
+ * A component that keeps injecting html while the generator is running.
+ *
+ * The `rid` prop is the one {@linkcode renderToStream} returns, this way the suspense
+ * knows which request it belongs to.
+ */
+export function Generator<T>(props: GeneratorProps<T>): JSX.Element;
+
+/**
  * Transforms a component tree who may contain `Suspense` components into a stream of
  * HTML.
  *
@@ -89,10 +100,11 @@ export function Suspense(props: SuspenseProps): JSX.Element;
  *   id will be used.
  * @see {@linkcode Suspense}
  */
-export function renderToStream(
-  html: JSX.Element | ((rid: number | string) => JSX.Element),
-  rid?: number | string
+export declare function renderToStream(
+  html: (rid: Rid) => JSX.Element,
+  rid?: Rid
 ): Readable;
+export declare function renderToStream(html: JSX.Element, rid: Rid): Readable;
 
 /**
  * Joins the html base template (with possible suspense's fallbacks) with the request data
@@ -122,9 +134,70 @@ export function renderToStream(
  */
 export function resolveHtmlStream(template: JSX.Element, data: RequestData): Readable;
 
+/** A helper function to get the request data for a given request id. */
+export function useRequestData(rid: Rid): RequestData;
+
 /**
- * This script needs to be loaded at the top of the page. You do not need to load it
- * manually, unless GLOBAL_SUSPENSE.autoScript is set to false.
+ * A helper function to attempt to use the error handler to recovery an async error thrown
+ * by a suspense or generator.
+ *
+ * @param run A unique number to identify the current template **(not request id)**
+ */
+export function recoverPromiseRejection(
+  data: RequestData,
+  run: number,
+  handler: SuspenseProps['catch'],
+  mode: RcInsert,
+  error: Error
+): Promise<void>;
+
+/**
+ * A helper function to clear the request data once everything is resolved and the stream
+ * needs to be cleared to avoid memory leaks.
+ */
+export function clearRequestData(rid: Rid, data: RequestData): void;
+
+/**
+ * Creates the html <template> tag to be used when streaming async html data to the
+ * client.
+ *
+ * The template might contain {@linkcode SuspenseScript} if
+ * {@linkcode SUSPENSE_ROOT.autoScript} is true and this is the first render
+ *
+ * @param run A unique number to identify the current template **(not request id)**
+ */
+export function createHtmlTemplate(
+  run: number,
+  data: RequestData,
+  mode: RcInsert,
+  content?: string
+): JSX.Element;
+
+/** How the {@linkcode SuspenseScript} should handle the insertion of the async content. */
+export declare enum RcInsert {
+  /** Swaps the element (**default**) */
+  REPLACE = 0,
+
+  /** Appends the element */
+  APPEND = 1,
+
+  /** Appends the last element and cleans up left resources */
+  L_APPEND = 2
+}
+
+/**
+ * Returns the html fallback content to be used when streaming async html data to the
+ * client.
+ *
+ * @param run A unique number to identify the current template **(not request id)**
+ */
+export function createHtmlFallback(run: number, fallback: string): JSX.Element;
+
+/**
+ * This script needs to be loaded at the top of the page.
+ *
+ * You do not need to load it manually, unless {@linkcode SUSPENSE_ROOT.autoScript} is
+ * **manually** set to `false`.
  *
  * @see {@linkcode Suspense}
  */
@@ -137,7 +210,7 @@ export declare const SuspenseScript: string;
  */
 export interface SuspenseProps {
   /** The request id is used to identify the request for this suspense. */
-  rid: number | string;
+  rid: Rid;
 
   /** The fallback to render while the async children are loading. */
   fallback: JSX.Element;
@@ -153,6 +226,28 @@ export interface SuspenseProps {
    *
    * This does not catches for errors thrown by the suspense itself or async fallback
    * components. Please use {@linkcode ErrorBoundary} to catch them instead.
+   */
+  catch?: JSX.Element | ((error: unknown) => JSX.Element);
+}
+
+export interface GeneratorProps<T> {
+  /** The request id is used to identify the request for this suspense. */
+  rid: Rid;
+
+  /** A component async generator */
+  source: AsyncIterable<T>;
+
+  /**
+   * A function to map the generator value to a JSX.Element if the generator is not a html
+   * string itself
+   */
+  map?: (value: Awaited<T>) => JSX.Element;
+
+  /**
+   * This error boundary is used to catch any error thrown when evaluating the
+   * {@linkcode source} attribute.
+   *
+   * ### Undefined behaviors happens on each browser kind when the html stream is unexpected closed by the server if an error is thrown. You should always define an error boundary to catch errors.
    */
   catch?: JSX.Element | ((error: unknown) => JSX.Element);
 }
