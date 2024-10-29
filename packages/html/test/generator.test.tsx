@@ -131,7 +131,7 @@ describe('Generator', () => {
         const component = renderToStream((r) => (
           <>
             {data
-              .map((i) => fn(i * 2, (5 - i) * 100))
+              .map((i) => fn(i * 2, 150 + i * 20))
               .map((source, i) => (
                 <div title={i.toString()}>
                   <Generator
@@ -198,11 +198,56 @@ describe('Generator', () => {
               <script id="S:5" data-ss>
                 $KITA_RC(5,1)
               </script>
+              <template id="N:4" data-sr>
+                <div>1</div>
+              </template>
+              <script id="S:4" data-ss>
+                $KITA_RC(4,1)
+              </script>
+              <template id="N:1" data-sr>
+                <div>1</div>
+              </template>
+              <script id="S:1" data-ss>
+                $KITA_RC(1,1)
+              </script>
+              <template id="N:3" data-sr>
+                <div>1</div>
+              </template>
+              <script id="S:3" data-ss>
+                $KITA_RC(3,1)
+              </script>
+              <template id="N:2" data-sr>
+                <div>1</div>
+              </template>
+              <script id="S:2" data-ss>
+                $KITA_RC(2,1)
+              </script>
               <template id="N:5" data-sr>
                 <div>1</div>
               </template>
               <script id="S:5" data-ss>
                 $KITA_RC(5,1)
+              </script>
+              <script id="S:4" data-ss>
+                $KITA_RC(4,2)
+              </script>
+              <template id="N:1" data-sr>
+                <div>2</div>
+              </template>
+              <script id="S:1" data-ss>
+                $KITA_RC(1,1)
+              </script>
+              <template id="N:3" data-sr>
+                <div>2</div>
+              </template>
+              <script id="S:3" data-ss>
+                $KITA_RC(3,1)
+              </script>
+              <template id="N:2" data-sr>
+                <div>2</div>
+              </template>
+              <script id="S:2" data-ss>
+                $KITA_RC(2,1)
               </script>
               <template id="N:5" data-sr>
                 <div>2</div>
@@ -210,11 +255,44 @@ describe('Generator', () => {
               <script id="S:5" data-ss>
                 $KITA_RC(5,1)
               </script>
+              <template id="N:1" data-sr>
+                <div>3</div>
+              </template>
+              <script id="S:1" data-ss>
+                $KITA_RC(1,1)
+              </script>
+              <template id="N:3" data-sr>
+                <div>3</div>
+              </template>
+              <script id="S:3" data-ss>
+                $KITA_RC(3,1)
+              </script>
+              <template id="N:2" data-sr>
+                <div>3</div>
+              </template>
+              <script id="S:2" data-ss>
+                $KITA_RC(2,1)
+              </script>
               <template id="N:5" data-sr>
                 <div>3</div>
               </template>
               <script id="S:5" data-ss>
                 $KITA_RC(5,1)
+              </script>
+              <script id="S:1" data-ss>
+                $KITA_RC(1,2)
+              </script>
+              <template id="N:3" data-sr>
+                <div>4</div>
+              </template>
+              <script id="S:3" data-ss>
+                $KITA_RC(3,1)
+              </script>
+              <template id="N:2" data-sr>
+                <div>4</div>
+              </template>
+              <script id="S:2" data-ss>
+                $KITA_RC(2,1)
               </script>
               <template id="N:5" data-sr>
                 <div>4</div>
@@ -222,11 +300,32 @@ describe('Generator', () => {
               <script id="S:5" data-ss>
                 $KITA_RC(5,1)
               </script>
+              <template id="N:3" data-sr>
+                <div>5</div>
+              </template>
+              <script id="S:3" data-ss>
+                $KITA_RC(3,1)
+              </script>
+              <template id="N:2" data-sr>
+                <div>5</div>
+              </template>
+              <script id="S:2" data-ss>
+                $KITA_RC(2,1)
+              </script>
               <template id="N:5" data-sr>
                 <div>5</div>
               </template>
               <script id="S:5" data-ss>
                 $KITA_RC(5,1)
+              </script>
+              <script id="S:3" data-ss>
+                $KITA_RC(3,2)
+              </script>
+              <template id="N:2" data-sr>
+                <div>6</div>
+              </template>
+              <script id="S:2" data-ss>
+                $KITA_RC(2,1)
               </script>
               <template id="N:5" data-sr>
                 <div>6</div>
@@ -234,11 +333,20 @@ describe('Generator', () => {
               <script id="S:5" data-ss>
                 $KITA_RC(5,1)
               </script>
+              <template id="N:2" data-sr>
+                <div>7</div>
+              </template>
+              <script id="S:2" data-ss>
+                $KITA_RC(2,1)
+              </script>
               <template id="N:5" data-sr>
                 <div>7</div>
               </template>
               <script id="S:5" data-ss>
                 $KITA_RC(5,1)
+              </script>
+              <script id="S:2" data-ss>
+                $KITA_RC(2,2)
               </script>
               <template id="N:5" data-sr>
                 <div>8</div>
@@ -254,114 +362,6 @@ describe('Generator', () => {
               </script>
               <script id="S:5" data-ss>
                 $KITA_RC(5,2)
-              </script>
-              <template id="N:2" data-sr>
-                <div>1</div>
-              </template>
-              <script id="S:2" data-ss>
-                $KITA_RC(2,1)
-              </script>
-              <template id="N:3" data-sr>
-                <div>1</div>
-              </template>
-              <script id="S:3" data-ss>
-                $KITA_RC(3,1)
-              </script>
-              <template id="N:2" data-sr>
-                <div>2</div>
-              </template>
-              <script id="S:2" data-ss>
-                $KITA_RC(2,1)
-              </script>
-              <template id="N:1" data-sr>
-                <div>1</div>
-              </template>
-              <script id="S:1" data-ss>
-                $KITA_RC(1,1)
-              </script>
-              <template id="N:2" data-sr>
-                <div>3</div>
-              </template>
-              <script id="S:2" data-ss>
-                $KITA_RC(2,1)
-              </script>
-              <template id="N:4" data-sr>
-                <div>1</div>
-              </template>
-              <script id="S:4" data-ss>
-                $KITA_RC(4,1)
-              </script>
-              <template id="N:3" data-sr>
-                <div>2</div>
-              </template>
-              <script id="S:3" data-ss>
-                $KITA_RC(3,1)
-              </script>
-              <template id="N:2" data-sr>
-                <div>4</div>
-              </template>
-              <script id="S:2" data-ss>
-                $KITA_RC(2,1)
-              </script>
-              <template id="N:2" data-sr>
-                <div>5</div>
-              </template>
-              <script id="S:2" data-ss>
-                $KITA_RC(2,1)
-              </script>
-              <template id="N:1" data-sr>
-                <div>2</div>
-              </template>
-              <script id="S:1" data-ss>
-                $KITA_RC(1,1)
-              </script>
-              <template id="N:3" data-sr>
-                <div>3</div>
-              </template>
-              <script id="S:3" data-ss>
-                $KITA_RC(3,1)
-              </script>
-              <template id="N:2" data-sr>
-                <div>6</div>
-              </template>
-              <script id="S:2" data-ss>
-                $KITA_RC(2,1)
-              </script>
-              <template id="N:2" data-sr>
-                <div>7</div>
-              </template>
-              <script id="S:2" data-ss>
-                $KITA_RC(2,1)
-              </script>
-              <script id="S:4" data-ss>
-                $KITA_RC(4,2)
-              </script>
-              <template id="N:3" data-sr>
-                <div>4</div>
-              </template>
-              <script id="S:3" data-ss>
-                $KITA_RC(3,1)
-              </script>
-              <script id="S:2" data-ss>
-                $KITA_RC(2,2)
-              </script>
-              <template id="N:1" data-sr>
-                <div>3</div>
-              </template>
-              <script id="S:1" data-ss>
-                $KITA_RC(1,1)
-              </script>
-              <template id="N:3" data-sr>
-                <div>5</div>
-              </template>
-              <script id="S:3" data-ss>
-                $KITA_RC(3,1)
-              </script>
-              <script id="S:1" data-ss>
-                $KITA_RC(1,2)
-              </script>
-              <script id="S:3" data-ss>
-                $KITA_RC(3,2)
               </script>
             </>
           </>
