@@ -131,7 +131,7 @@ describe('Generator', () => {
         const component = renderToStream((r) => (
           <>
             {data
-              .map((i) => fn(i * 2, (5 - i) * 20))
+              .map((i) => fn(i * 2, (5 - i) * 100))
               .map((source, i) => (
                 <div title={i.toString()}>
                   <Generator
