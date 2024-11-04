@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.8.1",
+    "@types/node": "^22.8.7",
     "c8": "^10.1.2",
     "jsdom": "^25.0.1",
     "react": "^18.3.1",
