@@ -1,3 +1,4 @@
+import HonoRuntimeRenderers from '@kitajs/bench-html-honojsx';
 import JSXTERuntimeRenderers from '@kitajs/bench-html-jsxte';
 import KitaHtmlJSXRuntimeRenderers from '@kitajs/bench-html-kitajs';
 import PreactRuntimeRenderers from '@kitajs/bench-html-preact';
@@ -9,6 +10,7 @@ import VHtmlRenderers from '@kitajs/bench-html-vhtml';
 
 import * as CommonTagsRender from 'common-tags';
 import * as gHtml from 'ghtml';
+import * as HonoHtmlRender from 'hono/html';
 import * as JSXTE from 'jsxte';
 // import * as Nano from 'nano-jsx';
 import * as PreactRenderToString from 'preact-render-to-string';
@@ -87,6 +89,22 @@ export function Ghtml(name, purchases) {
 Ghtml.type = RunnerType.template;
 Ghtml.baseline = false;
 
+export function HonoHtml(name, purchases) {
+  return StringTemplateRenderers.Normal.RealWorldPage(
+    HonoHtmlRender.html,
+    name,
+    purchases
+  ).toString();
+}
+HonoHtml.type = RunnerType.template;
+HonoHtml.baseline = false;
+
+export function HonoJsx(name, purchases) {
+  return HonoRuntimeRenderers.RealWorldPage(name, purchases).toString();
+}
+HonoJsx.type = RunnerType.jsx;
+HonoJsx.baseline = false;
+
 // NanoJSX was so slow that it was increasing the scale of the graph, making it hard to read
 // Nano.renderSSR();
 // /** @param {string} name */
@@ -105,6 +123,8 @@ export const RunnersFn = [
   React,
   Jsxte,
   CommonTags,
-  Ghtml
+  Ghtml,
+  HonoHtml,
+  HonoJsx
   // NanoJsx
 ].sort((a, b) => a.type - b.type);
