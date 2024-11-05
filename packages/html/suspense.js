@@ -29,14 +29,17 @@ const RcInsert = {
 // no elements are substituted.
 const SuspenseScript = /* html */ `
       <script id="kita-html-suspense">
-        /*! MIT License https://html.kitajs.org */
+        /*! MIT License https://html.kitajs.org*/
         // i is the id of the template
         // g is the flag append element before instead of replacing (2 means last item)
-        function $KITA_RC(i,g){
+        // h is how many elements should be kept in the fragment
+        function $KITA_RC(i,g,h){
           // simple aliases
           var d=document,q=d.querySelector.bind(d),
             // div sent as the fallback wrapper
             v=q('div[id="B:'+i+'"][data-sf]'),
+            // another alias
+            p=v&&v.parentNode,
             // template and script sent after promise finishes
             t=q('template[id="N:'+i+'"][data-sr]'),
             s=q('script[id="S:'+i+'"][data-ss]'),
@@ -55,11 +58,18 @@ const SuspenseScript = /* html */ `
               f.appendChild(c);
 
             // replaces the div and removes the script and template (insert == 0, so is false)
-            v.parentNode[g?'insertBefore':'replaceChild'](f,v);
+            p[g?'insertBefore':'replaceChild'](f,v);
+
+            // if maximum elements are set, removes the first ones
+            // until the limit is reached
+            if(h)
+              while((p.children.length+g==${RcInsert.L_APPEND}?1:0)>h)
+                p.removeChild(p.firstChild);
 
             // removes both template and script after being replaced
             t&&t.remove();
             s.remove();
+
             // removes the initial template when the generator finishes
             g==${RcInsert.L_APPEND}&&v.remove();
 
@@ -143,6 +153,10 @@ function Generator(props) {
     throw new Error('Generator requires a `rid` to be specified.');
   }
 
+  if (props.chunkSize === undefined || props.chunkSize < 0) {
+    props.chunkSize = 8192; // 8KB
+  }
+
   const data = useRequestData(props.rid);
 
   // Gets the current run number for this request
@@ -150,7 +164,14 @@ function Generator(props) {
   // were used and 1 as the first suspense component
   const run = ++data.running;
 
-  void consume()
+  void consumeGenerator(
+    run,
+    data,
+    props.map,
+    props.source,
+    props.childLimit,
+    props.chunkSize
+  )
     .catch(function errorRecovery(error) {
       return recoverPromiseRejection(data, run, props.catch, RcInsert.APPEND, error);
     })
@@ -162,23 +183,40 @@ function Generator(props) {
     });
 
   return createHtmlFallback(run, '');
+}
 
-  async function consume() {
-    for await (const chunk of props.source) {
-      data.stream.push(
-        createHtmlTemplate(
-          run,
-          data,
-          RcInsert.APPEND,
-          //@ts-expect-error - map is not required
-          props.map ? await props.map(chunk) : chunk
-        )
-      );
+/**
+ * @param {number} run
+ * @param {Dts.RequestData} data
+ * @param {((value: any) => JSX.Element) | undefined} mapper
+ * @param {AsyncIterable<any>} source
+ * @param {number} limit
+ * @param {number} chunkSize
+ */
+async function consumeGenerator(run, data, mapper, source, limit, chunkSize) {
+  let buffer = '';
+  let size = 0;
+
+  for await (let chunk of source) {
+    if (mapper) {
+      chunk = mapper(chunk);
+
+      if (typeof chunk !== 'string') {
+        chunk = await chunk;
+      }
     }
 
-    // Emits last item to remove initial template div
-    data.stream.push(createHtmlTemplate(run, data, RcInsert.L_APPEND));
+    size += Buffer.byteLength(chunk);
+    buffer += chunk;
+
+    if (size >= chunkSize) {
+      data.stream.push(createHtmlTemplate(run, data, RcInsert.APPEND, buffer, limit));
+      buffer = '';
+      size = 0;
+    }
   }
+
+  data.stream.push(createHtmlTemplate(run, data, RcInsert.L_APPEND, buffer, limit));
 }
 
 /** @type {typeof Dts.recoverPromiseRejection} */
@@ -304,11 +342,12 @@ function clearRequestData(rid, data) {
 }
 
 /** @type {typeof Dts.createHtmlTemplate} */
-function createHtmlTemplate(run, data, mode, content) {
-  if (mode !== RcInsert.L_APPEND) {
-    content = `<template id="N:${run}" data-sr>${content}</template><script id="S:${run}" data-ss>$KITA_RC(${mode ? `${run},${mode}` : run})</script>`;
+function createHtmlTemplate(run, data, mode, content, limit) {
+  // content might be available in the L_APPEND if chunkSize doesn't fills the buffer
+  if (content) {
+    content = `<template id="N:${run}" data-sr>${content}</template><script id="S:${run}" data-ss>$KITA_RC(${mode ? (limit ? `${run},${mode},${limit}` : `${run},${mode}`) : run})</script>`;
   } else {
-    content = `<script id="S:${run}" data-ss>$KITA_RC(${run},${mode})</script>`;
+    content = `<script id="S:${run}" data-ss>$KITA_RC(${run},${limit ? `${mode},${limit}` : mode})</script>`;
   }
 
   // Appends the suspense script if its the first suspense component in this

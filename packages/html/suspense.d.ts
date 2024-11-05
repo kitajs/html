@@ -170,7 +170,8 @@ export function createHtmlTemplate(
   run: number,
   data: RequestData,
   mode: RcInsert,
-  content?: string
+  content?: string,
+  limit?: number
 ): JSX.Element;
 
 /** How the {@linkcode SuspenseScript} should handle the insertion of the async content. */
@@ -236,6 +237,29 @@ export interface GeneratorProps<T> {
 
   /** A component async generator */
   source: AsyncIterable<T>;
+
+  /**
+   * Sending large amounts of small chunks is worse than grouping them together. This
+   * setting allows you to group the chunks together before sending them to the client.
+   *
+   * - Smaller chunks (4 KB - 8 KB) are better for highly interactive pages where quick
+   *   rendering feedback is necessary.
+   * - Larger chunks (up to 64 KB) work well for static or less interactive content where
+   *   total load time is more important than initial render speed.
+   *
+   * @default 8*1024
+   */
+  chunkSize?: number;
+
+  /**
+   * How many children should be rendered at the same time. This is useful to avoid
+   * rendering infinite items at once.
+   *
+   * Useful for log streams and other infinite generators.
+   *
+   * @default undefined (no limit)
+   */
+  childLimit?: number;
 
   /**
    * A function to map the generator value to a JSX.Element if the generator is not a html
