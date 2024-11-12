@@ -254,6 +254,7 @@ declare namespace JSX {
 
   interface HtmlHtmlTag extends HtmlTag {
     manifest?: undefined | string;
+    xmlns?: string | string;
   }
 
   interface HtmlIFrameTag extends HtmlTag {
