@@ -21,7 +21,7 @@
     "@kitajs/bench-html-vhtml": "workspace:*",
     "common-tags": "1.8.2",
     "ghtml": "3.1.0",
-    "hono": "4.6.10",
+    "hono": "4.6.12",
     "html-minifier": "4.0.0",
     "jsxte": "3.3.1",
     "mitata": "1.0.17",
