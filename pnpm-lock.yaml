@@ -43,8 +43,8 @@ importers:
         version: 5.7.2
     devDependencies:
       '@types/node':
-        specifier: ^22.9.0
-        version: 22.9.0
+        specifier: ^22.10.1
+        version: 22.10.1
 
   benchmarks/jsxte:
     dependencies:
@@ -59,8 +59,8 @@ importers:
         version: 5.7.2
     devDependencies:
       '@types/node':
-        specifier: ^22.9.0
-        version: 22.9.0
+        specifier: ^22.10.1
+        version: 22.10.1
 
   benchmarks/kitajs:
     dependencies:
@@ -87,8 +87,8 @@ importers:
         version: 5.7.2
     devDependencies:
       '@types/node':
-        specifier: ^22.9.0
-        version: 22.9.0
+        specifier: ^22.10.1
+        version: 22.10.1
       '@types/react':
         specifier: ^18.3.12
         version: 18.3.12
@@ -106,8 +106,8 @@ importers:
         version: 5.7.2
     devDependencies:
       '@types/node':
-        specifier: ^22.9.0
-        version: 22.9.0
+        specifier: ^22.10.1
+        version: 22.10.1
       '@types/react':
         specifier: ^18.3.12
         version: 18.3.12
@@ -125,8 +125,8 @@ importers:
         version: 5.7.2
     devDependencies:
       '@types/node':
-        specifier: ^22.9.0
-        version: 22.9.0
+        specifier: ^22.10.1
+        version: 22.10.1
       '@types/react':
         specifier: ^18.3.12
         version: 18.3.12
@@ -198,8 +198,8 @@ importers:
         version: 5.7.2
     devDependencies:
       '@types/node':
-        specifier: ^22.9.0
-        version: 22.9.0
+        specifier: ^22.10.1
+        version: 22.10.1
 
   benchmarks/typed-html:
     dependencies:
@@ -250,8 +250,8 @@ importers:
         specifier: ^21.1.7
         version: 21.1.7
       '@types/node':
-        specifier: ^22.9.0
-        version: 22.9.0
+        specifier: ^22.10.1
+        version: 22.10.1
       c8:
         specifier: ^10.1.2
         version: 10.1.2
@@ -278,8 +278,8 @@ importers:
         specifier: ^21.1.7
         version: 21.1.7
       '@types/node':
-        specifier: ^22.9.0
-        version: 22.9.0
+        specifier: ^22.10.1
+        version: 22.10.1
       c8:
         specifier: ^10.1.2
         version: 10.1.2
@@ -321,8 +321,8 @@ importers:
         specifier: ^0.5.15
         version: 0.5.15
       '@types/node':
-        specifier: ^22.9.0
-        version: 22.9.0
+        specifier: ^22.10.1
+        version: 22.10.1
       '@types/yargs':
         specifier: ^17.0.33
         version: 17.0.33
@@ -692,8 +692,8 @@ packages:
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
 
-  '@types/node@22.9.0':
-    resolution: {integrity: sha512-vuyHg81vvWA1Z1ELfvLko2c8f34gyA0zaic0+Rllc5lbCnbSyuvb2Oxpm6TAUAC/2xZN3QGqxBNggD1nNR2AfQ==}
+  '@types/node@22.10.1':
+    resolution: {integrity: sha512-qKgsUwfHZV2WCWLAnVP1JqnpE6Im6h3Y0+fYgMTasNQ7V++CBX5OT1as0g0f+OyubbFqhf6XVNIsmN4IIhEgGQ==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -2034,8 +2034,8 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  undici-types@6.19.8:
-    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+  undici-types@6.20.0:
+    resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
 
   unist-util-stringify-position@4.0.0:
     resolution: {integrity: sha512-0ASV06AAoKCDkS2+xw5RXJywruurpbC4JZSm7nr7MOt1ojAzvyyaO+UxZf18j8FCF6kmzCZKcAgN/yu2gm2XgQ==}
@@ -2594,7 +2594,7 @@ snapshots:
 
   '@types/jsdom@21.1.7':
     dependencies:
-      '@types/node': 22.9.0
+      '@types/node': 22.10.1
       '@types/tough-cookie': 4.0.5
       parse5: 7.1.2
 
@@ -2610,9 +2610,9 @@ snapshots:
 
   '@types/node@12.20.55': {}
 
-  '@types/node@22.9.0':
+  '@types/node@22.10.1':
     dependencies:
-      undici-types: 6.19.8
+      undici-types: 6.20.0
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -3966,7 +3966,7 @@ snapshots:
 
   uglify-js@3.17.4: {}
 
-  undici-types@6.19.8: {}
+  undici-types@6.20.0: {}
 
   unist-util-stringify-position@4.0.0:
     dependencies:
