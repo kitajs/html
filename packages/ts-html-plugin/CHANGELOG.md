@@ -1,5 +1,18 @@
 # @kitajs/ts-html-plugin
 
+## 4.1.1
+
+### Patch Changes
+
+- [`2f8a5ec`](https://github.com/kitajs/html/commit/2f8a5ecb82150069fc99f535d275eaa2fa9ef4d4)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Fixed url docs for error
+  codes
+
+- Updated dependencies
+  [[`dad464f`](https://github.com/kitajs/html/commit/dad464fda394df816ef151898ddfad82891f2635),
+  [`3b40ece`](https://github.com/kitajs/html/commit/3b40eceb2efa38d4f63fad9a8853532814a195b0)]:
+  - @kitajs/html@4.2.5
+
 ## 4.1.0
 
 ### Minor Changes
