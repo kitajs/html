@@ -84,7 +84,7 @@ export function toKebabCase(this: void, camel: string): string;
 export function createElement(
   this: void,
   name: string | Function,
-  attributes: PropsWithChildren<any> | null,
+  attributes: PropsWithChildren<unknown> | null,
   ...contents: Children[]
 ): JSX.Element;
 
@@ -171,4 +171,14 @@ export type Component<T = {}> = (this: void, props: PropsWithChildren<T>) => JSX
  * @link https://github.com/kitajs/html
  * @link https://www.npmjs.com/package/@kitajs/html
  */
-export const Html: Omit<typeof import('.'), 'Html'>;
+export declare const Html: Omit<typeof import('.'), 'Html'>;
+
+/**
+ * Fast and type safe HTML templates using JSX syntax.
+ *
+ * @module Html
+ * @license Apache License Version 2.0
+ * @link https://github.com/kitajs/html
+ * @link https://www.npmjs.com/package/@kitajs/html
+ */
+export as namespace Html;
