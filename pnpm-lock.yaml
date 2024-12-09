@@ -176,8 +176,8 @@ importers:
         specifier: 3.3.1
         version: 3.3.1
       mitata:
-        specifier: 1.0.17
-        version: 1.0.17
+        specifier: 1.0.20
+        version: 1.0.20
       nano-jsx:
         specifier: 0.1.0
         version: 0.1.0
@@ -1507,8 +1507,8 @@ packages:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
 
-  mitata@1.0.17:
-    resolution: {integrity: sha512-luLuhHudcTm4vUV5O5MbHYc9nkCVxW50wO65lvSlrbvsov1KMsyv9njm9jIp5hWyJSiU9Nb+WQBeoSxwv6UraQ==}
+  mitata@1.0.20:
+    resolution: {integrity: sha512-oHWYGX5bi4wGT/1zrhiZAEzqTV14Vq6/PUTW8WK0b3YHBBQcZz2QFm+InHhjnD0I7B6CMtwdGt2K0938r7YTdQ==}
 
   mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
@@ -3489,7 +3489,7 @@ snapshots:
 
   minipass@7.1.2: {}
 
-  mitata@1.0.17: {}
+  mitata@1.0.20: {}
 
   mri@1.2.0: {}
 
