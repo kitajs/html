@@ -1,5 +1,14 @@
 # @kitajs/html
 
+## 4.2.6
+
+### Patch Changes
+
+- [#349](https://github.com/kitajs/html/pull/349)
+  [`eda217b`](https://github.com/kitajs/html/commit/eda217b4278eb85c7970ea8056c639ec9c7532a9)
+  Thanks [@garrappachc](https://github.com/garrappachc)! - add typings for the htmx
+  preload extension
+
 ## 4.2.5
 
 ### Patch Changes
