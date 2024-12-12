@@ -2,6 +2,7 @@ import HonoRuntimeRenderers from '@kitajs/bench-html-honojsx';
 import JSXTERuntimeRenderers from '@kitajs/bench-html-jsxte';
 import KitaHtmlJSXRuntimeRenderers from '@kitajs/bench-html-kitajs';
 import PreactRuntimeRenderers from '@kitajs/bench-html-preact';
+import PugRenderers from '@kitajs/bench-html-pug';
 import ReactRuntimeRenderers from '@kitajs/bench-html-react';
 import ReactJSXRuntimeRenderers from '@kitajs/bench-html-reactjsx';
 import StringTemplateRenderers from '@kitajs/bench-html-templates';
@@ -105,6 +106,12 @@ export function HonoJsx(name, purchases) {
 HonoJsx.type = RunnerType.jsx;
 HonoJsx.baseline = false;
 
+export function Pug(name, purchases) {
+  return PugRenderers.RealWorldPage(name, purchases);
+}
+Pug.type = RunnerType.template;
+Pug.baseline = false;
+
 // NanoJSX was so slow that it was increasing the scale of the graph, making it hard to read
 // Nano.renderSSR();
 // /** @param {string} name */
@@ -125,6 +132,7 @@ export const RunnersFn = [
   CommonTags,
   Ghtml,
   HonoHtml,
-  HonoJsx
+  HonoJsx,
+  Pug
   // NanoJsx
 ].sort((a, b) => a.type - b.type);
