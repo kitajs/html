@@ -68,7 +68,7 @@
 - [How it works](#how-it-works)
 - [Serialization table](#serialization-table)
 - [Format HTML output](#format-html-output)
-- [Deprecating global register](#deprecating-global-register)
+- [Removing global register](#removing-global-register)
 - [Deprecating importing type extensions](#deprecating-importing-type-extensions)
 - [Fork credits](#fork-credits)
 
@@ -1018,10 +1018,10 @@ console.log(prettify(html));
 
 <br />
 
-## Deprecating global register
+## Removing global register
 
-The `@kitajs/html/register` in favour of the `react-jsx` target `@kitajs/html` supports,
-which automatically registers the JSX runtime globally.
+The `@kitajs/html/register` was removed in favour of the `react-jsx` target `@kitajs/html`
+supports, which automatically registers the JSX runtime globally.
 
 Please update your tsconfig to use the new `jsxImportSource` option and remove all
 references to `'@kitajs/html/register'` from your codebase.
