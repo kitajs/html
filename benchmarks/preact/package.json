@@ -12,7 +12,7 @@
     "typescript": "^5.7.2"
   },
   "devDependencies": {
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.10.5",
     "@types/react": "^18.3.12"
   }
 }
