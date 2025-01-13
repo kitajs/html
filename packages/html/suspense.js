@@ -63,7 +63,7 @@ const SuspenseScript = /* html */ `
             // if maximum elements are set, removes the first ones
             // until the limit is reached
             if(h)
-              while((p.children.length+g==${RcInsert.L_APPEND}?1:0)>h)
+              while(p.children.length-1>h)
                 p.removeChild(p.firstChild);
 
             // removes both template and script after being replaced
@@ -190,7 +190,7 @@ function Generator(props) {
  * @param {Dts.RequestData} data
  * @param {((value: any) => JSX.Element) | undefined} mapper
  * @param {AsyncIterable<any>} source
- * @param {number} limit
+ * @param {number | undefined} limit
  * @param {number} chunkSize
  */
 async function consumeGenerator(run, data, mapper, source, limit, chunkSize) {

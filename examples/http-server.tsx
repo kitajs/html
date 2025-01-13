@@ -1,202 +1,193 @@
-import { Generator, renderToStream } from '@kitajs/html/suspense';
-import http from 'node:http';
-import { setTimeout } from 'timers/promises';
+import type { Join, PartialTuple } from './types';
 
-http
-  .createServer((req, response) => {
-    // This simple webserver only has a index.html file
-    if (req.url !== '/' && req.url !== '/index.html') {
-      response.end();
-      return;
+/**
+ * A safe, typed, enumerable bidirectional map that ensures unique values and supports
+ * compound keys.
+ *
+ * @template K - A tuple representing the structure of the compound key, composed of
+ *   strings or numbers.
+ * @template V - The type of the values stored in the map. Defaults to `string`.
+ * @template S - The type of the separator string used to join keys. Defaults to `' '`.
+ */
+export class UbiMap<
+  K extends (string | number)[],
+  V extends string | number = string,
+  const S extends string = ' '
+> {
+  /** Internal map for storing keys mapped to values. */
+  private kmap: Record<Join<K, S>, V> = Object.create(null);
+
+  /** Internal map for storing values mapped to keys. */
+  private vmap: Record<V, Join<K, S>> = Object.create(null);
+
+  /**
+   * Creates a new instance of `UbiMap`.
+   *
+   * @param data - An optional initial dataset for the map, where keys are joined strings
+   *   and values are of type `V`.
+   * @param separator - The string used to separate components of compound keys. Defaults
+   *   to `' '`.
+   */
+  constructor(
+    data?: Record<Join<K, S>, V>,
+    private readonly separator: S = ' ' as S
+  ) {
+    if (data) {
+      for (const [key, value] of Object.entries<V>(data)) {
+        this.set(key as Join<K, S>, value);
+      }
     }
-    console.time('Generator');
-
-    // ⚠️ Charset utf8 is important to avoid old browsers utf7 xss attacks
-    response.setHeader('Content-Type', 'text/html; charset=utf-8');
-    response.setHeader('connection', 'keep-alive');
-
-    // Creates the html stream
-    const htmlStream = renderToStream((rid) => <RealWorldPage rid={rid} />);
-
-    // Pipes it into the response
-    htmlStream.pipe(response);
-
-    response.on('close', () => {
-      console.timeEnd('Generator');
-    });
-
-    // If it's a fastify server just use
-    // response.type('text/html; charset=utf-8').send(htmlStream);
-  })
-  .listen(8080, () => {
-    console.log('Listening to http://localhost:8080');
-  });
-
-function Purchase({ name, price, quantity }) {
-  return (
-    <div class="purchase purchase-card">
-      <div class="purchase-name" safe>
-        {name}
-      </div>
-      <div class="purchase-price">{price}</div>
-      <div class="purchase-quantity">{quantity}</div>
-    </div>
-  );
-}
-
-function Layout({ children, head }) {
-  return (
-    <html lang="en">
-      <head>{head}</head>
-      <body>{children}</body>
-    </html>
-  );
-}
-
-function Head({ title }) {
-  return (
-    <div>
-      <title safe>{title}</title>
-      <meta name="description" content="A description" />
-      <meta name="keywords" content="some, keywords" />
-      <meta name="author" content="Some Author" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="stylesheet" href="styles.css" />
-      <script src="script.js"></script>
-      <meta name="twitter:card" content="summary" />
-      <meta name="twitter:site" content="@site" />
-      <meta name="twitter:title" content="Title" />
-      <meta name="twitter:description" content="A description" />
-      <meta name="twitter:creator" content="@creator" />
-      <meta name="twitter:image" content="image.jpg" />
-      <meta content="Title" />
-      <meta content="website" />
-      <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dev/index.bundle.js" />
-      <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dist/index.bundle.js"></script>
-    </div>
-  );
-}
-
-function Header({ name }) {
-  return (
-    <header class="header">
-      <h1 class="header-title" safe>
-        Hello {name}
-      </h1>
-      <nav class="header-nav">
-        <ul class="header-ul">
-          <li class="header-item">
-            <a href="/">Home</a>
-          </li>
-          <li>
-            <a href="/about">About</a>
-          </li>
-        </ul>
-      </nav>
-    </header>
-  );
-}
-
-function Footer({ name }) {
-  return (
-    <footer class="footer">
-      <p class="footer-year" safe>
-        © {new Date().getFullYear()} {name}
-      </p>
-
-      <p class="footer">
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy</a>
-      </p>
-    </footer>
-  );
-}
-
-function Main({ children, name }) {
-  return (
-    <div>
-      <Header name={name} />
-      <main class="main-content">{children}</main>
-      <Footer name={name} />
-    </div>
-  );
-}
-
-function UserProfile({ name }) {
-  return (
-    <section class="user-profile">
-      <h2 class="user-profile title">User Profile</h2>
-      <p class="user-profile name" safe>
-        Name: {name}
-      </p>
-      <p class="user-profile info">Email: example@example.com</p>
-      <p class="user-profile info">Address: 123 Main St, City, Country</p>
-      <p class="user-profile info">Phone: 123-456-7890</p>
-    </section>
-  );
-}
-
-function Sidebar({ purchases }) {
-  return (
-    <aside class="sidebar">
-      <h2 class="purchase title">Recent Purchases</h2>
-      <ul class="purchase list">
-        {purchases.slice(0, 3).map((purchase) => (
-          <li class="purchase-preview" safe>
-            {purchase.name} - ${purchase.price.toFixed(2)}
-          </li>
-        ))}
-      </ul>
-    </aside>
-  );
-}
-
-function PageContent() {
-  return (
-    <div class="page-content">
-      <h2 class="title mb-4 h2">Welcome to our store</h2>
-      <p class="p text mb-0">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis magna id
-        dolor ultricies, eget pretium ligula sodales. Cras sit amet turpis nec lacus
-        blandit placerat. Sed vestibulum est sit amet enim ultrices rutrum. Vivamus in
-        nulla vel nunc interdum vehicula.
-      </p>
-      <p class="p text mb-0">
-        Pellentesque efficitur tellus id velit vehicula laoreet. Proin et neque ac dolor
-        hendrerit elementum. Fusce auctor metus non ligula tincidunt, id gravida odio
-        sollicitudin.
-      </p>
-    </div>
-  );
-}
-
-async function* generate() {
-  for (let i = 0; i <= 2; i++) {
-    yield { i };
-    await setTimeout(1000000);
   }
-}
 
-export function RealWorldPage({ name = 'Arthur', rid }: { name?: string; rid: number }) {
-  return (
-    <Layout head={<Head title="Real World Example" />}>
-      <Main name={name}>
-        <h2>Purchases</h2>
+  /**
+   * Adds a new key-value pair to the map. Both keys and values must be unique.
+   *
+   * @example
+   *
+   * ```ts
+   * const ubimap = new UbiMap<[string, string]>();
+   *
+   * // Keys as separate arguments
+   * ubimap.set('key1', 'key2', 'value');
+   *
+   * // Key in a single string
+   * ubimap.set('key1 key2', 'value');
+   * ```
+   *
+   * @param input - A tuple containing the components of the key followed by the value.
+   * @throws Will throw an error if the key or value already exists in the map.
+   */
+  set(...input: [...keys: K | [Join<K, S>], value: V]): void {
+    const value = input.pop() as V;
+    const keys = input.join(this.separator) as Join<K, S>;
 
-        <div class="purchases">
-          <Generator
-            rid={rid}
-            source={generate()}
-            chunkSize={1}
-            childLimit={2}
-            map={({ i }) => <Purchase name={i + 'i'} price={i} quantity={i} />}
-          />
-        </div>
+    if (this.kmap[keys]) {
+      throw new Error(`Key ${keys} already exists in map`);
+    }
 
-        <UserProfile name={name} />
-        {/* <Sidebar purchases={purchases} /> */}
-        <PageContent />
-      </Main>
-    </Layout>
-  );
+    if (this.vmap[value]) {
+      throw new Error(`Value ${value} already exists in map`);
+    }
+
+    this.kmap[keys] = value;
+    this.vmap[value] = keys;
+  }
+
+  /**
+   * Removes a key-value pair from the map.
+   *
+   * This method uses `delete` under the hood since this map was designed be a fast access
+   * map and not a volatile one.
+   *
+   * @param key - The components of the compound key.
+   * @returns A boolean indicating whether the key was removed.
+   */
+  remove(...key: K | [Join<K, S>]): boolean {
+    const keys = key.join(this.separator) as Join<K, S>;
+
+    if (!this.kmap[keys]) {
+      return false;
+    }
+
+    return delete this.vmap[this.kmap[keys]] && delete this.kmap[keys];
+  }
+
+  /**
+   * Retrieves the value associated with a compound key.
+   *
+   * ```ts
+   * const ubimap = new UbiMap<[string, string]>();
+   *
+   * // Keys as separate arguments
+   * ubimap.get('key1', 'key2');
+   *
+   * // Key in a single string
+   * ubimap.set('key1 key2');
+   * ```
+   *
+   * @param key - The components of the compound key.
+   * @returns The value associated with the key.
+   */
+  get(...key: K | [Join<K, S>]): V {
+    return this.kmap[key.join(this.separator) as Join<K, S>];
+  }
+
+  /**
+   * Retrieves the compound key associated with a value.
+   *
+   * @example
+   *
+   * ```ts
+   * const ubimap = new UbiMap<[string, string]>();
+   *
+   * ubimap.set('a', 'b', 'value');
+   *
+   * console.log(ubimap.getKey('value')); // 'a b'
+   * ```
+   *
+   * @param value - The value to look up.
+   * @returns The joined key corresponding to the value, or `undefined` if the value does
+   *   not exist.
+   */
+  getKey(value: V): Join<K, S> | undefined {
+    return this.vmap[value];
+  }
+
+  /**
+   * Lists all keys in the map that start with the specified prefixes.
+   *
+   * @example
+   *
+   * ```ts
+   * const ubimap = new UbiMap<[string, string]>();
+   *
+   * ubimap.set('a', 'b', 'value1');
+   * ubimap.set('a', 'c', 'value2');
+   * ubimap.set('b', 'c', 'value3');
+   *
+   * console.log(ubimap.keys('a')); // ['a b', 'a c']
+   * ```
+   *
+   * @param prefixes - A partial tuple representing the key prefix to filter by.
+   * @returns An array of keys matching the prefix.
+   */
+  keys<P extends PartialTuple<K>>(...prefixes: P): Extract<Join<K, S>, Join<P, S>>[] {
+    const prefix = prefixes.join(this.separator);
+
+    return Object.keys(this.kmap).filter((key) => key.startsWith(prefix)) as Extract<
+      Join<K, S>,
+      Join<P, S>
+    >[];
+  }
+
+  /**
+   * Lists all values in the map whose associated keys start with the specified prefixes.
+   *
+   * @example
+   *
+   * ```ts
+   * const ubimap = new UbiMap<[string, string]>();
+   *
+   * ubimap.set('a', 'b', 'value1');
+   * ubimap.set('a', 'c', 'value2');
+   * ubimap.set('b', 'c', 'value3');
+   *
+   * console.log(ubimap.values('a')); // ['value1', 'value2']
+   * console.log(ubimap.values()); // ['value1', 'value2', 'value3']
+   * ```
+   *
+   * @param prefixes - A partial tuple representing the key prefix to filter by.
+   * @returns An array of values corresponding to the matching keys.
+   */
+  values(...prefixes: PartialTuple<K>): V[] {
+    const prefix = prefixes.join(this.separator);
+    return Object.keys(this.vmap).filter((value) => value.startsWith(prefix)) as V[];
+  }
+
+  /** Iterates over all key-value pairs in the map. */
+  *[Symbol.iterator]() {
+    for (const key in this.kmap) {
+      yield [key, this.kmap[key as Join<K, S>]];
+    }
+  }
 }
