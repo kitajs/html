@@ -264,6 +264,10 @@ function attributesToString(attributes) {
     // @ts-expect-error - this indexing is safe.
     value = attributes[key];
 
+    if (value === null || value === undefined) {
+      continue;
+    }
+
     // React className compatibility.
     if (key === 'className') {
       // @ts-expect-error - both were provided, so use the class attribute.
@@ -314,10 +318,6 @@ function attributesToString(attributes) {
         result += ' ' + key;
       }
 
-      continue;
-    }
-
-    if (value === null || value === undefined) {
       continue;
     }
 
