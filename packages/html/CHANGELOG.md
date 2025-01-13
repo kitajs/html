@@ -1,5 +1,14 @@
 # @kitajs/html
 
+## 4.2.7
+
+### Patch Changes
+
+- [#369](https://github.com/kitajs/html/pull/369)
+  [`660e448`](https://github.com/kitajs/html/commit/660e4484a7ec757a4a7e26e61905a84ca1e3bee6)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Allow undefined in style
+  attributes
+
 ## 4.2.6
 
 ### Patch Changes
