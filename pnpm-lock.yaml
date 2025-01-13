@@ -182,8 +182,8 @@ importers:
         specifier: 0.1.0
         version: 0.1.0
       preact-render-to-string:
-        specifier: 6.5.12
-        version: 6.5.12(preact@10.25.4)
+        specifier: 6.5.13
+        version: 6.5.13(preact@10.25.4)
       react-dom:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
@@ -1651,8 +1651,8 @@ packages:
     resolution: {integrity: sha512-4UGewrYgqDFw9vV6zNV+ADmPAUAfJPKtGvb/VdpQAx25X5f3xXdGdyOEVFwkl8Hl/tl7+xbeHqSEM+D5/TirUg==}
     engines: {node: '>=10'}
 
-  preact-render-to-string@6.5.12:
-    resolution: {integrity: sha512-FpU7/cRipZo4diSWQq7gZWVp+Px76CtVduJZNvQwVzynDsAIxKteMrjCCGPbM2oEasReoDffaeMCMlaur9ohIg==}
+  preact-render-to-string@6.5.13:
+    resolution: {integrity: sha512-iGPd+hKPMFKsfpR2vL4kJ6ZPcFIoWZEcBf0Dpm3zOpdVvj77aY8RlLiQji5OMrngEyaxGogeakTb54uS2FvA6w==}
     peerDependencies:
       preact: '>=10'
 
@@ -3626,7 +3626,7 @@ snapshots:
     dependencies:
       irregular-plurals: 3.5.0
 
-  preact-render-to-string@6.5.12(preact@10.25.4):
+  preact-render-to-string@6.5.13(preact@10.25.4):
     dependencies:
       preact: 10.25.4
 
