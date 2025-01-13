@@ -15,6 +15,15 @@ describe('Style', () => {
     );
   });
 
+  test('accepts undefined', () => {
+    assert.equal(
+      <div style={{ backgroundColor: undefined }}></div>,
+      '<div style=""></div>'
+    );
+
+    assert.equal(<div style={undefined}></div>, '<div></div>');
+  });
+
   test('CSSProperties', () => {
     const style: JSX.CSSProperties = {
       color: 'red',
