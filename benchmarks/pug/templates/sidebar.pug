@@ -1,0 +1,5 @@
+aside.sidebar
+  h2.purchase.title Recent Purchases
+  ul.purchase.list
+    each purchase, index in purchases.slice(0, 3)
+      li.purchase-preview #{purchase.name} - $#{purchase.price.toFixed(2)} 
