@@ -24,7 +24,7 @@
     "hono": "4.6.15",
     "html-minifier": "4.0.0",
     "jsxte": "3.3.1",
-    "mitata": "1.0.23",
+    "mitata": "1.0.34",
     "nano-jsx": "0.1.0",
     "preact-render-to-string": "6.5.13",
     "react-dom": "18.3.1"
