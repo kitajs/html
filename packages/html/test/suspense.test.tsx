@@ -1044,7 +1044,7 @@ describe('Suspense errors', () => {
 
     await assert.rejects(
       text(renderToStream(render, 1)),
-      /Error: The provided Request Id is already in use: 1./
+      /Error: The provided Rid is already in use: 1./
     );
 
     const html = await text(stream);
