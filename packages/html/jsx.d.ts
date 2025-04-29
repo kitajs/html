@@ -560,6 +560,7 @@ declare namespace JSX {
     autobuffer?: undefined | string;
     autoplay?: undefined | boolean;
     loop?: undefined | boolean;
+    muted?: undefined | boolean;
     controls?: undefined | boolean;
     width?: undefined | string;
     height?: undefined | string;
