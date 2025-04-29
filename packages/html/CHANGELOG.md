@@ -1,5 +1,13 @@
 # @kitajs/html
 
+## 4.2.8
+
+### Patch Changes
+
+- [#405](https://github.com/kitajs/html/pull/405)
+  [`b114173`](https://github.com/kitajs/html/commit/b114173dc068c0a469e9600063ca87d3f49f8a40)
+  Thanks [@Crenshinibon](https://github.com/Crenshinibon)! - Added `muted` video attribute
+
 ## 4.2.7
 
 ### Patch Changes
