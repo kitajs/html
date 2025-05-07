@@ -190,7 +190,7 @@ declare namespace JSX {
 
   interface HtmlButtonTag extends HtmlTag {
     action?: undefined | string;
-    autofocus?: undefined | string;
+    autofocus?: undefined | boolean;
     disabled?: undefined | boolean;
     enctype?: undefined | string;
     form?: undefined | string;
@@ -302,7 +302,7 @@ declare namespace JSX {
     action?: undefined | string;
     alt?: undefined | string;
     autocomplete?: undefined | string;
-    autofocus?: undefined | string;
+    autofocus?: undefined | boolean;
     checked?: undefined | boolean;
     disabled?: undefined | boolean;
     enctype?: undefined | string;
@@ -336,7 +336,7 @@ declare namespace JSX {
   }
 
   interface KeygenTag extends HtmlTag {
-    autofocus?: undefined | string;
+    autofocus?: undefined | boolean;
     challenge?: undefined | string;
     disabled?: undefined | boolean;
     form?: undefined | string;
@@ -517,7 +517,7 @@ declare namespace JSX {
   }
 
   interface HtmlTextAreaTag extends HtmlTag {
-    autofocus?: undefined | string;
+    autofocus?: undefined | boolean;
     cols?: undefined | string;
     dirname?: undefined | string;
     disabled?: undefined | boolean;
