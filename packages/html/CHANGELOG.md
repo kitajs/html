@@ -1,5 +1,14 @@
 # @kitajs/html
 
+## 4.2.9
+
+### Patch Changes
+
+- [#407](https://github.com/kitajs/html/pull/407)
+  [`e16fb12`](https://github.com/kitajs/html/commit/e16fb12503f8081f983bfee02ff6f593a7c9c272)
+  Thanks [@lcdss](https://github.com/lcdss)! - Change autofocus type from string to
+  boolean
+
 ## 4.2.8
 
 ### Patch Changes
