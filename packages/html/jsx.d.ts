@@ -942,4 +942,4 @@ type AriaRole =
   | 'tree'
   | 'treegrid'
   | 'treeitem'
-  | (string & {});
+  | AnyString;
