@@ -12,9 +12,7 @@
   "funding": "https://github.com/kitajs/html?sponsor=1",
   "license": "MIT",
   "author": "Arthur Fiorette <kita@arthur.place>",
-  "sideEffects": [
-    "register.js"
-  ],
+  "sideEffects": false,
   "type": "commonjs",
   "exports": {
     ".": "./index.js",
@@ -22,7 +20,6 @@
     "./jsx-dev-runtime": "./jsx-dev-runtime.js",
     "./package.json": "./package.json",
     "./suspense": "./suspense.js",
-    "./register": "./register.js",
     "./error-boundary": "./error-boundary.js",
     "./*": "./*"
   },
