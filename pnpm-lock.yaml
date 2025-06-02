@@ -33,8 +33,8 @@ importers:
   benchmarks/honojsx:
     dependencies:
       hono:
-        specifier: ^4.7.7
-        version: 4.7.7
+        specifier: ^4.7.11
+        version: 4.7.11
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -167,8 +167,8 @@ importers:
         specifier: 3.1.2
         version: 3.1.2
       hono:
-        specifier: 4.7.7
-        version: 4.7.7
+        specifier: 4.7.11
+        version: 4.7.11
       html-minifier:
         specifier: 4.0.0
         version: 4.0.0
@@ -1180,8 +1180,8 @@ packages:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
 
-  hono@4.7.7:
-    resolution: {integrity: sha512-2PCpQRbN87Crty8/L/7akZN3UyZIAopSoRxCwRbJgUuV1+MHNFHzYFxZTg4v/03cXUm+jce/qa2VSBZpKBm3Qw==}
+  hono@4.7.11:
+    resolution: {integrity: sha512-rv0JMwC0KALbbmwJDEnxvQCeJh+xbS3KEWW5PC9cMJ08Ur9xgatI0HmtgYZfOdOSOeYsp5LO2cOhdI8cLEbDEQ==}
     engines: {node: '>=16.9.0'}
 
   hosted-git-info@2.8.9:
@@ -3039,7 +3039,7 @@ snapshots:
 
   he@1.2.0: {}
 
-  hono@4.7.7: {}
+  hono@4.7.11: {}
 
   hosted-git-info@2.8.9: {}
 
