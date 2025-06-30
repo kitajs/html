@@ -9,6 +9,6 @@
   "dependencies": {
     "tslib": "^2.8.1",
     "typed-html": "^3.0.1",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   }
 }
