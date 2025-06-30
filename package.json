@@ -30,7 +30,7 @@
     "@changesets/cli": "^2.28.1",
     "@kitajs/html": "workspace:*",
     "husky": "^9.1.7",
-    "prettier": "^3.5.3",
+    "prettier": "^3.6.2",
     "typescript": "^5.8.2"
   },
   "packageManager": "pnpm@9.1.1",
