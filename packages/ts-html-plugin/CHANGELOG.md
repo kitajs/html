@@ -1,5 +1,14 @@
 # @kitajs/ts-html-plugin
 
+## 4.1.2
+
+### Patch Changes
+
+- [#421](https://github.com/kitajs/html/pull/421)
+  [`b9a71b9`](https://github.com/kitajs/html/commit/b9a71b9600fd811400c3f7a4cf70987d5bdbe90f)
+  Thanks [@Duod-Notyap](https://github.com/Duod-Notyap)! - Fix identifiers starting with
+  'e' considered safe
+
 ## 4.1.1
 
 ### Patch Changes
