@@ -39,7 +39,7 @@ jobs:
         run: pnpm test
 
       - name: Publish to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           # Codecov backend may be unstable
           fail_ci_if_error: false
