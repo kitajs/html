@@ -497,6 +497,7 @@ declare namespace JSX {
 
   interface HtmlDetailsTag extends HtmlTag {
     open?: undefined | boolean;
+    name?: undefined | string;
   }
 
   interface HtmlDialogTag extends HtmlTag {
