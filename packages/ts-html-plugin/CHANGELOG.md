@@ -1,5 +1,18 @@
 # @kitajs/ts-html-plugin
 
+## 4.1.3
+
+### Patch Changes
+
+- [`8c55210`](https://github.com/kitajs/html/commit/8c552105eb3f19efcc7aa507367e76f098f44f93)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Added OICD publishing
+
+- Updated dependencies
+  [[`8c55210`](https://github.com/kitajs/html/commit/8c552105eb3f19efcc7aa507367e76f098f44f93),
+  [`8c55210`](https://github.com/kitajs/html/commit/8c552105eb3f19efcc7aa507367e76f098f44f93),
+  [`8c55210`](https://github.com/kitajs/html/commit/8c552105eb3f19efcc7aa507367e76f098f44f93)]:
+  - @kitajs/html@4.2.10
+
 ## 4.1.2
 
 ### Patch Changes
