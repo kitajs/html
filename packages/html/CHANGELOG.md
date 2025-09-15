@@ -1,5 +1,20 @@
 # @kitajs/html
 
+## 4.2.10
+
+### Patch Changes
+
+- [`8c55210`](https://github.com/kitajs/html/commit/8c552105eb3f19efcc7aa507367e76f098f44f93)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Added frameborder
+  attribute
+
+- [`8c55210`](https://github.com/kitajs/html/commit/8c552105eb3f19efcc7aa507367e76f098f44f93)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Added OICD publishing
+
+- [`8c55210`](https://github.com/kitajs/html/commit/8c552105eb3f19efcc7aa507367e76f098f44f93)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Add missing attributes
+  and components
+
 ## 4.2.9
 
 ### Patch Changes
