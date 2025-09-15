@@ -6,7 +6,7 @@ import { TSLangServer } from './util/lang-server';
 it('Ensures readme checks will throw error', async () => {
   await using server = new TSLangServer(__dirname);
 
-  const diagnostics = await server.openWithDiagnostics/* tsx */ `
+  const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
       <>
         <div>{String.name}</div>

@@ -30,7 +30,28 @@ declare namespace JSX {
 
   interface HtmlTag extends ElementChildrenAttribute, IntrinsicAttributes {
     accesskey?: undefined | string;
+    autocapitalize?:
+      | undefined
+      | 'off'
+      | 'none'
+      | 'on'
+      | 'sentences'
+      | 'words'
+      | 'characters'
+      | AnyString;
+    autocorrect?: undefined | 'on' | 'off' | AnyString;
     contenteditable?: undefined | string;
+    enterkeyhint?:
+      | undefined
+      | 'enter'
+      | 'done'
+      | 'go'
+      | 'next'
+      | 'previous'
+      | 'search'
+      | 'send'
+      | AnyString;
+    inert?: undefined | boolean;
     inputmode?:
       | undefined
       | 'none'
@@ -45,14 +66,19 @@ declare namespace JSX {
     dir?: undefined | string;
     hidden?: undefined | string | boolean;
     id?: undefined | number | string;
+    nonce?: undefined | string;
+    part?: undefined | string;
     popover?: undefined | boolean | 'auto' | 'manual';
     role?: undefined | AriaRole;
     lang?: undefined | string;
+    slot?: undefined | string;
     draggable?: undefined | string | boolean;
     spellcheck?: undefined | string | boolean;
     tabindex?: undefined | number | string;
     title?: undefined | string;
     translate?: undefined | string | boolean;
+    virtualkeyboardpolicy?: undefined | 'auto' | 'manual' | AnyString;
+    writingsuggestions?: undefined | 'true' | 'false' | AnyString;
 
     /** A css style attribute which also supports a `csstype` object. */
     style?: undefined | string | CSSProperties;
@@ -262,6 +288,7 @@ declare namespace JSX {
     allowfullscreen?: undefined | boolean;
     allowpaymentrequest?: undefined | boolean;
     credentialless?: undefined | boolean;
+    frameborder?: undefined | number | string;
     height?: undefined | string;
     loading?: undefined | string;
     name?: undefined | string;
@@ -295,6 +322,7 @@ declare namespace JSX {
     decoding?: undefined | 'sync' | 'async' | 'auto' | AnyString;
     loading?: undefined | 'eager' | 'lazy' | AnyString;
     srcset?: undefined | string;
+    fetchpriority?: undefined | 'high' | 'low' | 'auto' | AnyString;
   }
 
   interface HtmlInputTag extends HtmlTag {
@@ -363,6 +391,8 @@ declare namespace JSX {
     type?: undefined | string;
     sizes?: undefined | string;
     integrity?: undefined | string;
+    fetchpriority?: undefined | 'high' | 'low' | 'auto' | AnyString;
+    blocking?: undefined | 'render' | AnyString;
   }
 
   interface HtmlMapTag extends HtmlTag {
@@ -461,6 +491,8 @@ declare namespace JSX {
     crossorigin?: undefined | string;
     integrity?: undefined | string;
     text?: undefined | string;
+    fetchpriority?: undefined | 'high' | 'low' | 'auto' | AnyString;
+    blocking?: undefined | 'render' | AnyString;
   }
 
   interface HtmlDetailsTag extends HtmlTag {
@@ -495,6 +527,7 @@ declare namespace JSX {
     type?: undefined | string;
     disabled?: undefined | boolean;
     scoped?: undefined | string;
+    blocking?: undefined | 'render' | AnyString;
   }
 
   interface HtmlTableTag extends HtmlTag {
@@ -568,6 +601,18 @@ declare namespace JSX {
 
   // We allow any attributes on svg because its hard to keep track of them all.
   interface HtmlSvgTag extends HtmlTag, Record<string, any> {}
+
+  interface HtmlSearchTag extends HtmlTag {}
+
+  interface HtmlSlotTag extends HtmlTag {
+    name?: undefined | string;
+  }
+
+  interface HtmlFencedFrameTag extends HtmlTag {
+    allow?: undefined | string;
+    height?: undefined | number | string;
+    width?: undefined | number | string;
+  }
 
   interface HtmlUnspecifiedTag extends HtmlTag, Record<string, any> {
     of: string;
@@ -760,6 +805,7 @@ declare namespace JSX {
     feSpotLight: HtmlSvgTag;
     feTile: HtmlSvgTag;
     feTurbulence: HtmlSvgTag;
+    fencedframe: HtmlFencedFrameTag;
     fieldset: HtmlFieldSetTag;
     figcaption: HtmlTag;
     figure: HtmlTag;
@@ -829,7 +875,9 @@ declare namespace JSX {
     ruby: HtmlTag;
     s: HtmlTag;
     samp: HtmlTag;
+    slot: HtmlSlotTag;
     script: HtmlScriptTag;
+    search: HtmlSearchTag;
     section: HtmlTag;
     select: HtmlSelectTag;
     set: HtmlSvgTag;

@@ -6,7 +6,7 @@ import { TSLangServer } from './util/lang-server';
 it('Detect xss prone usage', async () => {
   await using server = new TSLangServer(__dirname);
 
-  const diagnostics = await server.openWithDiagnostics/* tsx */ `
+  const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
       <>
         <div>

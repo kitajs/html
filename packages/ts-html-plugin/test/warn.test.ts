@@ -6,7 +6,7 @@ import { TSLangServer } from './util/lang-server';
 it('Warn on unused `safe` tags', async () => {
   await using server = new TSLangServer(__dirname);
 
-  const diagnostics = await server.openWithDiagnostics/* tsx */ `
+  const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
       <>
         <div safe>

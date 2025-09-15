@@ -6,7 +6,7 @@ import { TSLangServer } from './util/lang-server';
 it('Ensure <Component /> children are safe', async () => {
   await using server = new TSLangServer(__dirname);
 
-  const diagnostics = await server.openWithDiagnostics/* tsx */ `
+  const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
       <>
         {/* error */}
@@ -59,7 +59,7 @@ it('Ensure <Component /> children are safe', async () => {
 it('Ensure <Component /> children are safe using "e" tag function', async () => {
   await using server = new TSLangServer(__dirname);
 
-  const diagnostics = await server.openWithDiagnostics/* tsx */ `
+  const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
       <>
         {/* error */}

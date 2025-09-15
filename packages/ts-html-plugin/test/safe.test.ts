@@ -5,7 +5,7 @@ import { TSLangServer } from './util/lang-server';
 it('Allow correct xss usage', async () => {
   await using server = new TSLangServer(__dirname);
 
-  const diagnostics = await server.openWithDiagnostics/* tsx */ `
+  const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export function Test() {
         var email = "unsafeText";
         return <span safe>{email}</span>;
