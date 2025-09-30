@@ -217,6 +217,8 @@ declare namespace JSX {
   interface HtmlButtonTag extends HtmlTag {
     action?: undefined | string;
     autofocus?: undefined | boolean;
+    command?: undefined | string;
+    commandfor?: undefined | string;
     disabled?: undefined | boolean;
     enctype?: undefined | string;
     form?: undefined | string;
