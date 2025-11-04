@@ -1,5 +1,19 @@
 # @kitajs/html
 
+## 4.2.11
+
+### Patch Changes
+
+- [#435](https://github.com/kitajs/html/pull/435)
+  [`2a31dd4`](https://github.com/kitajs/html/commit/2a31dd4eeeeedcd7f641bedbe739ef7c30424d76)
+  Thanks [@JoBurgard](https://github.com/JoBurgard)! - Add 'command' and 'commandfor' to
+  HtmlButtonTag Type
+
+- [#442](https://github.com/kitajs/html/pull/442)
+  [`e4f4008`](https://github.com/kitajs/html/commit/e4f400893f19c41d33af1d173faa8cca833b055a)
+  Thanks [@louwers](https://github.com/louwers)! - Change HTMX preload JSX type to include
+  boolean
+
 ## 4.2.10
 
 ### Patch Changes
