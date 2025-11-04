@@ -535,7 +535,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/preload/
      */
-    preload?: 'mousedown' | 'mouseover' | 'preload:init' | AnyStr;
+    preload?: boolean | 'mousedown' | 'mouseover' | 'preload:init' | AnyStr;
 
     /**
      * Enables preloading linked image resources.
