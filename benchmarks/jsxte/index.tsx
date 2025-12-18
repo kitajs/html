@@ -62,9 +62,7 @@ function Header({ name }) {
 function Footer({ name }) {
   return (
     <footer class="footer">
-      <p class="footer-year">
-        © {new Date().getFullYear()} {name}
-      </p>
+      <p class="footer-year">© {name}</p>
 
       <p class="footer">
         <a href="/terms">Terms</a>
