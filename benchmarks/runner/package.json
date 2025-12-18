@@ -27,6 +27,7 @@
     "mitata": "1.0.34",
     "nano-jsx": "0.1.0",
     "preact-render-to-string": "6.5.13",
+    "react": "18.3.1",
     "react-dom": "18.3.1"
   }
 }
