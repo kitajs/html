@@ -66,7 +66,7 @@ function Header(html: Function, { name }) {
 function Footer(html: Function, { name }) {
   return html`
     <footer class="footer">
-      <p class="footer-year">© ${new Date().getFullYear()} ${name}</p>
+      <p class="footer-year">© ${name}</p>
 
       <p class="footer">
         <a href="/terms">Terms</a>

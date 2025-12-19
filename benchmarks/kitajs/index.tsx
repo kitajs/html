@@ -67,7 +67,7 @@ function Footer({ name }) {
   return (
     <footer class="footer">
       <p class="footer-year" safe>
-        © {new Date().getFullYear()} {name}
+        © {name}
       </p>
 
       <p class="footer">
