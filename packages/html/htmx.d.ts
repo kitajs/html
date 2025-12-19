@@ -195,6 +195,15 @@ declare namespace Htmx {
      * @see https://htmx.org/extensions/morphdom-swap/
      */
     morphdom: 'morphdom';
+
+    /**
+     * Support for the [preload](https://htmx.org/extensions/preload/) extension.
+     *
+     * CDN: https://unpkg.com/htmx-ext-preload@2.0.1/preload.js
+     *
+     * @see https://htmx.org/extensions/preload/
+     */
+    preload: 'preload';
   }
 
   /** Definitions for htmx attributes up to 1.9.3. */
@@ -520,6 +529,20 @@ declare namespace Htmx {
      * @see https://htmx.org/extensions/head-support/
      */
     'hx-head'?: 'merge' | 'append' | 're-eval';
+
+    /**
+     * Configures strategy of preloading the given resource.
+     *
+     * @see https://htmx.org/extensions/preload/
+     */
+    preload?: boolean | 'mousedown' | 'mouseover' | 'preload:init' | AnyStr;
+
+    /**
+     * Enables preloading linked image resources.
+     *
+     * @see https://htmx.org/extensions/preload/
+     */
+    'preload-images'?: boolean;
 
     /**
      * Hyperscript expression

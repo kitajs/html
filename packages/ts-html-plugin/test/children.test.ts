@@ -5,7 +5,7 @@ import { TSLangServer } from './util/lang-server';
 it('Ensure PropsWithChildren works as normal', async () => {
   await using server = new TSLangServer(__dirname);
 
-  const diagnostics = await server.openWithDiagnostics/* tsx */ `
+  const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export interface Extension extends PropsWithChildren {
       user?: { name: string };
     }

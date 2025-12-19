@@ -1,5 +1,81 @@
 # @kitajs/html
 
+## 4.2.11
+
+### Patch Changes
+
+- [#435](https://github.com/kitajs/html/pull/435)
+  [`2a31dd4`](https://github.com/kitajs/html/commit/2a31dd4eeeeedcd7f641bedbe739ef7c30424d76)
+  Thanks [@JoBurgard](https://github.com/JoBurgard)! - Add 'command' and 'commandfor' to
+  HtmlButtonTag Type
+
+- [#442](https://github.com/kitajs/html/pull/442)
+  [`e4f4008`](https://github.com/kitajs/html/commit/e4f400893f19c41d33af1d173faa8cca833b055a)
+  Thanks [@louwers](https://github.com/louwers)! - Change HTMX preload JSX type to include
+  boolean
+
+## 4.2.10
+
+### Patch Changes
+
+- [`8c55210`](https://github.com/kitajs/html/commit/8c552105eb3f19efcc7aa507367e76f098f44f93)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Added frameborder
+  attribute
+
+- [`8c55210`](https://github.com/kitajs/html/commit/8c552105eb3f19efcc7aa507367e76f098f44f93)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Added OICD publishing
+
+- [`8c55210`](https://github.com/kitajs/html/commit/8c552105eb3f19efcc7aa507367e76f098f44f93)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Add missing attributes
+  and components
+
+## 4.2.9
+
+### Patch Changes
+
+- [#407](https://github.com/kitajs/html/pull/407)
+  [`e16fb12`](https://github.com/kitajs/html/commit/e16fb12503f8081f983bfee02ff6f593a7c9c272)
+  Thanks [@lcdss](https://github.com/lcdss)! - Change autofocus type from string to
+  boolean
+
+## 4.2.8
+
+### Patch Changes
+
+- [#405](https://github.com/kitajs/html/pull/405)
+  [`b114173`](https://github.com/kitajs/html/commit/b114173dc068c0a469e9600063ca87d3f49f8a40)
+  Thanks [@Crenshinibon](https://github.com/Crenshinibon)! - Added `muted` video attribute
+
+## 4.2.7
+
+### Patch Changes
+
+- [#369](https://github.com/kitajs/html/pull/369)
+  [`660e448`](https://github.com/kitajs/html/commit/660e4484a7ec757a4a7e26e61905a84ca1e3bee6)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Allow undefined in style
+  attributes
+
+## 4.2.6
+
+### Patch Changes
+
+- [#349](https://github.com/kitajs/html/pull/349)
+  [`eda217b`](https://github.com/kitajs/html/commit/eda217b4278eb85c7970ea8056c639ec9c7532a9)
+  Thanks [@garrappachc](https://github.com/garrappachc)! - add typings for the htmx
+  preload extension
+
+## 4.2.5
+
+### Patch Changes
+
+- [#331](https://github.com/kitajs/html/pull/331)
+  [`dad464f`](https://github.com/kitajs/html/commit/dad464fda394df816ef151898ddfad82891f2635)
+  Thanks [@JacopoPatroclo](https://github.com/JacopoPatroclo)! - Add xmlns prop to html
+  tag jsx type
+
+- [`3b40ece`](https://github.com/kitajs/html/commit/3b40eceb2efa38d4f63fad9a8853532814a195b0)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Improved benchmarks
+
 ## 4.2.4
 
 ### Patch Changes

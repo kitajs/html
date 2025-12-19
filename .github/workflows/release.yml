@@ -10,9 +10,11 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
-  id-token: write
+  id-token: write # Required for OIDC
   contents: write
-  pull-requests: write
+  pull-requests: write # Required to create a release PR
+  checks: write # Required to create a check run
+  issues: write # Required to create issues
 
 jobs:
   release:
@@ -20,12 +22,11 @@ jobs:
     if: ${{ github.actor != 'dependabot[bot]' }}
 
     environment:
-      name: Npm
-      url: https://www.npmjs.com/package/@kitajs/html
+      name: NPM Registry
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # https://github.com/actions/checkout/issues/1471
       - name: Fetch tags
@@ -53,14 +54,13 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          version: pnpm ci:version
+          version: pnpm ci-version
           commit: 'chore: update versions'
           title: 'Release plan'
 
           # https://github.com/changesets/action/issues/246
           # https://github.com/changesets/changesets/pull/674
-          publish: pnpm ci:publish
+          publish: pnpm ci-publish
         env:
           GITHUB_TOKEN: ${{ secrets.AUTOMERGE_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true

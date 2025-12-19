@@ -6,7 +6,7 @@ import { TSLangServer } from './util/lang-server';
 it('Detect xss prone usage', async () => {
   await using server = new TSLangServer(__dirname);
 
-  const diagnostics = await server.openWithDiagnostics/* tsx */ `
+  const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
       <>
         <div>
@@ -18,6 +18,9 @@ it('Detect xss prone usage', async () => {
           ))}
           {['a', 'b', 'c'].map((i) => (
             <div>{i}</div>
+          ))}
+          {['a', 'b', 'c'].map((e) => (
+            <div>{e}</div>
           ))}
         </div>
         <div>{['a', 'b', 'c'].map((i) => i)}</div>
@@ -57,15 +60,22 @@ it('Detect xss prone usage', async () => {
       category: 'error'
     },
     {
-      start: { line: 47, offset: 15 },
-      end: { line: 47, offset: 44 },
+      start: { line: 47, offset: 19 },
+      end: { line: 47, offset: 20 },
       text: Xss.message,
       code: Xss.code,
       category: 'error'
     },
     {
-      start: { line: 48, offset: 15 },
-      end: { line: 48, offset: 52 },
+      start: { line: 50, offset: 15 },
+      end: { line: 50, offset: 44 },
+      text: Xss.message,
+      code: Xss.code,
+      category: 'error'
+    },
+    {
+      start: { line: 51, offset: 15 },
+      end: { line: 51, offset: 52 },
       text: Xss.message,
       code: Xss.code,
       category: 'error'

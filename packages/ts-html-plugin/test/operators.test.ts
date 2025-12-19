@@ -6,7 +6,7 @@ import { TSLangServer } from './util/lang-server';
 it('Operators are evaluated normally', async () => {
   await using server = new TSLangServer(__dirname);
 
-  const diagnostics = await server.openWithDiagnostics/* tsx */ `
+  const diagnostics = await server.openWithDiagnostics /* tsx */ `
 
     function CustomComponent(props: { name: string }) {
       return ${'<div>{Html.e`${props.name}`}</div>'}
