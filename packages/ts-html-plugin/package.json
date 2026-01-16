@@ -20,22 +20,23 @@
     "xss-scan": "dist/cli.js"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "dev": "tsc -p tsconfig.build.json --watch",
+    "build": "tsgo -p tsconfig.build.json",
+    "dev": "tsgo -p tsconfig.build.json --watch",
     "prepack": "npm run build",
     "test": "pnpm build && pnpm install && pnpm test-exec",
     "test-exec": "node --require @swc-node/register --test test/**/*.test.ts"
   },
   "dependencies": {
     "chalk": "^5.6.2",
-    "tslib": "^2.8.1",
+    "tslib": "catalog:",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "@swc-node/register": "^1.11.1",
-    "@swc/helpers": "^0.5.17",
-    "@types/node": "^24.5.0",
-    "@types/yargs": "^17.0.33",
+    "@swc-node/register": "catalog:",
+    "@swc/helpers": "catalog:",
+    "@types/node": "catalog:",
+    "@types/yargs": "^17.0.35",
+    "@typescript/native-preview": "catalog:",
     "fast-defer": "^1.1.9",
     "self": "file:"
   },

@@ -31,20 +31,21 @@
   "types": "index.d.ts",
   "scripts": {
     "bench": "pnpm --filter \"benchmark-*\" build && pnpm --filter \"benchmark-runner\" start",
-    "test": "tsc; c8 --reporter lcov --reporter text node --no-deprecation --enable-source-maps --test dist/test",
-    "test:only": "tsc; node --no-deprecation --test-only --test dist/test"
+    "test": "tsgo; c8 --reporter lcov --reporter text node --no-deprecation --enable-source-maps --test dist/test",
+    "test:only": "tsgo; node --no-deprecation --test-only --test dist/test"
   },
   "dependencies": {
-    "csstype": "^3.1.3"
+    "csstype": "^3.2.3"
   },
   "devDependencies": {
-    "@types/jsdom": "^21.1.7",
-    "@types/node": "^24.5.0",
-    "c8": "^10.1.3",
-    "jsdom": "^27.0.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "typescript": "^5.9.2"
+    "@types/jsdom": "catalog:",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "c8": "catalog:",
+    "jsdom": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "typescript": "catalog:"
   },
   "engines": {
     "node": ">=12"
