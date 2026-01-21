@@ -368,7 +368,7 @@ importers:
         specifier: 'catalog:'
         version: 7.0.0-dev.20260120.1
       '@vitest/coverage-v8':
-        specifier: ^4.0.17
+        specifier: 'catalog:'
         version: 4.0.17(vitest@4.0.17(@types/node@24.10.9)(jsdom@27.4.0))
       c8:
         specifier: 'catalog:'
@@ -394,22 +394,19 @@ importers:
 
   packages/ts-html-plugin:
     dependencies:
-      '@kitajs/html':
-        specifier: workspace:^
-        version: link:../html
       chalk:
         specifier: ^5.6.2
         version: 5.6.2
       tslib:
         specifier: 'catalog:'
         version: 2.8.1
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
       yargs:
         specifier: ^18.0.0
         version: 18.0.0
     devDependencies:
+      '@kitajs/html':
+        specifier: workspace:^
+        version: link:../html
       '@types/node':
         specifier: 'catalog:'
         version: 24.10.9
@@ -428,6 +425,9 @@ importers:
       self:
         specifier: 'link:'
         version: 'link:'
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
       vitest:
         specifier: 'catalog:'
         version: 4.0.17(@types/node@24.10.9)(jsdom@27.4.0)

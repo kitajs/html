@@ -13,7 +13,7 @@
   "license": "MIT",
   "author": "Arthur Fiorette <kita@arthur.place>",
   "sideEffects": false,
-  "type": "module",
+  "type": "commonjs",
   "exports": {
     ".": "./dist/index.js",
     "./*": "./*",
@@ -25,6 +25,7 @@
   },
   "files": [
     "dist",
+    "src",
     "*.d.ts",
     "!dist/*.tsbuildinfo"
   ],

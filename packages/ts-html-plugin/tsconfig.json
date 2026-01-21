@@ -1,12 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "verbatimModuleSyntax": false,
     "target": "esnext",
     "jsx": "react-jsx",
     "jsxImportSource": "@kitajs/html",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "outDir": "./dist",
     "plugins": [{ "name": "self" }]
   },

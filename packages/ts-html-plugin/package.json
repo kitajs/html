@@ -31,12 +31,14 @@
     "yargs": "^18.0.0"
   },
   "devDependencies": {
+    "@kitajs/html": "workspace:^",
     "@types/node": "catalog:",
     "@types/yargs": "^17.0.35",
     "@typescript/native-preview": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "fast-defer": "^1.1.9",
     "self": "link:",
+    "typescript": "catalog:",
     "vitest": "catalog:"
   },
   "peerDependencies": {
