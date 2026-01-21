@@ -1,15 +1,14 @@
-import assert from 'node:assert';
-import { describe, it } from 'node:test';
 import { setTimeout } from 'timers/promises';
-import { ErrorBoundary, HtmlTimeout } from '../error-boundary';
+import { describe, expect, it } from 'vitest';
+import { ErrorBoundary, HtmlTimeout } from '../src/error-boundary.js';
 
 describe('Error Boundary', () => {
   it('should render error boundary', async () => {
     try {
       await (<div>{Promise.reject(<div>2</div>)}</div>);
-      assert.fail('should throw');
+      throw new Error('should throw');
     } catch (error) {
-      assert.equal(error, <div>2</div>);
+      expect(error).toMatchInlineSnapshot(`"<div>2</div>"`);
     }
 
     try {
@@ -21,9 +20,9 @@ describe('Error Boundary', () => {
         </>
       );
 
-      assert.equal(html, <div>1</div>);
+      expect(html).toMatchInlineSnapshot(`"<div>1</div>"`);
     } catch {
-      assert.fail('should not throw');
+      throw new Error('should not throw');
     }
   });
 
@@ -36,7 +35,7 @@ describe('Error Boundary', () => {
       </>
     );
 
-    assert.equal(html, <div>my error</div>);
+    expect(html).toMatchInlineSnapshot(`"<div>my error</div>"`);
   });
 
   it('Catches timed out promise', async () => {
@@ -48,7 +47,7 @@ describe('Error Boundary', () => {
       </>
     );
 
-    assert.equal(html, '<div>1</div>');
+    expect(html).toMatchInlineSnapshot(`"<div>1</div>"`);
   });
 
   it('Renders non timed out promise', async () => {
@@ -60,7 +59,7 @@ describe('Error Boundary', () => {
       </>
     );
 
-    assert.equal(html, <div>2</div>);
+    expect(html).toMatchInlineSnapshot(`"<div>2</div>"`);
   });
 
   it('Catches timed out promise', async () => {
@@ -68,7 +67,7 @@ describe('Error Boundary', () => {
       <>
         <ErrorBoundary
           catch={(err) => {
-            assert.ok(err instanceof HtmlTimeout);
+            expect(err instanceof HtmlTimeout).toBeTruthy();
             return <div>1</div>;
           }}
           timeout={10}
@@ -78,7 +77,7 @@ describe('Error Boundary', () => {
       </>
     );
 
-    assert.equal(html, '<div>1</div>');
+    expect(html).toMatchInlineSnapshot(`"<div>1</div>"`);
   });
 
   it('doesnt do nothing on sync children', () => {
@@ -90,6 +89,6 @@ describe('Error Boundary', () => {
       </>
     );
 
-    assert.equal(html, '<div>2</div>');
+    expect(html).toMatchInlineSnapshot(`"<div>2</div>"`);
   });
 });

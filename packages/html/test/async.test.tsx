@@ -1,7 +1,6 @@
-import assert from 'node:assert';
-import test, { describe } from 'node:test';
 import { setImmediate } from 'node:timers/promises';
-import Html from '../index';
+import { describe, expect, test } from 'vitest';
+import * as Html from '../src/index.js';
 
 async function Async(props: Html.PropsWithChildren) {
   await setImmediate(); // simple way to ensure async-ness
@@ -14,9 +13,9 @@ function Sync(props: Html.PropsWithChildren) {
 
 describe('Async components', () => {
   test('Components', async () => {
-    assert(<Sync>{1}</Sync>, '<div>1</div>');
-    assert.ok(<Async>{1}</Async> instanceof Promise);
-    assert(await (<Async>{1}</Async>), '<div>1</div>');
+    expect(<Sync>{1}</Sync>).toBeTruthy();
+    expect(<Async>{1}</Async> instanceof Promise).toBeTruthy();
+    expect(await (<Async>{1}</Async>)).toBeTruthy();
   });
 
   test('Child', async () => {
@@ -26,8 +25,8 @@ describe('Async components', () => {
       </Sync>
     );
 
-    assert.ok(html instanceof Promise);
-    assert(await html, '<div>1</div>');
+    expect(html instanceof Promise).toBeTruthy();
+    expect(await html).toBeTruthy();
   });
 
   test('Children', async () => {
@@ -42,7 +41,7 @@ describe('Async components', () => {
       </div>
     );
 
-    assert.ok(html instanceof Promise);
-    assert(await html, '<div>1234</div>');
+    expect(html instanceof Promise).toBeTruthy();
+    expect(await html).toBeTruthy();
   });
 });

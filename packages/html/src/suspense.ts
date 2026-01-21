@@ -1,11 +1,88 @@
-const { contentsToString, contentToString } = require('./index');
-const { Readable, PassThrough } = require('node:stream');
+import { PassThrough, Readable } from 'node:stream';
+import type { Children } from './index.js';
+import { contentsToString, contentToString } from './index.js';
+
+declare global {
+  /**
+   * The `SUSPENSE_ROOT` is a global object that holds the state of all the suspense
+   * components rendered in the server.
+   */
+  var SUSPENSE_ROOT: {
+    /**
+     * The requests map is a map of RequestId x SuspenseData containing the stream to
+     * write the HTML, the number of running promises and if the first suspense has
+     * already resolved.
+     */
+    requests: Map<number | string, RequestData>;
+
+    /**
+     * This value is used (and incremented shortly after) when no requestId is provided
+     * for {@linkcode renderToStream}
+     *
+     * @default 1
+     */
+    requestCounter: number;
+
+    /**
+     * If we should automatically stream {@linkcode SuspenseScript} before the first
+     * suspense is rendered. If you disable this setting, you need to manually load the
+     * {@linkcode SuspenseScript} in your HTML before any suspense is rendered. Otherwise,
+     * the suspense will not work.
+     *
+     * @default true
+     */
+    autoScript: boolean;
+  };
+}
+
+/** Everything a suspense needs to know about its request lifecycle. */
+export type RequestData = {
+  /** If the first suspense has already resolved */
+  sent: boolean;
+
+  /** How many are still running */
+  running: number;
+
+  /**
+   * The stream we should write
+   *
+   * WeakRef requires ES2021 typings (node 14+) to be installed.
+   */
+  stream: Readable;
+};
+
+/**
+ * The props for the `Suspense` component.
+ *
+ * @see {@linkcode Suspense}
+ */
+export interface SuspenseProps {
+  /** The request id is used to identify the request for this suspense. */
+  rid: number | string;
+
+  /** The fallback to render while the async children are loading. */
+  fallback: JSX.Element;
+
+  /** The async children to render as soon as they are ready. */
+  children: Children;
+
+  /**
+   * This error boundary is used to catch any error thrown by an async component and
+   * streams its fallback instead.
+   *
+   * ### Undefined behaviors happens on each browser kind when the html stream is unexpected closed by the server if an error is thrown. You should always define an error boundary to catch errors.
+   *
+   * This does not catches for errors thrown by the suspense itself or async fallback
+   * components. Please use {@linkcode ErrorBoundary} to catch them instead.
+   */
+  catch?: JSX.Element | ((error: unknown) => JSX.Element);
+}
 
 // Avoids double initialization in case this file is not cached by
 // module bundlers.
 if (!globalThis.SUSPENSE_ROOT) {
   /* global SUSPENSE_ROOT */
-  globalThis.SUSPENSE_ROOT = {
+  globalThis.SUSPENSE_ROOT ??= {
     requests: new Map(),
     requestCounter: 1,
     autoScript: true
@@ -25,7 +102,13 @@ function noop() {}
 // Pending data-sr elements are kept pending if their fallback has not yet been
 // rendered, on each render a try to switch all pending data-sr is attempted until
 // no elements are substituted.
-const SuspenseScript = /* html */ `
+/**
+ * This script needs to be loaded at the top of the page. You do not need to load it
+ * manually, unless GLOBAL_SUSPENSE.autoScript is set to false.
+ *
+ * @see {@linkcode Suspense}
+ */
+export const SuspenseScript = /* html */ `
       <script id="kita-html-suspense">
         /*! MIT License https://kita.js.org */
         function $KITA_RC(i){
@@ -60,7 +143,7 @@ const SuspenseScript = /* html */ `
               // resets j & c from previous loop
               c=j=0;
 
-              // loops over every found pending template and 
+              // loops over every found pending template and
               for(;c<r.length;c++)
                 if(r[c]!=t)
                   // let j as true while at least on $KITA_RC call returns true
@@ -78,8 +161,17 @@ const SuspenseScript = /* html */ `
   // Removes line breaks added for readability
   .replace(/\n\s*/g, '');
 
-/** @type {import('./suspense').Suspense} */
-function Suspense(props) {
+/**
+ * A component that returns a fallback while the async children are loading.
+ *
+ * The `rid` prop is the one {@linkcode renderToStream} returns, this way the suspense
+ * knows which request it belongs to.
+ *
+ * **Warning**: Using `Suspense` without any type of runtime support will _**LEAK
+ * memory**_ and not work. Always use with `renderToStream` or within a framework that
+ * supports it.
+ */
+export function Suspense(props: SuspenseProps): JSX.Element {
   const children = Array.isArray(props.children)
     ? contentsToString(props.children)
     : contentToString(props.children);
@@ -140,7 +232,7 @@ function Suspense(props) {
       return html.then(writeStreamTemplate);
     })
     .catch(function writeFatalError(error) {
-      data.stream.emit('error', error);
+      data!.stream.emit('error', error);
     })
     .finally(function clearRequestData() {
       // reduces current suspense id
@@ -174,9 +266,9 @@ function Suspense(props) {
   /**
    * This function may be called by the catch handler in case the error could be handled.
    *
-   * @param {string} result
+   * @param result
    */
-  function writeStreamTemplate(result) {
+  function writeStreamTemplate(result: string) {
     if (
       // Ensures the stream is still open (.closed may not be already defined at this point)
       !SUSPENSE_ROOT.requests.has(props.rid) ||
@@ -204,8 +296,37 @@ function Suspense(props) {
   }
 }
 
-/** @type {import('./suspense').renderToStream} */
-function renderToStream(html, rid) {
+/**
+ * Transforms a component tree who may contain `Suspense` components into a stream of
+ * HTML.
+ *
+ * @example
+ *
+ * ```tsx
+ * import { text} from 'node:stream/consumers';
+ *
+ * // Prints out the rendered stream (2nd example shows with a custom id)
+ * const stream = renderToStream(r => <AppWithSuspense rid={r} />)
+ * const stream = renderToStream(<AppWithSuspense rid={myCustomId} />, myCustomId)
+ *
+ * // You can consume it as a stream
+ * for await (const html of stream) {
+ *  console.log(html.toString())
+ * }
+ *
+ * // Or join it all together (Wastes ALL Suspense benefits, but useful for testing)
+ * console.log(await text(stream))
+ * ```
+ *
+ * @param html The component tree to render or a function that returns the component tree.
+ * @param rid The request id to identify the request, if not provided, a new incrementing
+ *   id will be used.
+ * @see {@linkcode Suspense}
+ */
+export function renderToStream(
+  html: JSX.Element | ((rid: number | string) => JSX.Element),
+  rid?: number | string
+): Readable {
   if (!rid) {
     rid = SUSPENSE_ROOT.requestCounter++;
   } else if (SUSPENSE_ROOT.requests.has(rid)) {
@@ -265,8 +386,36 @@ function renderToStream(html, rid) {
   return resolveHtmlStream(html, requestData);
 }
 
-/** @type {import('./suspense').resolveHtmlStream} */
-function resolveHtmlStream(template, requestData) {
+/**
+ * Joins the html base template (with possible suspense's fallbacks) with the request data
+ * and returns the final Readable to be piped into the response stream.
+ *
+ * **This API is meant to be used by library authors and should not be used directly.**
+ *
+ * @example
+ *
+ * ```tsx
+ * const html = <RootLayout rid={rid} />
+ * const requestData = SUSPENSE_ROOT.requests.get(rid);
+ *
+ * if(!requestData) {
+ *   return html;
+ * }
+ *
+ * // This prepends the html into the stream, handling possible
+ * // cases where the html resolved after one of its async children
+ * return resolveHtmlStream(html, requestData)
+ * ```
+ *
+ * @param fallback The fallback to render while the async children are loading.
+ * @param stream The stream to write the fallback into.
+ * @returns The same stream or another one with the fallback prepended.
+ * @see {@linkcode renderToStream}
+ */
+export function resolveHtmlStream(
+  template: JSX.Element,
+  requestData: RequestData
+): Readable {
   // Impossible to sync templates have their
   // streams being written (sent = true) before the fallback
   if (typeof template === 'string') {
@@ -288,8 +437,3 @@ function resolveHtmlStream(template, requestData) {
 
   return prepended;
 }
-
-exports.Suspense = Suspense;
-exports.renderToStream = renderToStream;
-exports.resolveHtmlStream = resolveHtmlStream;
-exports.SuspenseScript = SuspenseScript;

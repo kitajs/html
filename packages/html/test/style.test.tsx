@@ -1,27 +1,26 @@
-import assert from 'node:assert';
-import test, { describe } from 'node:test';
-import { styleToString } from '../index';
+import { describe, expect, test } from 'vitest';
+import { styleToString } from '../src/index.js';
 
 describe('Style', () => {
   test('camel case property', () => {
-    assert.equal(
+    expect(
       <>
         <div style={{ backgroundColor: 'red' }}></div>
         <div style="background-color: blue;"></div>
         <div style="background-color:green;"></div>
         <div style="backgroundColor:green;"></div>
-      </>,
-      '<div style="background-color:red;"></div><div style="background-color: blue;"></div><div style="background-color:green;"></div><div style="backgroundColor:green;"></div>'
+      </>
+    ).toMatchInlineSnapshot(
+      `"<div style="background-color:red;"></div><div style="background-color: blue;"></div><div style="background-color:green;"></div><div style="backgroundColor:green;"></div>"`
     );
   });
 
   test('accepts undefined', () => {
-    assert.equal(
-      <div style={{ backgroundColor: undefined }}></div>,
-      '<div style=""></div>'
+    expect(<div style={{ backgroundColor: undefined }}></div>).toMatchInlineSnapshot(
+      `"<div style=""></div>"`
     );
 
-    assert.equal(<div style={undefined}></div>, '<div></div>');
+    expect(<div style={undefined}></div>).toMatchInlineSnapshot(`"<div></div>"`);
   });
 
   test('CSSProperties', () => {
@@ -31,19 +30,20 @@ describe('Style', () => {
       not: 'defined'
     };
 
-    assert.equal(<div style={style} />, '<div style="color:red;not:defined;"></div>');
+    expect(<div style={style} />).toMatchInlineSnapshot(
+      `"<div style="color:red;not:defined;"></div>"`
+    );
   });
 
   test('Weird values', () => {
-    assert.equal(
+    expect(
       styleToString({
         a: 0,
         b: undefined,
         c: 1,
         d: '2',
         e: { f: 3 }
-      }),
-      'a:0;c:1;d:2;e:[object Object];'
-    );
+      })
+    ).toBe('a:0;c:1;d:2;e:[object Object];');
   });
 });

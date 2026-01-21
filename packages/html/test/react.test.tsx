@@ -1,6 +1,5 @@
-import assert from 'node:assert';
-import test, { describe } from 'node:test';
-import Html from '../index';
+import { describe, expect, test } from 'vitest';
+import * as Html from '../src/index.js';
 
 const Header: Html.Component<any> = ({ children, ...attributes }) => (
   <h1 {...attributes}>{children}</h1>
@@ -14,42 +13,43 @@ function Button({ children, ...attributes }: Html.PropsWithChildren<any>) {
   );
 }
 
-function AssertChildren({ children, expect }: Html.PropsWithChildren<{ expect: any }>) {
-  assert.deepEqual(children, expect);
+function AssertChildren({
+  children,
+  expect: expectedChildren
+}: Html.PropsWithChildren<{ expect: any }>) {
+  expect(children).toEqual(expectedChildren);
   return <div>{children}</div>;
 }
 
 describe('React integration', () => {
   test('react children', () => {
-    assert.equal(
-      '<h1 class="title"></h1><span>Header Text</span><button type="button" class="original-class">Button Text</button>',
+    expect(
       <>
         <Header class="title"></Header>
         <span>Header Text</span>
         <Button>Button Text</Button>
       </>
+    ).toMatchInlineSnapshot(
+      `"<h1 class="title"></h1><span>Header Text</span><button type="button" class="original-class">Button Text</button>"`
     );
   });
 
   test('React-style children', () => {
-    assert.equal(
-      '<h1 class="title"><span>Header Text</span></h1>',
+    expect(
       <Header class="title">
         <span>Header Text</span>
       </Header>
+    ).toMatchInlineSnapshot(`"<h1 class="title"><span>Header Text</span></h1>"`);
+
+    expect(<Button class="override" />).toMatchInlineSnapshot(
+      `"<button type="button" class="override"></button>"`
     );
 
-    assert.equal(
-      '<button type="button" class="override"></button>',
-      <Button class="override" />
+    expect(<Button>Button Text</Button>).toMatchInlineSnapshot(
+      `"<button type="button" class="original-class">Button Text</button>"`
     );
 
-    assert.equal(
-      '<button type="button" class="original-class">Button Text</button>',
-      <Button>Button Text</Button>
-    );
-
-    assert.equal(
+    expect(
       <>
         <AssertChildren expect={undefined} />
         <AssertChildren expect={undefined}></AssertChildren>
@@ -65,28 +65,27 @@ describe('React integration', () => {
         <AssertChildren expect={[<div></div>, '1', <div></div>]}>
           <div></div>1<div></div>
         </AssertChildren>
-      </>,
-      '<div></div>' +
-        '<div></div>' +
-        '<div><div></div></div>' +
-        '<div>1</div>' +
-        '<div>1 2</div>' +
-        '<div><div></div><div></div></div>' +
-        '<div><div></div>1<div></div></div>'
+      </>
+    ).toMatchInlineSnapshot(
+      `"<div></div><div></div><div><div></div></div><div>1</div><div>1 2</div><div><div></div><div></div></div><div><div></div>1<div></div></div>"`
     );
   });
 
   test('React-style className', () => {
-    assert.equal(<div class="a"></div>, '<div class="a"></div>');
-    assert.equal(<div className="c"></div>, '<div class="c"></div>');
-    assert.equal(<div class="b" className="d"></div>, '<div class="b"></div>');
-    assert.equal(<div className="a" class="b"></div>, '<div class="b"></div>');
+    expect(<div class="a"></div>).toMatchInlineSnapshot(`"<div class="a"></div>"`);
+    expect(<div className="c"></div>).toMatchInlineSnapshot(`"<div class="c"></div>"`);
+    expect(<div class="b" className="d"></div>).toMatchInlineSnapshot(
+      `"<div class="b"></div>"`
+    );
+    expect(<div className="a" class="b"></div>).toMatchInlineSnapshot(
+      `"<div class="b"></div>"`
+    );
   });
 
   test('Reserved `key` attribute', () => {
     function Test({ key }: { key: number }) {
       // ensure the below component call does not passed key
-      assert.equal(key, undefined);
+      expect(key).toBe(undefined);
 
       return (
         <div
@@ -96,12 +95,11 @@ describe('React integration', () => {
       );
     }
 
-    assert.equal(
+    expect(
       <Test
         //@ts-expect-error - key is reserved
         key={1}
-      />,
-      '<div></div>'
-    );
+      />
+    ).toMatchInlineSnapshot(`"<div></div>"`);
   });
 });

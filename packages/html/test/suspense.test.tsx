@@ -1,10 +1,9 @@
 import { JSDOM } from 'jsdom';
-import assert from 'node:assert';
 import { text } from 'node:stream/consumers';
-import { afterEach, describe, it, mock, test } from 'node:test';
 import { setImmediate, setTimeout } from 'node:timers/promises';
-import Html, { type PropsWithChildren } from '../index';
-import { Suspense, SuspenseScript, renderToStream } from '../suspense';
+import { afterEach, describe, expect, it, test, vi } from 'vitest';
+import { Html, type PropsWithChildren } from '../src/index.js';
+import { Suspense, SuspenseScript, renderToStream } from '../src/suspense.js';
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
   await setTimeout(ms * 50);
@@ -17,7 +16,7 @@ function Throw(): string {
 
 // Detect leaks of pending promises
 afterEach(() => {
-  assert.equal(SUSPENSE_ROOT.requests.size, 0, 'Suspense root left pending requests');
+  expect(SUSPENSE_ROOT.requests.size).toBe(0);
 
   // Reset suspense root
   SUSPENSE_ROOT.autoScript = true;
@@ -27,33 +26,33 @@ afterEach(() => {
 
 describe('Suspense', () => {
   test('Sync without suspense', async () => {
-    assert.equal(await text(renderToStream(() => <div />)), <div />);
+    expect(await text(renderToStream(() => <div />))).toBe(<div />);
 
-    assert.equal(await text(renderToStream(async () => <div />)), <div />);
+    expect(await text(renderToStream(async () => <div />))).toBe(<div />);
   });
 
   test('Suspense sync children', async () => {
-    assert.equal(
+    expect(
       await text(
         renderToStream((r) => (
           <Suspense rid={r} fallback={<div>1</div>}>
             <div>2</div>
           </Suspense>
         ))
-      ),
-      <div>2</div>
-    );
+      )
+    ).toBe(<div>2</div>);
   });
 
   test('Suspense async children', async () => {
-    assert.equal(
+    expect(
       await text(
         renderToStream((r) => (
           <Suspense rid={r} fallback={<div>1</div>}>
             <SleepForMs ms={2} />
           </Suspense>
         ))
-      ),
+      )
+    ).toBe(
       <>
         <div id="B:1" data-sf>
           <div>1</div>
@@ -72,14 +71,15 @@ describe('Suspense', () => {
   });
 
   test('Suspense async children & fallback', async () => {
-    assert.equal(
+    expect(
       await text(
         renderToStream((r) => (
           <Suspense rid={r} fallback={Promise.resolve(<div>1</div>)}>
             <SleepForMs ms={2} />
           </Suspense>
         ))
-      ),
+      )
+    ).toBe(
       <>
         <div id="B:1" data-sf>
           <div>1</div>
@@ -98,14 +98,15 @@ describe('Suspense', () => {
   });
 
   test('Suspense async fallback sync children', async () => {
-    assert.equal(
+    expect(
       await text(
         renderToStream((r) => (
           <Suspense rid={r} fallback={Promise.resolve(<div>1</div>)}>
             <div>2</div>
           </Suspense>
         ))
-      ),
+      )
+    ).toBe(
       <>
         <div>2</div>
       </>
@@ -124,8 +125,7 @@ describe('Suspense', () => {
             );
           })
         ).then((res) => {
-          assert.equal(
-            res,
+          expect(res).toBe(
             <>
               <div id="B:1" data-sf>
                 <div>1</div>
@@ -148,14 +148,15 @@ describe('Suspense', () => {
 
   test('Multiple sync renders cleanup', async () => {
     for (let i = 0; i < 10; i++) {
-      assert.equal(
+      expect(
         await text(
           renderToStream((r) => (
             <Suspense rid={r} fallback={Promise.resolve(<div>1</div>)}>
               <SleepForMs ms={2} />
             </Suspense>
           ))
-        ),
+        )
+      ).toBe(
         <>
           <div id="B:1" data-sf>
             <div>1</div>
@@ -175,7 +176,7 @@ describe('Suspense', () => {
   });
 
   test('Multiple children', async () => {
-    assert.equal(
+    expect(
       await text(
         renderToStream((r) => (
           <div>
@@ -192,7 +193,8 @@ describe('Suspense', () => {
             </Suspense>
           </div>
         ))
-      ),
+      )
+    ).toBe(
       <>
         <div>
           <div id="B:1" data-sf>
@@ -260,8 +262,7 @@ describe('Suspense', () => {
       //@ts-expect-error - testing invalid promises
       const seconds = +promises[index]!.seconds;
 
-      assert.strictEqual(
-        result,
+      expect(result).toBe(
         <>
           <div>
             {Array.from({ length: seconds }, (_, i) => (
@@ -290,26 +291,26 @@ describe('Suspense', () => {
 
   it('ensures autoScript works', async () => {
     // Sync does not needs autoScript
-    assert.equal(
+    expect(
       await text(
         renderToStream((r) => (
           <Suspense rid={r} fallback={<div>1</div>}>
             <div>2</div>
           </Suspense>
         ))
-      ),
-      <div>2</div>
-    );
+      )
+    ).toBe(<div>2</div>);
 
     // Async renders SuspenseScript
-    assert.equal(
+    expect(
       await text(
         renderToStream((r) => (
           <Suspense rid={r} fallback={<div>1</div>}>
             {Promise.resolve(<div>2</div>)}
           </Suspense>
         ))
-      ),
+      )
+    ).toBe(
       <>
         <div id="B:1" data-sf>
           <div>1</div>
@@ -330,14 +331,15 @@ describe('Suspense', () => {
     SUSPENSE_ROOT.autoScript = false;
 
     // Async renders SuspenseScript
-    assert.equal(
+    expect(
       await text(
         renderToStream((r) => (
           <Suspense rid={r} fallback={<div>1</div>}>
             {Promise.resolve(<div>2</div>)}
           </Suspense>
         ))
-      ),
+      )
+    ).toBe(
       <>
         <div id="B:1" data-sf>
           <div>1</div>
@@ -361,10 +363,10 @@ describe('Suspense', () => {
       </div>
     ));
 
-    assert(stream.readable);
+    expect(stream.readable).toBeTruthy();
 
     // emits end event
-    const fn = mock.fn();
+    const fn = vi.fn();
     stream.on('end', fn);
 
     const chunks = [];
@@ -373,11 +375,10 @@ describe('Suspense', () => {
       chunks.push(chunk);
     }
 
-    assert.equal(fn.mock.calls.length, 1);
-    assert.equal(chunks.length, 2);
+    expect(fn.mock.calls.length).toBe(1);
+    expect(chunks.length).toBe(2);
 
-    assert.equal(
-      chunks[0].toString(),
+    expect(chunks[0].toString()).toBe(
       <div>
         <div id="B:1" data-sf>
           <div>2</div>
@@ -385,8 +386,7 @@ describe('Suspense', () => {
       </div>
     );
 
-    assert.equal(
-      chunks[1].toString(),
+    expect(chunks[1].toString()).toBe(
       <>
         {SuspenseScript}
 
@@ -403,39 +403,38 @@ describe('Suspense', () => {
   test('renderToStream without suspense', async () => {
     const stream = renderToStream(() => '<div>not suspense</div>', 1227);
 
-    assert.ok(stream.readable);
+    expect(stream.readable).toBeTruthy();
 
     const data = stream.read();
 
-    assert.equal(data.toString(), '<div>not suspense</div>');
+    expect(data.toString()).toBe('<div>not suspense</div>');
 
-    assert.equal(await text(stream), '');
+    expect(await text(stream)).toBe('');
 
-    assert.ok(stream.closed);
+    expect(stream.closed).toBeTruthy();
   });
 
   it('tests suspense without children', async () => {
-    assert.equal(
+    expect(
       await text(
         renderToStream((r) => (
           //@ts-expect-error - testing invalid children
           <Suspense rid={r} fallback={<div>1</div>}></Suspense>
         ))
-      ),
-      ''
-    );
+      )
+    ).toBe('');
   });
 
   it('works with async error handlers', async () => {
-    assert.equal(
+    expect(
       await text(
         renderToStream((r) => (
           <Suspense rid={r} fallback={<div>1</div>} catch={Promise.resolve(<div>2</div>)}>
             {Promise.reject(<div>3</div>)}
           </Suspense>
         ))
-      ),
-
+      )
+    ).toBe(
       <>
         <div id="B:1" data-sf>
           <div>1</div>
@@ -454,7 +453,7 @@ describe('Suspense', () => {
   });
 
   it('works with deep suspense calls', async () => {
-    assert.equal(
+    expect(
       await text(
         renderToStream((rid) => {
           return (
@@ -478,7 +477,8 @@ describe('Suspense', () => {
             </div>
           );
         })
-      ),
+      )
+    ).toBe(
       <>
         <div>
           <div id="B:2" data-sf>
@@ -513,7 +513,7 @@ describe('Suspense', () => {
   });
 
   it('works with deep suspense calls resolving first', async () => {
-    assert.equal(
+    expect(
       await text(
         renderToStream((rid) => {
           return (
@@ -537,7 +537,8 @@ describe('Suspense', () => {
             </div>
           );
         })
-      ),
+      )
+    ).toBe(
       <>
         <div>
           <div id="B:2" data-sf>
@@ -594,8 +595,7 @@ describe('Suspense', () => {
       ))
     );
 
-    assert.equal(
-      html,
+    expect(html).toBe(
       <>
         <div>
           <div id="B:2" data-sf>
@@ -705,8 +705,9 @@ describe('Suspense', () => {
     );
 
     // tests with final html result
-    assert.equal(
-      new JSDOM(html, { runScripts: 'dangerously' }).window.document.body.innerHTML,
+    expect(
+      new JSDOM(html, { runScripts: 'dangerously' }).window.document.body.innerHTML
+    ).toBe(
       <>
         <div>
           <div>Outer 0!</div>
@@ -753,8 +754,7 @@ describe('Suspense', () => {
       ))
     );
 
-    assert.equal(
-      html,
+    expect(html).toBe(
       <>
         <div>
           <div id="B:1" data-sf>
@@ -799,9 +799,9 @@ describe('Suspense', () => {
         ))
       );
 
-      assert.fail('should throw');
+      throw new Error('should throw');
     } catch (error) {
-      assert.equal(error, 'Fallback!');
+      expect(error).toBe('Fallback!');
     }
   });
 });
@@ -815,8 +815,7 @@ describe('Suspense errors', () => {
         </Suspense>
       );
 
-      assert.equal(
-        outside,
+      expect(outside).toBe(
         <div id="B:1" data-sf>
           1
         </div>
@@ -824,10 +823,10 @@ describe('Suspense errors', () => {
 
       const requestData = SUSPENSE_ROOT.requests.get(1);
 
-      assert.equal(requestData?.running, 1);
-      assert.equal(requestData?.sent, false);
+      expect(requestData?.running).toBe(1);
+      expect(requestData?.sent).toBe(false);
     } finally {
-      assert.ok(SUSPENSE_ROOT.requests.has(1));
+      expect(SUSPENSE_ROOT.requests.has(1)).toBeTruthy();
 
       // cleans up
       SUSPENSE_ROOT.requests.delete(1);
@@ -835,16 +834,15 @@ describe('Suspense errors', () => {
   });
 
   it('tests sync errors are thrown', async () => {
-    await assert.rejects(
+    await expect(
       text(
         renderToStream((r) => (
           <Suspense rid={r} fallback={<div>fallback</div>}>
             <Throw />
           </Suspense>
         ))
-      ),
-      /test/
-    );
+      )
+    ).rejects.toThrow(/test/);
   });
 
   it('test sync errors after suspense', async () => {
@@ -866,9 +864,9 @@ describe('Suspense errors', () => {
         ))
       );
 
-      assert.fail('should throw');
+      throw new Error('should throw');
     } catch (error: any) {
-      assert.equal(error.message, 'test');
+      expect(error.message).toBe('test');
     }
   });
 
@@ -884,9 +882,9 @@ describe('Suspense errors', () => {
         ))
       );
 
-      assert.fail('should throw');
+      throw new Error('should throw');
     } catch (error) {
-      assert.equal(error, err);
+      expect(error).toBe(err);
     }
   });
 
@@ -902,17 +900,16 @@ describe('Suspense errors', () => {
     try {
       for await (const data of stream) {
         // Second stream would be the suspense result, which errors out
-        assert.equal(
-          data.toString(),
+        expect(data.toString()).toBe(
           <div id="B:1" data-sf>
             <div>1</div>
           </div>
         );
       }
 
-      assert.fail('should throw');
+      throw new Error('should throw');
     } catch (error) {
-      assert.equal(error, err);
+      expect(error).toBe(err);
     }
   });
 
@@ -920,14 +917,14 @@ describe('Suspense errors', () => {
     const err = new Error('component failed');
 
     // Sync does not needs autoScript
-    assert.equal(
+    expect(
       await text(
         renderToStream((r) => (
           <Suspense
             rid={r}
             fallback={<div>1</div>}
             catch={(err2) => {
-              assert.equal(err2, err);
+              expect(err2).toBe(err);
 
               return <div>3</div>;
             }}
@@ -935,7 +932,8 @@ describe('Suspense errors', () => {
             {Promise.reject(err)}
           </Suspense>
         ))
-      ),
+      )
+    ).toBe(
       <>
         <div id="B:1" data-sf>
           <div>1</div>
@@ -953,29 +951,29 @@ describe('Suspense errors', () => {
   });
 
   it('throws when rid is not provided', async () => {
-    await assert.rejects(
+    await expect(
       text(
         renderToStream(() => (
           //@ts-expect-error
           <Suspense fallback={<div>1</div>}>{Promise.resolve('123')}</Suspense>
         ))
-      ),
-      /Error: Suspense requires a `rid` to be specified./
-    );
+      )
+    ).rejects.toThrow(/Suspense requires a `rid` to be specified./);
   });
 
   it('tests suspense with error boundary', async () => {
     const err = new Error('component failed');
 
     // Sync does not needs autoScript
-    assert.equal(
+    expect(
       await text(
         renderToStream((r) => (
           <Suspense rid={r} fallback={<div>1</div>} catch={<div>3</div>}>
             {Promise.reject(err)}
           </Suspense>
         ))
-      ),
+      )
+    ).toBe(
       <>
         <div id="B:1" data-sf>
           <div>1</div>
@@ -1015,8 +1013,7 @@ describe('Suspense errors', () => {
 
     await new Promise((res) => rendered.once('close', res));
 
-    assert.equal(
-      firstChunk.toString(),
+    expect(firstChunk.toString()).toBe(
       <div id="B:1" data-sf>
         <div>1</div>
       </div>
@@ -1026,7 +1023,7 @@ describe('Suspense errors', () => {
     // The error below would be thrown:
     // Error [ERR_STREAM_PUSH_AFTER_EOF]: stream.push() after EOF
 
-    assert.equal(await text(rendered), '');
+    expect(await text(rendered)).toBe('');
   });
 
   it('does not allows to use the same rid', async () => {
@@ -1042,15 +1039,13 @@ describe('Suspense errors', () => {
 
     const stream = renderToStream(render, 1);
 
-    await assert.rejects(
-      text(renderToStream(render, 1)),
-      /Error: The provided Request Id is already in use: 1./
+    await expect(text(renderToStream(render, 1))).rejects.toThrow(
+      /The provided Request Id is already in use: 1./
     );
 
     const html = await text(stream);
 
-    assert.equal(
-      html,
+    expect(html).toBe(
       <>
         <div id="B:1" data-sf>
           <div>1</div>
@@ -1076,9 +1071,9 @@ describe('Suspense errors', () => {
     try {
       await text(stream);
 
-      assert.fail('should throw');
+      throw new Error('should throw');
     } catch (error: any) {
-      assert.equal(error.message, 'Factory error');
+      expect(error.message).toBe('Factory error');
     }
   });
 });

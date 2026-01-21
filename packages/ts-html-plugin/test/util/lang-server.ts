@@ -64,11 +64,10 @@ export class TSLangServer {
   isClosed = false;
   server: ChildProcess;
   sequence = 0;
+  debug: boolean;
 
-  constructor(
-    projectPath: string,
-    private readonly debug = false
-  ) {
+  constructor(projectPath: string, debug = false) {
+    this.debug = debug;
     this.server = fork(require.resolve('typescript/lib/tsserver'), {
       cwd: projectPath,
       stdio: ['pipe', 'pipe', 'pipe', 'ipc'],

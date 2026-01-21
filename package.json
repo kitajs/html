@@ -32,11 +32,11 @@
     "husky": "^9.1.7",
     "prettier": "^3.8.0",
     "prettier-plugin-jsdoc": "^1.8.0",
-    "prettier-plugin-organize-imports": "^4.2.0",
-    "prettier-plugin-packagejson": "^2.5.21",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "prettier-plugin-packagejson": "^3.0.0",
     "typescript": "catalog:"
   },
-  "packageManager": "pnpm@10.28.0",
+  "packageManager": "pnpm@10.28.1",
   "engines": {
     "node": ">=20.13",
     "pnpm": ">=10"

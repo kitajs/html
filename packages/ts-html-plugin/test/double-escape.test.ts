@@ -1,5 +1,4 @@
-import assert from 'node:assert';
-import { it } from 'node:test';
+import { expect, it } from 'vitest';
 import { DoubleEscape } from '../src/errors';
 import { TSLangServer } from './util/lang-server';
 
@@ -23,7 +22,7 @@ it('Avoid escaping twice', async () => {
     );
 `;
 
-  assert.deepStrictEqual(diagnostics.body, [
+  expect(diagnostics.body).toEqual([
     {
       start: { line: 36, offset: 14 },
       end: { line: 36, offset: 18 },

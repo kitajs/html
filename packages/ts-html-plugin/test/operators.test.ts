@@ -1,5 +1,4 @@
-import assert from 'node:assert';
-import { it } from 'node:test';
+import { expect, it } from 'vitest';
 import { DoubleEscape, Xss } from '../src/errors';
 import { TSLangServer } from './util/lang-server';
 
@@ -71,7 +70,7 @@ it('Operators are evaluated normally', async () => {
     );
 `;
 
-  assert.deepStrictEqual(diagnostics.body, [
+  expect(diagnostics.body).toEqual([
     {
       start: { line: 40, offset: 34 },
       end: { line: 40, offset: 38 },

@@ -12,27 +12,26 @@
   "funding": "https://github.com/kitajs/html?sponsor=1",
   "license": "MIT",
   "author": "Arthur Fiorette <kita@arthur.place>",
-  "sideEffects": [
-    "register.js"
-  ],
-  "type": "commonjs",
+  "sideEffects": false,
+  "type": "module",
   "exports": {
-    ".": "./index.js",
-    "./jsx-runtime": "./jsx-runtime.js",
-    "./jsx-dev-runtime": "./jsx-dev-runtime.js",
+    ".": "./dist/index.js",
+    "./*": "./*",
+    "./error-boundary": "./dist/error-boundary.js",
+    "./jsx-dev-runtime": "./dist/jsx-dev-runtime.js",
+    "./jsx-runtime": "./dist/jsx-runtime.js",
     "./package.json": "./package.json",
-    "./suspense": "./suspense.js",
-    "./register": "./register.js",
-    "./error-boundary": "./error-boundary.js",
-    "./*": "./*"
+    "./suspense": "./dist/suspense.js"
   },
-  "main": "index.js",
-  "module": "index.js",
-  "types": "index.d.ts",
+  "files": [
+    "dist",
+    "*.d.ts",
+    "!dist/*.tsbuildinfo"
+  ],
   "scripts": {
     "bench": "pnpm --filter \"benchmark-*\" build && pnpm --filter \"benchmark-runner\" start",
-    "test": "tsgo; c8 --reporter lcov --reporter text node --no-deprecation --enable-source-maps --test dist/test",
-    "test:only": "tsgo; node --no-deprecation --test-only --test dist/test"
+    "build": "tsgo -p tsconfig.build.json",
+    "test": "vitest --coverage --typecheck --run"
   },
   "dependencies": {
     "csstype": "^3.2.3"
@@ -41,11 +40,14 @@
     "@types/jsdom": "catalog:",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
     "c8": "catalog:",
     "jsdom": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "typescript": "catalog:"
+    "self": "link:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "engines": {
     "node": ">=12"

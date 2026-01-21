@@ -21,10 +21,9 @@
   },
   "scripts": {
     "build": "tsgo -p tsconfig.build.json",
-    "dev": "tsgo -p tsconfig.build.json --watch",
     "prepack": "npm run build",
-    "test": "pnpm build && pnpm install && pnpm test-exec",
-    "test-exec": "node --require @swc-node/register --test test/**/*.test.ts"
+    "pretest": "npm run build",
+    "test": "vitest --coverage --typecheck --run"
   },
   "dependencies": {
     "chalk": "^5.6.2",
@@ -32,16 +31,16 @@
     "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "@swc-node/register": "catalog:",
-    "@swc/helpers": "catalog:",
     "@types/node": "catalog:",
     "@types/yargs": "^17.0.35",
     "@typescript/native-preview": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
     "fast-defer": "^1.1.9",
-    "self": "file:"
+    "self": "link:",
+    "vitest": "catalog:"
   },
   "peerDependencies": {
-    "@kitajs/html": "workspace:^4.2.10",
-    "typescript": "^5.6.2"
+    "@kitajs/html": "workspace:^",
+    "typescript": "catalog:"
   }
 }
