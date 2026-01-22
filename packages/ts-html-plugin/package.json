@@ -21,8 +21,8 @@
   },
   "scripts": {
     "build": "tsgo -p tsconfig.build.json",
-    "prepack": "npm run build",
-    "pretest": "npm run build",
+    "prepack": "pnpm run build",
+    "pretest": "pnpm run build",
     "test": "vitest --coverage --typecheck --run"
   },
   "dependencies": {

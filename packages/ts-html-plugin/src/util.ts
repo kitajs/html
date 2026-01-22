@@ -243,13 +243,45 @@ export function isSafeAttribute(
     return true;
   }
 
+  // Check if this is a property access to .children (from PropsWithChildren)
+  // This must be checked BEFORE union recursion to avoid false positives
+  if (ts.isPropertyAccessExpression(node) && node.name.text === 'children') {
+    return true;
+  }
+
+  // Consolidated identifier checks - MUST be before union recursion
+  if (ts.isIdentifier(node)) {
+    // Destructured or direct `children` parameter (e.g., function Test({ children }: PropsWithChildren))
+    if (node.text === 'children') {
+      return true;
+    }
+
+    // Check if variable is initialized with JSX (e.g., const element = <div />)
+    const symbol = checker.getSymbolAtLocation(node);
+    if (symbol) {
+      const declarations = symbol.getDeclarations();
+      if (declarations) {
+        for (const decl of declarations) {
+          if (
+            ts.isVariableDeclaration(decl) &&
+            decl.initializer &&
+            isJsx(ts, decl.initializer)
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+
   // Any type is never safe
   if (type.flags & ts.TypeFlags.Any) {
     return false;
   }
 
+  // Check type aliases for JSX.Element and Html.Children
   if (type.aliasSymbol) {
-    // Allows JSX.Element
+    // Allows JSX.Element (when the alias is preserved)
     if (
       node &&
       type.aliasSymbol.escapedName === 'Element' &&

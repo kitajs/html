@@ -3,7 +3,7 @@ import { ComponentXss } from '../src/errors';
 import { TSLangServer } from './util/lang-server';
 
 it('Ensure <Component /> children are safe', async () => {
-  await using server = new TSLangServer(__dirname, true);
+  await using server = new TSLangServer(__dirname);
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
