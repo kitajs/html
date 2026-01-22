@@ -1,5 +1,5 @@
 function Purchase(html: Function, { name, price, quantity }) {
-  return html`
+  return html /* html */ `
     <div class="purchase purchase-card">
       <div class="purchase-name">${name}</div>
       <div class="purchase-price">${price}</div>
@@ -9,28 +9,24 @@ function Purchase(html: Function, { name, price, quantity }) {
 }
 
 function Layout(html: Function, { children, head }: any) {
-  return html`
+  return html /* html */ `
     <html lang="en">
-      <head>
-        !${head}
-      </head>
+      ${head}
       <body>
-        !${children}
+        ${children}
       </body>
     </html>
   `;
 }
 
 function Head(html: Function, { title }) {
-  return html`
-    <div>
+  return html /* html */ `
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>${title}</title>
       <meta name="description" content="A description" />
       <meta name="keywords" content="some, keywords" />
       <meta name="author" content="Some Author" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="stylesheet" href="styles.css" />
-      <script src="script.js"></script>
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:site" content="@site" />
       <meta name="twitter:title" content="Title" />
@@ -39,14 +35,16 @@ function Head(html: Function, { title }) {
       <meta name="twitter:image" content="image.jpg" />
       <meta content="Title" />
       <meta content="website" />
-      <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dev/index.bundle.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dist/index.bundle.js"></script>
-    </div>
+      <link rel="stylesheet" href="styles.css" />
+      <script src="script.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dev/index.bundle.js" />
+      <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dist/index.bundle.js" />
+    </head>
   `;
 }
 
 function Header(html: Function, { name }) {
-  return html`
+  return html /* html */ `
     <header class="header">
       <h1 class="header-title">Hello ${name}</h1>
       <nav class="header-nav">
@@ -64,7 +62,7 @@ function Header(html: Function, { name }) {
 }
 
 function Footer(html: Function, { name }) {
-  return html`
+  return html /* html */ `
     <footer class="footer">
       <p class="footer-year">© ${name}</p>
 
@@ -77,17 +75,17 @@ function Footer(html: Function, { name }) {
 }
 
 function Main(html: Function, { children, name }: any) {
-  return html`
+  return html /* html */ `
     <div>
-      !${Header(html, { name })}
-      <main class="main-content">!${children}</main>
-      !${Footer(html, { name })}
+      ${Header(html, { name })}
+      <main class="main-content">${children}</main>
+      ${Footer(html, { name })}
     </div>
   `;
 }
 
 function UserProfile(html: Function, { name }) {
-  return html`
+  return html /* html */ `
     <section class="user-profile">
       <h2 class="user-profile title">User Profile</h2>
       <p class="user-profile name">Name: ${name}</p>
@@ -99,11 +97,11 @@ function UserProfile(html: Function, { name }) {
 }
 
 function Sidebar(html: Function, { purchases }) {
-  return html`
+  return html /* html */ `
     <aside class="sidebar">
       <h2 class="purchase title">Recent Purchases</h2>
       <ul class="purchase list">
-        !${purchases
+        ${purchases
           .slice(0, 3)
           .map(
             (purchase) => html`
@@ -118,7 +116,7 @@ function Sidebar(html: Function, { purchases }) {
 }
 
 function PageContent(html: Function) {
-  return html`
+  return html /* html */ `
     <div class="page-content">
       <h2 class="title mb-4 h2">Welcome to our store</h2>
       <p class="p text mb-0">
@@ -137,14 +135,14 @@ function PageContent(html: Function) {
 }
 
 export function RealWorldPage(html: Function, name: string, purchases: any[]) {
-  return html`!${Layout(html, {
+  return html /* html */ `${Layout(html, {
     head: Head(html, { title: 'Real World Example' }),
     children: Main(html, {
       name,
       children: [
-        html`<h2>Purchases</h2>`,
-        html`<div class="purchases">
-          !${purchases.map((purchase) =>
+        html /* html */ `<h2>Purchases</h2>`,
+        html /* html */ `<div class="purchases">
+          ${purchases.map((purchase) =>
             Purchase(html, {
               name: purchase.name,
               price: purchase.price,

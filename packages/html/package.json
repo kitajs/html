@@ -16,8 +16,11 @@
   "type": "commonjs",
   "exports": {
     ".": "./dist/index.js",
-    "./*": "./*",
+    "./all-types": "./all-types.d.ts",
+    "./alpine": "./alpine.d.ts",
     "./error-boundary": "./dist/error-boundary.js",
+    "./hotwire-turbo": "./hotwire-turbo.d.ts",
+    "./htmx": "./htmx.d.ts",
     "./jsx-dev-runtime": "./dist/jsx-dev-runtime.js",
     "./jsx-runtime": "./dist/jsx-runtime.js",
     "./package.json": "./package.json",

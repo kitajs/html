@@ -4,6 +4,7 @@ node_modules
 index.tsbuildinfo
 dist
 coverage
+.DS_Store
 
 *.log
 *.tsbuildinfo

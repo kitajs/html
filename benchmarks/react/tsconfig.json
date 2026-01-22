@@ -1,10 +1,14 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "jsx": "react",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "importHelpers": true,
+    "module": "nodenext",
+    "target": "ESNext",
+    "moduleResolution": "nodenext",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "jsx": "react"
   },
   "include": ["index.tsx"],
   "exclude": ["dist"]

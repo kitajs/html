@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@typescript/native-preview": "catalog:",
-    "preact": "^10.27.3",
+    "preact": "^10.28.2",
     "tslib": "catalog:",
     "typescript": "catalog:"
   },

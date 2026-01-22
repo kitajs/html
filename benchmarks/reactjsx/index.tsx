@@ -11,7 +11,7 @@ function Purchase({ name, price, quantity }) {
 function Layout({ children, head }) {
   return (
     <html lang="en">
-      <head>{head}</head>
+      {head}
       <body>{children}</body>
     </html>
   );
@@ -19,14 +19,12 @@ function Layout({ children, head }) {
 
 function Head({ title }) {
   return (
-    <div>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>{title}</title>
       <meta name="description" content="A description" />
       <meta name="keywords" content="some, keywords" />
       <meta name="author" content="Some Author" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="stylesheet" href="styles.css" />
-      <script src="script.js"></script>
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:site" content="@site" />
       <meta name="twitter:title" content="Title" />
@@ -35,9 +33,11 @@ function Head({ title }) {
       <meta name="twitter:image" content="image.jpg" />
       <meta content="Title" />
       <meta content="website" />
-      <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dev/index.bundle.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dist/index.bundle.js"></script>
-    </div>
+      <link rel="stylesheet" href="styles.css" />
+      <script src="script.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dev/index.bundle.js" />
+      <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dist/index.bundle.js" />
+    </head>
   );
 }
 

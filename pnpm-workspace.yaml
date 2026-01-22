@@ -8,7 +8,7 @@ catalog:
   '@types/jsdom': ^27.0.0
   '@types/node': ^24.10.9
   '@types/react': ^19.2.9
-  '@typescript/native-preview': latest
+  '@typescript/native-preview': 7.0.0-dev.20260122.2
   '@vitest/coverage-v8': ^4.0.17
   c8: ^10.1.3
   jsdom: ^27.4.0

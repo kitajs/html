@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "module": "Node16",
-    "moduleResolution": "Node16",
+    "sourceMap": true,
+    "importHelpers": true,
+    "module": "nodenext",
     "target": "ESNext",
+    "moduleResolution": "nodenext",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "jsx": "react",
-    "jsxFactory": "elements.createElement",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true
+    "jsxFactory": "elements.createElement"
   },
   "include": ["index.tsx"],
   "exclude": ["dist"]

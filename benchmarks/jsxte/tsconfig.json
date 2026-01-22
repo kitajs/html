@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "module": "Node16",
+    "sourceMap": true,
+    "importHelpers": true,
+    "module": "nodenext",
     "target": "ESNext",
-    "jsx": "react-jsx",
-    "jsxImportSource": "jsxte",
-    "moduleResolution": "Node16",
+    "moduleResolution": "nodenext",
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true
+    "jsx": "react-jsx",
+    "jsxImportSource": "jsxte"
   },
   "include": ["index.tsx"],
   "exclude": ["dist"]
