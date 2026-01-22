@@ -71,10 +71,11 @@ Based on the codebase:
 
 ## File Organization
 
-- Source files in package root or src/
+- Source files in `src/` directory
 - Tests in `test/` directory with `.test.tsx` or `.test.ts` extension
-- Type definitions alongside implementation files (.d.ts files)
+- Type definitions generated alongside compiled files in `dist/`
 - Build output in `dist/` directory
+- Additional type definition files (htmx.d.ts, alpine.d.ts, etc.) in package root
 
 ## Documentation
 

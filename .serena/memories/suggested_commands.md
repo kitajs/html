@@ -2,7 +2,7 @@
 
 ## Package Manager
 
-**Always use pnpm** - The project enforces this via preinstall hook.
+**Always use pnpm** - The project enforces this via preinstall hook. Requires pnpm >= 10.
 
 ## Main Development Commands
 
@@ -12,11 +12,11 @@
 # Build all packages
 pnpm build
 
-# Build with watch mode (rebuilds on changes)
-pnpm watch
-
 # Build specific package (from root)
 pnpm --filter "@kitajs/html" build
+
+# Build uses tsgo (native TypeScript compiler preview)
+# Each package has: pnpm build -> tsgo -p tsconfig.build.json
 ```
 
 ### Testing
@@ -25,21 +25,12 @@ pnpm --filter "@kitajs/html" build
 # Run all tests in all packages
 pnpm test
 
-# Run tests in a specific package (from package directory)
-cd packages/html
-pnpm test
+# Run tests in a specific package
+pnpm --filter "@kitajs/html" test
+cd packages/html && pnpm test
 
-# For packages/html specifically:
-# - Compiles TypeScript
-# - Runs tests with c8 coverage
-# - Uses Node.js native test runner
-# - Test files: dist/test/**/*.test.js (compiled from test/*.test.tsx)
-
-# Run only tests marked with .only
-pnpm test:only
-
-# Watch mode (for fastify-html-plugin)
-pnpm --filter "@kitajs/fastify-html-plugin" test:watch
+# Test command runs Vitest with coverage and type checking:
+# vitest --coverage --typecheck --run
 ```
 
 ### Formatting
@@ -65,7 +56,7 @@ pnpm bench
 
 ```bash
 # Create a changeset (for version bumps)
-pnpm change
+pnpm changeset
 
 # Version packages (CI command)
 pnpm ci-version
@@ -87,17 +78,24 @@ Git hooks are managed by Husky:
 
 ```bash
 cd packages/html
-pnpm test         # Run tests with coverage
-pnpm test:only    # Run only .only tests
-pnpm bench        # Run benchmarks
+pnpm build    # Build with tsgo
+pnpm test     # Run vitest with coverage and typecheck
+```
+
+### @kitajs/ts-html-plugin
+
+```bash
+cd packages/ts-html-plugin
+pnpm build    # Build with tsgo
+pnpm test     # Run vitest with coverage and typecheck
 ```
 
 ### @kitajs/fastify-html-plugin
 
 ```bash
 cd packages/fastify-html-plugin
-pnpm test         # Run tests with tsd and c8
-pnpm test:watch   # Watch mode for tests
+pnpm build    # Build with tsgo
+pnpm test     # Run vitest with coverage and typecheck
 ```
 
 ## Common Workflows
@@ -105,8 +103,8 @@ pnpm test:watch   # Watch mode for tests
 ### After making changes:
 
 1. Format code: `pnpm format` (or let pre-commit hook handle it)
-2. Run tests: `pnpm test`
-3. Build: `pnpm build`
+2. Build: `pnpm build`
+3. Run tests: `pnpm test`
 
 ### Before committing:
 
@@ -133,4 +131,11 @@ pnpm --filter "<package-name>" <command>
 
 # Run commands in parallel
 pnpm -r --parallel <command>
+```
+
+### Running examples:
+
+```bash
+npx tsx examples/fastify-htmx.tsx
+npx tsx examples/http-server.tsx
 ```

@@ -35,12 +35,13 @@ This is a pnpm monorepo with the following structure:
 
 ## Tech Stack
 
-- **Language**: TypeScript 5.9.2+
+- **Language**: TypeScript 5.9+
 - **Runtime**: Node.js >= 20.13
-- **Package Manager**: pnpm >= 9 (required via preinstall hook)
+- **Package Manager**: pnpm >= 10 (required via preinstall hook)
 - **JSX Transform**: react-jsx with jsxImportSource: @kitajs/html
 - **Module System**: CommonJS
-- **Testing**: Node.js native test runner with c8 for coverage
+- **Build Tool**: tsgo (@typescript/native-preview)
+- **Testing**: Vitest with @vitest/coverage-v8
 - **Formatting**: Prettier with @arthurfiorette/prettier-config
 - **Git Hooks**: Husky
 - **Versioning**: Changesets with GitHub changelog integration
@@ -49,6 +50,6 @@ This is a pnpm monorepo with the following structure:
 
 - csstype (for CSS types)
 - fastify-plugin (for Fastify integration)
-- TypeScript, tslib, @swc-node/register (build tools)
-- JSDOM (for testing)
-- c8 (code coverage)
+- TypeScript, tslib (build tools)
+- JSDOM (for DOM testing)
+- Vitest with v8 coverage

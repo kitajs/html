@@ -83,9 +83,9 @@ Each package uses explicit exports in package.json:
 ```json
 {
   "exports": {
-    ".": "./index.js",
-    "./jsx-runtime": "./jsx-runtime.js",
-    "./suspense": "./suspense.js"
+    ".": "./dist/index.js",
+    "./jsx-runtime": "./dist/jsx-runtime.js",
+    "./suspense": "./dist/suspense.js"
     // etc.
   }
 }
@@ -133,32 +133,37 @@ declare global {
 
 ## Testing Patterns
 
-### 1. Node Native Test Runner
+### 1. Vitest Test Runner
 
-Uses Node.js built-in test runner (not Jest/Mocha):
+Uses Vitest with coverage and type checking:
 
-```javascript
-import { test } from 'node:test';
-import assert from 'node:assert';
+```typescript
+import { describe, it, expect } from 'vitest';
+
+describe('component', () => {
+  it('renders correctly', () => {
+    expect(<div>hello</div>).toBe('<div>hello</div>');
+  });
+});
 ```
 
 ### 2. JSDOM for DOM Testing
 
 When DOM testing is needed:
 
-```javascript
+```typescript
 import { JSDOM } from 'jsdom';
 const dom = new JSDOM(htmlString);
 ```
 
-### 3. TSD for Type Testing
+### 3. Vitest Type Testing
 
-For TypeScript type definitions:
+For TypeScript type definitions (using vitest --typecheck):
 
 ```typescript
-// test-d.ts files
-import { expectType } from 'tsd';
-expectType<string>(<div>foo</div>);
+// Uses vitest's built-in type testing capabilities
+import { expectTypeOf } from 'vitest';
+expectTypeOf(<div>foo</div>).toEqualTypeOf<string>();
 ```
 
 ## Performance Patterns

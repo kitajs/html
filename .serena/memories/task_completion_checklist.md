@@ -26,14 +26,15 @@ When completing a coding task in this project, follow these steps:
 
 - [ ] Run tests: `pnpm test` (from root or package directory)
 - [ ] All tests pass with no failures
-- [ ] Code coverage is maintained or improved (c8 reports)
+- [ ] Code coverage is maintained or improved (Vitest v8 coverage)
 - [ ] For new features: Add appropriate tests in `test/` directory
+- [ ] Type tests pass: Vitest runs with `--typecheck` flag
 
 ## 5. Build
 
-- [ ] Build succeeds: `pnpm build`
+- [ ] Build succeeds: `pnpm build` (uses tsgo - native TypeScript compiler)
 - [ ] No build warnings or errors
-- [ ] Type definitions (.d.ts) are correctly generated
+- [ ] Type definitions (.d.ts) are correctly generated in `dist/`
 
 ## 6. Documentation
 
@@ -51,7 +52,7 @@ When completing a coding task in this project, follow these steps:
 ## 8. Version Management (if releasing)
 
 - [ ] Create changeset if making user-facing changes
-  - Run: `pnpm change`
+  - Run: `pnpm changeset`
 - [ ] Follow semantic versioning
 
 ## 9. Git
