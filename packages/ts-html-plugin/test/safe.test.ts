@@ -1,5 +1,4 @@
-import assert from 'node:assert';
-import { it } from 'node:test';
+import { expect, it } from 'vitest';
 import { TSLangServer } from './util/lang-server';
 
 it('Allow correct xss usage', async () => {
@@ -75,5 +74,5 @@ it('Allow correct xss usage', async () => {
     );
 `;
 
-  assert.strictEqual(diagnostics.body.length, 0);
+  expect(diagnostics.body).toHaveLength(0);
 });

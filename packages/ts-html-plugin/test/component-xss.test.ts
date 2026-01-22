@@ -1,10 +1,9 @@
-import assert from 'node:assert';
-import { it } from 'node:test';
+import { expect, it } from 'vitest';
 import { ComponentXss } from '../src/errors';
 import { TSLangServer } from './util/lang-server';
 
 it('Ensure <Component /> children are safe', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname, true);
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
@@ -38,7 +37,7 @@ it('Ensure <Component /> children are safe', async () => {
     );
 `;
 
-  assert.deepStrictEqual(diagnostics.body, [
+  expect(diagnostics.body).toEqual([
     {
       start: { line: 39, offset: 23 },
       end: { line: 39, offset: 24 },
@@ -100,7 +99,7 @@ it('Ensure <Component /> children are safe using "e" tag function', async () => 
     );
 `;
 
-  assert.deepStrictEqual(diagnostics.body, [
+  expect(diagnostics.body).toEqual([
     {
       start: { line: 39, offset: 23 },
       end: { line: 39, offset: 24 },

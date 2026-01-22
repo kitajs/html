@@ -1,6 +1,5 @@
-import assert from 'node:assert';
-import test, { describe } from 'node:test';
-import Html from '../index';
+import { describe, expect, test } from 'vitest';
+import * as Html from '../src/index.js';
 
 const Header: Html.Component<any> = ({ children, ...attributes }) => (
   <h1 {...attributes}>{children}</h1>
@@ -16,21 +15,18 @@ function Button(attributes: Html.PropsWithChildren<any>) {
 
 describe('Components', () => {
   test('helper components', () => {
-    assert.equal(
-      '<h1 class="title"><span>Header Text</span></h1>',
+    expect(
       <Header class="title">
         <span>Header Text</span>
       </Header>
+    ).toMatchInlineSnapshot(`"<h1 class="title"><span>Header Text</span></h1>"`);
+
+    expect(<Button class="override" test="a" b={3} />).toMatchInlineSnapshot(
+      `"<button type="button" class="override" test="a" b="3"></button>"`
     );
 
-    assert.equal(
-      '<button type="button" class="override" test="a" b="3"></button>',
-      <Button class="override" test="a" b={3} />
-    );
-
-    assert.equal(
-      '<button type="button" class="original-class">Button Text</button>',
-      <Button>Button Text</Button>
+    expect(<Button>Button Text</Button>).toMatchInlineSnapshot(
+      `"<button type="button" class="original-class">Button Text</button>"`
     );
   });
 });

@@ -1,24 +1,24 @@
-import assert from 'node:assert';
-import test, { describe } from 'node:test';
-import Html from '../index';
+import { describe, expect, test } from 'vitest';
+import * as Html from '../src/index.js';
 
 const unsafeTag = '<script tag="1">alert(1)</script>';
 const safeTag = Html.escape`${unsafeTag}`;
 
 describe('HTML Escaping', () => {
   test('e is the same as escape', () => {
-    assert.equal(Html.e, Html.escape);
+    expect(Html.e).toBe(Html.escape);
   });
 
   test('escapes content', () => {
-    assert.equal(<>{unsafeTag}</>, <>{unsafeTag}</>);
+    expect(<>{unsafeTag}</>).toBe(<>{unsafeTag}</>);
   });
 
   test('with children', () => {
-    assert.equal(
+    expect(
       <>
         <div>{unsafeTag}</div>
-      </>,
+      </>
+    ).toBe(
       <>
         <div>{unsafeTag}</div>
       </>
@@ -26,10 +26,11 @@ describe('HTML Escaping', () => {
   });
 
   test('escapes children', () => {
-    assert.equal(
+    expect(
       <>
         <div safe>{unsafeTag}</div>
-      </>,
+      </>
+    ).toBe(
       <>
         <div>{safeTag}</div>
       </>
@@ -37,12 +38,13 @@ describe('HTML Escaping', () => {
   });
 
   test('escapes deep children', () => {
-    assert.equal(
+    expect(
       <>
         <div safe>
           <div>{unsafeTag}</div>
         </div>
-      </>,
+      </>
+    ).toBe(
       <>
         <div>{Html.escape`${(<div>{unsafeTag}</div>)}`}</div>
       </>
@@ -50,34 +52,31 @@ describe('HTML Escaping', () => {
   });
 
   test('always escapes attributes', () => {
-    assert.equal(
+    expect(
       <>
         <div style={'"&<>\''}></div>
         <div style={{ backgroundColor: '"&<>\'' }}></div>
         <div class={'"&<>\''}></div>
         <div class={'test:1" xss="false'}></div>
-      </>,
-      <>
-        <div style="&#34;&<>'"></div>
-        <div style="background-color:&#34;&<>';"></div>
-        <div class="&#34;&<>'"></div>
-        <div class="test:1&#34; xss=&#34;false"></div>
       </>
+    ).toMatchInlineSnapshot(
+      `"<div style="&#34;&<>'"></div><div style="background-color:&#34;&<>';"></div><div class="&#34;&<>'"></div><div class="test:1&#34; xss=&#34;false"></div>"`
     );
 
-    assert.equal(
+    expect(
       <>
         <div style={`"&<>'`}></div>
         <div style={{ backgroundColor: `"&<>'` }}></div>
         <div class={`"&<>'`}></div>
-      </>,
-      `<div style="&#34;&<>'"></div><div style="background-color:&#34;&<>';"></div><div class="&#34;&<>'"></div>`
+      </>
+    ).toMatchInlineSnapshot(
+      `"<div style="&#34;&<>'"></div><div style="background-color:&#34;&<>';"></div><div class="&#34;&<>'"></div>"`
     );
   });
 
   test('handles unknown values', () => {
-    assert.equal(Html.escape``, '');
-    assert.equal(Html.escape`${{ a: 1 }}`, '[object Object]');
+    expect(Html.escape``).toBe('');
+    expect(Html.escape`${{ a: 1 }}`).toBe('[object Object]');
   });
 
   // The matrix of cases we need to test for:
@@ -90,111 +89,93 @@ describe('HTML Escaping', () => {
   // 7. Works when the text to escape is in the end
   // 8. Returns the same string when there's no need to escape
   test('always escape', () => {
-    assert.equal(
-      Html.escape`absolutely nothing to do here`,
+    expect(Html.escape`absolutely nothing to do here`).toBe(
       'absolutely nothing to do here'
     );
-    assert.equal(
-      Html.escape`<script>alert(1)</script>`,
+    expect(Html.escape`<script>alert(1)</script>`).toBe(
       '&lt;script>alert(1)&lt;/script>'
     );
-    assert.equal(Html.escape`<`, '&lt;');
-    assert.equal(Html.escape`>`, '>');
-    assert.equal(Html.escape`&`, '&amp;');
-    assert.equal(Html.escape`'`, '&#39;');
-    assert.equal(Html.escape`"`, '&#34;');
-    assert.equal(Html.escape`\u00A0`, '\u00A0');
-    assert.equal(Html.escape`<script>ab`, '&lt;script>ab');
-    assert.equal(Html.escape`<script>`, '&lt;script>');
-    assert.equal(Html.escape`<script><script>`, '&lt;script>&lt;script>');
+    expect(Html.escape`<`).toBe('&lt;');
+    expect(Html.escape`>`).toBe('>');
+    expect(Html.escape`&`).toBe('&amp;');
+    expect(Html.escape`'`).toBe('&#39;');
+    expect(Html.escape`"`).toBe('&#34;');
+    expect(Html.escape`\u00A0`).toBe('\u00A0');
+    expect(Html.escape`<script>ab`).toBe('&lt;script>ab');
+    expect(Html.escape`<script>`).toBe('&lt;script>');
+    expect(Html.escape`<script><script>`).toBe('&lt;script>&lt;script>');
 
-    assert.equal(
-      Html.escape`lalala<script>alert(1)</script>lalala`,
+    expect(Html.escape`lalala<script>alert(1)</script>lalala`).toBe(
       'lalala&lt;script>alert(1)&lt;/script>lalala'
     );
 
-    assert.equal(
-      Html.escape`<script>alert(1)</script>lalala`,
+    expect(Html.escape`<script>alert(1)</script>lalala`).toBe(
       '&lt;script>alert(1)&lt;/script>lalala'
     );
-    assert.equal(
-      Html.escape`lalala<script>alert(1)</script>`,
+    expect(Html.escape`lalala<script>alert(1)</script>`).toBe(
       'lalala' + '&lt;script>alert(1)&lt;/script>'
     );
 
-    assert.equal(Html.escape`What does 😊 mean?`, 'What does 😊 mean?');
-    assert.equal(Html.escape`<What does 😊`, '&lt;What does 😊');
-    assert.equal(
-      Html.escape`<div>What does 😊 mean in text?`,
+    expect(Html.escape`What does 😊 mean?`).toBe('What does 😊 mean?');
+    expect(Html.escape`<What does 😊`).toBe('&lt;What does 😊');
+    expect(Html.escape`<div>What does 😊 mean in text?`).toBe(
       '&lt;div>What does 😊 mean in text?'
     );
 
-    assert.equal(
-      Html.escape`${('lalala' + '<script>alert(1)</script>' + 'lalala').repeat(900)}`,
-      'lalala&lt;script>alert(1)&lt;/script>lalala'.repeat(900)
-    );
-    assert.equal(
-      Html.escape`${('<script>alert(1)</script>' + 'lalala').repeat(900)}`,
+    expect(
+      Html.escape`${('lalala' + '<script>alert(1)</script>' + 'lalala').repeat(900)}`
+    ).toBe('lalala&lt;script>alert(1)&lt;/script>lalala'.repeat(900));
+    expect(Html.escape`${('<script>alert(1)</script>' + 'lalala').repeat(900)}`).toBe(
       '&lt;script>alert(1)&lt;/script>lalala'.repeat(900)
     );
-    assert.equal(
-      Html.escape`${('lalala' + '<script>alert(1)</script>').repeat(900)}`,
+    expect(Html.escape`${('lalala' + '<script>alert(1)</script>').repeat(900)}`).toBe(
       ('lalala' + '&lt;script>alert(1)&lt;/script>').repeat(900)
     );
 
     // the positions of the unicode codepoint are important
     // our simd code for U16 is at 8 bytes, so we need to especially check the boundaries
-    assert.equal(
-      Html.escape`😊lalala<script>alert(1)</script>lalala`,
+    expect(Html.escape`😊lalala<script>alert(1)</script>lalala`).toBe(
       '😊lalala&lt;script>alert(1)&lt;/script>lalala'
     );
-    assert.equal(
-      Html.escape`${'<script>😊alert(1)</script>' + 'lalala'}`,
+    expect(Html.escape`${'<script>😊alert(1)</script>' + 'lalala'}`).toBe(
       '&lt;script>😊alert(1)&lt;/script>lalala'
     );
-    assert.equal(
-      Html.escape`<script>alert(1)😊</script>lalala`,
+    expect(Html.escape`<script>alert(1)😊</script>lalala`).toBe(
       '&lt;script>alert(1)😊&lt;/script>lalala'
     );
-    assert.equal(
-      Html.escape`<script>alert(1)</script>😊lalala`,
+    expect(Html.escape`<script>alert(1)</script>😊lalala`).toBe(
       '&lt;script>alert(1)&lt;/script>😊lalala'
     );
-    assert.equal(
-      Html.escape`<script>alert(1)</script>lal😊ala`,
+    expect(Html.escape`<script>alert(1)</script>lal😊ala`).toBe(
       '&lt;script>alert(1)&lt;/script>lal😊ala'
     );
-    assert.equal(
-      Html.escape`${'<script>alert(1)</script>' + 'lal😊ala'.repeat(10)}`,
+    expect(Html.escape`${'<script>alert(1)</script>' + 'lal😊ala'.repeat(10)}`).toBe(
       '&lt;script>alert(1)&lt;/script>' + 'lal😊ala'.repeat(10)
     );
 
     for (let i = 1; i < 10; i++)
-      assert.equal(
-        Html.escape`${'<script>alert(1)</script>' + 'la😊'.repeat(i)}`,
+      expect(Html.escape`${'<script>alert(1)</script>' + 'la😊'.repeat(i)}`).toBe(
         '&lt;script>alert(1)&lt;/script>' + 'la😊'.repeat(i)
       );
 
-    assert.equal(
-      Html.escape`${'la😊' + '<script>alert(1)</script>'}`,
+    expect(Html.escape`${'la😊' + '<script>alert(1)</script>'}`).toBe(
       'la😊' + '&lt;script>alert(1)&lt;/script>'
     );
-    assert.equal(
-      Html.escape`${('lalala' + '<script>alert(1)</script>😊').repeat(1)}`,
+    expect(Html.escape`${('lalala' + '<script>alert(1)</script>😊').repeat(1)}`).toBe(
       ('lalala' + '&lt;script>alert(1)&lt;/script>😊').repeat(1)
     );
 
-    assert.equal(Html.escape`${'😊'.repeat(100)}`, '😊'.repeat(100));
-    assert.equal(Html.escape`${'😊<'.repeat(100)}`, '😊&lt;'.repeat(100));
-    assert.equal(Html.escape`${'<😊>'.repeat(100)}`, '&lt;😊>'.repeat(100));
-    assert.equal(Html.escape`😊`, '😊');
-    assert.equal(Html.escape`😊😊`, '😊😊');
-    assert.equal(Html.escape`😊lo`, '😊lo');
-    assert.equal(Html.escape`lo😊`, 'lo😊');
+    expect(Html.escape`${'😊'.repeat(100)}`).toBe('😊'.repeat(100));
+    expect(Html.escape`${'😊<'.repeat(100)}`).toBe('😊&lt;'.repeat(100));
+    expect(Html.escape`${'<😊>'.repeat(100)}`).toBe('&lt;😊>'.repeat(100));
+    expect(Html.escape`😊`).toBe('😊');
+    expect(Html.escape`😊😊`).toBe('😊😊');
+    expect(Html.escape`😊lo`).toBe('😊lo');
+    expect(Html.escape`lo😊`).toBe('lo😊');
 
-    assert.equal(Html.escape`${' '.repeat(32) + '😊'}`, ' '.repeat(32) + '😊');
-    assert.equal(Html.escape`${' '.repeat(32) + '😊😊'}`, ' '.repeat(32) + '😊😊');
-    assert.equal(Html.escape`${' '.repeat(32) + '😊lo'}`, ' '.repeat(32) + '😊lo');
-    assert.equal(Html.escape`${' '.repeat(32) + 'lo😊'}`, ' '.repeat(32) + 'lo😊');
+    expect(Html.escape`${' '.repeat(32) + '😊'}`).toBe(' '.repeat(32) + '😊');
+    expect(Html.escape`${' '.repeat(32) + '😊😊'}`).toBe(' '.repeat(32) + '😊😊');
+    expect(Html.escape`${' '.repeat(32) + '😊lo'}`).toBe(' '.repeat(32) + '😊lo');
+    expect(Html.escape`${' '.repeat(32) + 'lo😊'}`).toBe(' '.repeat(32) + 'lo😊');
   });
 });

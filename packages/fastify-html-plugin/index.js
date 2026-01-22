@@ -9,8 +9,8 @@ const kAutoDoctype = Symbol.for('fastify-kita-html.autoDoctype');
 /**
  * Returns true if the string starts with `<html`, **ignores whitespace and casing**.
  *
- * @param {string} value
  * @this {void}
+ * @param {string} value
  */
 const isTagHtml = RegExp.prototype.test.bind(/^\s*<html/i);
 

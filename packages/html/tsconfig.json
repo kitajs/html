@@ -1,38 +1,9 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ESNext",
     "jsx": "react-jsx",
-    "jsxImportSource": "..",
-    "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "incremental": true,
-    "allowJs": true,
-    "checkJs": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "declaration": true,
-    "importHelpers": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "useUnknownInCatchVariables": true,
-    "alwaysStrict": true,
-    "outDir": "dist",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "skipDefaultLibCheck": true
+    "jsxImportSource": "self",
+    "outDir": "./dist"
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.d.ts", "node_modules/csstype"],
-  "exclude": ["node_modules", "dist", "coverage", "benchmarks"]
+  "include": ["src", "test"]
 }

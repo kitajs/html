@@ -1,62 +1,54 @@
-import assert from 'node:assert';
-import test, { describe } from 'node:test';
+import { describe, expect, test } from 'vitest';
 
 describe('HTML Encoding', () => {
   test('should encode " as &#34', () => {
-    assert.equal(<div class={'"'}></div>, '<div class="&#34;"></div>');
+    expect(<div class={'"'}></div>).toMatchInlineSnapshot(`"<div class="&#34;"></div>"`);
   });
 
   test('should encode & as &amp', () => {
-    assert.equal(
+    expect(
       <div class={'&'} safe>
         &
-      </div>,
-      '<div class="&">&amp;</div>'
-    );
+      </div>
+    ).toMatchInlineSnapshot(`"<div class="&">&amp;</div>"`);
   });
 
   test('should NOT encode \\u00A0 as &#32', () => {
-    assert.equal(<div class={'\u00A0'}></div>, '<div class="\u00A0"></div>');
+    expect(<div class={'\u00A0'}></div>).toMatchInlineSnapshot(`"<div class=" "></div>"`);
   });
 
   test('should encode date attributes as ISO strings', () => {
     const date = new Date();
 
-    assert.equal(
-      <div datetime={date}></div>,
+    //@ts-expect-error - testing date attribute
+    expect(<div datetime={date}></div>).toBe(
       `<div datetime="${date.toISOString()}"></div>`
     );
   });
 
   test('using a Date type attribute', () => {
-    assert.equal(
-      '<time datetime="1914-12-20T08:00:00.000Z"></time>',
+    expect(
       <time datetime={new Date('1914-12-20T08:00+0000')}></time>
-    );
+    ).toMatchInlineSnapshot(`"<time datetime="1914-12-20T08:00:00.000Z"></time>"`);
 
-    assert.equal(
-      '<ins datetime="1914-12-20T08:00:00.000Z">new</ins>',
+    expect(
       <ins datetime={new Date('1914-12-20T08:00+0000')}>new</ins>
-    );
+    ).toMatchInlineSnapshot(`"<ins datetime="1914-12-20T08:00:00.000Z">new</ins>"`);
 
-    assert.equal(
-      '<del datetime="1914-12-20T08:00:00.000Z">old</del>',
+    expect(
       <del datetime={new Date('1914-12-20T08:00+0000')}>old</del>
-    );
+    ).toMatchInlineSnapshot(`"<del datetime="1914-12-20T08:00:00.000Z">old</del>"`);
 
-    assert.equal(
-      '<time datetime="1914-12-20T08:00:00.000Z"></time>',
+    expect(
       <time datetime={new Date('1914-12-20T08:00+0000').toISOString()}></time>
-    );
+    ).toMatchInlineSnapshot(`"<time datetime="1914-12-20T08:00:00.000Z"></time>"`);
 
-    assert.equal(
-      '<ins datetime="1914-12-20T08:00:00.000Z">new</ins>',
+    expect(
       <ins datetime={new Date('1914-12-20T08:00+0000').toISOString()}>new</ins>
-    );
+    ).toMatchInlineSnapshot(`"<ins datetime="1914-12-20T08:00:00.000Z">new</ins>"`);
 
-    assert.equal(
-      '<del datetime="1914-12-20T08:00:00.000Z">old</del>',
+    expect(
       <del datetime={new Date('1914-12-20T08:00+0000').toISOString()}>old</del>
-    );
+    ).toMatchInlineSnapshot(`"<del datetime="1914-12-20T08:00:00.000Z">old</del>"`);
   });
 });

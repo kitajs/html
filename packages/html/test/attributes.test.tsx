@@ -1,131 +1,138 @@
-import assert from 'node:assert';
-import test, { describe } from 'node:test';
+import { describe, expect, test } from 'vitest';
 
 describe('Attributes', () => {
   test('Numbers', () => {
-    assert.equal(
-      '<ol start="1"><li value="2">2</li></ol>',
+    expect(
       <ol start={1}>
         <li value={2}>2</li>
       </ol>
-    );
+    ).toMatchInlineSnapshot(`"<ol start="1"><li value="2">2</li></ol>"`);
 
-    assert.equal(
-      '<meter value="2" min="1" max="3" low="0" high="5" optimum="3"></meter>',
+    expect(
       <meter value={2} min={1} max={3} low={0} high={5} optimum={3}></meter>
+    ).toMatchInlineSnapshot(
+      `"<meter value="2" min="1" max="3" low="0" high="5" optimum="3"></meter>"`
     );
 
-    assert.equal(
-      '<progress value="2" max="5"></progress>',
-      <progress value={2} max={5}></progress>
+    expect(<progress value={2} max={5}></progress>).toMatchInlineSnapshot(
+      `"<progress value="2" max="5"></progress>"`
     );
 
-    assert.equal('<td colspan="2" rowspan="5"></td>', <td colspan={2} rowspan={5}></td>);
+    expect(<td colspan={2} rowspan={5}></td>).toMatchInlineSnapshot(
+      `"<td colspan="2" rowspan="5"></td>"`
+    );
 
-    assert.equal('<th colspan="2" rowspan="5"></th>', <th colspan={2} rowspan={5}></th>);
+    expect(<th colspan={2} rowspan={5}></th>).toMatchInlineSnapshot(
+      `"<th colspan="2" rowspan="5"></th>"`
+    );
   });
 
   test('Booleans', () => {
     // https://www.w3.org/TR/html5/infrastructure.html#boolean-attributes
-    assert.equal('<input checked/>', <input checked={true}></input>);
+    expect(<input checked={true}></input>).toMatchInlineSnapshot(`"<input checked/>"`);
 
-    assert.equal('<input/>', <input checked={false}></input>);
+    expect(<input checked={false}></input>).toMatchInlineSnapshot(`"<input/>"`);
 
-    assert.equal('<input disabled/>', <input disabled={true}></input>);
+    expect(<input disabled={true}></input>).toMatchInlineSnapshot(`"<input disabled/>"`);
 
-    assert.equal('<input/>', <input disabled={false}></input>);
+    expect(<input disabled={false}></input>).toMatchInlineSnapshot(`"<input/>"`);
 
-    assert.equal(
-      '<p draggable spellcheck hidden translate></p>',
-      <p draggable spellcheck hidden translate></p>
+    expect(<p draggable spellcheck hidden translate></p>).toMatchInlineSnapshot(
+      `"<p draggable spellcheck hidden translate></p>"`
     );
 
-    assert.equal(
-      '<p></p>',
+    expect(
       <p draggable={false} spellcheck={false} hidden={false} translate={false}></p>
-    );
+    ).toMatchInlineSnapshot(`"<p></p>"`);
 
-    assert.equal('<form novalidate></form>', <form novalidate></form>);
+    expect(<form novalidate></form>).toMatchInlineSnapshot(`"<form novalidate></form>"`);
   });
 
   test('Undefined', () => {
-    assert.equal(
-      '<div></div>',
+    expect(
       <div hidden={undefined} translate={undefined}>
         {undefined}
       </div>
-    );
+    ).toMatchInlineSnapshot(`"<div></div>"`);
   });
 
   test('Dates & Objects', () => {
     const date = new Date();
-    assert.equal(<del datetime={date} />, `<del datetime="${date.toISOString()}"></del>`);
+    expect(<del datetime={date} />).toMatchInlineSnapshot(
+      `<del datetime="${date.toISOString()}"></del>`
+    );
 
-    assert.equal(<div test={{}}></div>, '<div test="[object Object]"></div>');
+    //@ts-expect-error - testing object attribute
+    expect(<div test={{}}></div>).toMatchInlineSnapshot(
+      `"<div test="[object Object]"></div>"`
+    );
   });
 
   test('Popover', () => {
-    assert.equal('<div popover="auto"></div>', <div popover="auto"></div>);
-    assert.equal('<div popover="manual"></div>', <div popover="manual"></div>);
+    expect(<div popover="auto"></div>).toMatchInlineSnapshot(
+      `"<div popover="auto"></div>"`
+    );
+    expect(<div popover="manual"></div>).toMatchInlineSnapshot(
+      `"<div popover="manual"></div>"`
+    );
 
-    assert.equal('<div popover></div>', <div popover></div>);
+    expect(<div popover></div>).toMatchInlineSnapshot(`"<div popover></div>"`);
   });
 
   test('class arrays', () => {
-    assert.equal(<div class="name" />, '<div class="name"></div>');
-    assert.equal(<div class={['name']} />, '<div class="name"></div>');
+    expect(<div class="name" />).toMatchInlineSnapshot(`"<div class="name"></div>"`);
+    expect(<div class={['name']} />).toMatchInlineSnapshot(`"<div class="name"></div>"`);
     //@ts-expect-error - This kind of expression is always falsy.
-    assert.equal(<div class={['' && 'name']} />, '<div></div>');
+    expect(<div class={['' && 'name']} />).toMatchInlineSnapshot(`"<div></div>"`);
 
-    assert.equal(
+    expect(
       //@ts-expect-error - This kind of expression is always falsy.
-      <div class={[false && 'a', 'name', null && 'b', 0 && 'c']} />,
-      '<div class="name"></div>'
-    );
+      <div class={[false && 'a', 'name', null && 'b', 0 && 'c']} />
+    ).toMatchInlineSnapshot(`"<div class="name"></div>"`);
 
-    assert.equal(
-      <div class={['a b c d', false && 'e', true && 'f', 'g h i j']} />,
-      '<div class="a b c d f g h i j"></div>'
-    );
+    expect(
+      <div class={['a b c d', false && 'e', true && 'f', 'g h i j']} />
+    ).toMatchInlineSnapshot(`"<div class="a b c d f g h i j"></div>"`);
 
-    assert.equal(
-      <div class={['a', 'b', 'c', 'd', false && 'e', true && 'f', 'g', 'h', 'i', 'j']} />,
-      '<div class="a b c d f g h i j"></div>'
-    );
+    expect(
+      <div class={['a', 'b', 'c', 'd', false && 'e', true && 'f', 'g', 'h', 'i', 'j']} />
+    ).toMatchInlineSnapshot(`"<div class="a b c d f g h i j"></div>"`);
   });
 
   test('attrs attribute', () => {
-    assert.equal(
-      <div attrs={{ 'data-test': 'test', 'data-test2': 'test2' }} />,
-      '<div data-test="test" data-test2="test2"></div>'
+    expect(
+      <div attrs={{ 'data-test': 'test', 'data-test2': 'test2' }} />
+    ).toMatchInlineSnapshot(`"<div data-test="test" data-test2="test2"></div>"`);
+
+    expect(
+      <div attrs={{ 'data-test': 'test', 'data-test2': 'test2' }} data-test3="test3" />
+    ).toMatchInlineSnapshot(
+      `"<div data-test="test" data-test2="test2" data-test3="test3"></div>"`
     );
 
-    assert.equal(
-      <div attrs={{ 'data-test': 'test', 'data-test2': 'test2' }} data-test3="test3" />,
-      '<div data-test="test" data-test2="test2" data-test3="test3"></div>'
-    );
-
-    assert.equal(
-      <div attrs='data-test="test" data-test2="test2"'></div>,
-      '<div data-test="test" data-test2="test2"></div>'
+    expect(<div attrs='data-test="test" data-test2="test2"'></div>).toMatchInlineSnapshot(
+      `"<div data-test="test" data-test2="test2"></div>"`
     );
 
     // duplicates
-    assert.equal(
-      <div attrs='data-test="test" data-test2="test2"' data-test="test3"></div>,
-      '<div data-test="test" data-test2="test2" data-test="test3"></div>'
+    expect(
+      <div attrs='data-test="test" data-test2="test2"' data-test="test3"></div>
+    ).toMatchInlineSnapshot(
+      `"<div data-test="test" data-test2="test2" data-test="test3"></div>"`
     );
 
     // escapes object
-    assert.equal(
-      <div attrs={{ 'data-test': 'te"st', 'data-test2': 'test2' }} data-test="test3" />,
-      '<div data-test="te&#34;st" data-test2="test2" data-test="test3"></div>'
+    expect(
+      <div attrs={{ 'data-test': 'te"st', 'data-test2': 'test2' }} data-test="test3" />
+    ).toMatchInlineSnapshot(
+      `"<div data-test="te&#34;st" data-test2="test2" data-test="test3"></div>"`
     );
 
     // does not escape string
-    assert.equal(
-      <div attrs='data-test="te"st" data-test2="test2"' data-test="test3" />,
-      `<div data-test="te"st" data-test2="test2" data-test="test3"></div>`
+    expect(
+      <div attrs='data-test="te"st" data-test2="test2"' data-test="test3" />
+    ).toMatchInlineSnapshot(
+      `"<div data-test="te"st" data-test2="test2" data-test="test3"></div>"`
     );
   });
 });

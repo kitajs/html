@@ -1,5 +1,4 @@
-import assert from 'node:assert';
-import { it } from 'node:test';
+import { expect, it } from 'vitest';
 import { Xss } from '../src/errors';
 import { TSLangServer } from './util/lang-server';
 
@@ -14,7 +13,7 @@ it('Ensures readme checks will throw error', async () => {
     );
 `;
 
-  assert.deepStrictEqual(diagnostics.body, [
+  expect(diagnostics.body).toEqual([
     {
       category: 'error',
       code: Xss.code,

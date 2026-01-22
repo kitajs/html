@@ -1,7 +1,7 @@
 import type { default as TS, server } from 'typescript/lib/tsserverlibrary';
 import { proxyObject, recursiveDiagnoseJsxElements } from './util';
 
-export = function initHtmlPlugin(modules: { typescript: typeof TS }) {
+module.exports = function (modules: { typescript: typeof TS }) {
   const ts = modules.typescript;
 
   return {

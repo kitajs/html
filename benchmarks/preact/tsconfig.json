@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "dist",
     "jsx": "react-jsx",
     "jsxImportSource": "preact",

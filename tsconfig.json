@@ -1,38 +1,45 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "jsx": "react-jsx",
-    "jsxImportSource": "@kitajs/html",
-    "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "incremental": true,
-    "allowJs": true,
-    "checkJs": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "declaration": true,
-    "importHelpers": true,
-    "declarationMap": true,
+    // File Layout
+    // "rootDir": "./src",
+    // "outDir": "./dist",
+    "noEmit": true,
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    "module": "nodenext",
+    "target": "esnext",
+    // For nodejs:
+    // "lib": ["esnext"],
+    // "types": ["node"],
+    // and npm install -D @types/node
+
+    // Other Outputs
     "sourceMap": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "useUnknownInCatchVariables": true,
-    "alwaysStrict": true,
-    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "erasableSyntaxOnly": true,
+
+    // Style Options
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    // Recommended Options
+    "strict": true,
+    "verbatimModuleSyntax": false,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
     "skipDefaultLibCheck": true
-  },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.d.ts", "node_modules/csstype"],
-  "exclude": ["node_modules", "dist", "coverage", "benchmarks"]
+  }
 }

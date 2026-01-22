@@ -1,8 +1,6 @@
-import test, { describe } from 'node:test';
-
-import assert from 'node:assert';
-import { createElement, h } from '../';
-import { jsx, jsxs } from '../jsx-runtime';
+import { describe, expect, test } from 'vitest';
+import { createElement, h } from '../src/index.js';
+import { jsx, jsxs } from '../src/jsx-runtime.js';
 
 describe('Runtime behavior of JSX', () => {
   test('createElement', () => {
@@ -14,94 +12,95 @@ describe('Runtime behavior of JSX', () => {
       return Promise.resolve('<div>1</div>');
     }
 
-    assert.strictEqual(createElement, h);
+    expect(createElement).toBe(h);
 
     // children
-    assert.equal(
-      createElement('div', { id: 'test' }, 'Hello'),
-      '<div id="test">Hello</div>'
+    expect(createElement('div', { id: 'test' }, 'Hello')).toMatchInlineSnapshot(
+      `"<div id="test">Hello</div>"`
     );
 
     // no children
-    assert.equal(createElement('div', { id: 'test' }), '<div id="test"></div>');
+    expect(createElement('div', { id: 'test' })).toMatchInlineSnapshot(
+      `"<div id="test"></div>"`
+    );
 
     // no attributes
-    assert.equal(createElement('div', null), '<div></div>');
+    expect(createElement('div', null)).toMatchInlineSnapshot(`"<div></div>"`);
 
     // render Component
-    assert.equal(createElement(Component, null), '<div></div>');
-    assert.equal(createElement(Component, {}, 'child'), '<div>child</div>');
-    assert.equal(
-      createElement(Component, null, 'child ', 'child2'),
-      '<div>child child2</div>'
+    expect(createElement(Component, null)).toMatchInlineSnapshot(`"<div></div>"`);
+    expect(createElement(Component, {}, 'child')).toMatchInlineSnapshot(
+      `"<div>child</div>"`
     );
-    assert.equal(
-      createElement(Component, {}, 'child ', 'child2'),
-      '<div>child child2</div>'
+    expect(createElement(Component, null, 'child ', 'child2')).toMatchInlineSnapshot(
+      `"<div>child child2</div>"`
+    );
+    expect(createElement(Component, {}, 'child ', 'child2')).toMatchInlineSnapshot(
+      `"<div>child child2</div>"`
     );
 
     // render tag
-    assert.equal(
-      createElement('tag', { of: 'custom-html-tag' }),
-      '<custom-html-tag></custom-html-tag>'
+    expect(createElement('tag', { of: 'custom-html-tag' })).toMatchInlineSnapshot(
+      `"<custom-html-tag></custom-html-tag>"`
     );
 
     // render async Component
-    assert.ok(
+    expect(
       createElement('div', null, createElement(AsyncComponent, null)) instanceof Promise
-    );
+    ).toBeTruthy();
 
     // void element
-    assert.equal(createElement('meta', null), '<meta/>');
+    expect(createElement('meta', null)).toMatchInlineSnapshot(`"<meta/>"`);
   });
 
   test('jsx', () => {
     function Component(attrs: any) {
-      assert.deepStrictEqual(attrs.children, 'Hello');
+      expect(attrs.children).toEqual('Hello');
       return 'Hello';
     }
 
     // child
-    assert.equal(
-      jsx('div', { id: 'test', children: 'Hello' }),
-      '<div id="test">Hello</div>'
+    expect(jsx('div', { id: 'test', children: 'Hello' })).toMatchInlineSnapshot(
+      `"<div id="test">Hello</div>"`
     );
 
     // no child
-    assert.equal(jsx('div', { id: 'test' }), '<div id="test"></div>');
+    expect(jsx('div', { id: 'test' })).toMatchInlineSnapshot(`"<div id="test"></div>"`);
 
     // no attributes
-    assert.equal(jsx('div', {}), '<div></div>');
+    expect(jsx('div', {})).toMatchInlineSnapshot(`"<div></div>"`);
 
     // render tag
-    assert.equal(
-      jsx('tag', { of: 'custom-html-tag' }),
-      '<custom-html-tag></custom-html-tag>'
+    expect(jsx('tag', { of: 'custom-html-tag' })).toMatchInlineSnapshot(
+      `"<custom-html-tag></custom-html-tag>"`
     );
 
     // Single child
-    assert.equal(jsx(Component, { id: 'test', children: 'Hello' }), 'Hello');
+    expect(jsx(Component, { id: 'test', children: 'Hello' })).toBe('Hello');
   });
 
   test('jsxs', () => {
     function Component(attrs: any) {
-      assert.deepStrictEqual(attrs.children, ['Hello']);
+      expect(attrs.children).toEqual(['Hello']);
       return 'Hello';
     }
 
     // child
-    assert.equal(
-      jsxs('div', { id: 'test', children: ['Hello'] }),
-      '<div id="test">Hello</div>'
+    expect(jsxs('div', { id: 'test', children: ['Hello'] })).toMatchInlineSnapshot(
+      `"<div id="test">Hello</div>"`
     );
 
     // epmty childrens
-    assert.equal(jsxs('div', { id: 'test', children: [] }), '<div id="test"></div>');
+    expect(jsxs('div', { id: 'test', children: [] })).toMatchInlineSnapshot(
+      `"<div id="test"></div>"`
+    );
 
     // void element
-    assert.equal(jsxs('meta', { children: [] }), '<meta/>');
+    expect(jsxs('meta', { children: [] })).toMatchInlineSnapshot(`"<meta/>"`);
 
     // Array children
-    assert.equal(jsxs(Component, { id: 'test', children: ['Hello'] }), ['Hello']);
+    expect(jsxs(Component, { id: 'test', children: ['Hello'] })).toMatchInlineSnapshot(
+      `"Hello"`
+    );
   });
 });

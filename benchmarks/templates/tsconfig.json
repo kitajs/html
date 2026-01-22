@@ -1,11 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "dist",
     "module": "Node16",
     "target": "ESNext",
-    "jsx": "react-jsx",
-    "jsxImportSource": "@kitajs/html",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true

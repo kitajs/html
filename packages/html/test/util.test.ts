@@ -1,10 +1,9 @@
-import assert from 'node:assert';
-import { describe, test } from 'node:test';
-import Html from '../index';
+import { describe, expect, test } from 'vitest';
+import { Html } from '../src/index.js';
 
 describe('Util', () => {
   test('Undefined contents', async () => {
-    assert.equal(
+    expect(
       await Html.contentsToString([
         undefined,
         Promise.resolve(undefined),
@@ -13,9 +12,8 @@ describe('Util', () => {
         Promise.resolve(null),
         [null, Promise.resolve(null)],
         [[[[[[[]]]]]]]
-      ]),
-      ''
-    );
+      ])
+    ).toBe('');
 
     for (const i of [
       undefined,
@@ -26,19 +24,18 @@ describe('Util', () => {
       [null, Promise.resolve(null)],
       [[[[[[[]]]]]]]
     ]) {
-      assert.equal(await Html.contentToString(i), '');
+      expect(await Html.contentToString(i)).toBe('');
     }
 
-    assert.equal(await Html.contentsToString([]), '');
+    expect(await Html.contentsToString([])).toBe('');
   });
 
   test('Deep scaping', async () => {
-    assert.equal(
-      await Html.contentsToString(['<>', Promise.resolve('<>')], true),
+    expect(await Html.contentsToString(['<>', Promise.resolve('<>')], true)).toBe(
       '&lt;>&lt;>'
     );
 
-    assert.equal(
+    expect(
       await Html.contentsToString(
         [
           undefined,
@@ -50,24 +47,22 @@ describe('Util', () => {
           [[[[[[['<>']]]]]]]
         ],
         true
-      ),
-      '&lt;>'
-    );
+      )
+    ).toBe('&lt;>');
   });
 
   test('String contents', async () => {
-    assert.equal(
+    expect(
       await Html.contentsToString([
         'a',
         Promise.resolve('b'),
         ['c', Promise.resolve('d')]
-      ]),
-      'abcd'
-    );
+      ])
+    ).toBe('abcd');
   });
 
   test('Only string contents', async () => {
-    assert.equal(await Html.contentsToString(['a', 'b', ['c', 'd']]), 'abcd');
+    expect(await Html.contentsToString(['a', 'b', ['c', 'd']])).toBe('abcd');
   });
 
   test('Promises', async () => {
@@ -77,11 +72,11 @@ describe('Util', () => {
       Promise.resolve(['c', Promise.resolve('d')])
     ]);
 
-    assert.ok(result instanceof Promise);
-    assert.equal(await result, 'abcd');
+    expect(result instanceof Promise).toBeTruthy();
+    expect(await result).toBe('abcd');
   });
 
   test('h() function', async () => {
-    assert.equal(Html.h, Html.createElement);
+    expect(Html.h).toBe(Html.createElement);
   });
 });

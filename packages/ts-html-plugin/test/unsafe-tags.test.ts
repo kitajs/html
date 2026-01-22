@@ -1,5 +1,4 @@
-import assert from 'node:assert';
-import { it } from 'node:test';
+import { expect, it } from 'vitest';
 import { Xss } from '../src/errors';
 import { TSLangServer } from './util/lang-server';
 
@@ -30,7 +29,7 @@ it('Detect xss prone usage', async () => {
     );
 `;
 
-  assert.deepStrictEqual(diagnostics.body, [
+  expect(diagnostics.body).toEqual([
     {
       start: { line: 37, offset: 15 },
       end: { line: 37, offset: 19 },

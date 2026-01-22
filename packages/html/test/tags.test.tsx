@@ -1,69 +1,71 @@
-import assert from 'node:assert';
-import test, { describe } from 'node:test';
+import { describe, expect, test } from 'vitest';
 
 describe('Tags', () => {
   test('Self-closing html tags', () => {
-    assert.equal('<area/>', <area></area>);
+    expect(<area></area>).toMatchInlineSnapshot(`"<area/>"`);
 
-    assert.equal('<hr/>', <hr></hr>);
+    expect(<hr></hr>).toMatchInlineSnapshot(`"<hr/>"`);
 
-    assert.equal('<hr>content</hr>', <hr>content</hr>);
+    expect(<hr>content</hr>).toMatchInlineSnapshot(`"<hr>content</hr>"`);
 
-    assert.equal('<meta charset="utf8"/>', <meta charset="utf8"></meta>);
+    expect(<meta charset="utf8"></meta>).toMatchInlineSnapshot(
+      `"<meta charset="utf8"/>"`
+    );
 
-    assert.equal('<video autoplay></video>', <video autoplay></video>);
+    expect(<video autoplay></video>).toMatchInlineSnapshot(`"<video autoplay></video>"`);
     //@ts-expect-error - invalid type
-    assert.equal('<video autoplay=""></video>', <video autoplay=""></video>);
+    expect(<video autoplay=""></video>).toMatchInlineSnapshot(
+      `"<video autoplay=""></video>"`
+    );
     //@ts-expect-error - invalid type
-    assert.equal('<video autoplay="test"></video>', <video autoplay="test"></video>);
+    expect(<video autoplay="test"></video>).toMatchInlineSnapshot(
+      `"<video autoplay="test"></video>"`
+    );
   });
 
   test('custom tag', () => {
-    assert.equal(<tag of="div" attr />, '<div attr></div>');
+    expect(<tag of="div" attr />).toMatchInlineSnapshot(`"<div attr></div>"`);
 
-    assert.equal(<tag of="div" attr></tag>, '<div attr></div>');
-    assert.equal(
+    expect(<tag of="div" attr></tag>).toMatchInlineSnapshot(`"<div attr></div>"`);
+    expect(
       <tag of="div" attr>
         <div></div>
         <div></div>
-      </tag>,
-      '<div attr><div></div><div></div></div>'
-    );
+      </tag>
+    ).toMatchInlineSnapshot(`"<div attr><div></div><div></div></div>"`);
 
-    assert.equal(
+    expect(
       <tag of="div" attr>
         1
-      </tag>,
-      '<div attr>1</div>'
-    );
+      </tag>
+    ).toMatchInlineSnapshot(`"<div attr>1</div>"`);
 
-    assert.equal(
+    expect(
       <tag of="div" attr>
         {' '}
-      </tag>,
-      '<div attr> </div>'
-    );
+      </tag>
+    ).toMatchInlineSnapshot(`"<div attr> </div>"`);
   });
 
   test('custom void tag', () => {
-    assert.equal(<tag of="link" attr />, '<link attr/>');
+    expect(<tag of="link" attr />).toMatchInlineSnapshot(`"<link attr/>"`);
 
-    assert.equal(<tag of="link" attr></tag>, '<link attr/>');
+    expect(<tag of="link" attr></tag>).toMatchInlineSnapshot(`"<link attr/>"`);
 
-    assert.equal(
+    expect(
       <tag of="link" attr>
         1
-      </tag>,
-      '<link attr>1</link>'
-    );
+      </tag>
+    ).toMatchInlineSnapshot(`"<link attr>1</link>"`);
 
-    assert.equal(
+    expect(
       <tag of="link" attr>
         {' '}
-      </tag>,
-      '<link attr> </link>'
-    );
+      </tag>
+    ).toMatchInlineSnapshot(`"<link attr> </link>"`);
 
-    assert.equal(<tag of="my-custom-KEBAB" />, '<my-custom-KEBAB></my-custom-KEBAB>');
+    expect(<tag of="my-custom-KEBAB" />).toMatchInlineSnapshot(
+      `"<my-custom-KEBAB></my-custom-KEBAB>"`
+    );
   });
 });

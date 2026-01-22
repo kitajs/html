@@ -1,5 +1,4 @@
-import assert from 'node:assert';
-import { it } from 'node:test';
+import { expect, it } from 'vitest';
 import { TSLangServer } from './util/lang-server';
 
 it('Ensure PropsWithChildren works as normal', async () => {
@@ -9,23 +8,23 @@ it('Ensure PropsWithChildren works as normal', async () => {
     export interface Extension extends PropsWithChildren {
       user?: { name: string };
     }
-    
+
     export function Test({ children }: Extension) {
       return <div>{children}</div>;
     }
-    
+
     export function Test2(props: Extension) {
       return <div>{props.children}</div>;
     }
-    
+
     export function Test3({ children }: PropsWithChildren) {
       return <div>{children}</div>;
     }
-    
+
     export function Test4(props: PropsWithChildren) {
       return <div>{props.children}</div>;
     }
-    
+
     export function Test5(props?: PropsWithChildren) {
       return <div>{props?.children}</div>;
     }
@@ -49,5 +48,5 @@ it('Ensure PropsWithChildren works as normal', async () => {
     );
 `;
 
-  assert.deepStrictEqual(diagnostics.body, []);
+  expect(diagnostics.body).toEqual([]);
 });
