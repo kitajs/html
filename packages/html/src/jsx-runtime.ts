@@ -34,20 +34,21 @@ export function jsx(
   const attrs = attributesToString(attributes);
 
   if (attributes.children === undefined) {
-    return isVoidElement(name as string)
-      ? '<' + name + attrs + '/>'
-      : '<' + name + attrs + '></' + name + '>';
+    if (isVoidElement(name as string)) {
+      return `<${name}${attrs}/>`;
+    }
+    return `<${name}${attrs}></${name}>`;
   }
 
   const contents = contentToString(attributes.children, attributes.safe);
 
   if (contents instanceof Promise) {
     return contents.then(function resolveContents(child) {
-      return '<' + name + attrs + '>' + child + '</' + name + '>';
+      return `<${name}${attrs}>${child}</${name}>`;
     });
   }
 
-  return '<' + name + attrs + '>' + contents + '</' + name + '>';
+  return `<${name}${attrs}>${contents}</${name}>`;
 }
 
 /**
@@ -77,20 +78,21 @@ export function jsxs(
   const attrs = attributesToString(attributes);
 
   if (attributes.children.length === 0) {
-    return isVoidElement(name as string)
-      ? '<' + name + attrs + '/>'
-      : '<' + name + attrs + '></' + name + '>';
+    if (isVoidElement(name as string)) {
+      return `<${name}${attrs}/>`;
+    }
+    return `<${name}${attrs}></${name}>`;
   }
 
   const contents = contentsToString(attributes.children, attributes.safe);
 
   if (contents instanceof Promise) {
     return contents.then(function resolveContents(child) {
-      return '<' + name + attrs + '>' + child + '</' + name + '>';
+      return `<${name}${attrs}>${child}</${name}>`;
     });
   }
 
-  return '<' + name + attrs + '>' + contents + '</' + name + '>';
+  return `<${name}${attrs}>${contents}</${name}>`;
 }
 
 // According to the jsx-runtime spec we must export the fragment element also

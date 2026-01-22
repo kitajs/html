@@ -290,9 +290,6 @@ export function styleToString(this: void, style: object | string): string {
  * @returns The generated html attributes string.
  */
 export function attributesToString(this: void, attributes: object): string {
-  const keys = Object.keys(attributes);
-  const length = keys.length;
-
   let key,
     value,
     type,
@@ -300,12 +297,9 @@ export function attributesToString(this: void, attributes: object): string {
     start,
     classItems,
     valueLength,
-    result = '',
-    index = 0;
+    result = '';
 
-  for (; index < length; index++) {
-    key = keys[index];
-
+  for (key in attributes) {
     // Skips all @kitajs/html specific attributes.
     if (key === 'children' || key === 'safe' || key === 'of') {
       continue;
@@ -348,7 +342,7 @@ export function attributesToString(this: void, attributes: object): string {
         continue;
       }
     } else if (key === 'style') {
-      result += ' style="' + styleToString(value) + '"';
+      result += ` style="${styleToString(value)}"`;
       continue;
     } else if (key === 'attrs') {
       if (typeof value === 'string') {
@@ -371,18 +365,16 @@ export function attributesToString(this: void, attributes: object): string {
       continue;
     }
 
-    result += ' ' + key;
-
     if (type !== 'string') {
       // Non objects are
       if (type !== 'object') {
-        result += '="' + value.toString() + '"';
+        result += ` ${key}="${value}"`;
         continue;
       }
 
       // Dates are always safe
       if (value instanceof Date) {
-        result += '="' + value.toISOString() + '"';
+        result += ` ${key}="${value.toISOString()}"`;
         continue;
       }
 
@@ -396,11 +388,11 @@ export function attributesToString(this: void, attributes: object): string {
     // This is a optimization to avoid having to look twice for the " character.
     // And make the loop already start in the middle
     if (end === -1) {
-      result += '="' + value + '"';
+      result += ` ${key}="${value}"`;
       continue;
     }
 
-    result += '="';
+    result += ` ${key}="`;
 
     valueLength = value.length;
     start = 0;
@@ -578,19 +570,20 @@ export function createElement(
   const attrs = hasAttrs ? attributesToString(attributes) : '';
 
   if (children.length === 0) {
-    return isVoidElement(name as string)
-      ? '<' + name + attrs + '/>'
-      : '<' + name + attrs + '></' + name + '>';
+    if (isVoidElement(name as string)) {
+      return `<${name}${attrs}/>`;
+    }
+    return `<${name}${attrs}></${name}>`;
   }
 
   const contentsStr = contentsToString(children, hasAttrs && attributes.safe);
 
   if (typeof contentsStr === 'string') {
-    return '<' + name + attrs + '>' + contentsStr + '</' + name + '>';
+    return `<${name}${attrs}>${contentsStr}</${name}>`;
   }
 
   return contentsStr.then(function resolveContents(contents) {
-    return '<' + name + attrs + '>' + contents + '</' + name + '>';
+    return `<${name}${attrs}>${contents}</${name}>`;
   });
 }
 
