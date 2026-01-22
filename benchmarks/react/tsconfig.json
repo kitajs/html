@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "dist",
     "jsx": "react",
     "declaration": true,

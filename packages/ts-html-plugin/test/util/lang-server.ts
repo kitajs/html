@@ -64,11 +64,12 @@ export class TSLangServer {
   isClosed = false;
   server: ChildProcess;
   sequence = 0;
-  debug: boolean;
   buffer = ''; // Add buffer for incomplete messages
 
-  constructor(projectPath: string, debug = false) {
-    this.debug = debug;
+  constructor(
+    projectPath: string,
+    private readonly debug = false
+  ) {
     this.server = fork(require.resolve('typescript/lib/tsserver'), {
       cwd: projectPath,
       stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
@@ -99,7 +100,7 @@ export class TSLangServer {
     // Process all complete messages in the buffer
     let headerMatch = this.buffer.match(/Content-Length: (\d+)\r?\n\r?\n/);
 
-    while (headerMatch?.index && headerMatch[1]) {
+    while (headerMatch && headerMatch.index !== undefined) {
       // TSServer protocol: Content-Length: N\r\n\r\n{JSON}\r\n
       const contentLength = parseInt(headerMatch[1], 10);
       const headerEnd = headerMatch.index + headerMatch[0].length;
