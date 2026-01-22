@@ -80,6 +80,9 @@ importers:
       prettier-plugin-packagejson:
         specifier: ^3.0.0
         version: 3.0.0(prettier@3.8.0)
+      self-ts-plugin:
+        specifier: link:packages/ts-html-plugin
+        version: link:packages/ts-html-plugin
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -382,7 +385,7 @@ importers:
       react-dom:
         specifier: 'catalog:'
         version: 19.2.3(react@19.2.3)
-      self:
+      self-html:
         specifier: 'link:'
         version: 'link:'
       typescript:
@@ -422,7 +425,7 @@ importers:
       fast-defer:
         specifier: ^1.1.9
         version: 1.1.9
-      self:
+      self-ts-plugin:
         specifier: 'link:'
         version: 'link:'
       typescript:

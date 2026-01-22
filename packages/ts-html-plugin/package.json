@@ -37,7 +37,7 @@
     "@typescript/native-preview": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "fast-defer": "^1.1.9",
-    "self": "link:",
+    "self-ts-plugin": "link:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

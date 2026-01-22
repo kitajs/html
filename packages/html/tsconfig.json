@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "self",
+    "jsxImportSource": "self-html",
     "outDir": "./dist"
   },
   "include": ["src", "test"]

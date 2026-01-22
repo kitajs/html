@@ -1,4 +1,5 @@
-/// <reference path="./jsx.ts" />
+import './jsx.d.ts';
+
 /// <reference path="./suspense.ts" />
 /// <reference path="./error-boundary.ts" />
 

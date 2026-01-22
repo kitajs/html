@@ -11,7 +11,7 @@ export type Requests =
   | ts.server.protocol.SemanticDiagnosticsSyncRequest;
 
 try {
-  statSync(require.resolve('self'));
+  statSync(require.resolve('self-ts-plugin'));
 } catch (error) {
   throw new Error('You must run pnpm build before running tests');
 }
@@ -65,11 +65,10 @@ export class TSLangServer {
   server: ChildProcess;
   sequence = 0;
   buffer = ''; // Add buffer for incomplete messages
+  debug: boolean;
 
-  constructor(
-    projectPath: string,
-    private readonly debug = false
-  ) {
+  constructor(projectPath: string, debug = false) {
+    this.debug = debug;
     this.server = fork(require.resolve('typescript/lib/tsserver'), {
       cwd: projectPath,
       stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
@@ -83,8 +82,12 @@ export class TSLangServer {
     this.server.on('exit', this.exitPromise.resolve);
     this.server.on('error', this.exitPromise.reject);
 
-    this.server.stdout?.setEncoding('utf-8');
+    this.server.stderr?.setEncoding('utf-8');
+    this.server.stderr?.on('data', (data) => {
+      console.error(data);
+    });
 
+    this.server.stdout?.setEncoding('utf-8');
     this.server.stdout?.on('data', (data) => {
       try {
         this.buffer += data;
@@ -102,7 +105,7 @@ export class TSLangServer {
 
     while (headerMatch && headerMatch.index !== undefined) {
       // TSServer protocol: Content-Length: N\r\n\r\n{JSON}\r\n
-      const contentLength = parseInt(headerMatch[1], 10);
+      const contentLength = parseInt(headerMatch[1]!, 10);
       const headerEnd = headerMatch.index + headerMatch[0].length;
       const messageEnd = headerEnd + contentLength;
 

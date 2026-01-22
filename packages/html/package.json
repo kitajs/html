@@ -46,7 +46,7 @@
     "jsdom": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "self": "link:",
+    "self-html": "link:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

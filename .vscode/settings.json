@@ -1,6 +1,5 @@
 {
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.experimental.useTsgo": true,
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.tsserver.maxTsServerMemory": 4096,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
