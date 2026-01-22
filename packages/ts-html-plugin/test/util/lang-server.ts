@@ -64,6 +64,7 @@ export class TSLangServer {
   isClosed = false;
   server: ChildProcess;
   sequence = 0;
+  buffer = ''; // Add buffer for incomplete messages
 
   constructor(
     projectPath: string,
@@ -86,30 +87,56 @@ export class TSLangServer {
 
     this.server.stdout?.on('data', (data) => {
       try {
-        const obj = JSON.parse(data.split('\n', 3)[2]);
-
-        if (this.debug) {
-          console.dir(obj, { depth: 10 });
-        }
-
-        if (obj.success === false) {
-          this.errorEmitter.emit(obj.type === 'event' ? obj.event : obj.command, obj);
-
-          // Error is fatal, close the server
-          if (!this.isClosed) {
-            this.isClosed = true;
-            this.server.stdin?.end();
-          }
-        } else if (obj.type === 'event') {
-          this.responseEventEmitter.emit(obj.event, obj);
-        } else if (obj.type === 'response') {
-          this.responseCommandEmitter.emit(obj.command, obj);
-        }
+        this.buffer += data;
+        this.#processMessages();
       } catch (error) {
-        console.error(data);
+        console.error(this.buffer);
         this.exitPromise.reject(error);
       }
     });
+  }
+
+  #processMessages() {
+    // Process all complete messages in the buffer
+    let headerMatch = this.buffer.match(/Content-Length: (\d+)\r?\n\r?\n/);
+
+    while (headerMatch && headerMatch.index !== undefined) {
+      // TSServer protocol: Content-Length: N\r\n\r\n{JSON}\r\n
+      const contentLength = parseInt(headerMatch[1], 10);
+      const headerEnd = headerMatch.index + headerMatch[0].length;
+      const messageEnd = headerEnd + contentLength;
+
+      // Check if we have the complete message
+      if (this.buffer.length < messageEnd) break;
+
+      // Extract and parse the message
+      const jsonStr = this.buffer.substring(headerEnd, messageEnd);
+      const obj = JSON.parse(jsonStr);
+
+      // Remove the processed message from buffer
+      this.buffer = this.buffer.substring(messageEnd);
+
+      if (this.debug) {
+        console.dir(obj, { depth: 10 });
+      }
+
+      if (obj.success === false) {
+        this.errorEmitter.emit(obj.type === 'event' ? obj.event : obj.command, obj);
+
+        // Error is fatal, close the server
+        if (!this.isClosed) {
+          this.isClosed = true;
+          this.server.stdin?.end();
+        }
+      } else if (obj.type === 'event') {
+        this.responseEventEmitter.emit(obj.event, obj);
+      } else if (obj.type === 'response') {
+        this.responseCommandEmitter.emit(obj.command, obj);
+      }
+
+      // Check for next message
+      headerMatch = this.buffer.match(/Content-Length: (\d+)\r?\n\r?\n/);
+    }
   }
 
   /** Opens the project, sends diagnostics request and returns the response */
