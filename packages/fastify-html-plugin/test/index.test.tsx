@@ -1,7 +1,6 @@
 import fastify from 'fastify';
-import assert from 'node:assert';
-import test, { describe } from 'node:test';
 import { setImmediate } from 'node:timers/promises';
+import { describe, expect, test } from 'vitest';
 import { fastifyKitaHtml } from '..';
 
 describe('reply.html()', () => {
@@ -13,9 +12,9 @@ describe('reply.html()', () => {
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.strictEqual(res.body, '<div>Hello from JSX!</div>');
-    assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
-    assert.strictEqual(res.statusCode, 200);
+    expect(res.body).toBe('<div>Hello from JSX!</div>');
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+    expect(res.statusCode).toBe(200);
   });
 
   test('renders async html', async () => {
@@ -23,14 +22,14 @@ describe('reply.html()', () => {
     app.register(fastifyKitaHtml);
 
     app.get('/', (_, res) =>
-      res.html(<div>{setImmediate('Hello from async JSX!')}</div>)
+      res.html(<div safe>{setImmediate('Hello from async JSX!')}</div>)
     );
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.strictEqual(res.body, '<div>Hello from async JSX!</div>');
-    assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
-    assert.strictEqual(res.statusCode, 200);
+    expect(res.body).toBe('<div>Hello from async JSX!</div>');
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+    expect(res.statusCode).toBe(200);
   });
 
   test('fails when html is not a string', async () => {
@@ -44,9 +43,9 @@ describe('reply.html()', () => {
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.strictEqual(res.headers['content-type'], 'application/json; charset=utf-8');
-    assert.strictEqual(res.statusCode, 500);
-    assert.deepStrictEqual(res.json(), {
+    expect(res.headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(res.statusCode).toBe(500);
+    expect(res.json()).toEqual({
       statusCode: 500,
       code: 'ERR_INVALID_ARG_TYPE',
       error: 'Internal Server Error',
@@ -66,9 +65,9 @@ describe('reply.html()', () => {
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.strictEqual(res.statusCode, 500);
-    assert.strictEqual(res.headers['content-type'], 'application/json; charset=utf-8');
-    assert.deepStrictEqual(res.json(), {
+    expect(res.statusCode).toBe(500);
+    expect(res.headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(res.json()).toEqual({
       statusCode: 500,
       code: 'ERR_INVALID_ARG_TYPE',
       error: 'Internal Server Error',

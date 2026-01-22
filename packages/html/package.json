@@ -30,7 +30,6 @@
     "!dist/*.tsbuildinfo"
   ],
   "scripts": {
-    "bench": "pnpm --filter \"benchmark-*\" build && pnpm --filter \"benchmark-runner\" start",
     "build": "tsgo -p tsconfig.build.json",
     "test": "vitest --coverage --typecheck --run"
   },

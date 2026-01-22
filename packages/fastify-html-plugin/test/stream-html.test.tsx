@@ -5,12 +5,11 @@
 // This was adapted to work inside a fastify route handler.
 
 import Html, { type PropsWithChildren } from '@kitajs/html';
-import { Suspense, SuspenseScript } from '@kitajs/html/suspense';
+import { Suspense, SuspenseScript as safeSuspenseScript } from '@kitajs/html/suspense';
 import fastify from 'fastify';
 import { JSDOM } from 'jsdom';
-import assert from 'node:assert';
-import { afterEach, describe, test } from 'node:test';
 import { setTimeout } from 'node:timers/promises';
+import { afterEach, describe, expect, test } from 'vitest';
 import { fastifyKitaHtml } from '..';
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
@@ -21,7 +20,7 @@ async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
 describe('Suspense', () => {
   // Detect leaks of pending promises
   afterEach(() => {
-    assert.equal(SUSPENSE_ROOT.requests.size, 0, 'Suspense root left pending resources');
+    expect(SUSPENSE_ROOT.requests.size).toBe(0);
 
     // Reset suspense root
     SUSPENSE_ROOT.autoScript = true;
@@ -37,9 +36,9 @@ describe('Suspense', () => {
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.strictEqual(res.body, '<div></div>');
-    assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
+    expect(res.body).toBe('<div></div>');
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
   });
 
   test('Suspense sync children', async () => {
@@ -56,9 +55,9 @@ describe('Suspense', () => {
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.strictEqual(res.body, '<div>2</div>');
-    assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
+    expect(res.body).toBe('<div>2</div>');
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
   });
 
   test('Suspense async children', async () => {
@@ -75,16 +74,15 @@ describe('Suspense', () => {
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
-    assert.strictEqual(
-      res.body,
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+    expect(res.body).toBe(
       <>
         <div id="B:1" data-sf>
           <div>1</div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           2
@@ -110,16 +108,15 @@ describe('Suspense', () => {
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
-    assert.strictEqual(
-      res.body,
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+    expect(res.body).toBe(
       <>
         <div id="B:1" data-sf>
           <div>1</div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           2
@@ -145,9 +142,9 @@ describe('Suspense', () => {
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.strictEqual(res.body, '<div>2</div>');
-    assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
+    expect(res.body).toBe('<div>2</div>');
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
   });
 
   test('Multiple async renders cleanup', async () => {
@@ -167,16 +164,15 @@ describe('Suspense', () => {
     for (const _ of Array.from({ length: 100 })) {
       promises.push(
         app.inject({ method: 'GET', url: '/' }).then((res) => {
-          assert.strictEqual(res.statusCode, 200);
-          assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
-          assert.strictEqual(
-            res.body,
+          expect(res.statusCode).toBe(200);
+          expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+          expect(res.body).toBe(
             <>
               <div id="B:1" data-sf>
                 <div>1</div>
               </div>
 
-              {SuspenseScript}
+              {safeSuspenseScript}
 
               <template id="N:1" data-sr>
                 2
@@ -207,16 +203,15 @@ describe('Suspense', () => {
 
     for (let i = 0; i < 10; i++) {
       const res = await app.inject({ method: 'GET', url: '/' });
-      assert.strictEqual(res.statusCode, 200);
-      assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
-      assert.strictEqual(
-        res.body,
+      expect(res.statusCode).toBe(200);
+      expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+      expect(res.body).toBe(
         <>
           <div id="B:1" data-sf>
             <div>1</div>
           </div>
 
-          {SuspenseScript}
+          {safeSuspenseScript}
 
           <template id="N:1" data-sr>
             2
@@ -253,11 +248,10 @@ describe('Suspense', () => {
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
 
-    assert.strictEqual(
-      res.body,
+    expect(res.body).toBe(
       <>
         <div>
           <div id="B:1" data-sf>
@@ -271,7 +265,7 @@ describe('Suspense', () => {
           </div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           4
@@ -328,13 +322,11 @@ describe('Suspense', () => {
     );
 
     for (const result of results) {
-      // biome-ignore lint/style/noNonNullAssertion: this is a test
       const seconds = +result.headers.seconds!;
 
-      assert.strictEqual(result.statusCode, 200);
-      assert.strictEqual(result.headers['content-type'], 'text/html; charset=utf-8');
-      assert.strictEqual(
-        result.body,
+      expect(result.statusCode).toBe(200);
+      expect(result.headers['content-type']).toBe('text/html; charset=utf-8');
+      expect(result.body).toBe(
         <>
           <div>
             {Array.from({ length: seconds }, (_, i) => (
@@ -344,7 +336,7 @@ describe('Suspense', () => {
             ))}
           </div>
 
-          {SuspenseScript}
+          {safeSuspenseScript}
 
           {Array.from({ length: seconds }, (_, i) => (
             <>
@@ -361,7 +353,7 @@ describe('Suspense', () => {
     }
   });
 
-  test('works with parallel deep suspense calls resolving first', async (t) => {
+  test('works with parallel deep suspense calls resolving first', async () => {
     await using app = fastify();
     app.register(fastifyKitaHtml);
 
@@ -387,142 +379,138 @@ describe('Suspense', () => {
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
 
-    await t.test('Html stream', () => {
-      assert.strictEqual(
-        res.body,
-        <>
-          <div>
-            <div id="B:2" data-sf>
-              <div>0 fb outer</div>
-            </div>
-            <div id="B:4" data-sf>
-              <div>1 fb outer</div>
-            </div>
-            <div id="B:6" data-sf>
-              <div>2 fb outer</div>
-            </div>
-            <div id="B:8" data-sf>
-              <div>3 fb outer</div>
-            </div>
-            <div id="B:10" data-sf>
-              <div>4 fb outer</div>
-            </div>
+    expect(res.body).toBe(
+      <>
+        <div>
+          <div id="B:2" data-sf>
+            <div>0 fb outer</div>
           </div>
-
-          {SuspenseScript}
-
-          <template id="N:1" data-sr>
-            <div>Inner 0!</div>
-          </template>
-          <script id="S:1" data-ss>
-            $KITA_RC(1)
-          </script>
-
-          <template id="N:2" data-sr>
-            <div>Outer 0!</div>
-            <div id="B:1" data-sf>
-              <div>0 fb inner!</div>
-            </div>
-          </template>
-          <script id="S:2" data-ss>
-            $KITA_RC(2)
-          </script>
-
-          <template id="N:3" data-sr>
-            <div>Inner 1!</div>
-          </template>
-          <script id="S:3" data-ss>
-            $KITA_RC(3)
-          </script>
-
-          <template id="N:4" data-sr>
-            <div>Outer 1!</div>
-            <div id="B:3" data-sf>
-              <div>1 fb inner!</div>
-            </div>
-          </template>
-          <script id="S:4" data-ss>
-            $KITA_RC(4)
-          </script>
-
-          <template id="N:6" data-sr>
-            <div>Outer 2!</div>
-            <div id="B:5" data-sf>
-              <div>2 fb inner!</div>
-            </div>
-          </template>
-          <script id="S:6" data-ss>
-            $KITA_RC(6)
-          </script>
-
-          <template id="N:5" data-sr>
-            <div>Inner 2!</div>
-          </template>
-          <script id="S:5" data-ss>
-            $KITA_RC(5)
-          </script>
-
-          <template id="N:10" data-sr>
-            <div>Outer 4!</div>
-            <div id="B:9" data-sf>
-              <div>4 fb inner!</div>
-            </div>
-          </template>
-          <script id="S:10" data-ss>
-            $KITA_RC(10)
-          </script>
-
-          <template id="N:7" data-sr>
-            <div>Inner 3!</div>
-          </template>
-          <script id="S:7" data-ss>
-            $KITA_RC(7)
-          </script>
-
-          <template id="N:8" data-sr>
-            <div>Outer 3!</div>
-            <div id="B:7" data-sf>
-              <div>3 fb inner!</div>
-            </div>
-          </template>
-          <script id="S:8" data-ss>
-            $KITA_RC(8)
-          </script>
-
-          <template id="N:9" data-sr>
-            <div>Inner 4!</div>
-          </template>
-          <script id="S:9" data-ss>
-            $KITA_RC(9)
-          </script>
-        </>
-      );
-    });
-
-    await t.test('Browser simulation', async () => {
-      // Simulates a browser
-      assert.equal(
-        new JSDOM(res.body, { runScripts: 'dangerously' }).window.document.body.innerHTML,
-        <>
-          <div>
-            <div>Outer 0!</div>
-            <div>Inner 0!</div>
-            <div>Outer 1!</div>
-            <div>Inner 1!</div>
-            <div>Outer 2!</div>
-            <div>Inner 2!</div>
-            <div>Outer 3!</div>
-            <div>Inner 3!</div>
-            <div>Outer 4!</div>
-            <div>Inner 4!</div>
+          <div id="B:4" data-sf>
+            <div>1 fb outer</div>
           </div>
-          {SuspenseScript}
-        </>
-      );
-    });
+          <div id="B:6" data-sf>
+            <div>2 fb outer</div>
+          </div>
+          <div id="B:8" data-sf>
+            <div>3 fb outer</div>
+          </div>
+          <div id="B:10" data-sf>
+            <div>4 fb outer</div>
+          </div>
+        </div>
+
+        {safeSuspenseScript}
+
+        <template id="N:1" data-sr>
+          <div>Inner 0!</div>
+        </template>
+        <script id="S:1" data-ss>
+          $KITA_RC(1)
+        </script>
+
+        <template id="N:2" data-sr>
+          <div>Outer 0!</div>
+          <div id="B:1" data-sf>
+            <div>0 fb inner!</div>
+          </div>
+        </template>
+        <script id="S:2" data-ss>
+          $KITA_RC(2)
+        </script>
+
+        <template id="N:3" data-sr>
+          <div>Inner 1!</div>
+        </template>
+        <script id="S:3" data-ss>
+          $KITA_RC(3)
+        </script>
+
+        <template id="N:4" data-sr>
+          <div>Outer 1!</div>
+          <div id="B:3" data-sf>
+            <div>1 fb inner!</div>
+          </div>
+        </template>
+        <script id="S:4" data-ss>
+          $KITA_RC(4)
+        </script>
+
+        <template id="N:6" data-sr>
+          <div>Outer 2!</div>
+          <div id="B:5" data-sf>
+            <div>2 fb inner!</div>
+          </div>
+        </template>
+        <script id="S:6" data-ss>
+          $KITA_RC(6)
+        </script>
+
+        <template id="N:5" data-sr>
+          <div>Inner 2!</div>
+        </template>
+        <script id="S:5" data-ss>
+          $KITA_RC(5)
+        </script>
+
+        <template id="N:10" data-sr>
+          <div>Outer 4!</div>
+          <div id="B:9" data-sf>
+            <div>4 fb inner!</div>
+          </div>
+        </template>
+        <script id="S:10" data-ss>
+          $KITA_RC(10)
+        </script>
+
+        <template id="N:7" data-sr>
+          <div>Inner 3!</div>
+        </template>
+        <script id="S:7" data-ss>
+          $KITA_RC(7)
+        </script>
+
+        <template id="N:8" data-sr>
+          <div>Outer 3!</div>
+          <div id="B:7" data-sf>
+            <div>3 fb inner!</div>
+          </div>
+        </template>
+        <script id="S:8" data-ss>
+          $KITA_RC(8)
+        </script>
+
+        <template id="N:9" data-sr>
+          <div>Inner 4!</div>
+        </template>
+        <script id="S:9" data-ss>
+          $KITA_RC(9)
+        </script>
+      </>
+    );
+
+    // Browser simulation
+    expect(
+      new JSDOM(res.body, { runScripts: 'dangerously' }).window.document.body.innerHTML
+    ).toBe(
+      <>
+        <div>
+          <div>Outer 0!</div>
+          <div>Inner 0!</div>
+          <div>Outer 1!</div>
+          <div>Inner 1!</div>
+          <div>Outer 2!</div>
+          <div>Inner 2!</div>
+          <div>Outer 3!</div>
+          <div>Inner 3!</div>
+          <div>Outer 4!</div>
+          <div>Inner 4!</div>
+        </div>
+        {safeSuspenseScript}
+      </>
+    );
   });
 
   test('tests suspense without error boundary', async () => {
@@ -532,14 +520,14 @@ describe('Suspense', () => {
     app.get('/', (req, res) =>
       res.html(
         <Suspense rid={req.id} fallback={<div>1</div>}>
-          {Promise.reject(new Error('component failed'))}
+          {Promise.reject(new Error('component failed')) as Promise<'safe'>}
         </Suspense>
       )
     );
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.deepStrictEqual(res.json(), {
+    expect(res.json()).toEqual({
       error: 'Internal Server Error',
       message: 'component failed',
       statusCode: 500
@@ -558,27 +546,26 @@ describe('Suspense', () => {
           rid={req.id}
           fallback={<div>1</div>}
           catch={(err2) => {
-            assert.equal(err2, err);
+            expect(err2).toBe(err);
             return <div>3</div>;
           }}
         >
-          {Promise.reject(err)}
+          {Promise.reject(err) as Promise<'safe'>}
         </Suspense>
       )
     );
 
     const res = await app.inject({ method: 'GET', url: '/' });
 
-    assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
-    assert.strictEqual(
-      res.body,
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+    expect(res.body).toBe(
       <>
         <div id="B:1" data-sf>
           <div>1</div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
         <template id="N:1" data-sr>
           <div>3</div>
         </template>

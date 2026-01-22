@@ -1,4 +1,4 @@
-import './jsx.d.ts';
+import './jsx.js';
 
 /// <reference path="./suspense.ts" />
 /// <reference path="./error-boundary.ts" />
@@ -151,7 +151,7 @@ export let escapeHtml: (this: void, value: any) => string = function (value) {
   return escaped;
 };
 
-/* c8 ignore next 2 */
+/* v8 ignore next 2 */
 // @ts-ignore - bun runtime have its own escapeHTML function.
 if (typeof Bun !== 'undefined') escapeHtml = Bun.escapeHTML;
 

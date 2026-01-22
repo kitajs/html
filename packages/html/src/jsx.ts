@@ -992,6 +992,3 @@ type AriaRole =
   | 'treegrid'
   | 'treeitem'
   | (string & {});
-
-// Export empty object to make this a module
-export {};

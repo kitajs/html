@@ -19,6 +19,11 @@
     "ts-html-plugin": "dist/cli.js",
     "xss-scan": "dist/cli.js"
   },
+  "files": [
+    "dist",
+    "src",
+    "!dist/*.tsbuildinfo"
+  ],
   "scripts": {
     "build": "tsgo -p tsconfig.build.json",
     "prepack": "pnpm run build",

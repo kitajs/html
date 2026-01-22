@@ -1,46 +1,57 @@
 import fastify from 'fastify';
-import assert from 'node:assert';
-import test from 'node:test';
+import { describe, expect, test } from 'vitest';
 import { fastifyKitaHtml } from '../';
 
-test('opts.autoDoctype', async (t) => {
-  await using app = fastify();
-  app.register(fastifyKitaHtml);
+describe('opts.autoDoctype', () => {
+  test('Default', async () => {
+    await using app = fastify();
+    app.register(fastifyKitaHtml);
 
-  app.get('/default', () => <div>Not a html root element</div>);
-  app.get('/default/root', () => <html lang="en" />);
-  app.get('/html', (_, res) => res.html(<div>Not a html root element</div>));
-  app.get('/html/root', (_, res) => res.html(<html lang="en" />));
+    app.get('/default', () => <div>Not a html root element</div>);
 
-  await t.test('Default', async () => {
     const res = await app.inject({ method: 'GET', url: '/default' });
 
-    assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers['content-type'], 'text/plain; charset=utf-8');
-    assert.strictEqual(res.body, '<div>Not a html root element</div>');
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toBe('text/plain; charset=utf-8');
+    expect(res.body).toBe('<div>Not a html root element</div>');
   });
 
-  await t.test('Default root', async () => {
+  test('Default root', async () => {
+    await using app = fastify();
+    app.register(fastifyKitaHtml);
+
+    app.get('/default/root', () => <html lang="en" />);
+
     const res = await app.inject({ method: 'GET', url: '/default/root' });
 
-    assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers['content-type'], 'text/plain; charset=utf-8');
-    assert.strictEqual(res.body, '<html lang="en"></html>');
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toBe('text/plain; charset=utf-8');
+    expect(res.body).toBe('<html lang="en"></html>');
   });
 
-  await t.test('Html ', async () => {
+  test('Html', async () => {
+    await using app = fastify();
+    app.register(fastifyKitaHtml);
+
+    app.get('/html', (_, res) => res.html(<div>Not a html root element</div>));
+
     const res = await app.inject({ method: 'GET', url: '/html' });
 
-    assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
-    assert.strictEqual(res.body, '<div>Not a html root element</div>');
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+    expect(res.body).toBe('<div>Not a html root element</div>');
   });
 
-  await t.test('Html root', async () => {
+  test('Html root', async () => {
+    await using app = fastify();
+    app.register(fastifyKitaHtml);
+
+    app.get('/html/root', (_, res) => res.html(<html lang="en" />));
+
     const res = await app.inject({ method: 'GET', url: '/html/root' });
 
-    assert.strictEqual(res.statusCode, 200);
-    assert.strictEqual(res.headers['content-type'], 'text/html; charset=utf-8');
-    assert.strictEqual(res.body, '<!doctype html><html lang="en"></html>');
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+    expect(res.body).toBe('<!doctype html><html lang="en"></html>');
   });
 });

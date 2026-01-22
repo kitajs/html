@@ -1,13 +1,13 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "esnext",
     "jsx": "react-jsx",
     "jsxImportSource": "@kitajs/html",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "outDir": "dist",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "outDir": "./dist",
     "plugins": [{ "name": "@kitajs/ts-html-plugin" }]
   },
-  "include": ["lib", "test", "types", "index.js", "examples"]
+  "include": ["src", "test"]
 }

@@ -14,7 +14,7 @@
   "author": "Arthur Fiorette <kita@arthur.place>",
   "scripts": {
     "bench": "pnpm -r --filter \"@kitajs/bench-html-*\" build && pnpm --filter \"@kitajs/bench-html-runner\" start",
-    "build": "pnpm -r --aggregate-output build",
+    "build": "pnpm -r --filter \"./packages/*\" --aggregate-output build",
     "change": "changeset",
     "ci-publish": "pnpm publish -r --access public && changeset tag",
     "ci-version": "changeset version && pnpm install --no-frozen-lockfile",

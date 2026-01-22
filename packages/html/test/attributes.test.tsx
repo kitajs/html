@@ -59,7 +59,7 @@ describe('Attributes', () => {
   test('Dates & Objects', () => {
     const date = new Date();
     expect(<del datetime={date} />).toMatchInlineSnapshot(
-      `<del datetime="${date.toISOString()}"></del>`
+      `"<del datetime="${date.toISOString()}"></del>"`
     );
 
     //@ts-expect-error - testing object attribute

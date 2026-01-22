@@ -3,7 +3,11 @@ import { text } from 'node:stream/consumers';
 import { setImmediate, setTimeout } from 'node:timers/promises';
 import { afterEach, describe, expect, it, test, vi } from 'vitest';
 import { Html, type PropsWithChildren } from '../src/index.js';
-import { Suspense, SuspenseScript, renderToStream } from '../src/suspense.js';
+import {
+  Suspense,
+  renderToStream,
+  SuspenseScript as safeSuspenseScript
+} from '../src/suspense.js';
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
   await setTimeout(ms * 50);
@@ -58,7 +62,7 @@ describe('Suspense', () => {
           <div>1</div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           2
@@ -85,7 +89,7 @@ describe('Suspense', () => {
           <div>1</div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           2
@@ -131,7 +135,7 @@ describe('Suspense', () => {
                 <div>1</div>
               </div>
 
-              {SuspenseScript}
+              {safeSuspenseScript}
 
               <template id="N:1" data-sr>
                 2
@@ -162,7 +166,7 @@ describe('Suspense', () => {
             <div>1</div>
           </div>
 
-          {SuspenseScript}
+          {safeSuspenseScript}
 
           <template id="N:1" data-sr>
             2
@@ -208,7 +212,7 @@ describe('Suspense', () => {
           </div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           4
@@ -272,7 +276,7 @@ describe('Suspense', () => {
             ))}
           </div>
 
-          {SuspenseScript}
+          {safeSuspenseScript}
 
           {Array.from({ length: seconds }, (_, i) => (
             <>
@@ -316,7 +320,7 @@ describe('Suspense', () => {
           <div>1</div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           <div>2</div>
@@ -388,7 +392,7 @@ describe('Suspense', () => {
 
     expect(chunks[1].toString()).toBe(
       <>
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           <div>1</div>
@@ -440,7 +444,7 @@ describe('Suspense', () => {
           <div>1</div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           <div>2</div>
@@ -486,7 +490,7 @@ describe('Suspense', () => {
           </div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:2" data-sr>
           <div>2</div>
@@ -546,7 +550,7 @@ describe('Suspense', () => {
           </div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           <div>5</div>
@@ -615,7 +619,7 @@ describe('Suspense', () => {
           </div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           <div>Inner 0!</div>
@@ -721,14 +725,16 @@ describe('Suspense', () => {
           <div>Outer 4!</div>
           <div>Inner 4!</div>
         </div>
-        {SuspenseScript}
+        {safeSuspenseScript}
       </>
     );
   });
 
   it('SuspenseScript is a valid JS code', () => {
     // removes <script ...> and </script> tags
-    eval(SuspenseScript.slice(SuspenseScript.indexOf('>') + 1, -'</script>'.length));
+    eval(
+      safeSuspenseScript.slice(safeSuspenseScript.indexOf('>') + 1, -'</script>'.length)
+    );
   });
 
   it('Suspense works when children resolves first', async () => {
@@ -762,7 +768,7 @@ describe('Suspense', () => {
           </div>
         </div>
 
-        {SuspenseScript as 'safe'}
+        {safeSuspenseScript as 'safe'}
 
         <template id="N:1" data-sr>
           Child!
@@ -939,7 +945,7 @@ describe('Suspense errors', () => {
           <div>1</div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
         <template id="N:1" data-sr>
           <div>3</div>
         </template>
@@ -979,7 +985,7 @@ describe('Suspense errors', () => {
           <div>1</div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           <div>3</div>
@@ -1051,7 +1057,7 @@ describe('Suspense errors', () => {
           <div>1</div>
         </div>
 
-        {SuspenseScript}
+        {safeSuspenseScript}
 
         <template id="N:1" data-sr>
           <div>2</div>
