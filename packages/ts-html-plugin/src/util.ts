@@ -387,15 +387,22 @@ function getNodeExpressions(node: TS.Node): TS.Expression[] | undefined {
       return [];
     }
 
-    // Diagnose both sides since both sides can be executed, e.g:
-    // a empty string in the left side will execute the right side
+    // For && operator, the left side is only rendered when falsy
+    // (empty string, null, undefined, 0, false, NaN) - none of which are XSS risks
+    // So we only need to diagnose the right side
+    if (node.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken) {
+      return [node.right];
+    }
+
+    // For || and ?? operators, both sides can be rendered with potentially unsafe values
+    // So we diagnose both sides
     return [node.left, node.right];
   }
 
   // Checks the inner expression
   if (ts.isConditionalExpression(node)) {
     // ignore node.condition because its value will never be rendered
-    return [node.whenFalse, node.whenFalse];
+    return [node.whenTrue, node.whenFalse];
   }
 
   return undefined;
