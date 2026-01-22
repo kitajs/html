@@ -1,0 +1,17 @@
+{
+  "name": "@kitajs/example-http-server",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "tsx --watch src/index.tsx",
+    "test": "xss-scan"
+  },
+  "dependencies": {
+    "@kitajs/html": "workspace:*",
+    "@kitajs/ts-html-plugin": "workspace:*",
+    "@types/node": "catalog:",
+    "tslib": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  }
+}

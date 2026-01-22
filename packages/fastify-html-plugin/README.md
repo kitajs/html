@@ -41,11 +41,12 @@
 
 - [Installing](#installing)
 - [Preview](#preview)
-- [Installing](#installing-1)
 - [Configuration](#configuration)
+  - [Disabling Auto-Doctype Per Request](#disabling-auto-doctype-per-request)
 - [Documentation](#documentation)
 - [API](#api)
   - [`reply.html()`](#replyhtml)
+- [Compatibility](#compatibility)
 - [License](#license)
 
 <br />
@@ -53,24 +54,13 @@
 
 ## Installing
 
+> [!CAUTION] You **must have followed the `@kitajs/html`'s
+> [Installing](https://github.com/kitajs/html/tree/master/packages/html#installing)
+> guide** before continuing, otherwise you will be vulnerable to XSS attacks.
+
 ```sh
 npm install @kitajs/fastify-html-plugin
 ```
-
-<br />
-
-## Preview
-
-<img align="center" src="assets/preview.png" alt="Example of an error thrown by this LSP plugin." />
-
-<br />
-
-## Installing
-
-> [!CAUTION]  
-> You **must have followed the `@kitajs/html`'s
-> [Installing](https://github.com/kitajs/html/tree/master/packages/html#installing)
-> guide** before continuing, otherwise you will be vulnerable to XSS attacks.
 
 ```ts
 import kitaHtmlPlugin from '@kitajs/fastify-html-plugin';
@@ -81,6 +71,12 @@ const app = fastify();
 app.register(kitaHtmlPlugin);
 ```
 
+<br />
+
+## Preview
+
+<img align="center" src="assets/preview.png" alt="Preview of using @kitajs/fastify-html-plugin with JSX in Fastify." />
+
 ## Configuration
 
 Every option is well documented through their respective JSDoc comments, below are the
@@ -89,6 +85,20 @@ default options.
 | Name          | Description                                                                                        | Default |
 | ------------- | -------------------------------------------------------------------------------------------------- | ------- |
 | `autoDoctype` | Whether to automatically add `<!doctype html>` to a response starting with `<html>`, if not found. | `true`  |
+
+### Disabling Auto-Doctype Per Request
+
+You can disable the auto-doctype feature per request using the exported `kAutoDoctype`
+symbol:
+
+```ts
+import { kAutoDoctype } from '@kitajs/fastify-html-plugin';
+
+app.get('/fragment', (req, reply) => {
+  reply[kAutoDoctype] = false;
+  return reply.html(<div>Just a fragment, no doctype needed</div>);
+});
+```
 
 <br />
 
@@ -149,8 +159,14 @@ app
 
 <br />
 
+## Compatibility
+
+This plugin is compatible with **Fastify 4.x** and **Fastify 5.x**.
+
+<br />
+
 ## License
 
-Licensed under the **MIT**. See [`LICENSE`](LICENSE) for more informations.
+Licensed under the **MIT**. See [`LICENSE`](LICENSE) for more information.
 
 <br />

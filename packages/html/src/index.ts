@@ -431,7 +431,7 @@ export type Component<T = {}> = (this: void, props: PropsWithChildren<T>) => JSX
 /**
  * Joins raw string html elements into a single html string.
  *
- * A raw html fragment is just an array of strings, this method concatenates .
+ * A raw html fragment is just an array of strings, this method concatenates them.
  *
  * @param contents An maybe nested array of strings to concatenate.
  * @param escape If it should escape the contents before concatenating them. Default is
@@ -628,7 +628,7 @@ export const e: typeof escape = escape;
  * @link https://github.com/kitajs/html
  * @link https://www.npmjs.com/package/@kitajs/html
  */
-export const Html: Omit<typeof import('./index.js'), 'Html'> = {
+export const Html: Omit<typeof import('./index.js'), 'Html' | 'default'> = {
   escape,
   e,
   escapeHtml,

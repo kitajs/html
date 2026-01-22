@@ -80,9 +80,8 @@ manager, and put this inside your `tsconfig.json`.
 
 {
   "compilerOptions": {
-    "jsx": "react",
-    "jsxFactory": "Html.createElement",
-    "jsxFragmentFactory": "Html.Fragment",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@kitajs/html",
     "plugins": [{ "name": "@kitajs/ts-html-plugin" }]
   }
 }
@@ -94,7 +93,7 @@ manager, and put this inside your `tsconfig.json`.
 
 ## Running as CLI
 
-You can also run this project as a CLI tool. Which is a great way to ensue project-wide
+You can also run this project as a CLI tool. Which is a great way to ensure project-wide
 security. Also it's a great way to integrate with your CI/CD pipeline.
 
 ```sh
@@ -137,9 +136,9 @@ Sometimes, the plugin may not detect that a string or variable is safe for use a
 emit warnings, even when you are confident there are no security issues. Here are ways to
 address this:
 
-1. **Keep using use the `safe` Attribute:** Even if you are certain that the content is
-   free from XSS vulnerabilities, you can still use the `safe` attribute for added
-   assurance. After all, what's the problem of being safe twice?
+1. **Keep using the `safe` Attribute:** Even if you are certain that the content is free
+   from XSS vulnerabilities, you can still use the `safe` attribute for added assurance.
+   After all, what's the problem of being safe twice?
 
    ```tsx
    const html = <div safe>{content}</div>;

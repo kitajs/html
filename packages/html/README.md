@@ -109,7 +109,7 @@ To use the `@kitajs/html` package, follow these steps:
    ```
 
 3. Append the
-   [`xss-scan`](https://github.com/kitajs/html/tree/master/packages/ts-html-plugin/tree/main#running-as-cli)
+   [`xss-scan`](https://github.com/kitajs/html/tree/master/packages/ts-html-plugin#running-as-cli)
    command into your test script. This CLI comes from @kitajs/ts-html-plugin, which
    catches XSS vulnerabilities that may be introduced into your codebase, automating the
    xss scanning process to run everytime you test your code, like inside your CI/CD
@@ -144,13 +144,13 @@ To use the `@kitajs/html` package, follow these steps:
 
 > [!CAUTION]
 >
-> # Be sure your setup is working correclty!
+> # Be sure your setup is working correctly!
 >
 > Try writing `console.log(<div>{String.name}</div>);` in your editor. If it **THROWS** a
 > `XSS` error, then your setup is correct. Refer to the
 > [@kitajs/ts-html-plugin](https://github.com/kitajs/html/tree/master/packages/ts-html-plugin)
 > repository for more details on setting up editor intellisense. _(It should throw, as
-> `String.name` has a type of `string`, type which may or may not have special caracters)_
+> `String.name` has a type of `string`, which may or may not have special characters)_
 
 <br />
 <br />
@@ -252,7 +252,7 @@ function UserCard({ name, description, date, about }) {
       <br />
       <p safe>{description}</p>
       <br />
-      // Controlled input, no need to sanitize
+      {/* Controlled input, no need to sanitize */}
       <time datetime={date.toISOString()}>{date.toDateString()}</time>
       <br />
       <p safe>{about}</p>
@@ -365,8 +365,7 @@ const html = renderToStream(renderUserPage);
 
 <br />
 
-> [!NOTE]  
-> The `renderToStream()` is returns a native node/bun stream, head over to our
+> [!NOTE] The `renderToStream()` returns a native node/bun stream, head over to our
 > [suspense-server](./examples/suspense-server.tsx) example to see how to use it with
 > node:http, Express or Fastify servers.
 
@@ -544,7 +543,7 @@ app.get('/', (request, response) => (
 ));
 ```
 
-</br>
+<br />
 
 ## Alternative way to configure your tsconfig
 
@@ -864,8 +863,8 @@ Just add this triple slash directive to the top of your file:
 ## Performance
 
 This package is just a string builder on steroids, as you can see
-[how this works](#how-it-works). This means that most way to isolate performance
-differences is to micro benchmark.
+[how this works](#how-it-works). This means that the best way to measure performance
+differences is through micro benchmarks.
 
 The below benchmark compares this package with other popular HTML builders, like React,
 Typed Html, Common Tags and GHtml.
