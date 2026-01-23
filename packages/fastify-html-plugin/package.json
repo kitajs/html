@@ -25,15 +25,15 @@
     "test": "vitest --coverage --typecheck --run"
   },
   "dependencies": {
-    "fastify-plugin": "^5.1.0"
+    "fastify-plugin": "catalog:"
   },
   "devDependencies": {
-    "@fastify/formbody": "^8.0.2",
+    "@fastify/formbody": "catalog:",
     "@types/jsdom": "catalog:",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "fastify": "^5.7.1",
+    "fastify": "catalog:",
     "jsdom": "catalog:",
     "tslib": "catalog:",
     "typescript": "catalog:",

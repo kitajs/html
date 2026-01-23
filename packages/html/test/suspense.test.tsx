@@ -18,6 +18,32 @@ function Throw(): string {
   throw new Error('test');
 }
 
+/**
+ * Parses HTTP chunked transfer encoding format and returns the decoded content. Format:
+ * <hex-size>\r\n<data>\r\n...0\r\n\r\n
+ */
+function parseChunkedResponse(data: string): string {
+  let result = '';
+  let pos = 0;
+
+  while (pos < data.length) {
+    const sizeEnd = data.indexOf('\r\n', pos);
+    if (sizeEnd === -1) break;
+
+    const size = parseInt(data.slice(pos, sizeEnd), 16);
+    if (size === 0) break;
+
+    const dataStart = sizeEnd + 2;
+    const dataEnd = data.indexOf('\r\n', dataStart);
+    if (dataEnd === -1) break;
+
+    result += data.slice(dataStart, dataEnd);
+    pos = dataEnd + 2;
+  }
+
+  return result;
+}
+
 // Detect leaks of pending promises
 afterEach(() => {
   expect(SUSPENSE_ROOT.requests.size).toBe(0);
@@ -25,17 +51,35 @@ afterEach(() => {
   // Reset suspense root
   SUSPENSE_ROOT.autoScript = true;
   SUSPENSE_ROOT.requestCounter = 1;
+  SUSPENSE_ROOT.chunkedEncoding = true;
   SUSPENSE_ROOT.requests.clear();
 });
 
 describe('Suspense', () => {
   test('Sync without suspense', async () => {
+    // Disable chunked encoding for this test to compare raw output
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     expect(await text(renderToStream(() => <div />))).toBe(<div />);
 
     expect(await text(renderToStream(async () => <div />))).toBe(<div />);
   });
 
+  test('Sync without suspense with chunked encoding', async () => {
+    const raw = await text(renderToStream(() => <div />));
+    const html = parseChunkedResponse(raw);
+
+    expect(html).toBe(<div />);
+
+    const rawAsync = await text(renderToStream(async () => <div />));
+    const htmlAsync = parseChunkedResponse(rawAsync);
+
+    expect(htmlAsync).toBe(<div />);
+  });
+
   test('Suspense sync children', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     expect(
       await text(
         renderToStream((r) => (
@@ -48,6 +92,8 @@ describe('Suspense', () => {
   });
 
   test('Suspense async children', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     expect(
       await text(
         renderToStream((r) => (
@@ -75,6 +121,8 @@ describe('Suspense', () => {
   });
 
   test('Suspense async children & fallback', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     expect(
       await text(
         renderToStream((r) => (
@@ -102,6 +150,8 @@ describe('Suspense', () => {
   });
 
   test('Suspense async fallback sync children', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     expect(
       await text(
         renderToStream((r) => (
@@ -118,6 +168,8 @@ describe('Suspense', () => {
   });
 
   test('Multiple async renders cleanup', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     await Promise.all(
       Array.from({ length: 100 }, () => {
         return text(
@@ -151,6 +203,8 @@ describe('Suspense', () => {
   });
 
   test('Multiple sync renders cleanup', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     for (let i = 0; i < 10; i++) {
       expect(
         await text(
@@ -180,6 +234,8 @@ describe('Suspense', () => {
   });
 
   test('Multiple children', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     expect(
       await text(
         renderToStream((r) => (
@@ -239,6 +295,8 @@ describe('Suspense', () => {
   });
 
   test('Concurrent renders', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     const promises = [];
 
     for (const seconds of [9, 4, 7]) {
@@ -294,6 +352,8 @@ describe('Suspense', () => {
   });
 
   it('ensures autoScript works', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     // Sync does not needs autoScript
     expect(
       await text(
@@ -359,6 +419,8 @@ describe('Suspense', () => {
   });
 
   test('renderToStream', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     const stream = renderToStream((r) => (
       <div>
         <Suspense rid={r} fallback={<div>2</div>}>
@@ -405,6 +467,8 @@ describe('Suspense', () => {
   });
 
   test('renderToStream without suspense', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     const stream = renderToStream(() => '<div>not suspense</div>', 1227);
 
     expect(stream.readable).toBeTruthy();
@@ -419,6 +483,8 @@ describe('Suspense', () => {
   });
 
   it('tests suspense without children', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     expect(
       await text(
         renderToStream((r) => (
@@ -430,6 +496,8 @@ describe('Suspense', () => {
   });
 
   it('works with async error handlers', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     expect(
       await text(
         renderToStream((r) => (
@@ -457,6 +525,8 @@ describe('Suspense', () => {
   });
 
   it('works with deep suspense calls', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     expect(
       await text(
         renderToStream((rid) => {
@@ -517,6 +587,8 @@ describe('Suspense', () => {
   });
 
   it('works with deep suspense calls resolving first', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     expect(
       await text(
         renderToStream((rid) => {
@@ -579,6 +651,8 @@ describe('Suspense', () => {
   });
 
   it('works with parallel deep suspense calls resolving first', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     const html = await text(
       renderToStream((rid) => (
         <div>
@@ -738,6 +812,8 @@ describe('Suspense', () => {
   });
 
   it('Suspense works when children resolves first', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     async function Fallback() {
       for (let i = 0; i < 10; i++) {
         await setImmediate();
@@ -781,6 +857,8 @@ describe('Suspense', () => {
   });
 
   it('Suspense fails when children rejects first', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     async function Fallback(): Promise<string> {
       for (let i = 0; i < 10; i++) {
         await setImmediate();
@@ -814,6 +892,8 @@ describe('Suspense', () => {
 
 describe('Suspense errors', () => {
   it('Leaks if rendered outside of renderToStream', () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     try {
       const outside = (
         <Suspense rid={1} fallback={'1'}>
@@ -840,6 +920,8 @@ describe('Suspense errors', () => {
   });
 
   it('tests sync errors are thrown', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     await expect(
       text(
         renderToStream((r) => (
@@ -852,6 +934,8 @@ describe('Suspense errors', () => {
   });
 
   it('test sync errors after suspense', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     try {
       await text(
         renderToStream((r) => (
@@ -877,6 +961,8 @@ describe('Suspense errors', () => {
   });
 
   it('tests suspense without error boundary', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     const err = new Error('component failed');
 
     try {
@@ -895,6 +981,8 @@ describe('Suspense errors', () => {
   });
 
   it('tests stream suspense without error boundary', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     const err = new Error('component failed');
 
     const stream = renderToStream((r) => (
@@ -920,6 +1008,8 @@ describe('Suspense errors', () => {
   });
 
   it('tests suspense with function error boundary', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     const err = new Error('component failed');
 
     // Sync does not needs autoScript
@@ -957,6 +1047,8 @@ describe('Suspense errors', () => {
   });
 
   it('throws when rid is not provided', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     await expect(
       text(
         renderToStream(() => (
@@ -968,6 +1060,8 @@ describe('Suspense errors', () => {
   });
 
   it('tests suspense with error boundary', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     const err = new Error('component failed');
 
     // Sync does not needs autoScript
@@ -998,6 +1092,8 @@ describe('Suspense errors', () => {
   });
 
   it('does not write anything if stream is closed', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     const rendered = renderToStream(async (r) => {
       // Closes the stream rightly after
       const rd = SUSPENSE_ROOT.requests.get(r)!;
@@ -1033,6 +1129,8 @@ describe('Suspense errors', () => {
   });
 
   it('does not allows to use the same rid', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     let i = 1;
 
     function render(r: number | string) {
@@ -1070,6 +1168,8 @@ describe('Suspense errors', () => {
   });
 
   it('emits error if factory function throws', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
     const stream = renderToStream(async () => {
       throw new Error('Factory error');
     });
@@ -1081,5 +1181,111 @@ describe('Suspense errors', () => {
     } catch (error: any) {
       expect(error.message).toBe('Factory error');
     }
+  });
+});
+
+describe('Chunked encoding', () => {
+  test('outputs chunked format for sync content without suspense', async () => {
+    const raw = await text(renderToStream(() => <div>hello</div>));
+
+    // Verify it's in chunked format
+    expect(raw).toMatch(/^[0-9a-f]+\r\n/);
+    expect(raw).toMatch(/0\r\n\r\n$/);
+
+    // Verify decoded content
+    const html = parseChunkedResponse(raw);
+    expect(html).toBe(<div>hello</div>);
+  });
+
+  test('outputs chunked format for async content without suspense', async () => {
+    const raw = await text(renderToStream(async () => <div>async</div>));
+
+    // Verify it's in chunked format
+    expect(raw).toMatch(/^[0-9a-f]+\r\n/);
+    expect(raw).toMatch(/0\r\n\r\n$/);
+
+    // Verify decoded content
+    const html = parseChunkedResponse(raw);
+    expect(html).toBe(<div>async</div>);
+  });
+
+  test('outputs chunked format for suspense with async children', async () => {
+    const raw = await text(
+      renderToStream((r) => (
+        <Suspense rid={r} fallback={<div>loading</div>}>
+          <SleepForMs ms={1} />
+        </Suspense>
+      ))
+    );
+
+    // Verify it's in chunked format
+    expect(raw).toMatch(/^[0-9a-f]+\r\n/);
+    expect(raw).toMatch(/0\r\n\r\n$/);
+
+    // Verify decoded content
+    const html = parseChunkedResponse(raw);
+    expect(html).toContain('<div id="B:1" data-sf>');
+    expect(html).toContain('<template id="N:1" data-sr>');
+    expect(html).toContain('$KITA_RC(1)');
+  });
+
+  test('handles UTF-8 multibyte characters correctly', async () => {
+    const raw = await text(renderToStream(() => <div>日本語テスト🎉</div>));
+
+    // Verify decoded content
+    const html = parseChunkedResponse(raw);
+    expect(html).toBe(<div>日本語テスト🎉</div>);
+
+    // Verify the chunk size is in bytes, not characters
+    const firstLine = raw.split('\r\n')[0]!;
+    const chunkSize = parseInt(firstLine, 16);
+    expect(chunkSize).toBe(Buffer.byteLength(<div>日本語テスト🎉</div>, 'utf8'));
+  });
+
+  test('empty content produces just terminator', async () => {
+    const raw = await text(
+      renderToStream((r) => (
+        //@ts-expect-error - testing empty children
+        <Suspense rid={r} fallback={<div>1</div>}></Suspense>
+      ))
+    );
+
+    // Empty content should still have proper chunked terminator
+    expect(raw).toMatch(/0\r\n\r\n$/);
+
+    const html = parseChunkedResponse(raw);
+    expect(html).toBe('');
+  });
+
+  test('multiple suspense components produce multiple chunks', async () => {
+    const raw = await text(
+      renderToStream((r) => (
+        <div>
+          <Suspense rid={r} fallback={<div>1</div>}>
+            <SleepForMs ms={1} />
+          </Suspense>
+          <Suspense rid={r} fallback={<div>2</div>}>
+            <SleepForMs ms={2} />
+          </Suspense>
+        </div>
+      ))
+    );
+
+    // Verify decoded content
+    const html = parseChunkedResponse(raw);
+    expect(html).toContain('<div id="B:1" data-sf>');
+    expect(html).toContain('<div id="B:2" data-sf>');
+    expect(html).toContain('<template id="N:1" data-sr>');
+    expect(html).toContain('<template id="N:2" data-sr>');
+  });
+
+  test('can disable chunked encoding', async () => {
+    SUSPENSE_ROOT.chunkedEncoding = false;
+
+    const raw = await text(renderToStream(() => <div>no chunks</div>));
+
+    // Should not be in chunked format
+    expect(raw).not.toMatch(/^[0-9a-f]+\r\n/);
+    expect(raw).toBe(<div>no chunks</div>);
   });
 });

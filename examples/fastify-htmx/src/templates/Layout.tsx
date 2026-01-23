@@ -16,6 +16,8 @@ export function Layout({ title, children }: PropsWithChildren<LayoutProps>) {
           <title safe>{title}</title>
           <link rel="icon" href="https://kitajs.org/favicon.svg" type="image/svg+xml" />
           <script src="https://cdn.tailwindcss.com"></script>
+          <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+          <script src="https://unpkg.com/idiomorph@0.3.0/dist/idiomorph-ext.min.js"></script>
           <script>
             {`
               tailwind.config = {
@@ -51,10 +53,15 @@ export function Layout({ title, children }: PropsWithChildren<LayoutProps>) {
                 background-size: 200% 100%;
                 animation: shimmer 1.5s infinite;
               }
+              .htmx-request .htmx-indicator { display: inline-block; }
+              .htmx-indicator { display: none; }
             `}
           </style>
         </head>
-        <body class="bg-stone-950 min-h-screen text-stone-200 p-6 overflow-y-auto">
+        <body
+          class="bg-stone-950 min-h-screen text-stone-200 p-6 overflow-y-auto"
+          hx-ext="morph"
+        >
           {children}
         </body>
       </html>
