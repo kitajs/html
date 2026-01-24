@@ -568,7 +568,7 @@ namespace in every file you use JSX.
 ```tsx
 import { Html } from '@kitajs/html';
 
-const Html = (
+const html = (
   <div>
     <h1>Hello, world!</h1>
     <p>Welcome to the KitaJS HTML package.</p>
@@ -704,7 +704,7 @@ Or you can use the type option in your tsconfig to import the types globally:
 
 Often you will have a "template" html with doctype, things on the head, body and so on...
 Most users try to use them as a raw string and only use JSX for other components, but this
-is a not a good idea as
+is not a good idea as
 [you will have problems with it](https://github.com/nicojs/typed-html/issues/46).
 
 But you can always concatenate strings, like in this required use-case for `<doctype>`
