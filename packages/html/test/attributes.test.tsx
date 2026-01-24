@@ -56,12 +56,26 @@ describe('Attributes', () => {
     ).toMatchInlineSnapshot(`"<div></div>"`);
   });
 
-  test('Dates & Objects', () => {
-    const date = new Date();
-    expect(<del datetime={date} />).toMatchInlineSnapshot(
-      `"<del datetime="${date.toISOString()}"></del>"`
+  test('Dates', () => {
+    const date = new Date('1914-12-20T08:00+0000');
+
+    expect(<time datetime={date}></time>).toMatchInlineSnapshot(
+      `"<time datetime="1914-12-20T08:00:00.000Z"></time>"`
+    );
+    expect(<ins datetime={date}>new</ins>).toMatchInlineSnapshot(
+      `"<ins datetime="1914-12-20T08:00:00.000Z">new</ins>"`
+    );
+    expect(<del datetime={date}>old</del>).toMatchInlineSnapshot(
+      `"<del datetime="1914-12-20T08:00:00.000Z">old</del>"`
     );
 
+    // Also works with ISO strings
+    expect(<time datetime={date.toISOString()}></time>).toMatchInlineSnapshot(
+      `"<time datetime="1914-12-20T08:00:00.000Z"></time>"`
+    );
+  });
+
+  test('Objects', () => {
     //@ts-expect-error - testing object attribute
     expect(<div test={{}}></div>).toMatchInlineSnapshot(
       `"<div test="[object Object]"></div>"`

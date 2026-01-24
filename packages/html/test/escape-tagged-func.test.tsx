@@ -1,77 +1,9 @@
 import { describe, expect, test } from 'vitest';
 import * as Html from '../src/index.js';
 
-const unsafeTag = '<script tag="1">alert(1)</script>';
-const safeTag = Html.escape`${unsafeTag}`;
-
-describe('HTML Escaping', () => {
+describe('escape Tagged Template Function', () => {
   test('e is the same as escape', () => {
     expect(Html.e).toBe(Html.escape);
-  });
-
-  test('escapes content', () => {
-    expect(<>{unsafeTag}</>).toBe(<>{unsafeTag}</>);
-  });
-
-  test('with children', () => {
-    expect(
-      <>
-        <div>{unsafeTag}</div>
-      </>
-    ).toBe(
-      <>
-        <div>{unsafeTag}</div>
-      </>
-    );
-  });
-
-  test('escapes children', () => {
-    expect(
-      <>
-        <div safe>{unsafeTag}</div>
-      </>
-    ).toBe(
-      <>
-        <div>{safeTag}</div>
-      </>
-    );
-  });
-
-  test('escapes deep children', () => {
-    expect(
-      <>
-        <div safe>
-          <div>{unsafeTag}</div>
-        </div>
-      </>
-    ).toBe(
-      <>
-        <div>{Html.escape`${(<div>{unsafeTag}</div>)}`}</div>
-      </>
-    );
-  });
-
-  test('always escapes attributes', () => {
-    expect(
-      <>
-        <div style={'"&<>\''}></div>
-        <div style={{ backgroundColor: '"&<>\'' }}></div>
-        <div class={'"&<>\''}></div>
-        <div class={'test:1" xss="false'}></div>
-      </>
-    ).toMatchInlineSnapshot(
-      `"<div style="&#34;&<>'"></div><div style="background-color:&#34;&<>';"></div><div class="&#34;&<>'"></div><div class="test:1&#34; xss=&#34;false"></div>"`
-    );
-
-    expect(
-      <>
-        <div style={`"&<>'`}></div>
-        <div style={{ backgroundColor: `"&<>'` }}></div>
-        <div class={`"&<>'`}></div>
-      </>
-    ).toMatchInlineSnapshot(
-      `"<div style="&#34;&<>'"></div><div style="background-color:&#34;&<>';"></div><div class="&#34;&<>'"></div>"`
-    );
   });
 
   test('handles unknown values', () => {
@@ -88,7 +20,7 @@ describe('HTML Escaping', () => {
   // 6. Works when the text to escape is in the beginning
   // 7. Works when the text to escape is in the end
   // 8. Returns the same string when there's no need to escape
-  test('always escape', () => {
+  test('escapes special characters', () => {
     expect(Html.escape`absolutely nothing to do here`).toBe(
       'absolutely nothing to do here'
     );

@@ -45,6 +45,7 @@
 - [Running as CLI](#running-as-cli)
 - [Handling Warnings](#handling-warnings)
 - [Vscode](#vscode)
+- [tsgo Compatibility](#tsgo-compatibility)
 - [Error codes](#error-codes)
   - [K601](#k601)
   - [K602](#k602)
@@ -173,6 +174,23 @@ current project's typescript version.
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true
 }
+```
+
+<br />
+
+## tsgo Compatibility
+
+[tsgo](https://github.com/microsoft/typescript-go) (the native TypeScript compiler
+preview) does not currently implement support for Language Service Plugins. This means
+that when using tsgo, your IDE will not show XSS warnings and errors from this plugin.
+
+However, the `xss-scan` CLI tool will continue to work normally, as it uses the standard
+TypeScript compiler APIs. You can still use `xss-scan` in your CI/CD pipeline to catch XSS
+vulnerabilities even when developing with tsgo.
+
+```sh
+# This works regardless of whether you use tsgo or tsc
+xss-scan
 ```
 
 <br />

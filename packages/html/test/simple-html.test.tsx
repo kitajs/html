@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 
-describe('Html structures', () => {
-  test('simple html structures', () => {
+describe('HTML structures', () => {
+  test('basic elements', () => {
     expect(<a href="test">a link</a>).toMatchInlineSnapshot(
       `"<a href="test">a link</a>"`
     );
@@ -46,13 +46,24 @@ describe('Html structures', () => {
     expect(<D notHref></D>).toMatchInlineSnapshot(`"<div></div>"`);
   });
 
-  test('simple svg structure', () => {
+  test('svg structure', () => {
     expect(
       <svg width="100" height="100" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
       </svg>
     ).toMatchInlineSnapshot(
       `"<svg width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow"></circle></svg>"`
+    );
+  });
+
+  test('select element', () => {
+    expect(
+      <select onchange="jsFunctionCall()">
+        <option value="dog">Dog</option>
+        <option value="cat">Cat</option>
+      </select>
+    ).toMatchInlineSnapshot(
+      `"<select onchange="jsFunctionCall()"><option value="dog">Dog</option><option value="cat">Cat</option></select>"`
     );
   });
 });
