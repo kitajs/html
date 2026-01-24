@@ -575,4 +575,29 @@ describe('Suspense', () => {
       </>
     );
   });
+
+  test('stream outputs raw HTML (Fastify handles chunked transfer encoding at HTTP level)', async () => {
+    // This test verifies that the stream output is clean HTML without manual chunk markers.
+    // HTTP chunked transfer encoding is handled automatically by Fastify/Node.js at the
+    // protocol level when streaming responses without a Content-Length header.
+
+    await using app = fastify();
+    app.register(fastifyKitaHtml);
+
+    app.get('/', (req, res) =>
+      res.html(
+        <Suspense rid={req.id} fallback={<div>loading</div>}>
+          <SleepForMs ms={1} />
+        </Suspense>
+      )
+    );
+
+    const res = await app.inject({ method: 'GET', url: '/' });
+
+    expect(res.statusCode).toBe(200);
+    // Response should be clean HTML starting with the actual content
+    expect(res.body.startsWith('<div id="B:1"')).toBe(true);
+    // Should NOT contain manual chunk size markers (e.g., "28\r\n<div>...\r\n")
+    expect(res.body).not.toMatch(/^[0-9a-f]+\r\n/i);
+  });
 });

@@ -68,8 +68,6 @@
 - [How it works](#how-it-works)
 - [Serialization table](#serialization-table)
 - [Format HTML output](#format-html-output)
-- [Deprecating global register](#deprecating-global-register)
-- [Deprecating importing type extensions](#deprecating-importing-type-extensions)
 - [Fork credits](#fork-credits)
 
 <br />
@@ -401,6 +399,10 @@ function renderTemplate(rid: number) {
 
 The above example would only return anything after `MyAsyncFallback` is resolved. To catch
 async fallback errors, you must wrap it into a [`ErrorBoundary`](#error-boundaries).
+
+> [!NOTE] HTTP chunked transfer encoding is handled automatically by Node.js (and other
+> runtimes) when streaming responses without a `Content-Length` header. You don't need to
+> configure anything for this to work.
 
 <br />
 
@@ -1014,63 +1016,6 @@ console.log(prettify(html));
 
 👉 There's an open PR to implement this feature natively, wanna work on it? Check
 [this PR](https://github.com/kitajs/html/pull/1).
-
-<br />
-
-## Deprecating global register
-
-The `@kitajs/html/register` in favour of the `react-jsx` target `@kitajs/html` supports,
-which automatically registers the JSX runtime globally.
-
-Please update your tsconfig to use the new `jsxImportSource` option and remove all
-references to `'@kitajs/html/register'` from your codebase.
-
-```diff
-{
-  "compilerOptions": {
-+   "jsx": "react-jsx",
-+   "jsxImportSource": "@kitajs/html",
--   "jsx": "react",
--   "jsxFactory": "Html.createElement",
--   "jsxFragmentFactory": "Html.Fragment",
-    "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
-  }
-}
-```
-
-You can also remove all references to `import { Html } from '@kitajs/html'` from your
-codebase.
-
-```diff
-- import { Html } from '@kitajs/html';
-```
-
-<br />
-
-## Deprecating importing type extensions
-
-Importing type extensions like `import '@kitajs/html/htmx'` and
-`import '@kitajs/html/alpine'` have been deprecated and will be removed in the next major
-version.
-
-Please change the way you import them to either use `/// <reference types="..." />`
-[triple slash directive](https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html)
-or the [`types`](https://www.typescriptlang.org/tsconfig/#types) option in your tsconfig.
-
-```diff
-- import '@kitajs/html/htmx';
-+ /// <reference types="@kitajs/html/htmx" />
-```
-
-**Or** add them in the `types` option present in your tsconfig:
-
-```diff
-{
-  "compilerOptions": {
-+   "types": ["@kitajs/html/htmx"]
-  }
-}
-```
 
 <br />
 

@@ -14,6 +14,7 @@ const server = http.createServer((req, res) => {
 
   // Set proper content type with charset to prevent UTF-7 XSS attacks
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Transfer-Encoding', 'chunked');
 
   // Create the HTML stream from the page renderer
   const htmlStream = renderToStream(Dashboard);
