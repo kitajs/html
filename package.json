@@ -13,15 +13,16 @@
   "license": "MIT",
   "author": "Arthur Fiorette <kita@arthur.place>",
   "scripts": {
-    "bench": "pnpm -r --filter \"@kitajs/bench-html-*\" build && pnpm --filter \"@kitajs/bench-html-runner\" start",
-    "build": "pnpm -r --filter \"./packages/*\" --aggregate-output build",
+    "bench": "turbo run benchmark",
+    "build": "turbo run build --filter=\"./packages/*\"",
+    "build-all": "turbo run build",
     "changeset": "changeset",
     "ci-publish": "pnpm publish -r --access public && changeset tag",
     "ci-version": "changeset version && pnpm install --no-frozen-lockfile",
     "format": "prettier --write .",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky",
-    "test": "pnpm -r --no-bail --aggregate-output --parallel test"
+    "test": "turbo run test"
   },
   "devDependencies": {
     "@arthurfiorette/prettier-config": "^1.0.12",
@@ -34,6 +35,7 @@
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-packagejson": "^3.0.0",
     "self-ts-plugin": "link:packages/ts-html-plugin",
+    "turbo": "^2.7.6",
     "typescript": "catalog:"
   },
   "packageManager": "pnpm@10.28.1",

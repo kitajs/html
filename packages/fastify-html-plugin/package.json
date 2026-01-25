@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@fastify/formbody": "catalog:",
+    "@kitajs/html": "workspace:^",
     "@types/jsdom": "catalog:",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",

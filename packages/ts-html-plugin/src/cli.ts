@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import chalk from 'chalk';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -103,7 +101,7 @@ function fileExists(p: string) {
   }
 }
 
-async function main() {
+export async function main() {
   const args = await yargs(hideBin(process.argv)).help(false).version(version).argv;
 
   if (args.help || args.h) {
@@ -229,5 +227,3 @@ async function main() {
   console.log(chalk.green(`No XSS vulnerabilities found in ${files.length} files!`));
   process.exit(0);
 }
-
-main().catch(console.error);

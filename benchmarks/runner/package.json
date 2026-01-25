@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "benchmark": "NODE_ENV=production node --expose-gc lib/benchmark.js",
     "profile": "node lib/profile.js",
     "start": "NODE_ENV=production node --expose-gc lib/benchmark.js",
-    "pretest": "pnpm --filter=@kitajs/bench-html-kitajs --filter=@kitajs/bench-html-reactjsx --filter=@kitajs/bench-html-react build",
     "test": "node lib/react-equality.js"
   },
   "dependencies": {

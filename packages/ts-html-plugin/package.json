@@ -16,8 +16,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "ts-html-plugin": "dist/cli.js",
-    "xss-scan": "dist/cli.js"
+    "ts-html-plugin": "bin/index.js",
+    "xss-scan": "bin/index.js"
   },
   "files": [
     "dist",
