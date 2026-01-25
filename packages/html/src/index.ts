@@ -624,7 +624,7 @@ export const e: typeof escape = escape;
  * Fast and type safe HTML templates using JSX syntax.
  *
  * @module Html
- * @license Apache License Version 2.0
+ * @license MIT
  * @link https://github.com/kitajs/html
  * @link https://www.npmjs.com/package/@kitajs/html
  */

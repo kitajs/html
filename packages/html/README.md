@@ -1029,6 +1029,6 @@ Initial credits to [nicojs](https://github.com/nicojs) and
 [contributors](https://github.com/nicojs/typed-html/graphs/contributors) for the amazing
 work.
 
-Licensed under the [Apache License, Version 2.0](LICENSE).
+Licensed under the [MIT](LICENSE).
 
 <br />
