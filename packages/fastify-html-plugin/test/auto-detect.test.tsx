@@ -1,6 +1,6 @@
 import fastify from 'fastify';
 import { describe, expect, test } from 'vitest';
-import { fastifyKitaHtml } from '../';
+import { fastifyKitaHtml } from '../src';
 
 describe('opts.autoDoctype', () => {
   test('Default', async () => {

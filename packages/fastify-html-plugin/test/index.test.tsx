@@ -1,7 +1,7 @@
 import fastify from 'fastify';
 import { setImmediate } from 'node:timers/promises';
 import { describe, expect, test } from 'vitest';
-import { fastifyKitaHtml } from '..';
+import { fastifyKitaHtml } from '../src';
 
 describe('reply.html()', () => {
   test('renders html', async () => {

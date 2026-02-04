@@ -10,7 +10,7 @@ import fastify from 'fastify';
 import { JSDOM } from 'jsdom';
 import { setTimeout } from 'node:timers/promises';
 import { afterEach, describe, expect, test } from 'vitest';
-import { fastifyKitaHtml } from '..';
+import { fastifyKitaHtml } from '../src';
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
   await setTimeout(ms * 50);

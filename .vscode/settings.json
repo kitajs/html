@@ -5,5 +5,22 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#bd695e",
+    "statusBar.foreground": "#15202b",
+    "activityBar.activeBackground": "#c97c72",
+    "activityBar.background": "#c97c72",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "commandCenter.border": "#15202b99",
+    "sash.hoverBorder": "#c97c72",
+    "statusBarItem.hoverBackground": "#ad4336",
+    "statusBarItem.remoteBackground": "#bd695e",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#bd695e",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#bd695e99",
+    "titleBar.inactiveForeground": "#15202b99"
   }
 }

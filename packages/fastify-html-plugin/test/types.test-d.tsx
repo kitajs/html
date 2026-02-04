@@ -1,11 +1,11 @@
 import { Suspense } from '@kitajs/html/suspense';
 import fastify from 'fastify';
 import { expectTypeOf, test } from 'vitest';
-import { fastifyKitaHtml } from '..';
+import { fastifyKitaHtml, kAutoDoctype } from '../src';
 
 test('fastify-html-plugin types', () => {
   expectTypeOf(fastifyKitaHtml).toBeFunction();
-  expectTypeOf(fastifyKitaHtml.kAutoDoctype).toEqualTypeOf<symbol>();
+  expectTypeOf(kAutoDoctype).toEqualTypeOf<typeof kAutoDoctype>();
 
   const app = fastify();
 
