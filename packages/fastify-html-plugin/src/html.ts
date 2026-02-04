@@ -39,13 +39,17 @@ function handleSyncHtml(htmlStr: string, reply: FastifyReply) {
 
   if (requestData === undefined) {
     return reply
+      .header('transfer-encoding', 'identity')
       .header('content-length', Buffer.byteLength(htmlStr, 'utf-8'))
       .send(htmlStr);
   }
 
   // Content-length is optional as long as the connection is closed after the response is done
   // https://www.rfc-editor.org/rfc/rfc7230#section-3.3.3
-  return reply.send(
+  //
+  // Nodejs natively adds 'transfer-encoding: chunked' when returning a stream without content-length
+  // https://nodejs.org/api/http.html#requestwritechunk-encoding-callback
+  return reply.header('transfer-encoding', 'chunked').send(
     // htmlStr might resolve after one of its suspense components
     resolveHtmlStream(htmlStr, requestData)
   );

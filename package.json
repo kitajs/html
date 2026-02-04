@@ -22,7 +22,8 @@
     "format": "prettier --write .",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "test-types": "turbo run test-types"
   },
   "devDependencies": {
     "@arthurfiorette/prettier-config": "^1.0.12",

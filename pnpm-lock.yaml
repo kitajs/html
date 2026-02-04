@@ -338,6 +338,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.10.9
+      '@typescript/native-preview':
+        specifier: 'catalog:'
+        version: 7.0.0-dev.20260122.2
       fastify:
         specifier: 'catalog:'
         version: 5.7.1
@@ -365,6 +368,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.10.9
+      '@typescript/native-preview':
+        specifier: 'catalog:'
+        version: 7.0.0-dev.20260122.2
       tslib:
         specifier: 'catalog:'
         version: 2.8.1

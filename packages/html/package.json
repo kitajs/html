@@ -34,7 +34,8 @@
   ],
   "scripts": {
     "build": "tsgo -p tsconfig.build.json",
-    "test": "vitest --coverage --typecheck --run"
+    "test": "vitest --coverage --typecheck --run",
+    "test-types": "tsgo --noEmit"
   },
   "dependencies": {
     "csstype": "^3.2.3"

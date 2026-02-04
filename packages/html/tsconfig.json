@@ -6,6 +6,6 @@
     "outDir": "./dist",
     "skipLibCheck": false
   },
-  "include": ["src", "test"],
+  "include": ["src", "test", "*.d.ts"],
   "exclude": ["dist"]
 }

@@ -73,16 +73,14 @@ declare module 'fastify' {
     [kAutoDoctype]: boolean;
 
     /**
-     * **Synchronously** waits for the component tree to resolve and sends it at once to
-     * the browser.
-     *
-     * This method does not support the usage of `<Suspense />`, please use
-     * {@linkcode streamHtml} instead.
+     * Returns an HTML response to the browser. The response stream might remain open if
+     * there are pending Suspense components.
      *
      * If the HTML does not start with a doctype and `opts.autoDoctype` is enabled, it
      * will be added automatically.
      *
-     * The correct `Content-Type` header will also be defined.
+     * The correct `Content-Type`, `Content-Length` and `Transfer-Encoding` headers are
+     * going to be defined according to the html content being returned.
      *
      * @example
      *
@@ -96,10 +94,17 @@ declare module 'fastify' {
      *    </html>
      *   )
      * );
+     *
+     * app.get('/stream', (req, reply) =>
+     *  reply.html(
+     *    <Suspense rid={req.id} fallback={<div>Loading...</div>}>
+     *      {Promise.resolve(<div>Content loaded!</div>)}
+     *    </Suspense>
+     *   )
+     * );
      * ```
      *
      * @param html The HTML to send.
-     * @returns The response.
      */
     html<H extends JSX.Element>(
       this: this,

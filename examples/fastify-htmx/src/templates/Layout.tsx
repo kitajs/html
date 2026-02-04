@@ -6,20 +6,19 @@ interface LayoutProps {
 
 export function Layout({ title, children }: PropsWithChildren<LayoutProps>) {
   return (
-    '<!doctype html>' +
-    (
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <meta name="theme-color" content="#1B1B1F" />
-          <title safe>{title}</title>
-          <link rel="icon" href="https://kitajs.org/favicon.svg" type="image/svg+xml" />
-          <script src="https://cdn.tailwindcss.com"></script>
-          <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-          <script src="https://unpkg.com/idiomorph@0.3.0/dist/idiomorph-ext.min.js"></script>
-          <script>
-            {`
+    // autoDoctype is added by fastify-html-plugin
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#1B1B1F" />
+        <title safe>{title}</title>
+        <link rel="icon" href="https://kitajs.org/favicon.svg" type="image/svg+xml" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+        <script src="https://unpkg.com/idiomorph@0.3.0/dist/idiomorph-ext.min.js"></script>
+        <script>
+          {`
               tailwind.config = {
                 theme: {
                   extend: {
@@ -41,9 +40,9 @@ export function Layout({ title, children }: PropsWithChildren<LayoutProps>) {
                 }
               }
             `}
-          </script>
-          <style>
-            {`
+        </script>
+        <style>
+          {`
               @keyframes shimmer {
                 0% { background-position: 200% 0; }
                 100% { background-position: -200% 0; }
@@ -56,15 +55,14 @@ export function Layout({ title, children }: PropsWithChildren<LayoutProps>) {
               .htmx-request .htmx-indicator { display: inline-block; }
               .htmx-indicator { display: none; }
             `}
-          </style>
-        </head>
-        <body
-          class="bg-stone-950 min-h-screen text-stone-200 p-6 overflow-y-auto"
-          hx-ext="morph"
-        >
-          {children}
-        </body>
-      </html>
-    )
+        </style>
+      </head>
+      <body
+        class="bg-stone-950 min-h-screen text-stone-200 p-6 overflow-y-auto"
+        hx-ext="morph"
+      >
+        {children}
+      </body>
+    </html>
   );
 }

@@ -1,4 +1,8 @@
 import type { PropsWithChildren } from '@kitajs/html';
+import { setTimeout } from 'node:timers/promises';
+
+// Helper for random delay
+const randomDelay = (): Promise<number> => setTimeout(300 + Math.random() * 700);
 
 // Card component
 interface CardProps {
@@ -69,6 +73,28 @@ export function StatSkeleton() {
       <div class="h-3 w-12 skeleton rounded" />
     </div>
   );
+}
+
+// Async Stat Components - These demonstrate Suspense
+export async function VisitorsStat() {
+  await randomDelay();
+  return <StatCard label="Visitors" value="2,847" change="+12%" positive />;
+}
+
+export async function RequestsStat() {
+  await randomDelay();
+  return <StatCard label="Requests" value="14.2k" change="+28%" positive />;
+}
+
+export async function UptimeStat() {
+  await randomDelay();
+  return <StatCard label="Uptime" value="99.9%" change="Stable" positive />;
+}
+
+export async function MemoryStat() {
+  await randomDelay();
+  const used = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
+  return <StatCard label="Memory" value={`${used} MB`} />;
 }
 
 // List item

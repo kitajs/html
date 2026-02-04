@@ -28,7 +28,8 @@
     "build": "tsgo -p tsconfig.build.json",
     "prepack": "pnpm run build",
     "pretest": "pnpm run build",
-    "test": "vitest --coverage --typecheck --run"
+    "test": "vitest --coverage --typecheck --run",
+    "test-types": "tsgo --noEmit"
   },
   "dependencies": {
     "chalk": "^5.6.2",

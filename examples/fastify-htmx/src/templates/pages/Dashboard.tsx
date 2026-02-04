@@ -1,9 +1,19 @@
+import { Suspense } from '@kitajs/html/suspense';
 import { TodoItem } from '../../api/todos';
 import { store } from '../../store';
-import { Card, Progress, Spinner, StatSkeleton } from '../components';
+import {
+  Card,
+  MemoryStat,
+  Progress,
+  RequestsStat,
+  Spinner,
+  StatSkeleton,
+  UptimeStat,
+  VisitorsStat
+} from '../components';
 import { Layout } from '../Layout';
 
-export function Dashboard() {
+export function Dashboard({ rid }: { rid: number | string }) {
   return (
     <Layout title="KitaJS + HTMX Demo">
       <div class="flex flex-col max-w-5xl mx-auto w-full">
@@ -31,20 +41,20 @@ export function Dashboard() {
           </div>
         </header>
 
-        {/* Stats Row - Load on page load with hx-trigger="load" */}
+        {/* Stats Row - Using Suspense with async JSX components */}
         <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div hx-get="/api/stats/visitors" hx-trigger="load" hx-swap="outerHTML">
-            <StatSkeleton />
-          </div>
-          <div hx-get="/api/stats/requests" hx-trigger="load" hx-swap="outerHTML">
-            <StatSkeleton />
-          </div>
-          <div hx-get="/api/stats/uptime" hx-trigger="load" hx-swap="outerHTML">
-            <StatSkeleton />
-          </div>
-          <div hx-get="/api/stats/memory" hx-trigger="load" hx-swap="outerHTML">
-            <StatSkeleton />
-          </div>
+          <Suspense rid={rid} fallback={<StatSkeleton />}>
+            <VisitorsStat />
+          </Suspense>
+          <Suspense rid={rid} fallback={<StatSkeleton />}>
+            <RequestsStat />
+          </Suspense>
+          <Suspense rid={rid} fallback={<StatSkeleton />}>
+            <UptimeStat />
+          </Suspense>
+          <Suspense rid={rid} fallback={<StatSkeleton />}>
+            <MemoryStat />
+          </Suspense>
         </section>
 
         {/* Main Content */}
@@ -173,7 +183,8 @@ export function Dashboard() {
         {/* Footer */}
         <footer class="text-center flex-shrink-0">
           <p class="text-xs text-stone-600">
-            Each component uses HTMX for seamless server interactions without JavaScript
+            Stats use Suspense with async JSX components. Other components use HTMX for
+            seamless server interactions.
           </p>
           <p class="text-xs text-stone-500 mt-1">
             Built with{' '}

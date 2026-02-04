@@ -5,9 +5,14 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputLogs": "new-only"
+      "outputLogs": "new-only",
+      "outputs": ["dist"]
     },
     "test": {
+      "dependsOn": ["^build"],
+      "outputLogs": "new-only"
+    },
+    "test-types": {
       "dependsOn": ["^build"],
       "outputLogs": "new-only"
     },
