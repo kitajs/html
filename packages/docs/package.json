@@ -1,0 +1,22 @@
+{
+  "name": "@kitajs/html-docs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Official documentation for @kitajs/html - Fast and type safe HTML templates using TypeScript",
+  "type": "module",
+  "scripts": {
+    "build": "rspress build",
+    "dev": "rspress dev",
+    "preview": "rspress preview"
+  },
+  "dependencies": {
+    "@rspress/core": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  }
+}
