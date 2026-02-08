@@ -503,6 +503,7 @@ declare namespace JSX {
   }
 
   interface HtmlDialogTag extends HtmlTag {
+    closedby?: undefined | 'any' | 'closerequest' | 'none' | AnyString; 
     open?: undefined | boolean;
     onclose?: undefined | string;
   }
