@@ -1,5 +1,13 @@
 # @kitajs/html
 
+## 4.2.12
+
+### Patch Changes
+
+- [#461](https://github.com/kitajs/html/pull/461)
+  [`ab63a14`](https://github.com/kitajs/html/commit/ab63a14e4a63bbcf34578fa47ed6a55cf17bcab3)
+  Thanks [@8549](https://github.com/8549)! - Add closedby property on HtmlDialogTag
+
 ## 4.2.11
 
 ### Patch Changes
