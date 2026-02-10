@@ -1,5 +1,13 @@
 # @kitajs/ts-html-plugin
 
+## 4.1.4
+
+### Patch Changes
+
+- [`2f8c677`](https://github.com/kitajs/html/commit/2f8c677ee92c81dc97f1a181fbcb6205dee8fb04)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Add support for
+  Typescript 5.9.3
+
 ## 4.1.3
 
 ### Patch Changes
