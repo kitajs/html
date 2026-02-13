@@ -1,16 +1,36 @@
 [
   {
     "text": "Guide",
-    "link": "/guide/",
+    "link": "/guide/getting-started",
     "activeMatch": "/guide/"
   },
   {
-    "text": "Hello world",
-    "link": "/hello/",
-    "activeMatch": "/hello/"
+    "text": "XSS Security",
+    "link": "/guide/xss-scanner"
   },
   {
-    "text": "API",
-    "link": "https://rspress.rs/api/index.html"
+    "text": "Integrations",
+    "items": [
+      {
+        "text": "Fastify",
+        "link": "/integrations/fastify"
+      },
+      {
+        "text": "HTMX",
+        "link": "/integrations/htmx"
+      },
+      {
+        "text": "Alpine.js",
+        "link": "/integrations/alpine"
+      },
+      {
+        "text": "Hotwire Turbo",
+        "link": "/integrations/turbo"
+      }
+    ]
+  },
+  {
+    "text": "GitHub",
+    "link": "https://github.com/kitajs/html"
   }
 ]

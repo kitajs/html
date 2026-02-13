@@ -1,0 +1,385 @@
+/* Support for flag emojis */
+@font-face {
+  font-family: 'Twemoji Country Flags';
+  unicode-range:
+    U+1F1E6-1F1FF, U+1F3F4, U+E0062-E0063, U+E0065, U+E0067, U+E006C, U+E006E,
+    U+E0073-E0074, U+E0077, U+E007F;
+  src: url('https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill/dist/TwemojiCountryFlags.woff2')
+    format('woff2');
+  font-display: swap;
+}
+
+:root {
+  /* KitaJS Brand Colors - Primary color system */
+  --rp-c-brand: #bd695e;
+  --rp-c-brand-dark: #ad4336;
+  --rp-c-brand-light: #e4c8c5;
+  --rp-c-brand-lighter: #f5e8e6;
+  --rp-c-brand-darker: #8d3329;
+
+  /* Override ALL rspress brand color variables */
+  --rp-c-brand-1: #bd695e;
+  --rp-c-brand-2: #ad4336;
+  --rp-c-brand-3: #e4c8c5;
+
+  /* Text brand colors */
+  --rp-c-text-brand: #bd695e;
+  --rp-c-text-brand-1: #bd695e;
+  --rp-c-text-brand-2: #ad4336;
+
+  /* Link colors */
+  --rp-c-brand-link: #bd695e;
+  --rp-c-brand-link-hover: #ad4336;
+
+  /* Background brand colors */
+  --rp-c-bg-brand: #f5e8e6;
+  --rp-c-bg-brand-soft: rgba(189, 105, 94, 0.1);
+  --rp-c-bg-brand-mute: rgba(189, 105, 94, 0.05);
+
+  /* Button colors */
+  --rp-button-brand-border: transparent;
+  --rp-button-brand-text: #ffffff;
+  --rp-button-brand-bg: #bd695e;
+  --rp-button-brand-hover-border: transparent;
+  --rp-button-brand-hover-text: #ffffff;
+  --rp-button-brand-hover-bg: #ad4336;
+  --rp-button-brand-active-border: transparent;
+  --rp-button-brand-active-text: #ffffff;
+  --rp-button-brand-active-bg: #8d3329;
+
+  /* Hero colors */
+  --rp-home-hero-name-color: transparent;
+  --rp-home-hero-name-background: linear-gradient(120deg, #ad4336 30%, #bd695e 70%);
+
+  /* Hero image background - remove blue, use brand colors */
+  --rp-home-hero-image-background-image: linear-gradient(
+    125deg,
+    #bd695e 0%,
+    #e4c8c5 50%,
+    #f5e8e6 100%
+  );
+  --rp-home-hero-image-filter: blur(44px);
+
+  /* Accent colors - override any blue accents */
+  --rp-c-accent: #bd695e;
+  --rp-c-accent-1: #bd695e;
+  --rp-c-accent-2: #ad4336;
+  --rp-c-accent-3: #e4c8c5;
+  --rp-c-accent-soft: rgba(189, 105, 94, 0.14);
+
+  /* Border colors */
+  --rp-c-border-brand: #bd695e;
+
+  /* Font family with emoji support */
+  --rp-font-family-base:
+    'Twemoji Country Flags', 'Chinese Quotes', 'Inter var', 'Inter', ui-sans-serif,
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Helvetica, Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@media (min-width: 640px) {
+  :root {
+    --rp-home-hero-image-filter: blur(56px);
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --rp-home-hero-image-filter: blur(68px);
+  }
+}
+
+/* Search styling */
+.DocSearch {
+  --docsearch-primary-color: var(--rp-c-brand-dark) !important;
+}
+
+/* Home hero custom styling */
+.home-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+  padding: 4rem 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+@media (max-width: 960px) {
+  .home-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.hero-content {
+  flex: 1;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.hero-title .brand {
+  background: -webkit-linear-gradient(120deg, #ad4336 30%, #bd695e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--rp-c-text-1);
+}
+
+.hero-description {
+  font-size: 1.125rem;
+  color: var(--rp-c-text-2);
+  margin-bottom: 2rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 960px) {
+  .hero-actions {
+    justify-content: center;
+  }
+}
+
+.action-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.action-button.primary {
+  background: var(--rp-c-brand-light);
+  color: white;
+}
+
+.action-button.primary:hover {
+  background: var(--rp-c-brand);
+}
+
+.action-button.secondary {
+  background: var(--rp-c-bg-soft);
+  color: var(--rp-c-text-1);
+}
+
+.action-button.secondary:hover {
+  background: var(--rp-c-bg-mute);
+}
+
+.hero-image {
+  flex: 1;
+  max-width: 500px;
+}
+
+.hero-image img {
+  width: 100%;
+  height: auto;
+}
+
+/* Features grid */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.features h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--rp-c-text-1);
+}
+
+.features p {
+  color: var(--rp-c-text-2);
+  line-height: 1.6;
+}
+
+/* Integration grid */
+.integration-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.integration-grid h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.integration-grid h3 a {
+  color: var(--rp-c-brand);
+  text-decoration: none;
+}
+
+.integration-grid h3 a:hover {
+  color: var(--rp-c-brand-dark);
+}
+
+/* Code block improvements */
+.rp-code-block {
+  border-radius: 0.5rem;
+}
+
+/* Danger/warning boxes */
+.rp-container.danger {
+  border-color: var(--rp-c-danger);
+}
+
+.rp-container.warning {
+  border-color: var(--rp-c-warning);
+}
+
+.rp-container.tip {
+  border-color: var(--rp-c-brand);
+}
+
+/* Link colors - force brand colors everywhere */
+a {
+  color: var(--rp-c-brand) !important;
+}
+
+a:hover {
+  color: var(--rp-c-brand-dark) !important;
+}
+
+/* Navbar links */
+.rp-nav a,
+.rp-nav-item a,
+.rp-sidebar a {
+  color: inherit;
+}
+
+.rp-nav a:hover,
+.rp-nav-item a:hover {
+  color: var(--rp-c-brand) !important;
+}
+
+/* Active nav items */
+.rp-nav-item.active,
+.rp-sidebar-item.active {
+  color: var(--rp-c-brand) !important;
+  border-color: var(--rp-c-brand) !important;
+}
+
+/* Home page hero section overrides */
+.rp-home-hero {
+  background: transparent !important;
+}
+
+.rp-home-hero .rp-button.primary,
+.rp-home-hero .rp-button-brand {
+  background: var(--rp-c-brand) !important;
+  border-color: var(--rp-c-brand) !important;
+  color: white !important;
+}
+
+.rp-home-hero .rp-button.primary:hover,
+.rp-home-hero .rp-button-brand:hover {
+  background: var(--rp-c-brand-dark) !important;
+  border-color: var(--rp-c-brand-dark) !important;
+}
+
+/* Table styling */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+table th {
+  background: var(--rp-c-bg-soft);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem 1rem;
+}
+
+table td {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--rp-c-divider);
+}
+
+/* Override any blue background gradients in home page */
+.rp-home-hero-image {
+  background: linear-gradient(125deg, #bd695e 0%, #e4c8c5 50%, #f5e8e6 100%) !important;
+}
+
+/* Feature cards */
+.rp-feature-card {
+  border-color: var(--rp-c-divider);
+}
+
+.rp-feature-card:hover {
+  border-color: var(--rp-c-brand-light);
+}
+
+/* Code groups and tabs */
+.rp-code-tab.active,
+.rp-code-tab:hover {
+  color: var(--rp-c-brand) !important;
+  border-bottom-color: var(--rp-c-brand) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar-thumb {
+  background-color: var(--rp-c-brand-light);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--rp-c-brand);
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--rp-c-brand-light);
+  color: white;
+}
+
+/* Focus outline */
+*:focus-visible {
+  outline-color: var(--rp-c-brand) !important;
+}
+
+/* Badges and tags */
+.rp-badge,
+.rp-tag {
+  background-color: var(--rp-c-brand-light);
+  color: var(--rp-c-brand-dark);
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-tagline {
+    font-size: 1.25rem;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+  }
+}

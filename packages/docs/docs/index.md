@@ -2,47 +2,91 @@
 pageType: home
 
 hero:
-  name: My Site
-  text: A cool website!
-  tagline: This is the tagline
+  name: Kita Html
+  text: The fastest server-side JSX runtime
+  tagline: Just like your usual template engine, but just better!
   actions:
     - theme: brand
-      text: Quick Start
-      link: /guide/
+      text: Get Started →
+      link: /guide/getting-started
     - theme: alt
-      text: GitHub
-      link: https://github.com/web-infra-dev/rspress
+      text: Benchmark
+      link: /guide/benchmark
+    - theme: alt
+      text: Integrations
+      link: /integrations/overview
   image:
-    src: /rspress-icon.png
-    alt: Logo
+    src: /doug-pc-glasses.svg
+    alt: Doug, Kita's turtle mascot, with glasses looking at a computer screen
+
 features:
-  - title: Blazing fast build speed
+  - title: ⚡ Super Fast
     details:
-      The core compilation module is based on the Rust front-end toolchain, providing a
-      more ultimate development experience.
-    icon: 🏃🏻‍♀️
-  - title: Support for MDX content writing
+      Optimized string concatenation that outperforms most JSX runtimes. 10-40x faster
+      than React's renderToStaticMarkup. Built for speed without sacrificing developer
+      experience.
+    icon: ⚡
+
+  - title: 🛡️ XSS Protection
     details:
-      MDX is a powerful way to write content, allowing you to use React components in
-      Markdown.
+      Built-in TypeScript plugin that catches XSS vulnerabilities at compile-time. Your
+      code editor will warn you before XSS makes it to production.
+    icon: 🛡️
+
+  - title: 🔄 Async Components
+    details:
+      Full support for async/await with Suspense streaming. Start sending HTML to the
+      client while async operations complete in the background.
+    icon: 🔄
+
+  - title: 📦 Zero Dependencies
+    details:
+      Lightweight runtime with minimal dependencies. Perfect for serverless and edge
+      environments where bundle size matters.
     icon: 📦
-  - title: Built-in full-text search
+
+  - title: 🎯 Type Safe
     details:
-      Automatically generates a full-text search index for you during construction,
-      providing out-of-the-box full-text search capabilities.
-    icon: 🎨
-  - title: Simpler I18n solution
+      Full TypeScript support with JSX type definitions for all HTML elements and
+      attributes, plus HTMX, Alpine.js, and Hotwire Turbo.
+    icon: 🎯
+
+  - title: 🔌 Framework Agnostic
     details:
-      With the built-in I18n solution, you can easily provide multi-language support for
-      documents or components.
-    icon: 🌍
-  - title: Static site generation
-    details:
-      In production, it automatically builds into static HTML files, which can be easily
-      deployed anywhere.
-    icon: 🌈
-  - title: Providing multiple custom capabilities
-    details:
-      Through its extension mechanism, you can easily extend theme UI and build process.
-    icon: 🔥
+      Works with Fastify, Express, Hono, Bun, or any framework that handles strings. If it
+      works with strings, it works with KitaJS Html.
+    icon: 🔌
 ---
+
+## Quick Example
+
+```tsx
+// this is true
+typeof (<div>hello</div>) === 'string';
+
+// Simply write JSX and use it anywhere
+import fs from 'node:fs';
+
+fs.writeFileSync(
+  'index.html',
+  <p>
+    Hello, <strong>world</strong>!
+  </p>
+);
+```
+
+## Why KitaJS Html?
+
+Unlike React which builds a virtual DOM, KitaJS Html directly produces HTML strings,
+making it **perfect for server-side rendering**. It's the fastest way to generate HTML on
+the server while maintaining the familiar JSX syntax you already know.
+
+**Key Benefits:**
+
+- 🚀 **10-40x faster** than React's `renderToStaticMarkup`
+- 🔒 **Compile-time XSS detection** catches vulnerabilities before deployment
+- ⚡ **Streaming support** with Suspense for progressive rendering
+- 🎨 **Familiar JSX syntax** - no new templating language to learn
+- 🛠️ **Full TypeScript support** with autocomplete for HTML, HTMX, and more
+
+Ready to get started? Check out our [Getting Started guide](/guide/getting-started)!

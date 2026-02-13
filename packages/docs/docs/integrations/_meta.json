@@ -1,0 +1,32 @@
+[
+  {
+    "type": "file",
+    "name": "overview",
+    "label": "Overview"
+  },
+  {
+    "type": "file",
+    "name": "fastify",
+    "label": "Fastify"
+  },
+  {
+    "type": "file",
+    "name": "htmx",
+    "label": "HTMX"
+  },
+  {
+    "type": "file",
+    "name": "alpine",
+    "label": "Alpine.js"
+  },
+  {
+    "type": "file",
+    "name": "turbo",
+    "label": "Hotwire Turbo"
+  },
+  {
+    "type": "file",
+    "name": "base-templates",
+    "label": "Base HTML Templates"
+  }
+]

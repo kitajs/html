@@ -1,1 +1,32 @@
-["index"]
+[
+  {
+    "type": "file",
+    "name": "getting-started",
+    "label": "Getting Started"
+  },
+  {
+    "type": "file",
+    "name": "xss-scanner",
+    "label": "XSS Scanner"
+  },
+  {
+    "type": "file",
+    "name": "sanitization",
+    "label": "XSS & Sanitization"
+  },
+  {
+    "type": "file",
+    "name": "jsx-syntax",
+    "label": "JSX Syntax"
+  },
+  {
+    "type": "file",
+    "name": "async-components",
+    "label": "Async Components"
+  },
+  {
+    "type": "file",
+    "name": "benchmark",
+    "label": "Benchmark"
+  }
+]
