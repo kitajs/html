@@ -16,7 +16,14 @@ function HomeLayout() {
           className="rp-doc"
           style={{ width: '100%', maxWidth: 475, margin: '-1rem 0' }}
         >
-          <PackageManagerTabs command="add @kitajs/html @kitajs/ts-html-plugin" />
+          <PackageManagerTabs
+            command={{
+              npm: 'npm i @kitajs/html @kitajs/ts-html-plugin',
+              yarn: 'yarn add @kitajs/html @kitajs/ts-html-plugin',
+              pnpm: 'pnpm add @kitajs/html @kitajs/ts-html-plugin',
+              bun: 'bun add @kitajs/html @kitajs/ts-html-plugin'
+            }}
+          />
         </div>
       }
     />

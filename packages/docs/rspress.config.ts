@@ -1,6 +1,5 @@
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { defineConfig, type UserConfig } from '@rspress/core';
-import { transformerCompatibleMetaHighlight } from '@rspress/core/shiki-transformers';
 import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { pluginTwoslash } from '@rspress/plugin-twoslash';
 import {
@@ -10,7 +9,6 @@ import {
   transformerNotationHighlight,
   transformerRemoveNotationEscape
 } from '@shikijs/transformers';
-import * as path from 'node:path';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import pluginFileTree from 'rspress-plugin-file-tree';
 import pluginOg from 'rspress-plugin-og';
@@ -20,11 +18,14 @@ const DOCS_HOSTNAME = process.env.DOCS_HOSTNAME || 'html.kitajs.org';
 const DOCS_URL = `https://${DOCS_HOSTNAME}`;
 
 export default defineConfig({
-  base: path.join(__dirname, 'docs'),
   title: 'KitaJS Html',
   description: 'Fast and type safe HTML templates using TypeScript',
-  icon: 'https://kitajs.org/logo.svg',
-  logo: 'https://kitajs.org/doug-head-glasses.svg',
+  lang: 'en',
+  icon: 'https://kitajs.org/doug-head-glasses.svg',
+  logo: {
+    dark: 'https://kitajs.org/kita-horizontal-white.svg',
+    light: 'https://kitajs.org/kita-horizontal-black.svg'
+  },
 
   plugins: [
     pluginTwoslash(),
@@ -98,7 +99,7 @@ export default defineConfig({
         transformerNotationErrorLevel(),
         transformerNotationHighlight(),
         transformerNotationFocus(),
-        transformerCompatibleMetaHighlight(),
+        transformerNotationHighlight(),
         transformerRemoveNotationEscape()
       ]
     },
