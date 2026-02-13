@@ -1,5 +1,5 @@
 {
-  "name": "@kitajs/html-docs",
+  "name": "@kitajs/docs-html",
   "version": "1.0.0",
   "private": true,
   "description": "Official documentation for @kitajs/html - Fast and type safe HTML templates using TypeScript",
