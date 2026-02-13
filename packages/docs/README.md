@@ -1,7 +1,10 @@
-# @kitajs/html Documentation
+# @kitajs/html Documentation (New)
 
 Official documentation site for @kitajs/html, built with
 [Rspress 2.0](https://rspress.rs).
+
+This is a fresh documentation setup with improved structure, visual design, and
+organization.
 
 ## Development
 
@@ -19,91 +22,136 @@ pnpm build
 pnpm preview
 ```
 
+## Features
+
+- ⚡ **Lightning fast** with Rspress 2.0
+- 🎨 **Custom interactive hero** with animated Doug turtle and VSCode mockup
+- 🎯 **KitaJS brand colors** throughout (terracotta #bd695e, #ad4336, #e4c8c5)
+- 📚 **Reorganized content** with better hierarchy
+- 🔍 **TypeScript hover info** via Twoslash plugin
+- 🗺️ **SEO-optimized** with sitemap generation
+- 🌳 **File tree support** for showing project structure
+- 🖼️ **Open Graph images** for social sharing
+- 📦 **Zero runtime dependencies** (only @rspress/core)
+
 ## Project Structure
 
 ```
-docs/
-├── public/               # Static assets (logo, images, etc.)
-├── guide/                # Getting started and core guides
-│   ├── getting-started.md
-│   ├── xss-scanner.md
-│   ├── sanitization.md
-│   ├── jsx-syntax.md
-│   ├── async-components.md
-│   └── benchmark.md
-├── integrations/         # Integration guides
-│   ├── overview.md
-│   ├── fastify.md
-│   ├── htmx.md
-│   ├── alpine.md
-│   ├── turbo.md
-│   └── base-templates.md
-├── _nav.json            # Top-level navigation
-├── index.md             # Home page
-└── hello.md             # Example page (can be deleted)
-
-theme/
-├── index.tsx            # Theme customization entry point
-└── index.css            # Custom CSS with KitaJS branding
+docs-new/
+├── docs/
+│   ├── public/                        # Static assets
+│   │   ├── logo.png
+│   │   ├── doug-pc-glasses.svg
+│   │   └── xss-preview.png
+│   ├── _nav.json                      # Top navigation
+│   ├── index.md                       # Home page with hero
+│   ├── guide/
+│   │   ├── _meta.json
+│   │   ├── introduction.md
+│   │   ├── getting-started.md
+│   │   ├── xss-protection/            # XSS security docs
+│   │   │   ├── overview.md
+│   │   │   ├── scanner.md
+│   │   │   └── sanitization.md
+│   │   └── features/                  # Feature docs
+│   │       ├── jsx-syntax.md
+│   │       ├── async-components.md
+│   │       └── benchmark.md
+│   ├── integrations/
+│   │   ├── overview.md
+│   │   ├── frameworks/
+│   │   │   └── fastify.md
+│   │   └── libraries/
+│   │       ├── htmx.md
+│   │       ├── alpine.md
+│   │       ├── turbo.md
+│   │       └── base-templates.md
+│   └── api/                           # API reference
+│       ├── index.md
+│       ├── core.md
+│       ├── jsx-runtime.md
+│       └── plugins.md
+├── theme/
+│   ├── components/
+│   │   ├── HeroInteractive.tsx        # Animated hero
+│   │   └── HeroInteractive.module.css # Hero styles
+│   ├── index.tsx                      # Theme customization
+│   └── index.css                      # Brand colors
+├── rspress.config.ts                  # Rspress configuration
+├── package.json                       # Dependencies
+└── tsconfig.json                      # TypeScript config
 ```
 
 ## Theme Customization
 
-The documentation uses KitaJS brand colors:
+### Brand Colors (KitaJS)
 
-- Primary: `#bd695e`
-- Dark: `#ad4336`
-- Light: `#e4c8c5`
-
-These colors are defined in `theme/index.css` and applied throughout the site.
-
-## Navigation
-
-Navigation is configured in two ways:
-
-1. **Top-level navigation**: Defined in `docs/_nav.json`
-2. **Sidebar navigation**: Defined in `docs/[section]/_meta.json` files
-
-## Adding New Pages
-
-1. Create a new `.md` file in the appropriate directory
-2. Add an entry to the corresponding `_meta.json` file
-3. Use frontmatter for page configuration if needed
-
-Example:
-
-```md
----
-title: My Page
-description: A description of my page
----
-
-# My Page Content
-
-Content goes here...
+```css
+--rp-c-brand: #bd695e; /* Primary terracotta */
+--rp-c-brand-dark: #ad4336; /* Dark terracotta */
+--rp-c-brand-light: #e4c8c5; /* Light terracotta */
 ```
 
-## Features
+### Interactive Hero
 
-- ⚡ Fast development with Rspress 2.0
-- 🎨 Custom KitaJS branding and theme
-- 🔍 Built-in full-text search
-- 📱 Responsive design
-- 🌙 Dark mode support
-- 🎯 Type-safe MDX content
-- 🚀 Static site generation
-- 💨 Hot module replacement
+The hero section features:
+
+- Floating Doug turtle logo with gentle animation
+- Mock VSCode editor showing KitaJS code example
+- Glowing effects with brand colors
+- Smooth animations (float, breathe, shimmer)
+- Fully responsive (hides mockup on mobile)
+
+## Plugins
+
+- **@rspress/plugin-twoslash** - TypeScript hover info in code blocks
+- **@rspress/plugin-sitemap** - SEO sitemap generation
+- **rspress-plugin-file-tree** - File tree visualizations
+- **rspress-plugin-og** - Open Graph image generation
+- **rsbuild-plugin-open-graph** - OG meta tags
+
+## Configuration
+
+The site can be configured via environment variables:
+
+```bash
+# Override hostname (default: html.kitajs.org)
+DOCS_HOSTNAME=docs.example.com pnpm build
+```
+
+## Build Output
+
+- **Total size**: ~1.4 MB web assets (267 KB gzipped)
+- **20 HTML pages** generated
+- **Full-text search index** included
+- **Clean URLs** enabled (no .html extensions)
+
+## Improvements Over Old Docs
+
+1. **Better organization** - Logical content hierarchy with sections
+2. **Interactive hero** - Engaging homepage with animations
+3. **Enhanced navigation** - Clear sidebar with sections and dividers
+4. **Brand consistency** - KitaJS colors applied throughout
+5. **TypeScript integration** - Hover info for better learning
+6. **SEO optimized** - Sitemap, OG tags, meta descriptions
+7. **Production-ready** - Following rspress best practices
+
+## Next Steps
+
+- Test the site at http://localhost:3000
+- Review all pages for correctness
+- Add more API documentation as needed
+- Consider adding more examples
+- Deploy to production at html.kitajs.org
 
 ## Deployment
 
-Build the site for production:
+The built site in `doc_build/` can be deployed to:
 
-```bash
-pnpm build
-```
-
-The output will be in `doc_build/` directory, ready to be deployed to any static hosting
-service.
+- **Vercel**: Connect GitHub repo, auto-deploys
+- **Netlify**: Point to `doc_build/` directory
+- **GitHub Pages**: Use GitHub Actions workflow
+- **Cloudflare Pages**: Connect repo and build
 
 ## Resources
 

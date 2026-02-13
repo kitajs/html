@@ -1,32 +1,25 @@
 [
+  "overview",
   {
-    "type": "file",
-    "name": "overview",
-    "label": "Overview"
+    "type": "section-header",
+    "label": "Frameworks"
   },
   {
-    "type": "file",
-    "name": "fastify",
-    "label": "Fastify"
+    "type": "dir",
+    "name": "frameworks",
+    "label": "Frameworks",
+    "collapsible": true,
+    "collapsed": false
   },
   {
-    "type": "file",
-    "name": "htmx",
-    "label": "HTMX"
+    "type": "section-header",
+    "label": "Libraries"
   },
   {
-    "type": "file",
-    "name": "alpine",
-    "label": "Alpine.js"
-  },
-  {
-    "type": "file",
-    "name": "turbo",
-    "label": "Hotwire Turbo"
-  },
-  {
-    "type": "file",
-    "name": "base-templates",
-    "label": "Base HTML Templates"
+    "type": "dir",
+    "name": "libraries",
+    "label": "Libraries",
+    "collapsible": true,
+    "collapsed": false
   }
 ]

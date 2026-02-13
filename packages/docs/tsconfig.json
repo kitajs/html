@@ -1,28 +1,15 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "lib": ["DOM", "ES2020"],
-    "jsx": "react-jsx",
-    "target": "ES2020",
-    "noEmit": true,
-    "skipLibCheck": true,
-    "useDefineForClassFields": true,
-
-    /* modules */
-    "module": "ESNext",
-    "moduleDetection": "force",
+    "module": "esnext",
     "moduleResolution": "bundler",
-    "verbatimModuleSyntax": true,
-    "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-
-    /* type checking */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "lib": ["dom", "esnext"],
+    "types": ["node"],
+    "paths": {
+      "@theme": ["./theme"]
+    }
   },
-  "include": ["docs", "theme", "rspress.config.ts"],
-  "mdx": {
-    "checkMdx": true
-  }
+  "include": ["docs", "theme", "rspress.config.ts"]
 }

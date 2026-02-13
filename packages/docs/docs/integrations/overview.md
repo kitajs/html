@@ -7,7 +7,7 @@ project out there can be integrated with it.
 
 <div class="integration-grid">
 
-### [Fastify](/integrations/fastify)
+### [Fastify](/integrations/frameworks/fastify)
 
 Official Fastify plugin with seamless `reply.html()` support and Suspense streaming.
 
@@ -29,15 +29,15 @@ Native Bun support with optimized performance.
 
 <div class="integration-grid">
 
-### [HTMX](/integrations/htmx)
+### [HTMX](/integrations/libraries/htmx)
 
 Full type definitions for all HTMX attributes.
 
-### [Alpine.js](/integrations/alpine)
+### [Alpine.js](/integrations/libraries/alpine)
 
 Complete type support for Alpine.js directives.
 
-### [Hotwire Turbo](/integrations/turbo)
+### [Hotwire Turbo](/integrations/libraries/turbo)
 
 Type definitions for Turbo elements and attributes.
 
@@ -96,6 +96,6 @@ return new Response(html);
 
 ## Next Steps
 
-- Learn about [Fastify integration](/integrations/fastify)
-- Add [HTMX support](/integrations/htmx)
-- Configure [Base HTML Templates](/integrations/base-templates)
+- Learn about [Fastify integration](/integrations/frameworks/fastify)
+- Add [HTMX support](/integrations/libraries/htmx)
+- Configure [Base HTML Templates](/integrations/libraries/base-templates)

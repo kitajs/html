@@ -27,6 +27,10 @@ npm install @kitajs/html @kitajs/ts-html-plugin
 yarn add @kitajs/html @kitajs/ts-html-plugin
 ```
 
+```bash [bun]
+bun add @kitajs/html @kitajs/ts-html-plugin
+```
+
 :::
 
 ## TypeScript Configuration
@@ -51,7 +55,7 @@ Update your `tsconfig.json` file with the following settings:
 You will only have XSS intellisense if your editor uses the TypeScript version from your
 project's `node_modules` instead of the globally installed version.
 
-![XSS detection example](/xss-preview.png)
+![XSS detection example](https://kitajs.org/xss-preview.png)
 
 ### VS Code
 
@@ -84,7 +88,7 @@ This CLI comes from `@kitajs/ts-html-plugin`, which catches XSS vulnerabilities 
 be introduced into your codebase, automating the xss scanning process to run every time
 you test your code.
 
-Learn more about the [XSS Scanner CLI](/guide/xss-scanner).
+Learn more about the [XSS Scanner CLI](/guide/xss-protection/scanner).
 
 ## Verify Your Setup
 
@@ -124,8 +128,8 @@ console.log(html);
 
 **Next, you can:**
 
-- Learn about [XSS & Sanitization](/guide/sanitization)
-- Explore [JSX Syntax](/guide/jsx-syntax) features
-- Try [Async Components](/guide/async-components)
-- Integrate with [Fastify](/integrations/fastify)
-- Use with [HTMX](/integrations/htmx)
+- Learn about [XSS & Sanitization](/guide/xss-protection/sanitization)
+- Explore [JSX Syntax](/guide/features/jsx-syntax) features
+- Try [Async Components](/guide/features/async-components)
+- Integrate with [Fastify](/integrations/frameworks/fastify)
+- Use with [HTMX](/integrations/libraries/htmx)

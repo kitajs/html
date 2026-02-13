@@ -1,32 +1,34 @@
 [
+  "introduction",
   {
     "type": "file",
     "name": "getting-started",
-    "label": "Getting Started"
+    "label": "Getting Started",
+    "tag": "start-here"
   },
   {
-    "type": "file",
-    "name": "xss-scanner",
-    "label": "XSS Scanner"
+    "type": "divider"
   },
   {
-    "type": "file",
-    "name": "sanitization",
-    "label": "XSS & Sanitization"
+    "type": "section-header",
+    "label": "XSS Protection"
   },
   {
-    "type": "file",
-    "name": "jsx-syntax",
-    "label": "JSX Syntax"
+    "type": "dir",
+    "name": "xss-protection",
+    "label": "XSS Protection",
+    "collapsible": true,
+    "collapsed": false
   },
   {
-    "type": "file",
-    "name": "async-components",
-    "label": "Async Components"
+    "type": "section-header",
+    "label": "Features"
   },
   {
-    "type": "file",
-    "name": "benchmark",
-    "label": "Benchmark"
+    "type": "dir",
+    "name": "features",
+    "label": "Features",
+    "collapsible": true,
+    "collapsed": false
   }
 ]

@@ -1,33 +1,18 @@
 [
   {
     "text": "Guide",
-    "link": "/guide/getting-started",
+    "link": "/guide/introduction",
     "activeMatch": "/guide/"
   },
   {
-    "text": "XSS Security",
-    "link": "/guide/xss-scanner"
+    "text": "Integrations",
+    "link": "/integrations/overview",
+    "activeMatch": "/integrations/"
   },
   {
-    "text": "Integrations",
-    "items": [
-      {
-        "text": "Fastify",
-        "link": "/integrations/fastify"
-      },
-      {
-        "text": "HTMX",
-        "link": "/integrations/htmx"
-      },
-      {
-        "text": "Alpine.js",
-        "link": "/integrations/alpine"
-      },
-      {
-        "text": "Hotwire Turbo",
-        "link": "/integrations/turbo"
-      }
-    ]
+    "text": "API",
+    "link": "/api/",
+    "activeMatch": "/api/"
   },
   {
     "text": "GitHub",
