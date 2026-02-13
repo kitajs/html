@@ -1,0 +1,55 @@
+/* Emoji font support */
+@font-face {
+  font-family: 'Twemoji Country Flags';
+  unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0062-E0063, U+E0065, U+E0067, U+E006C, U+E006E, U+E0073-E0074, U+E0077, U+E007F;
+  src: url('https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill/dist/TwemojiCountryFlags.woff2') format('woff2');
+  font-display: swap;
+}
+
+:root {
+  /* KitaJS brand colors - rspress will use these throughout */
+  --rp-c-brand: #bd695e;
+  --rp-c-brand-dark: #ad4336;
+  --rp-c-brand-light: #e4c8c5;
+  --rp-c-brand-lighter: #f5e8e6;
+
+  /* Additional brand variants */
+  --rp-c-brand-1: #bd695e;
+  --rp-c-brand-2: #ad4336;
+  --rp-c-brand-3: #e4c8c5;
+  --rp-c-brand-tint: rgba(189, 105, 94, 0.1);
+
+  /* Font family with emoji support */
+  --rp-font-family-base: 'Twemoji Country Flags', 'Inter var', 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif, 'Apple Color Emoji';
+
+  /* Hero gradient - vibrant terracotta with better contrast */
+  --rp-home-hero-name-background: linear-gradient(120deg, #9d3329 30%, #e4857a 100%);
+  --rp-home-hero-title-bg: linear-gradient(120deg, #9d3329 30%, #e4857a 100%);
+
+  /* Light mode background */
+  --rp-home-background-bg:
+    radial-gradient(42.12% 56.13% at 100% 0%, rgba(189, 105, 94, 0.1) 0%, transparent 100%),
+    radial-gradient(42.01% 79.63% at 52.86% 0%, rgba(189, 105, 94, 0.2) 0%, transparent 100%),
+    radial-gradient(79.67% 58.09% at 0% 0%, rgba(173, 67, 54, 0.2) 0%, transparent 100%),
+    #fff;
+}
+
+/* Dark mode - match rspress structure with terracotta colors */
+html[data-theme='dark'],
+html.dark {
+  --rp-home-background-bg:
+    radial-gradient(42.12% 56.13% at 100% 0%, #3d1f1b 0%, #12121200 100%),
+    radial-gradient(55.81% 87.78% at 48.37% 0%, #000 0%, #12121200 89.55%),
+    radial-gradient(122.65% 88.24% at 0% 0%, #5d2e28 0%, #12121200 100%),
+    #121212;
+}
+
+/* Hero badge animation */
+:global(.rp-home-hero__badge)::before {
+  animation: breathe 3s ease-in-out infinite reverse;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 0.8; transform: scale(1.2); }
+}

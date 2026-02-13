@@ -1,0 +1,384 @@
+// Animations
+@keyframes float {
+  0%,
+  100% {
+    transform: rotate(2.5deg) translate(50px, -50px);
+  }
+  50% {
+    transform: rotate(2.5deg) translate(50px, -60px);
+  }
+}
+
+@keyframes floatLogo {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  isolation: isolate;
+
+  &:hover {
+    .container {
+      opacity: 1;
+    }
+    .logo {
+      opacity: 0.2;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover .logo {
+      opacity: 1;
+    }
+  }
+}
+
+.logo {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  bottom: 40px;
+  left: -20px;
+  z-index: 10;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
+  transition: opacity 0.3s;
+  animation: floatLogo 6s ease-in-out infinite;
+
+  @media (max-width: 1000px) {
+    position: static;
+    width: 200px;
+    height: 200px;
+    animation: none;
+    margin-bottom: 20px;
+  }
+}
+
+.glowLeft {
+  position: absolute;
+  top: 15%;
+  left: -10%;
+  width: 150px;
+  height: 150px;
+  background: var(--rp-c-brand);
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: -1;
+  animation: breathe 3s ease-in-out infinite;
+  pointer-events: none;
+
+  @media (max-width: 1000px) {
+    display: none;
+  }
+}
+
+.glowRight {
+  position: absolute;
+  bottom: 10%;
+  right: -10%;
+  width: 200px;
+  height: 200px;
+  background: var(--rp-c-brand);
+  border-radius: 50%;
+  filter: blur(60px);
+  z-index: -1;
+  animation: breathe 3s ease-in-out infinite reverse;
+  pointer-events: none;
+
+  @media (max-width: 1000px) {
+    display: none;
+  }
+}
+
+// VSCode Container
+.container {
+  width: 100%;
+  height: 100%;
+  background-color: var(--rp-c-bg);
+  border: 1px solid var(--rp-c-divider-light);
+  border-radius: var(--rp-radius-large);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--rp-shadow-3);
+  transform: rotate(2.5deg) translate(50px, -50px);
+  opacity: 0.9;
+  transition: opacity 0.3s;
+  animation: float 5s ease-in-out infinite;
+
+  @media (max-width: 1000px) {
+    display: none;
+  }
+}
+
+// VSCode Title Bar
+.titleBar {
+  height: 38px;
+  background-color: var(--rp-c-bg);
+  border-bottom: 1px solid var(--rp-c-divider-light);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  justify-content: space-between;
+}
+
+.trafficLights {
+  display: flex;
+  gap: 8px;
+
+  span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+}
+
+.titleBarCenter {
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  color: var(--rp-c-text-2);
+  font-family: var(--rp-font-family-base);
+}
+
+.titleBarRight {
+  width: 100px;
+}
+
+// VSCode Main Area
+.editorBody {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+// Activity Bar (left icons)
+.activityBar {
+  width: 48px;
+  background-color: var(--rp-c-bg);
+  border-right: 1px solid var(--rp-c-divider-light);
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  gap: 8px;
+  align-items: center;
+}
+
+.activityIcon {
+  width: 32px;
+  height: 32px;
+  background-color: var(--rp-c-bg-mute);
+  border-radius: 4px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+
+  &.active {
+    background-color: var(--rp-c-brand-tint);
+    opacity: 1;
+  }
+}
+
+// Sidebar (File Explorer)
+.sidebar {
+  width: 160px;
+  background-color: var(--rp-c-bg);
+  border-right: 1px solid var(--rp-c-divider-light);
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--rp-c-text-3);
+  padding: 8px 16px;
+  letter-spacing: 0.5px;
+}
+
+.fileTree {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 8px;
+}
+
+.folder {
+  padding: 4px 8px;
+  font-size: 13px;
+  color: var(--rp-c-text-1);
+  font-family: var(--rp-font-family-base);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.file {
+  padding: 4px 8px 4px 20px;
+  font-size: 13px;
+  color: var(--rp-c-text-2);
+  font-family: var(--rp-font-family-base);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+
+  &.active {
+    background-color: var(--rp-c-bg-mute);
+    color: var(--rp-c-text-1);
+  }
+}
+
+// Editor Area
+.editorArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--rp-c-bg);
+}
+
+.editorTabs {
+  height: 36px;
+  background-color: var(--rp-c-bg);
+  border-bottom: 1px solid var(--rp-c-divider-light);
+  display: flex;
+  align-items: center;
+}
+
+.tab {
+  height: 100%;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--rp-c-text-2);
+  border-right: 1px solid var(--rp-c-divider-light);
+  background-color: var(--rp-c-bg-soft);
+  transition: background-color 0.2s;
+
+  &.activeTab {
+    background-color: var(--rp-c-bg);
+    color: var(--rp-c-text-1);
+  }
+}
+
+.tabClose {
+  margin-left: 4px;
+  opacity: 0.5;
+  font-size: 16px;
+  line-height: 1;
+}
+
+// Code Editor
+.codeEditor {
+  flex: 1;
+  display: flex;
+  padding: 16px 0;
+  overflow: hidden;
+}
+
+.lineNumbers {
+  width: 40px;
+  text-align: right;
+  padding-right: 12px;
+  color: var(--rp-c-text-3);
+  font-family: var(--rp-font-family-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  user-select: none;
+}
+
+.codeContent {
+  flex: 1;
+  font-family: var(--rp-font-family-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--rp-c-text-1);
+  padding-right: 16px;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+// Syntax Highlighting
+.comment {
+  color: var(--rp-c-text-3);
+  font-style: italic;
+}
+
+.keyword {
+  color: #c678dd;
+}
+
+.variable {
+  color: #e06c75;
+}
+
+.function {
+  color: #61afef;
+}
+
+.string {
+  color: #98c379;
+}
+
+.jsx {
+  color: var(--rp-c-brand);
+  font-weight: 600;
+}
+
+.punctuation {
+  color: var(--rp-c-text-2);
+}
+
+.indent {
+  opacity: 0;
+}
+
+// Dark mode
+html[data-theme='dark'],
+html.dark {
+  .keyword {
+    color: #bb9af7;
+  }
+
+  .variable {
+    color: #f7768e;
+  }
+
+  .function {
+    color: #7aa2f7;
+  }
+
+  .string {
+    color: #9ece6a;
+  }
+}
+
+:global(.rp-home-hero__badge)::before {
+  animation: breathe 3s ease-in-out infinite reverse;
+}

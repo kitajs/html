@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "lib": ["dom", "esnext"],
+    "types": ["node"],
+    "paths": {
+      "@theme": ["./theme"]
+    }
+  },
+  "include": ["docs", "theme", "rspress.config.ts"]
+}

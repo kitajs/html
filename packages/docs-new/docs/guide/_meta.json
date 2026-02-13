@@ -1,0 +1,34 @@
+[
+  "introduction",
+  {
+    "type": "file",
+    "name": "getting-started",
+    "label": "Getting Started",
+    "tag": "start-here"
+  },
+  {
+    "type": "divider"
+  },
+  {
+    "type": "section-header",
+    "label": "XSS Protection"
+  },
+  {
+    "type": "dir",
+    "name": "xss-protection",
+    "label": "XSS Protection",
+    "collapsible": true,
+    "collapsed": false
+  },
+  {
+    "type": "section-header",
+    "label": "Features"
+  },
+  {
+    "type": "dir",
+    "name": "features",
+    "label": "Features",
+    "collapsible": true,
+    "collapsed": false
+  }
+]
