@@ -36,7 +36,7 @@ export default function HeroInteractive() {
             <span style={{ background: '#ffbd2e' }} />
             <span style={{ background: '#27c93f' }} />
           </div>
-          <div className={styles.titleBarCenter}>{activeTab} - KitaJS Html</div>
+          <div className={styles.titleBarCenter}>{activeTab} - Kita Html</div>
           <div className={styles.titleBarRight} />
         </div>
 

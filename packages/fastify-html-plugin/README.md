@@ -29,10 +29,10 @@
 <br />
 <br />
 
-<h1>🖨️ Fastify KitaJS Html Plugin</h1>
+<h1>🖨️ Fastify Kita Html Plugin</h1>
 
 <p align="center">
-  <code>@kitajs/fastify-html-plugin</code> is a fastify plugin to seamlessly integrate the KitaJS Html JSX engine into your fastify application.
+  <code>@kitajs/fastify-html-plugin</code> is a fastify plugin to seamlessly integrate the Kita Html JSX engine into your fastify application.
   <br />
   <br />
 </p>

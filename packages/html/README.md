@@ -29,7 +29,7 @@
 <br />
 <br />
 
-<h1>🏛️ KitaJS Html</h1>
+<h1>🏛️ Kita Html</h1>
 
 <p align="center">
   <code>@kitajs/html</code> is a <a href="#performance">super fast</a> JSX runtime to generate HTML strings that works everywhere. 
@@ -163,7 +163,7 @@ should be able to use JSX to generate HTML inside your .tsx files.
 const html = (
   <div>
     <h1>Hello, world!</h1>
-    <p>Welcome to the KitaJS HTML package.</p>
+    <p>Welcome to the Kita Html package.</p>
   </div>
 );
 ```
@@ -571,7 +571,7 @@ import { Html } from '@kitajs/html';
 const html = (
   <div>
     <h1>Hello, world!</h1>
-    <p>Welcome to the KitaJS HTML package.</p>
+    <p>Welcome to the Kita Html package.</p>
   </div>
 );
 ```

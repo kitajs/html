@@ -1,6 +1,6 @@
 # XSS Protection Overview
 
-KitaJS Html provides **multi-layered XSS protection** to keep your applications secure.
+Kita Html provides **multi-layered XSS protection** to keep your applications secure.
 Unlike many template engines that escape everything by default (breaking functionality),
 or escape nothing (creating vulnerabilities), KitaJS takes a balanced approach with
 compile-time detection.
@@ -128,7 +128,7 @@ function UserCard({ name, email, userId, joinDate }: UserCardProps) {
 - ❌ Escape nothing → XSS vulnerabilities
 - ❌ Manual escaping → easy to forget
 
-**KitaJS Html:**
+**Kita Html:**
 
 - ✅ Type-driven detection → catches issues early
 - ✅ Explicit marking → clear what's user input

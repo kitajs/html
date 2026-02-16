@@ -1,12 +1,12 @@
 # Introduction
 
-KitaJS Html is a **super-fast JSX runtime** that generates HTML strings directly, without
+Kita Html is a **super-fast JSX runtime** that generates HTML strings directly, without
 the overhead of a virtual DOM. It's designed for server-side rendering and provides an
 elegant, type-safe way to generate HTML.
 
-## What is KitaJS Html?
+## What is Kita Html?
 
-Unlike React which builds a virtual DOM and then renders it to HTML, KitaJS Html takes JSX
+Unlike React which builds a virtual DOM and then renders it to HTML, Kita Html takes JSX
 syntax and immediately produces HTML strings. This makes it:
 
 - ⚡ **10-40x faster** than React's server-side rendering
@@ -68,7 +68,7 @@ Learn more about [Async Components](/guide/features/async-components).
 
 ### 🎨 Familiar JSX Syntax
 
-If you know React JSX, you already know KitaJS Html:
+If you know React JSX, you already know Kita Html:
 
 ```tsx
 function Card({ title, children }: PropsWithChildren<{ title: string }>) {
@@ -95,7 +95,7 @@ Perfect for:
 
 ## Quick Start
 
-Ready to start using KitaJS Html? Head over to the
+Ready to start using Kita Html? Head over to the
 [Getting Started guide](/guide/getting-started) to set up your project.
 
 ## Learn More

@@ -1,8 +1,8 @@
-# KitaJS HTML Monorepo - Developer Guide
+# Kita Html Monorepo - Developer Guide
 
 ## Overview
 
-KitaJS HTML is a monorepo containing a super-fast JSX runtime that generates HTML strings.
+Kita Html is a monorepo containing a super-fast JSX runtime that generates HTML strings.
 Unlike React, which builds a virtual DOM, this library directly produces HTML strings,
 making it ideal for server-side rendering, static site generation, and HTMX-style
 applications.

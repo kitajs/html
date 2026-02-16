@@ -79,7 +79,7 @@ JSX automatically.
 
 ## Universal Compatibility
 
-Since KitaJS Html generates plain HTML strings, it works with **any** framework or library
+Since Kita Html generates plain HTML strings, it works with **any** framework or library
 that accepts strings:
 
 ```tsx

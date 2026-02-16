@@ -18,7 +18,7 @@ const DOCS_HOSTNAME = process.env.DOCS_HOSTNAME || 'html.kitajs.org';
 const DOCS_URL = `https://${DOCS_HOSTNAME}`;
 
 export default defineConfig({
-  title: 'KitaJS Html',
+  title: 'Kita Html',
   description: 'Fast and type safe HTML templates using TypeScript',
   lang: 'en',
   icon: 'https://kitajs.org/doug-head-glasses.svg',
@@ -42,7 +42,7 @@ export default defineConfig({
     plugins: [
       pluginSass(),
       pluginOpenGraph({
-        title: 'KitaJS Html',
+        title: 'Kita Html',
         description: 'Fast and type safe HTML templates using TypeScript',
         url: DOCS_URL,
         twitter: {

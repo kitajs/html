@@ -27,7 +27,7 @@ repository with your friends and co-workers! </sup>
 <br />
 
 <h1 align="center">
-  KitaJS Html Monorepo
+  Kita Html Monorepo
 </h1>
 
 <br />

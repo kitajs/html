@@ -1,11 +1,11 @@
-# KitaJS HTML Examples
+# Kita Html Examples
 
-Real-world examples demonstrating how to use KitaJS HTML to build server-rendered
+Real-world examples demonstrating how to use Kita Html to build server-rendered
 applications with JSX.
 
-## What is KitaJS HTML?
+## What is Kita Html?
 
-KitaJS HTML is a super-fast JSX runtime that generates HTML strings directly, without a
+Kita Html is a super-fast JSX runtime that generates HTML strings directly, without a
 virtual DOM. Perfect for server-side rendering, static site generation, HTMX applications,
 and streaming HTML with Suspense.
 

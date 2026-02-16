@@ -125,7 +125,7 @@ export function Dashboard(rid: number | string) {
             <img src="https://kitajs.org/logo.svg" alt="KitaJS Logo" class="w-10 h-10" />
             <div>
               <h1 class="text-xl font-bold bg-gradient-to-r from-kita-400 to-kita-300 bg-clip-text text-transparent">
-                KitaJS Html
+                Kita Html
               </h1>
               <p class="text-xs text-stone-500">Suspense Streaming Demo</p>
             </div>

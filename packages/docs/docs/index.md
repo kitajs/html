@@ -1,10 +1,10 @@
 ---
 pageType: home
-title: KitaJS Html
+title: Kita Html
 titleSuffix: Super-fast JSX Runtime
 
 hero:
-  name: KitaJS Html
+  name: Kita Html
   text: The fastest server-side JSX runtime
   tagline: Just like your usual template engine, but just better!
   actions:
@@ -50,6 +50,6 @@ features:
   - title: Framework Agnostic
     details:
       Works with Fastify, Express, Hono, Bun, or any framework that handles strings. If it
-      works with strings, it works with KitaJS Html.
+      works with strings, it works with Kita Html.
     icon: 🔌
 ---

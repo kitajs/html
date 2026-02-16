@@ -118,12 +118,12 @@ should be able to use JSX to generate HTML inside your .tsx files.
 const html = (
   <div>
     <h1>Hello, world!</h1>
-    <p>Welcome to the KitaJS HTML package.</p>
+    <p>Welcome to the Kita Html package.</p>
   </div>
 );
 
 console.log(html);
-// <div><h1>Hello, world!</h1><p>Welcome to the KitaJS HTML package.</p></div>
+// <div><h1>Hello, world!</h1><p>Welcome to the Kita Html package.</p></div>
 ```
 
 **Next, you can:**

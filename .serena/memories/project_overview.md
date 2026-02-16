@@ -1,8 +1,8 @@
-# KitaJS HTML - Project Overview
+# Kita Html - Project Overview
 
 ## Purpose
 
-KitaJS HTML is a monorepo containing a super fast JSX runtime library that generates HTML
+Kita Html is a monorepo containing a super fast JSX runtime library that generates HTML
 strings. It's designed to work with any Node.js framework (Express, Fastify, Hono,
 AdonisJS, Bun, etc.) and integrates well with HTMX, Alpine.js, and Hotwire Turbo.
 
