@@ -1,5 +1,14 @@
 # @kitajs/html
 
+## 4.2.13
+
+### Patch Changes
+
+- [#464](https://github.com/kitajs/html/pull/464)
+  [`0be97bb`](https://github.com/kitajs/html/commit/0be97bbb74b6ef8fb8e404d2b088e92a0b4adafe)
+  Thanks [@Moshyfawn](https://github.com/Moshyfawn)! - Align sandbox attribute type with
+  WHATWG specs
+
 ## 4.2.12
 
 ### Patch Changes
