@@ -2,6 +2,8 @@ name: CI Flow
 
 on:
   push:
+    branches:
+      - master
   pull_request:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -83,8 +85,16 @@ jobs:
       - name: Install packages
         run: pnpm install --frozen-lockfile
 
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Build docs
-        run: pnpm -F @kitajs/docs-html build
+        run: pnpm turbo build -F @kitajs/html-docs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
