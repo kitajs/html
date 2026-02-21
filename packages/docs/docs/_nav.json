@@ -13,9 +13,5 @@
     "text": "API",
     "link": "/api/",
     "activeMatch": "/api/"
-  },
-  {
-    "text": "GitHub",
-    "link": "https://github.com/kitajs/html"
   }
 ]

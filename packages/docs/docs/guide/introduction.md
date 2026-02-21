@@ -1,107 +1,106 @@
-# Introduction
+# What is Kita Html
 
-Kita Html is a **super-fast JSX runtime** that generates HTML strings directly, without
-the overhead of a virtual DOM. It's designed for server-side rendering and provides an
-elegant, type-safe way to generate HTML.
+Kita Html is a JSX runtime where every element evaluates to a string. Where React's
+`<div />` produces a virtual DOM node that must be reconciled and serialized, Kita Html's
+`<div />` returns `'<div></div>'` directly. There is no intermediate representation, no
+diffing step, and no serialization pass. The JSX you write compiles to function calls that
+concatenate strings.
 
-## What is Kita Html?
+This architecture makes Kita Html significantly faster than virtual DOM-based renderers
+for any scenario where the output is an HTML string: server-side rendering, static site
+generation, email templates, HTMX applications, or any HTTP handler that sends HTML over
+the wire.
 
-Unlike React which builds a virtual DOM and then renders it to HTML, Kita Html takes JSX
-syntax and immediately produces HTML strings. This makes it:
+## Performance through simplicity
 
-- ⚡ **10-40x faster** than React's server-side rendering
-- 📦 **Zero runtime dependencies** - just pure string generation
-- 🎯 **Fully type-safe** with TypeScript JSX definitions
-- 🔒 **XSS-protected** with compile-time vulnerability detection
-
-## How It Works
+A virtual DOM renderer performs three operations per render cycle: it constructs an object
+tree, diffs it against the previous tree, and serializes the result to a string. Kita Html
+skips all three. The TypeScript compiler rewrites JSX expressions into `jsx()` and
+`jsxs()` function calls at build time. At runtime, those functions concatenate attribute
+strings and child strings into a single result. The output is the final HTML with no
+post-processing.
 
 ```tsx
-// Your TSX code
-const html = <div class="hello">{name}</div>;
+// What you write
+<div class="card">
+  <h1 safe>{title}</h1>
+</div>;
 
-// TypeScript compiles it to:
-jsx('div', { class: 'hello', children: name });
+// What TypeScript compiles to
+jsx('div', { class: 'card', children: jsx('h1', { safe: true, children: title }) });
 
-// Which returns a string:
-('<div class="hello">Arthur</div>');
+// What the runtime returns
+('<div class="card"><h1>Escaped Title</h1></div>');
 ```
 
-That's it! No virtual DOM, no reconciliation, no hydration. Just fast, straightforward
-HTML string generation.
+This directness is why Kita Html benchmarks 7-40x faster than React's `renderToString`
+across real-world component trees. The runtime has zero dependencies beyond TypeScript
+itself.
 
-## Key Features
+## XSS protection
 
-### 🛡️ Built-in XSS Protection
+Because `JSX.Element` is a `string`, the runtime cannot distinguish between HTML produced
+by a component and raw user input injected as a child. Children are not escaped by
+default. This is a deliberate trade-off for performance and composability, and it is fully
+addressed by three layers of protection that work together to make accidental XSS
+practically impossible.
 
-The TypeScript plugin catches XSS vulnerabilities **at development time**:
+The `safe` attribute escapes children at render time. Adding it to any native element
+causes the runtime to pass all children through HTML entity escaping before concatenation.
 
 ```tsx
-const userInput: string = req.body.comment;
-
-// ❌ Error: Unsafe content
-<div>{userInput}</div>
-
-// ✅ Safe with escaping
 <div safe>{userInput}</div>
+// Renders: <div>&lt;script&gt;...&lt;/script&gt;</div>
 ```
 
-Learn more about [XSS Protection](/guide/xss-protection/overview).
+A TypeScript language service plugin analyzes every JSX expression in your editor and
+flags any child whose type could carry unescaped HTML. The same analysis runs as a CLI
+tool (`xss-scan`) in CI/CD pipelines, failing the build on any finding. Between the editor
+diagnostics and the CI gate, unsafe expressions are caught before they reach production.
+The only way to ship XSS-vulnerable code is to explicitly suppress the warnings.
 
-### 🔄 Async Components & Suspense
+## Async components and Suspense
 
-Full support for async/await with streaming Suspense:
+Kita Html supports async components natively. Any function component that returns a
+`Promise<string>` is valid JSX. When an async child appears anywhere in the tree, the
+entire parent chain becomes a `Promise<string>` through automatic propagation.
 
 ```tsx
-async function UserProfile({ id }: { id: string }) {
+async function UserCard({ id }: { id: string }) {
   const user = await db.getUser(id);
   return <div safe>{user.name}</div>;
 }
 
-// With Suspense streaming
-<Suspense rid={req.id} fallback={<Loading />}>
-  <UserProfile id="123" />
-</Suspense>;
+// The result is a Promise<string> because UserCard is async
+const html = <UserCard id="123" />;
 ```
 
-Learn more about [Async Components](/guide/features/async-components).
-
-### 🎨 Familiar JSX Syntax
-
-If you know React JSX, you already know Kita Html:
+For streaming scenarios, the Suspense component renders a fallback immediately and
+replaces it with the resolved content as each async subtree completes. This uses HTTP
+chunked transfer encoding to stream updates to the client without waiting for the entire
+page to resolve. A small inline script handles the client-side DOM replacement.
 
 ```tsx
-function Card({ title, children }: PropsWithChildren<{ title: string }>) {
-  return (
-    <div class="card">
-      <h2 safe>{title}</h2>
-      {children}
-    </div>
-  );
-}
+import { Suspense, renderToStream } from '@kitajs/html/suspense';
+
+const stream = renderToStream((rid) => (
+  <Suspense rid={rid} fallback={<div>Loading...</div>}>
+    <UserCard id="123" />
+  </Suspense>
+));
+
+// Pipe the stream to your HTTP response
 ```
 
-Learn more about [JSX Syntax](/guide/features/jsx-syntax).
+Each Suspense boundary operates independently, so fast components appear instantly while
+slow ones show their fallback. The `rid` parameter ties each Suspense instance to a
+specific request for safe concurrent rendering.
 
-## Use Cases
+## Packages
 
-Perfect for:
+Kita Html ships as three packages. `@kitajs/html` is the core runtime that compiles JSX to
+strings and provides Suspense streaming. `@kitajs/ts-html-plugin` is the TypeScript plugin
+and CLI scanner for XSS detection.
 
-- **Server-side rendering** - Generate HTML on the server efficiently
-- **Email templates** - Create HTML emails with JSX
-- **Static site generation** - Build static HTML files
-- **HTMX applications** - Return HTML fragments from API endpoints
-- **Template engines** - Replace EJS, Pug, or Handlebars
-
-## Quick Start
-
-Ready to start using Kita Html? Head over to the
-[Getting Started guide](/guide/getting-started) to set up your project.
-
-## Learn More
-
-- [Getting Started](/guide/getting-started) - Install and configure
-- [XSS Protection](/guide/xss-protection/overview) - Security best practices
-- [JSX Syntax](/guide/features/jsx-syntax) - All JSX features
-- [Integrations](/integrations/overview) - Framework and library integrations
-- [Benchmark](/guide/features/benchmark) - Performance comparisons
+Official [framework integrations](/integrations/overview) are available for Fastify,
+Elysia, and others. The core runtime works with any framework that accepts strings.

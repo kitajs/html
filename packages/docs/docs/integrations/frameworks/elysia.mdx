@@ -1,0 +1,48 @@
+import { PackageManagerTabs } from '@rspress/core/theme-original';
+
+# Elysia
+
+[`@elysiajs/html`](https://elysiajs.com/plugins/html) integrates Kita Html with
+[Elysia](https://elysiajs.com/). The plugin is maintained as part of the Elysia ecosystem
+and uses `@kitajs/html` as its JSX runtime.
+
+## Setup
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm i @elysiajs/html',
+    yarn: 'yarn add @elysiajs/html',
+    pnpm: 'pnpm add @elysiajs/html',
+    bun: 'bun add @elysiajs/html'
+  }}
+/>
+
+```tsx
+import { Elysia } from 'elysia';
+import { html } from '@elysiajs/html';
+
+const app = new Elysia()
+  .use(html())
+  .get('/', () => (
+    <html>
+      <body>
+        <h1>Hello from Elysia</h1>
+      </body>
+    </html>
+  ))
+  .listen(3000);
+```
+
+The plugin automatically sets `Content-Type: text/html; charset=utf8`, prepends the
+doctype, and converts JSX output into a proper response.
+
+## Configuration
+
+The plugin accepts options for content type, auto-detection, and doctype behavior. Refer
+to the [Elysia HTML plugin documentation](https://elysiajs.com/plugins/html) for the full
+configuration reference and up-to-date usage examples.
+
+## XSS protection
+
+The same XSS protection tooling applies. Install `@kitajs/ts-html-plugin` alongside
+`@elysiajs/html` for editor diagnostics and CI scanning with `xss-scan`.

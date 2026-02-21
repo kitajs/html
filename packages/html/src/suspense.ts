@@ -7,33 +7,39 @@ declare global {
    * The `SUSPENSE_ROOT` is a global object that holds the state of all the suspense
    * components rendered in the server.
    */
-  var SUSPENSE_ROOT: {
-    /**
-     * The requests map is a map of RequestId x SuspenseData containing the stream to
-     * write the HTML, the number of running promises and if the first suspense has
-     * already resolved.
-     */
-    requests: Map<number | string, RequestData>;
-
-    /**
-     * This value is used (and incremented shortly after) when no requestId is provided
-     * for {@linkcode renderToStream}
-     *
-     * @default 1
-     */
-    requestCounter: number;
-
-    /**
-     * If we should automatically stream {@linkcode SuspenseScript} before the first
-     * suspense is rendered. If you disable this setting, you need to manually load the
-     * {@linkcode SuspenseScript} in your HTML before any suspense is rendered. Otherwise,
-     * the suspense will not work.
-     *
-     * @default true
-     */
-    autoScript: boolean;
-  };
+  var SUSPENSE_ROOT: SuspenseRoot;
 }
+
+/**
+ * The `SUSPENSE_ROOT` is a global object that holds the state of all the suspense
+ * components rendered in the server.
+ */
+export type SuspenseRoot = {
+  /**
+   * The requests map is a map of RequestId x SuspenseData containing the stream to write
+   * the HTML, the number of running promises and if the first suspense has already
+   * resolved.
+   */
+  requests: Map<number | string, RequestData>;
+
+  /**
+   * This value is used (and incremented shortly after) when no requestId is provided for
+   * {@linkcode renderToStream}
+   *
+   * @default 1
+   */
+  requestCounter: number;
+
+  /**
+   * If we should automatically stream {@linkcode SuspenseScript} before the first suspense
+   * is rendered. If you disable this setting, you need to manually load the
+   * {@linkcode SuspenseScript} in your HTML before any suspense is rendered. Otherwise,
+   * the suspense will not work.
+   *
+   * @default true
+   */
+  autoScript: boolean;
+};
 
 /** Everything a suspense needs to know about its request lifecycle. */
 export type RequestData = {
@@ -104,7 +110,7 @@ function noop() {}
 // no elements are substituted.
 /**
  * This script needs to be loaded at the top of the page. You do not need to load it
- * manually, unless GLOBAL_SUSPENSE.autoScript is set to false.
+ * manually, unless {@linkcode SUSPENSE_ROOT.autoScript} is set to false.
  *
  * @see {@linkcode Suspense}
  */
@@ -407,9 +413,10 @@ export function renderToStream(
  * return resolveHtmlStream(html, requestData)
  * ```
  *
- * @param fallback The fallback to render while the async children are loading.
- * @param stream The stream to write the fallback into.
- * @returns The same stream or another one with the fallback prepended.
+ * @param template The initial HTML template, possibly containing suspense fallbacks.
+ * @param requestData The request data containing the stream to write resolved content
+ *   into.
+ * @returns The same stream or a new one with the template prepended.
  * @see {@linkcode renderToStream}
  */
 export function resolveHtmlStream(

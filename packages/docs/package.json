@@ -14,9 +14,12 @@
     "material-icon-theme": "^5.31.0"
   },
   "devDependencies": {
+    "@kitajs/html": "workspace:^",
     "@rsbuild/plugin-sass": "^1.5.0",
-    "@rspress/plugin-sitemap": "^2.0.1",
-    "@rspress/plugin-twoslash": "^2.0.1",
+    "@rspress/plugin-client-redirects": "^2.0.3",
+    "@rspress/plugin-sitemap": "^2.0.3",
+    "@rspress/plugin-twoslash": "^2.0.3",
+    "@rspress/plugin-typedoc": "^2.0.3",
     "@shikijs/transformers": "^3.22.0",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

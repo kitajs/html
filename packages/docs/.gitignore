@@ -1,0 +1,8 @@
+doc_build/
+# TypeDoc generated API docs (regenerated on each build)
+docs/api/html/**/*.md
+docs/api/html/**/**/*.md
+!docs/api/html/_meta.json
+docs/api/fastify/**/*.md
+docs/api/fastify/**/**/*.md
+!docs/api/fastify/_meta.json

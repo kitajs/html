@@ -1,0 +1,71 @@
+import { PackageManagerTabs } from '@rspress/core/theme-original';
+
+# Getting Started
+
+Install `@kitajs/html` and `@kitajs/ts-html-plugin` together. The first is the JSX
+runtime; the second provides editor diagnostics and the `xss-scan` CLI for catching XSS at
+compile time.
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm i @kitajs/html @kitajs/ts-html-plugin',
+    yarn: 'yarn add @kitajs/html @kitajs/ts-html-plugin',
+    pnpm: 'pnpm add @kitajs/html @kitajs/ts-html-plugin',
+    bun: 'bun add @kitajs/html @kitajs/ts-html-plugin'
+  }}
+/>
+
+## TypeScript configuration
+
+Add the following to your `tsconfig.json`. The `jsx` and `jsxImportSource` fields tell
+TypeScript to compile JSX using the Kita Html runtime. The `plugins` entry activates the
+XSS detection plugin in your editor.
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "@kitajs/html",
+    "plugins": [{ "name": "@kitajs/ts-html-plugin" }]
+  }
+}
+```
+
+If your editor uses a globally installed TypeScript version instead of the project's local
+copy, the plugin will not load. In VS Code, configure the workspace to use the local
+TypeScript:
+
+```json title=".vscode/settings.json"
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}
+```
+
+## XSS scanner
+
+Add `xss-scan` to your test script so it runs in CI alongside your tests. The CLI performs
+the same XSS analysis as the editor plugin, but against your entire codebase.
+
+```json title="package.json"
+{
+  "scripts": {
+    "test": "xss-scan && vitest"
+  }
+}
+```
+
+## Verification
+
+Write the following in a `.tsx` file:
+
+```tsx
+console.log(<div>{String.name}</div>);
+```
+
+Your editor should show an XSS error on `String.name`, because its type is `string` and it
+is not escaped. If you see the error, the plugin is working. Run `xss-scan` from the
+terminal to confirm the CLI catches the same issue.
+
+If no error appears, verify that your editor is using the workspace TypeScript version and
+that the `plugins` array is present in the `tsconfig.json` that covers the file.

@@ -1,0 +1,34 @@
+# Compatibility
+
+## Runtimes
+
+Kita Html works on Node.js 20.13 and later. Bun is fully supported and uses its native
+`Bun.escapeHTML` for faster escaping. Deno is untested but expected to work since the
+library has no native dependencies.
+
+## TypeScript
+
+TypeScript 5.0 or later is required. TypeScript 5.9+ is recommended for full compatibility
+with the latest type definitions.
+
+The native TypeScript compiler `tsgo` works for building projects that use Kita Html. The
+language service plugin (`@kitajs/ts-html-plugin`) requires the standard TypeScript
+language server and does not work with `tsgo`.
+
+## Module system
+
+The packages emit CommonJS. ESM consumers can import them with `esModuleInterop` enabled
+in `tsconfig.json`.
+
+## Frameworks
+
+Official [framework integrations](/integrations/overview) exist for Fastify (4.x and 5.x)
+and Elysia. Kita Html also works with any framework that accepts strings: Express, Hono,
+Bun's built-in server, AdonisJS, and others. Send the string or stream directly in the
+response body.
+
+## Editors
+
+The XSS detection plugin works in any editor that supports TypeScript language service
+plugins. VS Code requires the workspace TypeScript to be selected instead of the built-in
+version.

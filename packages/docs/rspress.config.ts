@@ -1,7 +1,9 @@
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { defineConfig, type UserConfig } from '@rspress/core';
+import { pluginClientRedirects } from '@rspress/plugin-client-redirects';
 import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { pluginTwoslash } from '@rspress/plugin-twoslash';
+import { pluginTypeDoc, PluginTypeDocOptions } from '@rspress/plugin-typedoc';
 import {
   transformerNotationDiff,
   transformerNotationErrorLevel,
@@ -9,9 +11,36 @@ import {
   transformerNotationHighlight,
   transformerRemoveNotationEscape
 } from '@shikijs/transformers';
+import path from 'node:path';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import pluginFileTree from 'rspress-plugin-file-tree';
 import pluginOg from 'rspress-plugin-og';
+
+/** Shared TypeDoc setup for compact, public-only API docs. */
+function configureTypeDoc(publicPath: string, tsconfig?: string) {
+  return (app: Parameters<Exclude<PluginTypeDocOptions['setup'], undefined>>[0]) => {
+    if (tsconfig) {
+      app.options.setValue('tsconfig', tsconfig);
+    }
+    app.options.setValue('excludeInternal', true);
+    app.options.setValue('excludePrivate', true);
+    app.options.setValue('excludeProtected', true);
+    app.options.setValue('hidePageHeader', true);
+    app.options.setValue('hideBreadcrumbs', true);
+    app.options.setValue('useCodeBlocks', true);
+    app.options.setValue('flattenOutputFiles', true);
+    app.options.setValue('mergeReadme', true);
+    app.options.setValue('readme', 'none');
+    app.options.setValue('formatWithPrettier', true);
+    app.options.setValue('publicPath', publicPath);
+  };
+}
+
+/** Creates a renamed pluginTypeDoc instance to allow multiple registrations. */
+function namedTypeDoc(name: string, options: Parameters<typeof pluginTypeDoc>[0]) {
+  const plugin = pluginTypeDoc(options);
+  return { ...plugin, name };
+}
 
 // Allow hostname override via env var
 const DOCS_HOSTNAME = process.env.DOCS_HOSTNAME || 'html.kitajs.org';
@@ -35,6 +64,31 @@ export default defineConfig({
     pluginFileTree(),
     pluginOg({
       domain: DOCS_URL
+    }),
+    namedTypeDoc('typedoc-html', {
+      entryPoints: [
+        path.join(__dirname, '../html/src/index.ts'),
+        path.join(__dirname, '../html/src/jsx-runtime.ts'),
+        path.join(__dirname, '../html/src/suspense.ts'),
+        path.join(__dirname, '../html/src/error-boundary.ts')
+      ],
+      outDir: 'api/html',
+      setup: configureTypeDoc('/api/html/', path.join(__dirname, 'tsconfig.typedoc.json'))
+    }),
+    namedTypeDoc('typedoc-fastify', {
+      entryPoints: [path.join(__dirname, '../fastify-html-plugin/src/index.ts')],
+      outDir: 'api/fastify',
+      setup: configureTypeDoc('/api/fastify/')
+    }),
+    pluginClientRedirects({
+      redirects: [
+        { from: '/k601', to: '/guide/xss/error-codes#k601' },
+        { from: '/k602', to: '/guide/xss/error-codes#k602' },
+        { from: '/k603', to: '/guide/xss/error-codes#k603' },
+        { from: '/k604', to: '/guide/xss/error-codes#k604' },
+        { from: '/packages/ts-html-plugin', to: '/guide/xss/error-codes' },
+        { from: '/packages/fastify-html-plugin', to: '/integrations/frameworks/fastify' }
+      ]
     })
   ],
 

@@ -1,5 +1,5 @@
 function urlDocs(error: `k${number}`) {
-  return `https://html.kitajs.org/packages/ts-html-plugin#${error}`;
+  return `https://html.kitajs.org/${error}`;
 }
 
 export const Xss = {

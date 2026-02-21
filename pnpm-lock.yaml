@@ -393,15 +393,24 @@ importers:
         specifier: ^5.31.0
         version: 5.31.0
     devDependencies:
+      '@kitajs/html':
+        specifier: workspace:^
+        version: link:../html
       '@rsbuild/plugin-sass':
         specifier: ^1.5.0
         version: 1.5.0(@rsbuild/core@2.0.0-beta.3(core-js@3.42.0))
+      '@rspress/plugin-client-redirects':
+        specifier: ^2.0.3
+        version: 2.0.3(@rspress/core@2.0.3(@types/react@19.2.9)(core-js@3.42.0))
       '@rspress/plugin-sitemap':
-        specifier: ^2.0.1
+        specifier: ^2.0.3
         version: 2.0.3(@rspress/core@2.0.3(@types/react@19.2.9)(core-js@3.42.0))
       '@rspress/plugin-twoslash':
-        specifier: ^2.0.1
+        specifier: ^2.0.3
         version: 2.0.3(@rspress/core@2.0.3(@types/react@19.2.9)(core-js@3.42.0))(react@19.2.4)(typescript@5.9.3)
+      '@rspress/plugin-typedoc':
+        specifier: ^2.0.3
+        version: 2.0.3(@rspress/core@2.0.3(@types/react@19.2.9)(core-js@3.42.0))(typescript@5.9.3)
       '@shikijs/transformers':
         specifier: ^3.22.0
         version: 3.22.0
@@ -900,6 +909,9 @@ packages:
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+
+  '@gerrit0/mini-shiki@3.22.0':
+    resolution: {integrity: sha512-jMpciqEVUBKE1QwU64S4saNMzpsSza6diNCk4MWAeCxO2+LFi2FIFmL2S0VDLzEJCxuvCbU783xi8Hp/gkM5CQ==}
 
   '@img/colour@1.0.0':
     resolution: {integrity: sha512-A5P/LfWGFSl6nsckYtjw9da+19jB8hkJ6ACTGcDfEJ0aE+l2n2El7dsVM7UVHZQ9s2lmYMWlrS21YLy2IR1LUw==}
@@ -1725,6 +1737,12 @@ packages:
     resolution: {integrity: sha512-GODWwufeJfblwgGrkxcxorSEVvhiJC3qhepWUxB4zSbUqn0wgbdOzGpTvf3NJX/OD7lV9wcUTtvballeNvbKeg==}
     engines: {node: '>=14.17.6'}
 
+  '@rspress/plugin-client-redirects@2.0.3':
+    resolution: {integrity: sha512-9+SoAbfoxM6OCRWx8jWHHi2zwJDcNaej/URx0CWZk8tvQ618yJW5mXJydknlac62399eYh/F7C3w8TZM3ORGVA==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    peerDependencies:
+      '@rspress/core': ^2.0.3
+
   '@rspress/plugin-container-syntax@1.47.1':
     resolution: {integrity: sha512-Uen5Bi/HQF+J8SdNDUHdIwziZrqWRIsMzaQa71oskQdzI2478dNPeFuGIwMX/4RF9msSW8MOL88OSKr/bng3Cg==}
     engines: {node: '>=14.17.6'}
@@ -1752,6 +1770,12 @@ packages:
       '@rspress/core': ^2.0.3
       react: '>=18.0.0'
       typescript: ^5.8.2
+
+  '@rspress/plugin-typedoc@2.0.3':
+    resolution: {integrity: sha512-vXijAXPewZccVz0BOWAVrQp8PhoT0d/RfhUK40TXxChPUqms/FTR3mAWV+9aC/kZ36bhuNjqz4lWOGl7LNU+mA==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    peerDependencies:
+      '@rspress/core': ^2.0.3
 
   '@rspress/runtime@1.47.1':
     resolution: {integrity: sha512-deEyM6wTr9G/Gq2LPPY2xJmW0wMPvtemTgXHcjd6VraQ3ikKGNEkZSofpwLOUfwsrHmOXEGHHQw5oFkaZb9ALw==}
@@ -3074,6 +3098,9 @@ packages:
   light-my-request@6.6.0:
     resolution: {integrity: sha512-CHYbu8RtboSIoVsHZ6Ye4cj4Aw/yg2oAFimlF7mNvfDV192LR7nDiKtSIfCuLT7KokPSTn/9kfVLm5OGN0A28A==}
 
+  linkify-it@5.0.0:
+    resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
+
   loader-runner@4.3.1:
     resolution: {integrity: sha512-IWqP2SCPhyVFTBtRcgMHdzlf9ul25NwaFx4wCEH/KjAXuuHY4yNjvPXsBokp8jCB936PyWRaPKUNh8NvylLp2Q==}
     engines: {node: '>=6.11.5'}
@@ -3116,6 +3143,9 @@ packages:
     resolution: {integrity: sha512-B5Y16Jr9LB9dHVkh6ZevG+vAbOsNOYCX+sXvFWFu7B3Iz5mijW3zdbMyhsh8ANd2mSWBYdJgnqi+mL7/LrOPYg==}
     engines: {node: 20 || >=22}
 
+  lunr@2.3.9:
+    resolution: {integrity: sha512-zTU3DaZaF3Rt9rhN3uBMGQD3dD2/vFQqnvZCDv4dl5iOzq2IZQqTxu90r4E5J+nP70J3ilqVCrbho2eWaeW8Ow==}
+
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
@@ -3133,6 +3163,10 @@ packages:
   markdown-extensions@2.0.0:
     resolution: {integrity: sha512-o5vL7aDWatOTX8LzaS1WMoaoxIiLRQJuIKKe2wAw6IeULDHaqbiqiggmx+pKvZDb1Sj+pE46Sn1T7lCqfFtg1Q==}
     engines: {node: '>=16'}
+
+  markdown-it@14.1.1:
+    resolution: {integrity: sha512-BuU2qnTti9YKgK5N+IeMubp14ZUKUUw7yeJbkjtosvHiP0AZ5c8IAgEMk79D0eC8F23r4Ac/q8cAIFdm2FtyoA==}
+    hasBin: true
 
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
@@ -3242,6 +3276,9 @@ packages:
 
   mdn-data@2.12.2:
     resolution: {integrity: sha512-IEn+pegP1aManZuckezWCO+XZQDplx1366JoVhTpMpBB1sPey/SbveZQUosKiKiGYjg1wH4pMlNgXbCiYgihQA==}
+
+  mdurl@2.0.0:
+    resolution: {integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==}
 
   medium-zoom@1.1.0:
     resolution: {integrity: sha512-ewyDsp7k4InCUp3jRmwHBRFGyjBimKps/AJLjRSox+2q/2H4p/PNpQf+pwONWlJiOudkBXtbdmVbFjqyybfTmQ==}
@@ -3769,6 +3806,10 @@ packages:
 
   pump@3.0.3:
     resolution: {integrity: sha512-todwxLMY7/heScKmntwQG8CXVkWUOdYxIvY2s0VWAAMh/nd8SoYiRaKjlr7+iCs984f2P8zvrfWcDDYVb73NfA==}
+
+  punycode.js@2.3.1:
+    resolution: {integrity: sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA==}
+    engines: {node: '>=6'}
 
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
@@ -4521,10 +4562,26 @@ packages:
     resolution: {integrity: sha512-JKCM9zTfPDuPqQqdGZBWSEiItShliKkBFg5c6yOR8zth43v763XkAzTWaOlVqc0Y6p9ee8AaAbipGfUnCsYZUA==}
     engines: {node: '>=12'}
 
+  typedoc-plugin-markdown@4.9.0:
+    resolution: {integrity: sha512-9Uu4WR9L7ZBgAl60N/h+jqmPxxvnC9nQAlnnO/OujtG2ubjnKTVUFY1XDhcMY+pCqlX3N2HsQM2QTYZIU9tJuw==}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      typedoc: 0.28.x
+
+  typedoc@0.28.16:
+    resolution: {integrity: sha512-x4xW77QC3i5DUFMBp0qjukOTnr/sSg+oEs86nB3LjDslvAmwe/PUGDWbe3GrIqt59oTqoXK5GRK9tAa0sYMiog==}
+    engines: {node: '>= 18', pnpm: '>= 10'}
+    hasBin: true
+    peerDependencies:
+      typescript: 5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x || 5.5.x || 5.6.x || 5.7.x || 5.8.x || 5.9.x
+
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  uc.micro@2.1.0:
+    resolution: {integrity: sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==}
 
   ufo@1.6.3:
     resolution: {integrity: sha512-yDJTmhydvl5lJzBmy/hyOAA0d+aqCBuwl818haVdYCRrWV84o7YyeVm4QlVHStqNrrJSTb6jKuFAVqAFsr+K3Q==}
@@ -5227,6 +5284,14 @@ snapshots:
       '@floating-ui/utils': 0.2.10
 
   '@floating-ui/utils@0.2.10': {}
+
+  '@gerrit0/mini-shiki@3.22.0':
+    dependencies:
+      '@shikijs/engine-oniguruma': 3.22.0
+      '@shikijs/langs': 3.22.0
+      '@shikijs/themes': 3.22.0
+      '@shikijs/types': 3.22.0
+      '@shikijs/vscode-textmate': 10.0.2
 
   '@img/colour@1.0.0': {}
 
@@ -6075,6 +6140,10 @@ snapshots:
     dependencies:
       '@rspress/shared': 1.47.1
 
+  '@rspress/plugin-client-redirects@2.0.3(@rspress/core@2.0.3(@types/react@19.2.9)(core-js@3.42.0))':
+    dependencies:
+      '@rspress/core': 2.0.3(@types/react@19.2.9)(core-js@3.42.0)
+
   '@rspress/plugin-container-syntax@1.47.1':
     dependencies:
       '@rspress/shared': 1.47.1
@@ -6106,6 +6175,14 @@ snapshots:
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
+
+  '@rspress/plugin-typedoc@2.0.3(@rspress/core@2.0.3(@types/react@19.2.9)(core-js@3.42.0))(typescript@5.9.3)':
+    dependencies:
+      '@rspress/core': 2.0.3(@types/react@19.2.9)(core-js@3.42.0)
+      typedoc: 0.28.16(typescript@5.9.3)
+      typedoc-plugin-markdown: 4.9.0(typedoc@0.28.16(typescript@5.9.3))
+    transitivePeerDependencies:
+      - typescript
 
   '@rspress/runtime@1.47.1':
     dependencies:
@@ -7633,6 +7710,10 @@ snapshots:
       process-warning: 4.0.1
       set-cookie-parser: 2.7.2
 
+  linkify-it@5.0.0:
+    dependencies:
+      uc.micro: 2.1.0
+
   loader-runner@4.3.1: {}
 
   loader-utils@2.0.4:
@@ -7670,6 +7751,8 @@ snapshots:
 
   lru-cache@11.2.4: {}
 
+  lunr@2.3.9: {}
+
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -7687,6 +7770,15 @@ snapshots:
   markdown-extensions@1.1.1: {}
 
   markdown-extensions@2.0.0: {}
+
+  markdown-it@14.1.1:
+    dependencies:
+      argparse: 2.0.1
+      entities: 4.5.0
+      linkify-it: 5.0.0
+      mdurl: 2.0.0
+      punycode.js: 2.3.1
+      uc.micro: 2.1.0
 
   markdown-table@3.0.4: {}
 
@@ -8013,6 +8105,8 @@ snapshots:
       '@types/mdast': 4.0.4
 
   mdn-data@2.12.2: {}
+
+  mdurl@2.0.0: {}
 
   medium-zoom@1.1.0: {}
 
@@ -8843,6 +8937,8 @@ snapshots:
     dependencies:
       end-of-stream: 1.4.5
       once: 1.4.0
+
+  punycode.js@2.3.1: {}
 
   punycode@2.3.1: {}
 
@@ -9712,7 +9808,22 @@ snapshots:
 
   typed-html@3.0.1: {}
 
+  typedoc-plugin-markdown@4.9.0(typedoc@0.28.16(typescript@5.9.3)):
+    dependencies:
+      typedoc: 0.28.16(typescript@5.9.3)
+
+  typedoc@0.28.16(typescript@5.9.3):
+    dependencies:
+      '@gerrit0/mini-shiki': 3.22.0
+      lunr: 2.3.9
+      markdown-it: 14.1.1
+      minimatch: 9.0.5
+      typescript: 5.9.3
+      yaml: 2.8.2
+
   typescript@5.9.3: {}
+
+  uc.micro@2.1.0: {}
 
   ufo@1.6.3: {}
 

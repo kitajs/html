@@ -1,0 +1,58 @@
+# How JSX Becomes HTML
+
+The transformation from JSX to an HTML string happens in two stages: a compile-time
+rewrite by TypeScript and a runtime evaluation by the Kita Html functions.
+
+## Compile time
+
+When `tsconfig.json` specifies `jsx: "react-jsx"` and `jsxImportSource: "@kitajs/html"`,
+TypeScript rewrites every JSX expression into a function call. Elements with a single
+child call `jsx()`. Elements with multiple children call `jsxs()`. Attributes and children
+are passed as a single props object.
+
+```tsx title="Source TSX"
+<ol start={2}>
+  {[1, 2].map((i) => (
+    <li>{i}</li>
+  ))}
+</ol>
+```
+
+TypeScript compiles this to:
+
+```js title="Compiled output"
+import { jsxs, jsx } from '@kitajs/html/jsx-runtime';
+
+jsxs('ol', {
+  start: 2,
+  children: [1, 2].map((i) => jsx('li', { children: i }))
+});
+```
+
+The JSX syntax is fully removed at compile time. The runtime never parses JSX.
+
+## Runtime
+
+The `jsx()` and `jsxs()` functions receive the tag name and the props object. They perform
+three operations in sequence: serialize attributes into an HTML attribute string,
+serialize children into a content string, and concatenate the opening tag, content, and
+closing tag.
+
+For the example above, the runtime produces:
+
+```js
+'<ol start="2"><li>1</li><li>2</li></ol>';
+```
+
+If any child is a `Promise`, the concatenation returns a `Promise<string>` instead of a
+`string`. This propagation is automatic: a single async component anywhere in the tree
+makes every ancestor async up to the root.
+
+Void elements like `<br />`, `<img />`, and `<meta />` skip the closing tag entirely. The
+runtime checks the tag name against a list ordered by frequency so the most common void
+elements resolve in a single comparison.
+
+Attributes are always escaped. The `class` attribute accepts arrays for conditional
+composition. The `style` attribute accepts both strings and objects, with automatic
+camelCase-to-kebab-case conversion for object keys. Boolean attributes like `disabled`
+render as valueless attributes when `true` and are omitted when `false`.

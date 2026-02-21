@@ -1,34 +1,34 @@
 [
-  "introduction",
-  {
-    "type": "file",
-    "name": "getting-started",
-    "label": "Getting Started",
-    "tag": "start-here"
-  },
-  {
-    "type": "divider"
-  },
   {
     "type": "section-header",
+    "label": "Getting Started"
+  },
+  "introduction",
+  "getting-started",
+  "how-jsx-becomes-html",
+  {
+    "type": "dir-section-header",
+    "name": "xss",
     "label": "XSS Protection"
   },
   {
-    "type": "dir",
-    "name": "xss-protection",
-    "label": "XSS Protection",
-    "collapsible": true,
-    "collapsed": false
+    "type": "dir-section-header",
+    "name": "async",
+    "label": "Async & Streaming"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "jsx",
+    "label": "JSX"
   },
   {
     "type": "section-header",
-    "label": "Features"
+    "label": "Architecture"
   },
+  "design-decisions",
   {
-    "type": "dir",
-    "name": "features",
-    "label": "Features",
-    "collapsible": true,
-    "collapsed": false
+    "type": "dir-section-header",
+    "name": "reference",
+    "label": "Reference"
   }
 ]

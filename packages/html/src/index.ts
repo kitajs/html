@@ -12,6 +12,7 @@ const CAMEL_REGEX = /[a-z][A-Z]/;
  * @param input The string to check.
  * @param index The index of the character to check.
  * @returns If the character at the given index is an uppercase character.
+ * @internal
  */
 export function isUpper(this: void, input: string, index: number): boolean {
   const code = input.charCodeAt(index);
@@ -22,6 +23,7 @@ export function isUpper(this: void, input: string, index: number): boolean {
  * Converts a camel cased string to a kebab cased string.
  *
  * @param camel The camel cased string to convert.
+ * @internal
  */
 export function toKebabCase(this: void, camel: string): string {
   // This is a optimization to avoid the whole conversion process when the
@@ -188,6 +190,7 @@ export function isVoidElement(this: void, tag: string): boolean {
  *
  * @param style A record of literal values to use as style attributes or a string.
  * @returns The generated html style string.
+ * @internal
  */
 export function styleToString(this: void, style: object | string): string {
   // Faster escaping process that only looks for the " character.
@@ -498,6 +501,7 @@ export function contentsToString(
  * @param escape If it should escape the content before transforming it. Default is
  *   `false`
  * @returns The transformed and escaped string of content.
+ * @internal
  */
 export function contentToString(
   this: void,
@@ -604,7 +608,11 @@ export function Fragment(props: PropsWithChildren): JSX.Element {
   return contentsToString([props.children]);
 }
 
-/** Here for interop with `preact` and many build systems. */
+/**
+ * Here for interop with `preact` and many build systems.
+ *
+ * @internal
+ */
 export const h: typeof createElement = createElement;
 
 /**
@@ -621,12 +629,13 @@ export const h: typeof createElement = createElement;
 export const e: typeof escape = escape;
 
 /**
- * Fast and type safe HTML templates using JSX syntax.
+ * Namespace export containing all core runtime functions. Used with the legacy `jsx:
+ * "react"` transform where `jsxFactory` is set to `Html.createElement`. When using the
+ * modern `jsx: "react-jsx"` transform, import individual functions directly from
+ * `@kitajs/html` instead.
  *
- * @module Html
- * @license MIT
- * @link https://github.com/kitajs/html
- * @link https://www.npmjs.com/package/@kitajs/html
+ * @see https://github.com/kitajs/html
+ * @see https://www.npmjs.com/package/@kitajs/html
  */
 export const Html: Omit<typeof import('./index.js'), 'Html' | 'default'> = {
   escape,

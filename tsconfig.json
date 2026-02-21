@@ -19,6 +19,7 @@
     "declaration": true,
     "declarationMap": true,
     "incremental": true,
+    "stripInternal": true,
 
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,

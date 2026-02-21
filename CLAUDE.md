@@ -14,7 +14,8 @@ kitajs/html/
 ├── packages/
 │   ├── html/               # Core JSX runtime (@kitajs/html)
 │   ├── ts-html-plugin/     # XSS detection TypeScript plugin (@kitajs/ts-html-plugin)
-│   └── fastify-html-plugin/# Fastify integration (@kitajs/fastify-html-plugin)
+│   ├── fastify-html-plugin/# Fastify integration (@kitajs/fastify-html-plugin)
+│   └── docs/               # Documentation site (@kitajs/docs-html)
 ├── benchmarks/             # Performance benchmarks
 └── examples/               # Usage examples
 ```
@@ -31,37 +32,16 @@ kitajs/html/
 
 ## Quick Start
 
-### Development Commands
-
 ```bash
-# Install dependencies (pnpm required)
-pnpm install
-
-# Build all packages
-pnpm build
-
-# Run all tests
-pnpm test
-
-# Format code
-pnpm format
-
-# Run benchmarks
-pnpm bench
+pnpm install        # Install dependencies (pnpm required)
+pnpm build          # Build all packages
+pnpm test           # Run all tests
+pnpm format         # Format code
+pnpm bench          # Run benchmarks
 ```
 
-### Per-Package Commands
-
-```bash
-# Build specific package
-pnpm --filter "@kitajs/html" build
-
-# Test specific package
-pnpm --filter "@kitajs/ts-html-plugin" test
-
-# Run commands from package directory
-cd packages/html && pnpm test
-```
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full development workflow, per-package
+commands, and pull request guidelines.
 
 ## Architecture Overview
 
@@ -152,6 +132,13 @@ Fastify integration. Key file:
 **See:**
 [`packages/fastify-html-plugin/CLAUDE.md`](packages/fastify-html-plugin/CLAUDE.md)
 
+### @kitajs/docs-html
+
+Documentation site at https://html.kitajs.org. Uses Rspress, follows Information Mapping
+methodology.
+
+**See:** [`packages/docs/CLAUDE.md`](packages/docs/CLAUDE.md)
+
 ## Tech Stack
 
 | Tool                | Purpose                              |
@@ -239,6 +226,15 @@ The codebase uses several optimization patterns:
 - Objects with `toString()`
 - Variables prefixed with `unsafe`
 
+## Documentation Rule
+
+Any change to the runtime, types, API surface, configuration, or behavior of any package
+must include a corresponding update to the documentation at `packages/docs/`. If a code
+change would make any existing documentation page inaccurate, update that page in the same
+commit. Use the `docs-writer` agent at `.claude/agents/docs-writer/` for documentation
+work. Run `pnpm -F @kitajs/docs-html build` to verify the docs site compiles after any
+documentation change.
+
 ## Common Patterns
 
 ### Component Definition
@@ -286,42 +282,10 @@ app.get('/', (req, reply) => reply.html(<Page rid={req.id} />));
 <div class={['base', isActive && 'active', size]} />
 ```
 
-## Testing Guidelines
-
-1. **XSS Safety**: Always test with malicious input samples
-2. **Async Handling**: Test both sync and async component paths
-3. **Type Coverage**: Use `vitest --typecheck` for type tests
-4. **Performance**: Run benchmarks for core changes
-
-## Contribution Workflow
-
-1. Fork and clone the repository
-2. Install dependencies: `pnpm install`
-3. Make changes
-4. Format: `pnpm format`
-5. Build: `pnpm build`
-6. Test: `pnpm test`
-7. Create changeset: `pnpm changeset`
-8. Submit PR
-
-## Examples
-
-The `examples/` directory contains working examples:
-
-- `fastify-htmx.tsx`: Fastify + HTMX integration with Suspense
-- `http-server.tsx`: Plain Node.js HTTP server with streaming
-
-Run examples:
-
-```bash
-npx tsx examples/fastify-htmx.tsx
-npx tsx examples/http-server.tsx
-```
-
 ## Common Gotchas
 
 1. **Children NOT escaped by default** - Always use `safe` for user input
 2. **`JSX.Element` is `string | Promise<string>`** - Handle both cases
 3. **Suspense needs `rid`** - Use request ID for concurrent safety
-4. **Components need `Html.escapeHtml()`** - `safe` only works on native elements
+4. **Components receive `safe` as a prop** - They must forward it to inner native elements
 5. **pnpm required** - npm/yarn will fail on install

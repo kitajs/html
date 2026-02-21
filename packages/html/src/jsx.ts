@@ -193,7 +193,7 @@ declare global {
       src?: undefined | string;
       autobuffer?: undefined | string;
       autoplay?: undefined | boolean;
-      preload?: undefined | string;
+      preload?: boolean | AnyString | 'mousedown' | 'mouseover' | 'preload:init';
       muted?: undefined | boolean;
       loop?: undefined | boolean;
       controls?: undefined | string;

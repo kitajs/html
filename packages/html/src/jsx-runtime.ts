@@ -14,7 +14,8 @@ import {
  *
  * @param name The name of the element to create or another component function
  * @param attributes The props to apply to the component
- * @retuns The generated html string or a promise that resolves to the generated html string
+ * @returns The generated html string or a promise that resolves to the generated html
+ *   string
  */
 export function jsx(
   this: void,
@@ -58,7 +59,8 @@ export function jsx(
  *
  * @param name The name of the element to create or another component function
  * @param attributes The props to apply to the component
- * @retuns The generated html string or a promise that resolves to the generated html string
+ * @returns The generated html string or a promise that resolves to the generated html
+ *   string
  */
 export function jsxs(
   this: void,

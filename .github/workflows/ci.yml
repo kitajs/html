@@ -6,6 +6,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+permissions:
+  pages: write
+  id-token: write
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -52,3 +56,41 @@ jobs:
           # Codecov backend may be unstable
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  deploy-docs:
+    needs: build
+    if: github.ref == 'refs/heads/arthurfiorette/serena'
+    runs-on: ubuntu-latest
+    name: Deploy Docs
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup node and restore cached dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Build docs
+        run: pnpm -F @kitajs/docs-html build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: packages/docs/doc_build
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

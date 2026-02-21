@@ -1,25 +1,18 @@
 [
   "overview",
   {
-    "type": "section-header",
+    "type": "dir-section-header",
+    "name": "frameworks",
     "label": "Frameworks"
   },
   {
-    "type": "dir",
-    "name": "frameworks",
-    "label": "Frameworks",
-    "collapsible": true,
-    "collapsed": false
+    "type": "dir-section-header",
+    "name": "type-extensions",
+    "label": "Type Extensions"
   },
   {
     "type": "section-header",
-    "label": "Libraries"
+    "label": "Templates"
   },
-  {
-    "type": "dir",
-    "name": "libraries",
-    "label": "Libraries",
-    "collapsible": true,
-    "collapsed": false
-  }
+  "base-templates"
 ]

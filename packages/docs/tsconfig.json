@@ -11,5 +11,6 @@
       "@theme": ["./theme"]
     }
   },
-  "include": ["docs", "theme", "rspress.config.ts"]
+  "include": ["docs", "theme", "rspress.config.ts"],
+  "exclude": []
 }
