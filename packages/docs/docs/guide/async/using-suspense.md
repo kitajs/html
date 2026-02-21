@@ -95,3 +95,28 @@ const stream = renderToStream((rid) => (
 
 The same `rid` is shared across all Suspense boundaries in the same request. The stream
 closes automatically when the last boundary resolves.
+
+## Async fallbacks
+
+The `fallback` prop can be an async component, but this blocks the entire stream until the
+fallback resolves. The server will not send any HTML until the async fallback is ready.
+
+```tsx
+async function LoadingMessage() {
+  await loadTranslations();
+  return <div>Loading user data...</div>;
+}
+
+const stream = renderToStream((rid) => (
+  <Suspense rid={rid} fallback={<LoadingMessage />}>
+    <UserProfile id="123" />
+  </Suspense>
+));
+```
+
+The stream waits for `LoadingMessage` to resolve before sending anything to the client.
+This defeats the purpose of streaming. Use synchronous fallbacks whenever possible.
+
+If an async fallback throws an error, wrap the Suspense in an `ErrorBoundary` to handle
+it. The `catch` prop only handles errors from the async children, not from the fallback
+itself.

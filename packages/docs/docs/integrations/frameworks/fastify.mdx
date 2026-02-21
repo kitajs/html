@@ -7,6 +7,14 @@ type headers, Suspense streaming, and automatic doctype injection.
 
 ## Setup
 
+:::danger XSS Protection Required
+
+You must install and configure `@kitajs/ts-html-plugin` before using this plugin to avoid
+XSS vulnerabilities. See the [Getting Started](/guide/getting-started) guide for complete
+setup instructions including TypeScript configuration and XSS detection.
+
+:::
+
 <PackageManagerTabs
   command={{
     npm: 'npm i @kitajs/fastify-html-plugin',
@@ -29,7 +37,7 @@ await app.register(fastifyKitaHtml);
 ## Sending HTML
 
 Use `reply.html()` with any JSX expression. The plugin sets the `Content-Type` header to
-`text/html; charset=utf-8` and calculates `Content-Length` automatically.
+`text/html; charset=utf-8`.
 
 ```tsx
 app.get('/', (req, reply) => {
@@ -44,6 +52,10 @@ app.get('/profile', (req, reply) => {
   reply.html(<UserProfile id={req.params.id} />);
 });
 ```
+
+For synchronous responses, the plugin calculates and sets the `Content-Length` header
+automatically. For Suspense streaming (below), the response uses chunked transfer encoding
+without a `Content-Length` header.
 
 ## Suspense streaming
 
@@ -65,6 +77,29 @@ app.get('/dashboard', (req, reply) => {
 
 No manual stream handling is required. The plugin detects Suspense usage through the
 global `SUSPENSE_ROOT` and calls `resolveHtmlStream` internally.
+
+## Error handling
+
+The plugin supports `ErrorBoundary` components for catching async errors. Wrap async
+content in an `ErrorBoundary` to handle failures gracefully.
+
+```tsx
+import { ErrorBoundary } from '@kitajs/html/error-boundary';
+import { Suspense } from '@kitajs/html/suspense';
+
+app.get('/dashboard', (req, reply) => {
+  reply.html(
+    <ErrorBoundary catch={(error) => <div>Error: {String(error)}</div>}>
+      <Suspense rid={req.id} fallback={<div>Loading...</div>}>
+        <AsyncDashboard />
+      </Suspense>
+    </ErrorBoundary>
+  );
+});
+```
+
+See the [Error Boundaries](/guide/async/error-boundaries) guide for details on error
+handling patterns.
 
 ## Auto-doctype
 

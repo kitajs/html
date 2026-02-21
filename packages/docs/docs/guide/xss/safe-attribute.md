@@ -14,6 +14,13 @@ all children through HTML entity escaping before concatenation.
 // Renders: <div>&lt;script&gt;alert(1)&lt;/script&gt;</div>
 ```
 
+Without `safe`, malicious input executes. Consider a user profile where the description
+field contains
+`</div><script>fetch('/steal', {method: 'POST', body: document.cookie})</script>`.
+Rendering this without escaping closes the container early, injects a script tag, and runs
+arbitrary code. The `safe` attribute converts the angle brackets to `&lt;` and `&gt;`,
+rendering the payload as harmless text.
+
 Place `safe` on the innermost element that holds the untrusted value. Do not add it to a
 parent wrapper, as that would escape the HTML of child components too.
 

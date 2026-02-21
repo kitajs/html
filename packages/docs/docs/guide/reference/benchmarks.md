@@ -5,45 +5,36 @@ through micro benchmarks that compare string generation speed against other HTML
 
 ## Results
 
-Benchmarked against React, Typed Html, Common Tags, and GHtml on a 13th Gen Intel Core
-i5-13600K running Node.js v20.11.0. Run `pnpm bench` in the repository root to reproduce.
+Benchmarked on an Apple M4 Pro (12 cores, 24 GB) running Node.js v24.12.0 on 2026-02-21.
+Run `pnpm bench` in the repository root to reproduce.
 
-### Many Components (31.4 KB output)
+### RealWorldPage (170.5 KiB output)
 
-| Library     | Time (avg) | Relative    |
-| ----------- | ---------- | ----------- |
-| Kita Html   | 98 us      | 1x          |
-| Typed Html  | 738 us     | 7.5x slower |
-| GHtml       | 753 us     | 7.6x slower |
-| Common Tags | 2,815 us   | 28x slower  |
-| React       | 4,119 us   | 42x slower  |
+| Library    | Avg time  | Notes                         |
+| ---------- | --------- | ----------------------------- |
+| KitaJs     | 270.46 µs | baseline                      |
+| Preact     | 467.59 µs | 1.7x slower                   |
+| ReactJsx   | 662.31 µs | 2.4x slower                   |
+| React      | 747.92 µs | 2.8x slower                   |
+| HonoJsx    | 782.56 µs | 2.9x slower                   |
+| TypedHtml  | 1.26 ms   | 4.7x slower, different output |
+| vHtml      | 1.58 ms   | 5.8x slower, different output |
+| Jsxte      | 2.41 ms   | 8.9x slower, different output |
+| CommonTags | 2.68 ms   | 9.9x slower, template engine  |
+| Ghtml      | 147.37 µs | template engine, 204.5 KiB    |
+| HonoHtml   | 108.91 µs | template engine, 204.5 KiB    |
 
-### Many Props (7.4 KB output)
-
-| Library     | Time (avg) | Relative    |
-| ----------- | ---------- | ----------- |
-| Kita Html   | 18 us      | 1x          |
-| GHtml       | 42 us      | 2.3x slower |
-| Common Tags | 43 us      | 2.3x slower |
-| React       | 71 us      | 3.8x slower |
-| Typed Html  | 76 us      | 4.1x slower |
-
-### MDN Homepage (66.7 KB output)
-
-| Library     | Time (avg) | Relative    |
-| ----------- | ---------- | ----------- |
-| Kita Html   | 14,981 us  | 1x          |
-| Typed Html  | 28,667 us  | 1.9x slower |
-| GHtml       | 37,052 us  | 2.5x slower |
-| Common Tags | 39,634 us  | 2.6x slower |
-| React       | 94,917 us  | 6.3x slower |
+Libraries marked "different output" produce HTML that differs from React's output for the
+same input. Libraries marked "template engine" lack JSX syntax, so they have no per-call
+function overhead and produce a larger output for the same logical content.
 
 ## Methodology
 
-The benchmarks aim to represent real-world usage with component trees of realistic size.
-Tagged template libraries like GHtml have an inherent advantage when rendering a single
-template call, as there is no function call overhead per element. The JSX-based benchmarks
-reflect the per-element function call cost that any JSX library incurs.
+The RealWorldPage benchmark is the most meaningful, as it represents a realistic workload
+scenario with a full component tree. Template engines such as Ghtml and HonoHtml have an
+inherent advantage: with no function call per element and no JSX transform, they trade
+away syntax highlighting and editor intellisense. The JSX-based results reflect the actual
+cost incurred by any JSX library.
 
 ## Why it is fast
 

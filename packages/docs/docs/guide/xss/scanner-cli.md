@@ -9,6 +9,8 @@ analysis from the command line.
 xss-scan [options] [files...]
 ```
 
+The command can also be invoked as `ts-html-plugin`, which is an alias for the same CLI.
+
 When called without file arguments, it scans all files included by the project's
 `tsconfig.json`. When file paths are provided, only those files are analyzed.
 
