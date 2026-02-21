@@ -105,8 +105,8 @@ importers:
         specifier: 'catalog:'
         version: 7.0.0-dev.20260122.2
       hono:
-        specifier: ^4.11.5
-        version: 4.11.5
+        specifier: ^4.12.1
+        version: 4.12.1
       tslib:
         specifier: 'catalog:'
         version: 2.8.1
@@ -254,8 +254,8 @@ importers:
         specifier: 4.0.2
         version: 4.0.2
       hono:
-        specifier: 4.11.5
-        version: 4.11.5
+        specifier: 4.12.1
+        version: 4.12.1
       html-minifier:
         specifier: 4.0.0
         version: 4.0.0
@@ -269,8 +269,8 @@ importers:
         specifier: 0.2.1
         version: 0.2.1
       preact-render-to-string:
-        specifier: 6.6.5
-        version: 6.6.5(preact@10.28.2)
+        specifier: 6.6.6
+        version: 6.6.6(preact@10.28.2)
       react:
         specifier: 'catalog:'
         version: 19.2.4
@@ -2838,8 +2838,8 @@ packages:
   highlightjs-vue@1.0.0:
     resolution: {integrity: sha512-PDEfEF102G23vHmPhLyPboFCD+BkMGu+GuJe2d9/eH4FsCwvgBpnc9n0pGE+ffKdph38s6foEZiEjdgHdzp+IA==}
 
-  hono@4.11.5:
-    resolution: {integrity: sha512-WemPi9/WfyMwZs+ZUXdiwcCh9Y+m7L+8vki9MzDw3jJ+W9Lc+12HGsd368Qc1vZi1xwW8BWMMsnK5efYKPdt4g==}
+  hono@4.12.1:
+    resolution: {integrity: sha512-hi9afu8g0lfJVLolxElAZGANCTTl6bewIdsRNhaywfP9K8BPf++F2z6OLrYGIinUwpRKzbZHMhPwvc0ZEpAwGw==}
     engines: {node: '>=16.9.0'}
 
   hookable@6.0.1:
@@ -3715,8 +3715,8 @@ packages:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
 
-  preact-render-to-string@6.6.5:
-    resolution: {integrity: sha512-O6MHzYNIKYaiSX3bOw0gGZfEbOmlIDtDfWwN1JJdc/T3ihzRT6tGGSEWE088dWrEDGa1u7101q+6fzQnO9XCPA==}
+  preact-render-to-string@6.6.6:
+    resolution: {integrity: sha512-EfqZJytnjJldV+YaaqhthU2oXsEf5e+6rDv957p+zxAvNfFLQOPfvBOTncscQ+akzu6Wrl7s3Pa0LjUQmWJsGQ==}
     peerDependencies:
       preact: '>=10 || >= 11.0.0-0'
 
@@ -7446,7 +7446,7 @@ snapshots:
 
   highlightjs-vue@1.0.0: {}
 
-  hono@4.11.5: {}
+  hono@4.12.1: {}
 
   hookable@6.0.1: {}
 
@@ -8870,7 +8870,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  preact-render-to-string@6.6.5(preact@10.28.2):
+  preact-render-to-string@6.6.6(preact@10.28.2):
     dependencies:
       preact: 10.28.2
 

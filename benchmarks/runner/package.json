@@ -21,12 +21,12 @@
     "@kitajs/bench-html-vhtml": "workspace:*",
     "common-tags": "1.8.2",
     "ghtml": "4.0.2",
-    "hono": "4.11.5",
+    "hono": "4.12.1",
     "html-minifier": "4.0.0",
     "jsxte": "3.3.1",
     "mitata": "1.0.34",
     "nano-jsx": "0.2.1",
-    "preact-render-to-string": "6.6.5",
+    "preact-render-to-string": "6.6.6",
     "react": "catalog:",
     "react-dom": "catalog:"
   }

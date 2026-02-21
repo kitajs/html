@@ -302,7 +302,25 @@ declare global {
         | 'strict-origin-when-cross-origin'
         | 'unsafe-url'
         | AnyString;
-      sandbox?: undefined | boolean;
+      sandbox?:
+        | undefined
+        | boolean
+        | ''
+        | 'allow-downloads'
+        | 'allow-forms'
+        | 'allow-modals'
+        | 'allow-orientation-lock'
+        | 'allow-pointer-lock'
+        | 'allow-popups'
+        | 'allow-popups-to-escape-sandbox'
+        | 'allow-presentation'
+        | 'allow-same-origin'
+        | 'allow-scripts'
+        | 'allow-storage-access-by-user-activation'
+        | 'allow-top-navigation'
+        | 'allow-top-navigation-by-user-activation'
+        | 'allow-top-navigation-to-custom-protocols'
+        | AnyString;
       src?: undefined | string;
       srcdoc?: undefined | string;
       seamless?: undefined | string;
@@ -499,6 +517,7 @@ declare global {
     }
 
     interface HtmlDialogTag extends HtmlTag {
+      closedby?: undefined | 'any' | 'closerequest' | 'none' | AnyString;
       open?: undefined | boolean;
       onclose?: undefined | string;
     }

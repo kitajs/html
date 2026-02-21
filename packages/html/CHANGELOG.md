@@ -1,5 +1,22 @@
 # @kitajs/html
 
+## 4.2.13
+
+### Patch Changes
+
+- [#464](https://github.com/kitajs/html/pull/464)
+  [`0be97bb`](https://github.com/kitajs/html/commit/0be97bbb74b6ef8fb8e404d2b088e92a0b4adafe)
+  Thanks [@Moshyfawn](https://github.com/Moshyfawn)! - Align sandbox attribute type with
+  WHATWG specs
+
+## 4.2.12
+
+### Patch Changes
+
+- [#461](https://github.com/kitajs/html/pull/461)
+  [`ab63a14`](https://github.com/kitajs/html/commit/ab63a14e4a63bbcf34578fa47ed6a55cf17bcab3)
+  Thanks [@8549](https://github.com/8549)! - Add closedby property on HtmlDialogTag
+
 ## 4.2.11
 
 ### Patch Changes
