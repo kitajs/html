@@ -19,8 +19,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        node: [24]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [lts/-2, lts/-1, lts]
 
     steps:
       - name: Checkout
@@ -34,6 +34,8 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'
+
+      - run: echo "Using Node $(node --version) on ${{ matrix.os }}"
 
       - name: Install packages
         run: pnpm install --frozen-lockfile
