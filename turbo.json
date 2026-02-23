@@ -21,7 +21,7 @@
     "benchmark": {
       "cache": false,
       "dependsOn": ["^build"],
-      "outputLogs": "new-only"
+      "outputLogs": "full"
     },
     "start": {
       "cache": false,

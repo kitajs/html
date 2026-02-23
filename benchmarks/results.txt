@@ -1,14 +1,3 @@
-<h1>Benchmark</h1>
-
-- [Results](#results)
-- [Versions](#versions)
-- [Information](#information)
-- [About KitaJS/Html](#about-kitajshtml)
-- [Runtime Inconsistencies](#runtime-inconsistencies)
-
-## Results
-
-```
 clk: ~4.80 GHz
 cpu: 13th Gen Intel(R) Core(TM) i5-13600K
 runtime: node 24.13.0 (x64-linux)
@@ -102,64 +91,3 @@ Sizes are the final html output based on the same input.
 
 *) Are template engines, which usually lacks syntax highlighting and intellisense:
    https://github.com/kitajs/html/blob/master/benchmarks/templates/normal.tsx
-```
-
-## Versions
-
-```json
-{
-  "common-tags": "1.8.2",
-  "ghtml": "4.0.2",
-  "hono": "4.12.2",
-  "html-minifier": "4.0.0",
-  "jsxte": "3.3.1",
-  "mitata": "1.0.34",
-  "nano-jsx": "0.2.1",
-  "preact-render-to-string": "6.6.6",
-  "react-dom": "19.2.9"
-}
-```
-
-## Information
-
-The `RealWorldPage` benchmark is the most meaningful since it represents a realistic
-workload scenario. _Other benchmarks serve specific purposes, such as measuring the speed
-of creating individual elements or handling attribute injection and escaping._
-
-It's essential to emphasize that all benchmarks aim for impartiality. Any perceived bias
-towards a particular library should be promptly reported, and corrective actions will be
-taken swiftly.
-
-We are committed to addressing any discrepancies or unfairness in the benchmarks promptly.
-Updates reflecting corrections will be publicly shared as soon as they are available.
-
-Feel free to reach out if you have any concerns or suggestions for improving the
-benchmarking process. Your feedback is invaluable in ensuring the fairness and accuracy of
-our comparisons.
-
-Also, feel free to contribute benchmarks for any library you're interested in by opening a
-pull request (PR). If you need assistance or wish to suggest a library for benchmarking,
-don't hesitate to open an issue.
-
-## About KitaJS/Html
-
-KitaJS/Html prioritizes performance while maintaining a user-friendly and intuitive API.
-Its design ensures not only speed but also a seamless developer experience (DX). Since
-this code may run on every request, its primary objective is speed, with a secondary focus
-on maintaining developer productivity.
-
-The library adheres to the JSX standard for its API, shielding users from the complexities
-of its internal workings. This approach allows us to optimize the underlying
-implementation extensively, including function inlining, to achieve maximum performance.
-
-## Runtime Inconsistencies
-
-I tried multiple formatters and minifiers to ensure the html output of all runtimes is
-consistent, however vhtml and common-tags aren't consistent at all, with weird behaviors
-like adding spaces between components and rendering `0` as an empty string...
-
-As react is by far the JSX standard these days, **KitaJS/Html is only required to produce
-the same output as ReactDOMServer.renderToStaticMarkup**.
-
-To be sure we are emitting a similar output and none of the libraries are emitting broken
-HTML, a realWorldPage is rendered and stored at the [samples](./runner/samples) directory.

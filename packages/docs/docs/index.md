@@ -6,7 +6,9 @@ titleSuffix: Super-fast JSX Runtime
 hero:
   name: Kita Html
   text: The fastest server-side JSX runtime
-  tagline: Just like your usual template engine, but just better!
+  tagline:
+    JSX that compiles to plain strings, not a virtual DOM. No diffing, no serialization,
+    no overhead.
   actions:
     - theme: brand
       text: Introduction
@@ -16,40 +18,44 @@ hero:
       link: /guide/getting-started
 
 features:
-  - title: Super Fast
+  - title: The Fastest JSX Runtime
     details:
-      Optimized string concatenation that outperforms most JSX runtimes. 10-40x faster
-      than React's renderToStaticMarkup. Built for speed without sacrificing developer
-      experience.
+      No virtual DOM means no object tree sitting in memory. Rendering a 170 KiB page runs
+      2-3x faster than React, Preact, and HonoJsx, while allocating half the memory, all
+      producing identical output.
     icon: ⚡
 
-  - title: XSS Protection
+  - title: Compile-Time XSS Detection
     details:
-      Built-in TypeScript plugin that catches XSS vulnerabilities at compile-time. Your
-      code editor will warn you before XSS makes it to production.
+      The TypeScript plugin flags unsafe string interpolations in your editor as you type.
+      The xss-scan CLI blocks them in CI. Vulnerabilities caught before they reach
+      production, with no runtime penalty on safe paths.
     icon: 🛡️
 
-  - title: Async Components
+  - title: Async and Streaming
     details:
-      Full support for async/await with Suspense streaming. Start sending HTML to the
-      client while async operations complete in the background.
+      Async children automatically make their parents async. Suspense streams HTML via
+      chunked transfer encoding, sending a fallback instantly and replacing it when the
+      promise resolves.
     icon: 🔄
 
   - title: Zero Dependencies
     details:
-      Lightweight runtime with zero dependencies. Perfect for serverless and edge
-      environments where bundle size matters.
+      The runtime ships with no dependencies. Small, predictable footprint for serverless
+      functions, edge runtimes, and any environment where cold-start latency matters.
     icon: 📦
 
   - title: Type Safe
     details:
-      Full TypeScript support with JSX type definitions for all HTML elements and
-      attributes, plus HTMX, Alpine.js, and Hotwire Turbo.
+      Complete JSX type definitions for every HTML5 element and attribute. HTMX,
+      Alpine.js, and Hotwire Turbo type extensions are included and opt-in via
+      triple-slash directives.
     icon: 🎯
 
   - title: Framework Agnostic
     details:
-      Works with Fastify, Express, Hono, Bun, or any framework that handles strings. If it
-      works with strings, it works with Kita Html.
+      The output is a plain string. Kita Html integrates with Fastify, Express, Hono, Bun,
+      or any server that returns strings. If it works with strings, it works with Kita
+      Html.
     icon: 🔌
 ---

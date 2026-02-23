@@ -125,7 +125,9 @@ export default function HeroInteractive() {
                       <span className={styles.jsx}>&lt;p&gt;</span>
                     </div>
                     <div>
-                      {'    '}Hello, <span className={styles.jsx}>&lt;b&gt;</span>
+                      {'    '}Hello, <span className={styles.jsx}>&lt;b</span>{' '}
+                      <span className={styles.keyword}>safe</span>
+                      <span className={styles.jsx}>&gt;</span>
                       <span className={styles.punctuation}>{'{'}</span>
                       <span className={styles.variable}>user.name</span>
                       <span className={styles.punctuation}>{'}'}</span>
