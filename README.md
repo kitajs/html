@@ -10,7 +10,7 @@ repository with your friends and co-workers! </sup>
 
 <p align="center" >
   <a href="https://kitajs.org" target="_blank" rel="noopener noreferrer">
-    <img src="https://kitajs.org/logo.png" width="256" alt="Kita JS logo" />
+    <img src="https://kitajs.org/doug-pc-glasses.svg" width="256" alt="Kita JS logo" />
   </a>
 </p>
 
