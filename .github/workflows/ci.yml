@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node: [lts/-2, lts/-1, lts]
+        node: [lts/-2, lts/-1, lts/*]
 
     steps:
       - name: Checkout
