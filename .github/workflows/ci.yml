@@ -12,6 +12,10 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -59,11 +63,11 @@ jobs:
 
       - name: Publish to Codecov
         uses: codecov/codecov-action@v5
+        if: ${{ matrix.os != 'windows-latest' }}
         with:
           # Codecov backend may be unstable
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
-
   deploy-docs:
     needs: build
     if: github.ref == 'refs/heads/next' || github.ref == 'refs/heads/master'
