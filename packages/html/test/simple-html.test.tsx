@@ -31,11 +31,8 @@ describe('HTML structures', () => {
 
   test('untyped & unknown attributes', () => {
     expect(<a not-href></a>).toMatchInlineSnapshot(`"<a not-href></a>"`);
-    //@ts-expect-error - should allow unknown attributes
     expect(<c not-href></c>).toMatchInlineSnapshot(`"<c not-href></c>"`);
-    //@ts-expect-error - should allow unknown attributes
     expect(<c notHref></c>).toMatchInlineSnapshot(`"<c notHref></c>"`);
-    //@ts-expect-error - should allow unknown attributes
     expect(<c notHref></c>).toMatchInlineSnapshot(`"<c notHref></c>"`);
 
     function D() {

@@ -76,7 +76,6 @@ describe('Attributes', () => {
   });
 
   test('Objects', () => {
-    //@ts-expect-error - testing object attribute
     expect(<div test={{}}></div>).toMatchInlineSnapshot(
       `"<div test="[object Object]"></div>"`
     );

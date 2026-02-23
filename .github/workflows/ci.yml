@@ -68,6 +68,7 @@ jobs:
           # Codecov backend may be unstable
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
+
   deploy-docs:
     needs: build
     if: github.ref == 'refs/heads/next' || github.ref == 'refs/heads/master'

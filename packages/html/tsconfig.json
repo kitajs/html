@@ -4,7 +4,18 @@
     "jsx": "react-jsx",
     "jsxImportSource": "self-html",
     "outDir": "./dist",
-    "skipLibCheck": false
+    "skipLibCheck": false,
+    // Redirect self-html imports to source files so TypeScript doesn't follow
+    // package.json exports into dist/, which would cause duplicate JSX namespace
+    // declarations alongside the ones in src/. `exclude: ["dist"]` cannot help
+    // here because TypeScript loads transitively-imported files regardless.
+    "paths": {
+      "self-html": ["./src/index.ts"],
+      "self-html/jsx-runtime": ["./src/jsx-runtime.ts"],
+      "self-html/jsx-dev-runtime": ["./src/jsx-dev-runtime.ts"],
+      "self-html/suspense": ["./src/suspense.ts"],
+      "self-html/error-boundary": ["./src/error-boundary.ts"]
+    }
   },
   "include": ["src", "test", "*.d.ts"],
   "exclude": ["dist"]

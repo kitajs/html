@@ -2,8 +2,8 @@ import { describe, expect, test } from 'vitest';
 
 describe('Miscellaneous', () => {
   test('Htmx properties', () => {
-    expect(<div hx-boost hx-headers></div>).toMatchInlineSnapshot(
-      `"<div hx-boost hx-headers></div>"`
+    expect(<div hx-boost hx-headers="js:"></div>).toMatchInlineSnapshot(
+      `"<div hx-boost hx-headers="js:"></div>"`
     );
 
     expect(<div hx-boost></div>).toMatchInlineSnapshot(`"<div hx-boost></div>"`);
