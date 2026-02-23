@@ -2,6 +2,8 @@
   "$schema": "https://turborepo.dev/schema.json",
   "concurrency": "90%",
   "daemon": false,
+  // Set in CI so we can distinguish cache for each OS
+  "globalEnv": ["TURBO_OS_ENV", "TURBO_NODE_ENV"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

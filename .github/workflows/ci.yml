@@ -26,6 +26,12 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         node: [lts/-2, lts/-1, lts/*]
 
+    # Set an environment variable to distinguish cache for each OS/Node
+    # and distinguish between CI matrix runs in turbo.json
+    env:
+      TURBO_OS_ENV: ${{ matrix.os }}
+      TURBO_NODE_ENV: ${{ matrix.node }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -43,14 +49,6 @@ jobs:
 
       - name: Install packages
         run: pnpm install --frozen-lockfile
-
-      - name: Cache turbo build setup
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
 
       - name: Build
         run: pnpm build-all
@@ -71,7 +69,7 @@ jobs:
 
   deploy-docs:
     needs: build
-    if: github.ref == 'refs/heads/next' || github.ref == 'refs/heads/master'
+    if: ${{ github.head_ref == 'next' || github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
     name: Deploy Docs
 
