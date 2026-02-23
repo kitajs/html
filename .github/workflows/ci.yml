@@ -63,7 +63,7 @@ jobs:
 
   deploy-docs:
     needs: build
-    if: github.ref == 'refs/heads/arthurfiorette/serena'
+    if: github.ref == 'refs/heads/next' || github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     name: Deploy Docs
 
