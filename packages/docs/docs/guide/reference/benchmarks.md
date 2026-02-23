@@ -5,24 +5,24 @@ through micro benchmarks that compare string generation speed against other HTML
 
 ## Results
 
-Benchmarked on an Apple M4 Pro (12 cores, 24 GB) running Node.js v24.12.0 on 2026-02-21.
-Run `pnpm bench` in the repository root to reproduce.
+Benchmarked on a 13th Gen Intel Core i5-13600K (~4.80 GHz) running Node.js v24.13.0 on
+2026-02-23. Run `pnpm bench` in the repository root to reproduce.
 
 ### RealWorldPage (170.5 KiB output)
 
-| Library    | Avg time  | Notes                         |
-| ---------- | --------- | ----------------------------- |
-| KitaJs     | 270.46 µs | baseline                      |
-| Preact     | 467.59 µs | 1.7x slower                   |
-| ReactJsx   | 662.31 µs | 2.4x slower                   |
-| React      | 747.92 µs | 2.8x slower                   |
-| HonoJsx    | 782.56 µs | 2.9x slower                   |
-| TypedHtml  | 1.26 ms   | 4.7x slower, different output |
-| vHtml      | 1.58 ms   | 5.8x slower, different output |
-| Jsxte      | 2.41 ms   | 8.9x slower, different output |
-| CommonTags | 2.68 ms   | 9.9x slower, template engine  |
-| Ghtml      | 147.37 µs | template engine, 204.5 KiB    |
-| HonoHtml   | 108.91 µs | template engine, 204.5 KiB    |
+| Library    | Avg time  | Avg memory | Notes                          |
+| ---------- | --------- | ---------- | ------------------------------ |
+| KitaJs     | 361.79 µs | 1.83 mb    | baseline                       |
+| Preact     | 806.05 µs | 3.09 mb    | 2.2x slower                    |
+| ReactJsx   | 1.01 ms   | 3.30 mb    | 2.8x slower                    |
+| React      | 1.04 ms   | 3.68 mb    | 2.9x slower                    |
+| HonoJsx    | 1.05 ms   | 3.14 mb    | 2.9x slower                    |
+| vHtml      | 2.06 ms   | 3.54 mb    | 5.7x slower, different output  |
+| TypedHtml  | 2.11 ms   | 7.13 mb    | 5.8x slower, different output  |
+| CommonTags | 3.58 ms   | 6.30 mb    | 9.9x slower, template engine   |
+| Jsxte      | 3.95 ms   | 13.94 mb   | 10.9x slower, different output |
+| Ghtml      | 230.79 µs | 0.65 mb    | template engine, 204.5 KiB     |
+| HonoHtml   | 118.12 µs | 0.55 mb    | template engine, 204.5 KiB     |
 
 Libraries marked "different output" produce HTML that differs from React's output for the
 same input. Libraries marked "template engine" lack JSX syntax, so they have no per-call
