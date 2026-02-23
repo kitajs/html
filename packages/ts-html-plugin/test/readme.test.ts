@@ -3,7 +3,7 @@ import { Xss } from '../src/errors';
 import { TSLangServer } from './util/lang-server';
 
 it('Ensures readme checks will throw error', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname, true);
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (

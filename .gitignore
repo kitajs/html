@@ -7,5 +7,4 @@
 coverage
 dist
 node_modules
-doc_build
 .playwright-mcp

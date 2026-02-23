@@ -1,4 +1,3 @@
-doc_build/
 # TypeDoc generated API docs (regenerated on each build)
 docs/api/html/**/*.md
 docs/api/html/**/**/*.md

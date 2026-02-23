@@ -51,6 +51,7 @@ export default defineConfig({
   description: 'Fast and type safe HTML templates using TypeScript',
   lang: 'en',
   icon: 'https://kitajs.org/doug-head-glasses.svg',
+  outDir: 'dist',
   logo: {
     dark: 'https://kitajs.org/kita-horizontal-white.svg',
     light: 'https://kitajs.org/kita-horizontal-black.svg'

@@ -99,7 +99,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: packages/docs/doc_build
+          path: packages/docs/dist
 
       - name: Deploy to GitHub Pages
         id: deployment

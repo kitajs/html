@@ -146,12 +146,9 @@ DOCS_HOSTNAME=docs.example.com pnpm build
 
 ## Deployment
 
-The built site in `doc_build/` can be deployed to:
-
-- **Vercel**: Connect GitHub repo, auto-deploys
-- **Netlify**: Point to `doc_build/` directory
-- **GitHub Pages**: Use GitHub Actions workflow
-- **Cloudflare Pages**: Connect repo and build
+The built site in `dist/` is being deployed to GitHub Pages via the `gh-pages` branch. The
+deployment workflow is configured in `.github/workflows/ci.yml` and runs on every push to
+`main`.
 
 ## Resources
 
