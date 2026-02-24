@@ -122,6 +122,25 @@ When writing tests, cover these areas:
 - Type correctness (Vitest runs `--typecheck`)
 - Performance regressions for core changes (run `pnpm bench`)
 
+### Debugging TypeScript Plugin Tests
+
+For `@kitajs/ts-html-plugin` tests, you can enable debug output by passing `true` as the
+second parameter to `TSLangServer`:
+
+```typescript
+const server = new TSLangServer(projectPath, true); // Enable debug mode
+```
+
+Debug mode provides:
+
+- Console output of all TypeScript server requests and responses
+- A `tss.log` file in the project directory with verbose logging
+- File content displayed with line numbers
+
+**Note**: Only use debug mode once per test file. Multiple debug-enabled instances will
+overwrite the `tss.log` file. Run tests individually or use separate test files when
+debugging.
+
 ## Changesets
 
 This project uses [Changesets](https://github.com/changesets/changesets) for version

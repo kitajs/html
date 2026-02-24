@@ -24,7 +24,7 @@ src/
 ├── index.ts    # TypeScript Language Service Plugin entry point
 ├── cli.ts      # CLI tool implementation (xss-scan)
 ├── util.ts     # Core XSS detection logic and helpers
-└── errors.ts   # Error code definitions (K601-K604)
+└── errors.ts   # Error code definitions (TS88601-TS88604)
 ```
 
 ### Key Components
@@ -84,7 +84,7 @@ Core XSS detection algorithms:
 **`diagnoseJsxElement`**: Analyzes a single JSX element
 
 - Checks for `script` tags (always allowed)
-- Handles `safe` attribute logic (K602 double escape, K604 unused safe)
+- Handles `safe` attribute logic (TS88602 double escape, TS88604 unused safe)
 - Iterates through JSX expressions in children
 
 **`diagnoseExpression`**: Analyzes expressions within JSX
@@ -104,12 +104,12 @@ Core XSS detection algorithms:
 
 Four error codes with documentation links:
 
-| Code | Severity | Description                                           |
-| ---- | -------- | ----------------------------------------------------- |
-| K601 | Error    | XSS-prone content without `safe` attribute            |
-| K602 | Error    | Double escaping detected (safe + inner JSX)           |
-| K603 | Error    | XSS in component children (needs `Html.escapeHtml()`) |
-| K604 | Warning  | Unnecessary `safe` attribute on safe content          |
+| Code    | Severity | Description                                           |
+| ------- | -------- | ----------------------------------------------------- |
+| TS88601 | Error    | XSS-prone content without `safe` attribute            |
+| TS88602 | Error    | Double escaping detected (safe + inner JSX)           |
+| TS88603 | Error    | XSS in component children (needs `Html.escapeHtml()`) |
+| TS88604 | Warning  | Unnecessary `safe` attribute on safe content          |
 
 ## Detection Algorithm
 
@@ -168,10 +168,10 @@ Binary and ternary expressions are analyzed on both branches:
 The plugin distinguishes between native elements and components:
 
 ```tsx
-// Native element - use `safe` attribute - K601
+// Native element - use `safe` attribute - TS88601
 <div>{userInput}</div>
 
-// Component - use Html.escapeHtml() - K603
+// Component - use Html.escapeHtml() - TS88603
 <Component>{userInput}</Component>
 ```
 
@@ -193,6 +193,24 @@ pnpm test  # Runs vitest with coverage and type checking
 
 The tests use the `KITA_TS_HTML_PLUGIN_TESTING` environment variable to enable special
 handling for monorepo paths.
+
+#### Debugging Tests
+
+The `TSLangServer` test helper accepts a second parameter to enable debug output:
+
+```typescript
+const server = new TSLangServer(projectPath, true); // Enable debug mode
+```
+
+When debug mode is enabled:
+
+- All TypeScript server requests and responses are logged to console
+- A `tss.log` file is written to the project directory with verbose logging
+- File content with line numbers is displayed
+
+**Important**: Only use debug mode once per test file. Multiple debug-enabled instances
+will override the `tss.log` file. If you need to debug multiple tests, run them
+individually or use separate test files.
 
 ### Running the CLI
 
