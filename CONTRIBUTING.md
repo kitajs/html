@@ -57,13 +57,29 @@ hooks enforce this, but running it manually avoids surprises.
 
 ## Making Changes
 
+### Iterative development workflow
+
+When making changes to a specific package, follow this cycle to catch errors early:
+
+1. Make a logical group of changes (e.g., implement one function, fix one bug)
+2. Run package-specific validation:
+   ```bash
+   pnpm -F <package-name> build
+   pnpm -F <package-name> test-types
+   pnpm -F <package-name> test
+   ```
+3. Fix any issues immediately before moving to the next group of changes
+4. Repeat for each logical change group
+
+This approach prevents accumulating broken code. Testing after each change makes debugging
+easier than gathering all feedback at the end.
+
 ### Code changes
 
 1. Make your changes in the relevant `packages/*/src/` directory
-2. Run `pnpm format` to format
-3. Run `pnpm build` to compile
-4. Run `pnpm test` to verify tests pass
-5. Update documentation (see below)
+2. Follow the iterative workflow above (test frequently)
+3. Update documentation (see below)
+4. Complete pre-push checklist (see below)
 
 ### Documentation changes
 
@@ -118,17 +134,25 @@ pnpm changeset
 Select the affected packages, choose the semver bump level, and write a short description.
 The changeset file is committed with your PR.
 
+## Pre-Push Checklist
+
+Before pushing code or submitting a PR, complete these steps in order:
+
+1. **Format code**: `pnpm format`
+2. **Build all packages**: `pnpm build` (must exit with code 0)
+3. **Type-check all packages**: `pnpm test-types` (must exit with code 0)
+4. **Run all tests**: `pnpm test` (must exit with code 0)
+5. **Create changeset**: `pnpm changeset` (see Changesets section)
+
+The changeset file must be committed with your changes.
+
 ## Pull Requests
 
-Every PR must include a changeset entry. Run `pnpm changeset` before submitting, select
-the affected packages, choose the semver bump level, and write a short description. The
-generated changeset file is committed with your PR.
+Every PR must include a changeset entry.
 
 1. Fork and clone the repository
 2. Create a branch for your changes
-3. Make changes and update documentation
-4. `pnpm format`
-5. `pnpm build`
-6. `pnpm test`
-7. `pnpm changeset`
-8. Submit PR
+3. Make changes following the iterative workflow
+4. Update documentation
+5. Complete pre-push checklist
+6. Submit PR
