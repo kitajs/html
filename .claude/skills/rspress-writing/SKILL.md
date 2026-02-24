@@ -162,34 +162,26 @@ import { Tab, Tabs } from '@rspress/core/theme';
 
 Basic usage:
 
-```mdx
+````mdx
 <Tabs>
-  <Tab label="ESM">
-    ```ts
-    import { html } from '@kitajs/html';
-    ```
-  </Tab>
-  <Tab label="CommonJS">
-    ```ts
-    const { html } = require('@kitajs/html');
-    ```
-  </Tab>
+  <Tab label="ESM">```ts import {html} from '@kitajs/html'; ```</Tab>
+  <Tab label="CommonJS">```ts const {html} = require('@kitajs/html'); ```</Tab>
 </Tabs>
-```
+````
 
 **Props — `Tabs`:**
 
-| Prop | Type | Purpose |
-|------|------|---------|
-| `defaultValue` | string | Pre-selects the tab whose `value` matches this string |
-| `groupId` | string | Synchronises selection across multiple `Tabs` instances on the page |
-| `tabPosition` | `'left'` \| `'center'` | Controls tab header alignment |
+| Prop           | Type                   | Purpose                                                             |
+| -------------- | ---------------------- | ------------------------------------------------------------------- |
+| `defaultValue` | string                 | Pre-selects the tab whose `value` matches this string               |
+| `groupId`      | string                 | Synchronises selection across multiple `Tabs` instances on the page |
+| `tabPosition`  | `'left'` \| `'center'` | Controls tab header alignment                                       |
 
 **Props — `Tab`:**
 
-| Prop | Type | Purpose |
-|------|------|---------|
-| `label` | string | Display name rendered in the tab header |
+| Prop    | Type   | Purpose                                         |
+| ------- | ------ | ----------------------------------------------- |
+| `label` | string | Display name rendered in the tab header         |
 | `value` | string | Identifier used by `defaultValue` and `groupId` |
 
 Use `Tabs` when showing the same concept in two or more variants (ESM vs CJS, framework
@@ -211,18 +203,21 @@ import { Steps } from '@rspress/core/theme';
 Usage — each `###` heading inside `<Steps>` starts a new numbered step. Any Markdown
 beneath the heading (text, blockquotes, code blocks) becomes the step body:
 
-```mdx
+````mdx
 <Steps>
 
 ### Install the package
 
-<PackageManagerTabs command={{ npm: 'npm i @kitajs/html', pnpm: 'pnpm add @kitajs/html' }} />
+<PackageManagerTabs
+  command={{ npm: 'npm i @kitajs/html', pnpm: 'pnpm add @kitajs/html' }}
+/>
 
 ### Configure tsconfig
 
 ```json title="tsconfig.json"
 { "compilerOptions": { "jsxImportSource": "@kitajs/html" } }
 ```
+````
 
 ### Write your first component
 
@@ -233,8 +228,8 @@ const greeting = <h1>Hello</h1>;
 </Steps>
 ```
 
-Use `Steps` only on Procedure-type pages. Do not use it for non-sequential lists; use
-a plain ordered list instead.
+Use `Steps` only on Procedure-type pages. Do not use it for non-sequential lists; use a
+plain ordered list instead.
 
 ## Type Extension Setup
 
@@ -259,6 +254,39 @@ After writing or editing any page:
 1. Run `pnpm format` to apply Prettier formatting
 2. Run `pnpm -F @kitajs/docs-html build` to verify the site compiles
 3. Check that the build exits with code 0 and no errors
+
+## KitaJS XSS Errors in TwoSlash
+
+The docs site's twoslash setup pre-configures every `tsx twoslash` block with:
+
+- `jsx: ReactJSX` and `jsxImportSource: @kitajs/html`, so JSX compiles without any
+  per-block imports or compiler overrides
+- `@kitajs/ts-html-plugin` injected via a wrapped `tsModule`, making TS88601–TS88604
+  diagnostics available to the compiler inside every block
+
+**No per-block setup is required.** Do not add `// @jsxImportSource`, `// @jsx`, or a
+`plugins` compiler option directive. The plugin is already active.
+
+To render a KitaJS XSS error, use `tsx twoslash` and declare the expected error code with
+`// @errors`:
+
+````
+```tsx twoslash
+// @errors: 88601
+console.log(<div>{String.name}</div>);
+```
+````
+
+KitaJS error codes:
+
+| Code    | Meaning                                                          |
+| ------- | ---------------------------------------------------------------- |
+| TS88601 | Content may introduce an XSS vulnerability                       |
+| TS88602 | The `safe` attribute causes content to be escaped more than once |
+| TS88603 | Content inside a Component must be escaped using escapeHtml()    |
+| TS88604 | The `safe` attribute is unused in this context                   |
+
+For the `// @errors` syntax and other twoslash directives, see the `twoslash` skill.
 
 ## Section-Specific Conventions
 

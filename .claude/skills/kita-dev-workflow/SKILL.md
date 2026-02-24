@@ -103,19 +103,25 @@ Runs Vitest with coverage and type checking across all packages. Must exit with 
 
 ### 5. Create Changeset
 
-```bash
-pnpm changeset
-```
+**Important**: Do not run `pnpm changeset` as it requires interactive input which is not
+supported. Instead, create the changeset file manually.
 
-Interactive prompt asks:
+#### Manual Changeset Creation
 
-1. Which packages changed? (Select with space, confirm with enter)
-2. What semver bump level? (`patch`, `minor`, `major`)
-3. Summary description (appears in CHANGELOG)
+1. Create a new file in `.changeset/` with a descriptive kebab-case name:
 
-This creates a file in `.changeset/` with a random name like `hip-trams-roll.md`.
+   ```
+   .changeset/fix-double-escape-self-closing.md
+   .changeset/add-new-escape-option.md
+   .changeset/remove-deprecated-api.md
+   ```
 
-**Commit the changeset file with your changes.**
+2. Use the format shown below (see Changeset Format section for details)
+
+3. Commit the changeset file with your changes
+
+The file name doesn't matter (it's just for human readability), but should be descriptive
+of the change. The content format is what matters for changelog generation.
 
 ## Changeset Format
 
