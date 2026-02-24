@@ -30,9 +30,9 @@ repository with your friends and co-workers! </sup>
   Kita Html Monorepo
 </h1>
 
-> [!WARNING] This is the **`next`** branch, tracking the upcoming v5 release. For the
-> latest stable v4 code, switch to the
-> [`master`](https://github.com/kitajs/html/tree/master) branch.
+> [!WARNING]  
+> This is the **`next`** branch, tracking the upcoming v5 release. For the latest stable
+> v4 code, switch to the [`master`](https://github.com/kitajs/html/tree/master) branch.
 
 <br />
 
