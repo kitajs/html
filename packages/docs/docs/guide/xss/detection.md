@@ -16,8 +16,8 @@ as unsafe. If the type is a number, boolean, string literal, `JSX.Element`, or
 `Html.Children`, it is considered safe. Union types are safe only if every member is safe.
 Both branches of ternary expressions are checked independently.
 
-The plugin emits diagnostics directly in the editor with error codes K601 through K604.
-These appear as red or yellow squiggles on the unsafe expression, with a message
+The plugin emits diagnostics directly in the editor with error codes TS88601 through
+TS88604. These appear as red or yellow squiggles on the unsafe expression, with a message
 explaining the issue and how to fix it.
 
 ## CLI scanner

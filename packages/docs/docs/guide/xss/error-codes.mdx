@@ -1,0 +1,180 @@
+import { Badge } from '@rspress/core/theme';
+
+# Error Codes
+
+The XSS detection engine emits four diagnostic codes. Each code links to a specific kind
+of safety issue with a defined fix.
+
+## TS88601 <Badge text="Error" type="danger" />
+
+**Content may introduce an XSS vulnerability and must be marked with the `safe`
+attribute.**
+
+<br />
+
+An expression with type `string` or `any` is used as a child of a native element without
+the `safe` attribute.
+
+```tsx twoslash
+//@errors: 88601
+declare let username: string;
+// ---cut---
+const html = <div>{username}</div>;
+```
+
+Variables prefixed with `safe` are exempt from this rule, as are expressions with safe
+types _(numbers, booleans, string literals...)_.
+
+::: tip Fix
+
+Add the `safe` attribute to escape the content
+
+```tsx twoslash
+//@errors: 88601
+declare let username: string;
+// ---cut---
+const html = <div safe>{username}</div>;
+```
+
+:::
+
+## TS88602 <Badge text="Error" type="danger" />
+
+**The `safe` attribute causes this content to be escaped more than once.**
+
+<br />
+
+Severity: error. The `safe` attribute is applied to an element whose children include JSX
+elements. This would escape the HTML output of those child components, corrupting their
+markup.
+
+```tsx twoslash
+//@errors: 88602
+declare function UserBadge(props: { url: string }): JSX.Element;
+declare let user: { name: string; badgeUrl: string };
+// ---cut---
+const html = (
+  <div safe>
+    {user.name}
+    <UserBadge url={user.badgeUrl} />
+  </div>
+);
+```
+
+You can also wrap inner components inside fragments or use `escapeHtml()` manually to
+avoid the double escaping.
+
+::: tip Fix
+
+Remove `safe` from the parent element. You can use `Fragment` to apply `safe` to a group
+of children without affecting nested components, since fragments don't render actual HTML
+elements.
+
+```tsx twoslash
+//@errors: 88602
+declare function UserBadge(props: { url: string }): JSX.Element;
+declare let user: { name: string; badgeUrl: string };
+// ---cut---
+import { Fragment } from '@kitajs/html';
+
+const html = (
+  <div>
+    <Fragment safe>{user.name}</Fragment>
+    <UserBadge url={user.badgeUrl} />
+  </div>
+);
+```
+
+:::
+
+## TS88603 <Badge text="Error" type="danger" />
+
+**Content inside a Component must be escaped using escapeHtml().**
+
+<br />
+
+An expression with type `string` or `any` is passed as a child to a component (uppercase
+tag name). Unlike native elements, components cannot use the `safe` attribute directly on
+children.
+
+```tsx twoslash
+//@errors: 88603
+function Card({ children }: { children: string }) {
+  return <div>{children}</div>;
+}
+declare let userName: string;
+// ---cut---
+const html = <Card>{userName}</Card>;
+```
+
+Components cannot apply the `safe` attribute directly to their children. You must either
+escape the content before passing it, or wrap it in a Fragment with the `safe` attribute.
+
+::: tip Fix
+
+Escape manually using `Html.escapeHtml()`
+
+```tsx twoslash
+//@errors: 88603
+import Html from '@kitajs/html';
+
+function Card({ children }: { children: string }) {
+  return <div>{children}</div>;
+}
+declare let userName: string;
+// ---cut---
+const html = <Card>{Html.escapeHtml(userName)}</Card>;
+```
+
+Or wrap the content in a Fragment with `safe`
+
+```tsx twoslash
+//@errors: 88603
+import { Fragment } from '@kitajs/html';
+
+let userName: string = 'Arthur';
+function Card({ children }: { children: JSX.Element }) {
+  return <div>{children}</div>;
+}
+
+// ---cut---
+const html = (
+  <Card>
+    <Fragment safe>{userName}</Fragment>
+  </Card>
+);
+```
+
+:::
+
+## TS88604 <Badge text="Warning" type="warning" />
+
+**The `safe` attribute is unused in this context.**
+
+<br />
+
+The `safe` attribute is applied to an element whose children are already safe types
+(numbers, booleans, `JSX.Element`, etc.). The escaping is redundant and can be removed.
+
+```tsx twoslash
+//@errors: 88604
+const count = 42;
+// ---cut---
+const html = <span safe>{count}</span>;
+```
+
+Numbers, booleans, bigints, string literals, and `JSX.Element` types are already safe and
+cannot introduce XSS vulnerabilities. The `safe` attribute has no effect on these types.
+
+::: tip Fix
+
+Remove the `safe` attribute since numbers are already safe
+
+```tsx twoslash
+//@errors: 88604
+const count = 42;
+// ---cut---
+const html = <span>{count}</span>;
+```
+
+:::

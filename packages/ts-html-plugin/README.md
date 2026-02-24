@@ -47,10 +47,10 @@
 - [Vscode](#vscode)
 - [tsgo Compatibility](#tsgo-compatibility)
 - [Error codes](#error-codes)
-  - [K601](#k601)
-  - [K602](#k602)
-  - [K603](#k603)
-  - [K604](#k604)
+  - [TS88601](#ts88601)
+  - [TS88602](#ts88602)
+  - [TS88603](#ts88603)
+  - [TS88604](#ts88604)
 - [JSX](#jsx)
 - [Special cases](#special-cases)
 
@@ -197,7 +197,10 @@ xss-scan
 
 ## Error codes
 
-### K601
+### TS88601
+
+**Content may introduce an XSS vulnerability and must be marked with the `safe`
+attribute.**
 
 Usage of JSX expression without safe attribute. This could lead to XSS vulnerabilities.
 Please use the safe attribute on the JSX element or prepend your variable with `safe`.
@@ -220,7 +223,9 @@ const html = <div>{safeContent}</div>;
 
 <br />
 
-### K602
+### TS88602
+
+**The `safe` attribute causes this content to be escaped more than once.**
 
 Usage of safe attribute on a JSX element whose children contains other JSX elements. It
 will lead to double escaping. If this is intended behavior, please extract the children
@@ -248,13 +253,16 @@ const html = (
 
 <br />
 
-### K603
+### TS88603
+
+**Content inside a Component must be escaped using escapeHtml().**
 
 You are using a xss-prone element as a children of a component. Please wrap it into a
 Html.escapeHtml() call or prepend it as a variable starting with `safe`.
 
-This error is similar to [K601](#k601), but instead of using `safe` native attribute, you
-need to use `Html.escapeHtml()` function because its a component and not a native JSX.
+This error is similar to [TS88601](#ts88601), but instead of using `safe` native
+attribute, you need to use `Html.escapeHtml()` function because its a component and not a
+native JSX.
 
 ```tsx
 // ❌ Content variable may have a value of `<script>alert('xss')</script>`
@@ -273,7 +281,9 @@ const html = <Component>{safeContent}</Component>;
 
 <br />
 
-### K604
+### TS88604
+
+**The `safe` attribute is unused in this context.**
 
 You are using the safe attribute on expressions that does not contain any XSS
 vulnerabilities. Please remove the safe attribute or prepend your variable with `unsafe`.

@@ -23,11 +23,11 @@ When called without file arguments, scans all files included by the project's
 
 ## Exit codes
 
-| Code | Meaning                          |
-| ---- | -------------------------------- |
-| 0    | No issues found.                 |
-| 1    | Errors found (K601, K602, K603). |
-| 2    | Warnings only (K604).            |
+| Code | Meaning                                   |
+| ---- | ----------------------------------------- |
+| 0    | No issues found.                          |
+| 1    | Errors found (TS88601, TS88602, TS88603). |
+| 2    | Warnings only (TS88604).                  |
 
 ## How it works
 

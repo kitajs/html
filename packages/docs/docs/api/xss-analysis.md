@@ -32,9 +32,9 @@ render without escaping. The full rule set is documented in the
 
 ## Diagnostic codes
 
-The engine emits four diagnostic codes: K601 (unsafe expression), K602 (double escaping),
-K603 (component children XSS), and K604 (unnecessary safe). Full descriptions with
-examples are in the [Error Codes](/guide/xss/error-codes) page.
+The engine emits four diagnostic codes: TS88601 (unsafe expression), TS88602 (double
+escaping), TS88603 (component children XSS), and TS88604 (unnecessary safe). Full
+descriptions with examples are in the [Error Codes](/guide/xss/error-codes) page.
 
 ## Component vs element detection
 

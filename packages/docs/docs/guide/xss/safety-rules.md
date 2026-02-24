@@ -32,10 +32,13 @@ safe.
 Both branches of ternary and binary expressions are checked independently. Even if one
 branch is unreachable at runtime, the engine still analyzes its type.
 
-```tsx
-// Both branches are checked
-<div>{condition ? safeValue : unsafeString}</div>
-//                            ^^^^^^^^^^^^ K601
+```tsx twoslash
+// @errors: 88601
+const condition = true;
+const safeValue = 42;
+const unsafeString = 'user input';
+
+<div>{condition ? safeValue : unsafeString}</div>;
 ```
 
 ## Exceptions

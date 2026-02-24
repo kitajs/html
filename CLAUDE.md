@@ -119,7 +119,7 @@ TypeScript plugin for XSS detection. Key files:
 - `src/index.ts`: Language Service Plugin entry
 - `src/cli.ts`: `xss-scan` CLI tool
 - `src/util.ts`: Core detection algorithms
-- `src/errors.ts`: Error codes (K601-K604)
+- `src/errors.ts`: Error codes (TS88601-TS88604)
 
 **See:** [`packages/ts-html-plugin/CLAUDE.md`](packages/ts-html-plugin/CLAUDE.md)
 

@@ -25,8 +25,8 @@ The plugin wraps the TypeScript language service's `getSemanticDiagnostics` meth
 `.tsx` or `.jsx` file is analyzed, the plugin runs the XSS analysis engine over the file's
 AST and appends any findings to the standard TypeScript diagnostics.
 
-Diagnostics appear as editor squiggles with error codes K601 through K604. Each diagnostic
-includes a message describing the issue and the recommended fix.
+Diagnostics appear as editor squiggles with error codes TS88601 through TS88604. Each
+diagnostic includes a message describing the issue and the recommended fix.
 
 ## Supported editors
 

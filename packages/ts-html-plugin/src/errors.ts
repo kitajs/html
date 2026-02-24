@@ -1,30 +1,34 @@
-const USE_URL_DOCS = process.env.INTERNAL_DISABLE_URL_DOCS !== 'true';
-
 function createError(code: number, message: string) {
-  // KITA in ASCII
-  // 75 * 105 * 116 * 97 = 88609500
-  // Simplify to 88600
-  code += 88600;
-
   return {
     code,
-    message: USE_URL_DOCS ? `${message}\nhttps://html.kitajs.org/k${code}` : message
+    message:
+      process.env.INTERNAL_DISABLE_URL_DOCS !== 'true'
+        ? `${message}\nSee https://html.kitajs.org/TS${code}`
+        : message
   };
 }
 
+// 88600 is the base code for all errors in this plugin.
+// KITA in ASCII
+// 75 * 105 * 116 * 97 = 88609500
+// Simplify to 88600
+
 export const Xss = createError(
-  1,
-  `Usage of xss-prone content without \`safe\` attribute.`
+  88601,
+  `Content may introduce an XSS vulnerability and must be marked with the \`safe\` attribute.`
 );
 
 export const DoubleEscape = createError(
-  2,
-  `Double escaping detected. Please remove the \`safe\` attribute.`
+  88602,
+  `The \`safe\` attribute causes this content to be escaped more than once.`
 );
 
 export const ComponentXss = createError(
-  3,
-  `Xss-prone content inside a Component, wrap it into a Html.escapeHtml() call.`
+  88603,
+  `Content inside a Component must be escaped using escapeHtml().`
 );
 
-export const UnusedSafe = createError(4, `Unused safe attribute.`);
+export const UnusedSafe = createError(
+  88604,
+  `The \`safe\` attribute is unused in this context.`
+);
