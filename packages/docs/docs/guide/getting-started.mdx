@@ -59,7 +59,8 @@ the same XSS analysis as the editor plugin, but against your entire codebase.
 
 Write the following in a `.tsx` file:
 
-```tsx
+```tsx twoslash
+// @errors: 88601
 console.log(<div>{String.name}</div>);
 ```
 

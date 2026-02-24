@@ -68,6 +68,7 @@ The `safe` attribute escapes children at render time. Adding it to any native el
 causes the runtime to pass all children through HTML entity escaping before concatenation.
 
 ```tsx twoslash
+//@noErrors
 const userInput = '<script>alert("XSS")</script>' as const;
 // ---cut---
 <div safe>{userInput}</div> === '<div>&lt;script&gt;...&lt;/script&gt;</div>';
@@ -132,7 +133,8 @@ specific request for safe concurrent rendering.
 
 As of now, Kita Html is composed of two main packages:
 
-- `@kitajs/html` is the core runtime that compiles JSX to strings and provides Suspense streaming.
+- `@kitajs/html` is the core runtime that compiles JSX to strings and provides Suspense
+  streaming.
 - `@kitajs/ts-html-plugin` is the TypeScript plugin and CLI scanner for XSS detection.
 
 Official [framework integrations](/integrations/overview) are available for Fastify,

@@ -1,3 +1,4 @@
+import createTsHtmlPlugin from '@kitajs/ts-html-plugin';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { defineConfig, type UserConfig } from '@rspress/core';
 import { pluginClientRedirects } from '@rspress/plugin-client-redirects';
@@ -5,17 +6,20 @@ import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { pluginTwoslash } from '@rspress/plugin-twoslash';
 import { pluginTypeDoc, PluginTypeDocOptions } from '@rspress/plugin-typedoc';
 import {
+  transformerMetaHighlight,
   transformerNotationDiff,
   transformerNotationErrorLevel,
   transformerNotationFocus,
   transformerNotationHighlight,
-  transformerRemoveNotationEscape
+  transformerRemoveNotationEscape,
+  transformerRenderIndentGuides
 } from '@shikijs/transformers';
 import path from 'node:path';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import pluginFileTree from 'rspress-plugin-file-tree';
 import pluginOg from 'rspress-plugin-og';
 import readingTime from 'rspress-plugin-reading-time';
+import ts from 'typescript';
 
 /** Shared TypeDoc setup for compact, public-only API docs. */
 function configureTypeDoc(publicPath: string, tsconfig?: string) {
@@ -60,7 +64,29 @@ export default defineConfig({
 
   plugins: [
     readingTime(),
-    pluginTwoslash(),
+    pluginTwoslash({
+      twoslashOptions: {
+        compilerOptions: {
+          jsx: ts.JsxEmit.ReactJSX,
+          jsxImportSource: '@kitajs/html'
+        },
+        tsModule: {
+          ...ts,
+          createLanguageService(host, registry, syntaxOnlyOrLanguageServiceMode) {
+            // Disables URL docs in ts-html-plugin error messages since this is already the docs site.
+            process.env.INTERNAL_DISABLE_URL_DOCS = 'true';
+
+            return createTsHtmlPlugin({ typescript: ts }).create({
+              languageService: ts.createLanguageService(
+                host,
+                registry,
+                syntaxOnlyOrLanguageServiceMode
+              )
+            });
+          }
+        }
+      }
+    }),
     pluginSitemap({
       siteUrl: DOCS_URL
     }),

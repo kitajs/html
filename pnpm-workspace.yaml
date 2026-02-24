@@ -21,3 +21,6 @@ catalog:
   tsx: ^4.21.0
   typescript: ^5.9.3
   vitest: ^4.0.18
+
+patchedDependencies:
+  '@shikijs/twoslash@3.22.0': patches/@shikijs__twoslash@3.22.0.patch
