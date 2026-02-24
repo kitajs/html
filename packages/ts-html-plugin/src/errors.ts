@@ -1,23 +1,30 @@
-function urlDocs(error: `k${number}`) {
-  return `https://html.kitajs.org/${error}`;
+const USE_URL_DOCS = process.env.INTERNAL_DISABLE_URL_DOCS !== 'true';
+
+function createError(code: number, message: string) {
+  // KITA in ASCII
+  // 75 * 105 * 116 * 97 = 88609500
+  // Simplify to 88600
+  code += 88600;
+
+  return {
+    code,
+    message: USE_URL_DOCS ? `${message}\nhttps://html.kitajs.org/k${code}` : message
+  };
 }
 
-export const Xss = {
-  code: '0 K601' as any,
-  message: `Usage of xss-prone content without \`safe\` attribute. ${urlDocs('k601')}`
-};
+export const Xss = createError(
+  1,
+  `Usage of xss-prone content without \`safe\` attribute.`
+);
 
-export const DoubleEscape = {
-  code: '0 K602' as any,
-  message: `Double escaping detected. Please remove the \`safe\` attribute. ${urlDocs('k602')}`
-};
+export const DoubleEscape = createError(
+  2,
+  `Double escaping detected. Please remove the \`safe\` attribute.`
+);
 
-export const ComponentXss = {
-  code: '0 K603' as any,
-  message: `Xss-prone content inside a Component, wrap it into a Html.escapeHtml() call. ${urlDocs('k603')}`
-};
+export const ComponentXss = createError(
+  3,
+  `Xss-prone content inside a Component, wrap it into a Html.escapeHtml() call.`
+);
 
-export const UnusedSafe = {
-  code: '0 K604' as any,
-  message: `Unused safe attribute. ${urlDocs('k604')}`
-};
+export const UnusedSafe = createError(4, `Unused safe attribute.`);

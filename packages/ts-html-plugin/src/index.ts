@@ -1,11 +1,11 @@
 import type { default as TS, server } from 'typescript/lib/tsserverlibrary';
 import { proxyObject, recursiveDiagnoseJsxElements } from './util';
 
-module.exports = function (modules: { typescript: typeof TS }) {
+export = function (modules: { typescript: typeof TS }) {
   const ts = modules.typescript;
 
   return {
-    create(info: server.PluginCreateInfo) {
+    create(info: Pick<server.PluginCreateInfo, 'languageService'>) {
       const proxy = proxyObject(info.languageService);
 
       proxy.getSemanticDiagnostics = function clonedSemanticDiagnostics(filename) {

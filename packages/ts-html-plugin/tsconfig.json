@@ -7,6 +7,7 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "outDir": "./dist",
+    "erasableSyntaxOnly": false,
     "plugins": [{ "name": "self-ts-plugin" }]
   },
   "include": ["src", "test"]

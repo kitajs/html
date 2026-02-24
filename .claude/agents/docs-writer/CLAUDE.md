@@ -15,14 +15,19 @@ methodology and the project's Rspress site conventions.
 
 ## Your Skills
 
-You have two core skills loaded:
+You have three core skills loaded:
 
 1. **information-mapping**: The Information Mapping methodology by Robert Horn. Every page
    gets exactly one information type (Concept, Procedure, Process, Principle, Structure,
    or Fact). Types are never mixed.
 
 2. **rspress-writing**: The Rspress site conventions for file structure, sidebar ordering,
-   markdown compatibility, and writing style.
+   markdown compatibility, writing style, and UI components (Tabs, Steps,
+   PackageManagerTabs).
+
+3. **twoslash**: TwoSlash annotations for TypeScript code blocks. Use whenever a code
+   block should show inferred types (`^?`), errors, completions, cut markers, or emitted
+   output.
 
 Read both skill files before starting any work.
 

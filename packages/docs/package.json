@@ -9,14 +9,11 @@
     "dev": "rspress dev --host 0.0.0.0 --port 1229",
     "preview": "rspress preview"
   },
-  "dependencies": {
-    "@rspress/core": "^2.0.3",
-    "material-icon-theme": "^5.31.0",
-    "rspress-plugin-reading-time": "^1.0.0"
-  },
   "devDependencies": {
     "@kitajs/html": "workspace:^",
+    "@kitajs/ts-html-plugin": "workspace:^",
     "@rsbuild/plugin-sass": "^1.5.0",
+    "@rspress/core": "^2.0.3",
     "@rspress/plugin-client-redirects": "^2.0.3",
     "@rspress/plugin-sitemap": "^2.0.3",
     "@rspress/plugin-twoslash": "^2.0.3",
@@ -25,11 +22,13 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "material-icon-theme": "^5.31.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "rsbuild-plugin-open-graph": "^1.1.2",
     "rspress-plugin-file-tree": "^1.0.4",
     "rspress-plugin-og": "^0.0.5",
+    "rspress-plugin-reading-time": "^1.0.0",
     "typescript": "catalog:"
   }
 }

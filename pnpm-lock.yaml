@@ -58,6 +58,11 @@ catalogs:
       specifier: ^4.0.18
       version: 4.0.18
 
+patchedDependencies:
+  '@shikijs/twoslash@3.22.0':
+    hash: a88ca771860dd998d1364e8b7e619c867ce9b81c7546ea076937fd1037600571
+    path: patches/@shikijs__twoslash@3.22.0.patch
+
 importers:
 
   .:
@@ -385,23 +390,19 @@ importers:
         version: 5.9.3
 
   packages/docs:
-    dependencies:
-      '@rspress/core':
-        specifier: ^2.0.3
-        version: 2.0.3(@types/react@19.2.9)(core-js@3.42.0)
-      material-icon-theme:
-        specifier: ^5.31.0
-        version: 5.31.0
-      rspress-plugin-reading-time:
-        specifier: ^1.0.0
-        version: 1.0.0(@rspress/core@2.0.3(@types/react@19.2.9)(core-js@3.42.0))
     devDependencies:
       '@kitajs/html':
         specifier: workspace:^
         version: link:../html
+      '@kitajs/ts-html-plugin':
+        specifier: workspace:^
+        version: link:../ts-html-plugin
       '@rsbuild/plugin-sass':
         specifier: ^1.5.0
         version: 1.5.0(@rsbuild/core@2.0.0-beta.3(core-js@3.42.0))
+      '@rspress/core':
+        specifier: ^2.0.3
+        version: 2.0.3(@types/react@19.2.9)(core-js@3.42.0)
       '@rspress/plugin-client-redirects':
         specifier: ^2.0.3
         version: 2.0.3(@rspress/core@2.0.3(@types/react@19.2.9)(core-js@3.42.0))
@@ -426,6 +427,9 @@ importers:
       '@types/react-dom':
         specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.9)
+      material-icon-theme:
+        specifier: ^5.31.0
+        version: 5.31.0
       react:
         specifier: 'catalog:'
         version: 19.2.4
@@ -441,6 +445,9 @@ importers:
       rspress-plugin-og:
         specifier: ^0.0.5
         version: 0.0.5(@rspress/shared@2.0.3(core-js@3.42.0))(rspress@1.47.1(tslib@2.8.1)(webpack@5.105.2))
+      rspress-plugin-reading-time:
+        specifier: ^1.0.0
+        version: 1.0.0(@rspress/core@2.0.3(@types/react@19.2.9)(core-js@3.42.0))
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -6227,7 +6234,7 @@ snapshots:
     dependencies:
       '@floating-ui/dom': 1.7.5
       '@rspress/core': 2.0.3(@types/react@19.2.9)(core-js@3.42.0)
-      '@shikijs/twoslash': 3.22.0(typescript@5.9.3)
+      '@shikijs/twoslash': 3.22.0(patch_hash=a88ca771860dd998d1364e8b7e619c867ce9b81c7546ea076937fd1037600571)(typescript@5.9.3)
       mdast-util-from-markdown: 2.0.2
       mdast-util-gfm: 3.1.0
       mdast-util-to-hast: 13.2.1
@@ -6334,7 +6341,7 @@ snapshots:
       '@shikijs/core': 3.22.0
       '@shikijs/types': 3.22.0
 
-  '@shikijs/twoslash@3.22.0(typescript@5.9.3)':
+  '@shikijs/twoslash@3.22.0(patch_hash=a88ca771860dd998d1364e8b7e619c867ce9b81c7546ea076937fd1037600571)(typescript@5.9.3)':
     dependencies:
       '@shikijs/core': 3.22.0
       '@shikijs/types': 3.22.0

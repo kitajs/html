@@ -174,7 +174,9 @@ export default defineConfig({
         transformerNotationHighlight(),
         transformerNotationFocus(),
         transformerNotationHighlight(),
-        transformerRemoveNotationEscape()
+        transformerRemoveNotationEscape(),
+        transformerMetaHighlight(),
+        transformerRenderIndentGuides()
       ]
     },
     showLineNumbers: true

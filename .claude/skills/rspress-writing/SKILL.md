@@ -147,6 +147,95 @@ Then use the component:
 Only use this for user-facing install commands. Internal dev commands (`pnpm build`, etc.)
 stay as plain bash blocks.
 
+## Tabs Component
+
+Use `Tabs` and `Tab` to display alternative content panes side by side. Import from
+`@rspress/core/theme`.
+
+Full reference: https://rspress.rs/ui/components/tabs.md
+
+Add the import at the top of the `.mdx` file (rename from `.md` if needed):
+
+```
+import { Tab, Tabs } from '@rspress/core/theme';
+```
+
+Basic usage:
+
+```mdx
+<Tabs>
+  <Tab label="ESM">
+    ```ts
+    import { html } from '@kitajs/html';
+    ```
+  </Tab>
+  <Tab label="CommonJS">
+    ```ts
+    const { html } = require('@kitajs/html');
+    ```
+  </Tab>
+</Tabs>
+```
+
+**Props — `Tabs`:**
+
+| Prop | Type | Purpose |
+|------|------|---------|
+| `defaultValue` | string | Pre-selects the tab whose `value` matches this string |
+| `groupId` | string | Synchronises selection across multiple `Tabs` instances on the page |
+| `tabPosition` | `'left'` \| `'center'` | Controls tab header alignment |
+
+**Props — `Tab`:**
+
+| Prop | Type | Purpose |
+|------|------|---------|
+| `label` | string | Display name rendered in the tab header |
+| `value` | string | Identifier used by `defaultValue` and `groupId` |
+
+Use `Tabs` when showing the same concept in two or more variants (ESM vs CJS, framework
+integrations, before/after). Prefer `PackageManagerTabs` for install commands.
+
+## Steps Component
+
+Use `Steps` to render sequential instruction blocks for procedures. Import from
+`@rspress/core/theme`.
+
+Full reference: https://rspress.rs/ui/components/steps.md
+
+Add the import at the top of the `.mdx` file:
+
+```
+import { Steps } from '@rspress/core/theme';
+```
+
+Usage — each `###` heading inside `<Steps>` starts a new numbered step. Any Markdown
+beneath the heading (text, blockquotes, code blocks) becomes the step body:
+
+```mdx
+<Steps>
+
+### Install the package
+
+<PackageManagerTabs command={{ npm: 'npm i @kitajs/html', pnpm: 'pnpm add @kitajs/html' }} />
+
+### Configure tsconfig
+
+```json title="tsconfig.json"
+{ "compilerOptions": { "jsxImportSource": "@kitajs/html" } }
+```
+
+### Write your first component
+
+```tsx
+const greeting = <h1>Hello</h1>;
+```
+
+</Steps>
+```
+
+Use `Steps` only on Procedure-type pages. Do not use it for non-sequential lists; use
+a plain ordered list instead.
+
 ## Type Extension Setup
 
 When documenting type extensions (HTMX, Alpine.js, Turbo, all-types), instruct users to
