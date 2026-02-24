@@ -94,6 +94,23 @@ export default defineConfig({
   ],
 
   builderConfig: {
+    html: {
+      // Privacy-friendly analytics by Plausible
+      // https://metrics.arthur.one/html.kitajs.org
+      tags: [
+        {
+          tag: 'script',
+          attrs: {
+            async: true,
+            src: 'https://metrics.arthur.one/js/pa-AKhE0bhhuBYoXQ-4fvapz.js'
+          }
+        },
+        {
+          tag: 'script',
+          children: `window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()`
+        }
+      ]
+    },
     plugins: [
       pluginSass(),
       pluginOpenGraph({

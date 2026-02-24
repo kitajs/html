@@ -1,9 +1,11 @@
 import {
   HomeHero as BasicHomeHero,
   HomeLayout as BasicHomeLayout,
+  Layout as BasicLayout,
   PackageManagerTabs,
   type HomeHeroProps
 } from '@rspress/core/theme-original';
+import { Banner } from './components/Banner.js';
 import HeroInteractive from './components/HeroInteractive.js';
 import './index.css';
 
@@ -35,6 +37,16 @@ const HomeHero = ({ image: _, ...otherProps }: HomeHeroProps) => {
   return <BasicHomeHero image={<HeroInteractive />} {...otherProps} />;
 };
 
+// Global layout with dismissible pre-release banner
+function Layout() {
+  return (
+    <>
+      <Banner />
+      <BasicLayout />
+    </>
+  );
+}
+
 // Export customizations
 export * from '@rspress/core/theme-original';
-export { HomeHero, HomeLayout };
+export { HomeHero, HomeLayout, Layout };
