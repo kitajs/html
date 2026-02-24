@@ -167,14 +167,12 @@ Binary and ternary expressions are analyzed on both branches:
 
 The plugin distinguishes between native elements and components:
 
-```typescript
-// Native element - use `safe` attribute
-<div>{ userInput } <
-  /div>  / / K601 <
-  // Component - use Html.escapeHtml()
-  Component >
-  { userInput } <
-  /Component>  / / K603;
+```tsx
+// Native element - use `safe` attribute - K601
+<div>{userInput}</div>
+
+// Component - use Html.escapeHtml() - K603
+<Component>{userInput}</Component>
 ```
 
 Detection is based on tag name casing (uppercase = component).
