@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import * as Html from '../src/index.js';
+import { Fragment } from '../src/index.js';
 
 const unsafeTag = '<script tag="1">alert(1)</script>';
 const safeTag = Html.escapeHtml(unsafeTag);
@@ -44,6 +45,12 @@ describe('HTML Escaping', () => {
       <>
         <div>{Html.escapeHtml(<div>{unsafeTag}</div>)}</div>
       </>
+    );
+  });
+
+  test('fragments supports safe', () => {
+    expect(<Fragment safe>{'<script>alert(1)</script>'}</Fragment>).toBe(
+      <Fragment>{Html.escapeHtml('<script>alert(1)</script>')}</Fragment>
     );
   });
 

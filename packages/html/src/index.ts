@@ -604,8 +604,10 @@ export function createElement(
  * const html = <Html.Fragment><div>1</div><div>2</div></Html.Fragment>
  * ```
  */
-export function Fragment(props: PropsWithChildren): JSX.Element {
-  return contentsToString([props.children]);
+export function Fragment(
+  props: PropsWithChildren<Pick<JSX.HtmlTag, 'safe'>>
+): JSX.Element {
+  return contentsToString([props.children], props.safe);
 }
 
 /**
