@@ -1,16 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './Banner.module.scss';
 
 const STORAGE_KEY = 'kita-v5-banner-dismissed';
 
 export function Banner() {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!sessionStorage.getItem(STORAGE_KEY)) {
       setVisible(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (!ref.current) {
+      document.documentElement.style.setProperty('--rp-banner-height', '0px');
+      return;
+    }
+    const observer = new ResizeObserver(([entry]) => {
+      document.documentElement.style.setProperty(
+        '--rp-banner-height',
+        `${entry?.contentRect.height}px`
+      );
+    });
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [visible]);
 
   function dismiss() {
     sessionStorage.setItem(STORAGE_KEY, '1');
@@ -20,7 +36,7 @@ export function Banner() {
   if (!visible) return null;
 
   return (
-    <div className={styles.banner} role="banner">
+    <div ref={ref} className={styles.banner} role="banner">
       <span>
         You are viewing documentation for the upcoming{' '}
         <a

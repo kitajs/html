@@ -15,6 +15,7 @@ import path from 'node:path';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import pluginFileTree from 'rspress-plugin-file-tree';
 import pluginOg from 'rspress-plugin-og';
+import readingTime from 'rspress-plugin-reading-time';
 
 /** Shared TypeDoc setup for compact, public-only API docs. */
 function configureTypeDoc(publicPath: string, tsconfig?: string) {
@@ -58,6 +59,7 @@ export default defineConfig({
   },
 
   plugins: [
+    readingTime(),
     pluginTwoslash(),
     pluginSitemap({
       siteUrl: DOCS_URL

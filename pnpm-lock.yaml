@@ -392,6 +392,9 @@ importers:
       material-icon-theme:
         specifier: ^5.31.0
         version: 5.31.0
+      rspress-plugin-reading-time:
+        specifier: ^1.0.0
+        version: 1.0.0(@rspress/core@2.0.3(@types/react@19.2.9)(core-js@3.42.0))
     devDependencies:
       '@kitajs/html':
         specifier: workspace:^
@@ -3965,6 +3968,9 @@ packages:
     resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
     engines: {node: '>= 14.18.0'}
 
+  reading-time@1.5.0:
+    resolution: {integrity: sha512-onYyVhBNr4CmAxFsKS7bz+uTLRakypIe4R+5A824vBSkQy/hB3fZepoVEf8OVAxzLvK+H/jm9TzpI3ETSm64Kg==}
+
   real-require@0.2.0:
     resolution: {integrity: sha512-57frrGM/OCTLqLOAh0mhVA9VBMHd+9U7Zb2THMGdBUoZVOtGbJzjxsYGDJ3A9AYYCP4hn6y1TVbaOfzWtm5GFg==}
     engines: {node: '>= 12.13.0'}
@@ -4109,6 +4115,11 @@ packages:
     peerDependencies:
       '@rspress/shared': ^1.46.1
       rspress: ^1.46.1
+
+  rspress-plugin-reading-time@1.0.0:
+    resolution: {integrity: sha512-zC8dlNdUVS/bzQppxqYSMt3U0kR7Je1kT0azaSTlkOnbQaKUIT3Ckbizf0r0teP4UFrhzVFhpoVF9/k5Un2JSg==}
+    peerDependencies:
+      '@rspress/core': ^2.0.0-rc.4 || ^2.0.0
 
   rspress@1.47.1:
     resolution: {integrity: sha512-EBGde3d6lSwNXimsM0PORRa+23WlDEg3cPLa6q+XA0n6v5nVRg4AkinPI38An/DliZfqijwxt3oeEajxQrkVTQ==}
@@ -9097,6 +9108,8 @@ snapshots:
   readdirp@4.1.2:
     optional: true
 
+  reading-time@1.5.0: {}
+
   real-require@0.2.0: {}
 
   recma-build-jsx@1.0.0:
@@ -9374,6 +9387,14 @@ snapshots:
       rspress: 1.47.1(tslib@2.8.1)(webpack@5.105.2)
       sharp: 0.34.5
       ufo: 1.6.3
+
+  rspress-plugin-reading-time@1.0.0(@rspress/core@2.0.3(@types/react@19.2.9)(core-js@3.42.0)):
+    dependencies:
+      '@rspress/core': 2.0.3(@types/react@19.2.9)(core-js@3.42.0)
+      reading-time: 1.5.0
+      rspress-plugin-devkit: 1.0.0(@rspress/core@2.0.3(@types/react@19.2.9)(core-js@3.42.0))
+    transitivePeerDependencies:
+      - supports-color
 
   rspress@1.47.1(tslib@2.8.1)(webpack@5.105.2):
     dependencies:
