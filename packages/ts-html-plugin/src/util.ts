@@ -1,4 +1,8 @@
-import ts, { type JsxFragment } from 'typescript';
+import {
+  type JsxFragment,
+  type JsxSelfClosingElement,
+  type default as ts
+} from 'typescript';
 import type {
   BinaryOperatorToken,
   Diagnostic,
@@ -15,7 +19,10 @@ const UPPERCASE = /[A-Z]/;
 const ESCAPE_HTML_REGEX = /^(\w+\.)?(escapeHtml|e\s*`|escape)/i;
 
 /** If the node is a JSX element or fragment */
-export function isJsx(ts: typeof TS, node: TS.Node): node is JsxElement | JsxFragment {
+function isJsx(
+  ts: typeof TS,
+  node: TS.Node
+): node is JsxElement | JsxFragment | JsxSelfClosingElement {
   return (
     ts.isJsxElement(node) || ts.isJsxFragment(node) || ts.isJsxSelfClosingElement(node)
   );
@@ -52,6 +59,7 @@ export function recursiveDiagnoseJsxElements(
 }
 
 function diagnostic(
+  ts: typeof TS,
   node: ts.Node,
   error: keyof typeof Errors,
   category: keyof typeof TS.DiagnosticCategory
@@ -68,7 +76,7 @@ function diagnostic(
 
 export function diagnoseJsxElement(
   ts: typeof TS,
-  node: JsxElement | JsxFragment,
+  node: JsxElement | JsxFragment | JsxSelfClosingElement,
   typeChecker: TypeChecker,
   diagnostics: Diagnostic[]
 ): void {
@@ -89,18 +97,18 @@ export function diagnoseJsxElement(
         // Only text elements
         (node.children.length === 1 && node.children[0]!.kind === ts.SyntaxKind.JsxText)
       ) {
-        diagnostics.push(diagnostic(safeAttribute, 'UnusedSafe', 'Warning'));
+        diagnostics.push(diagnostic(ts, safeAttribute, 'UnusedSafe', 'Warning'));
         return;
       }
 
       for (const exp of node.children) {
         if (
-          // JSX Element inside safe
-          ts.isJsxElement(exp) ||
+          // JSX Element inside safe (includes self-closing elements like <Component />)
+          isJsx(ts, exp) ||
           // Element is using safe with escapeHtml
           (ts.isJsxExpression(exp) && exp.expression?.getText().match(ESCAPE_HTML_REGEX))
         ) {
-          diagnostics.push(diagnostic(safeAttribute, 'DoubleEscape', 'Error'));
+          diagnostics.push(diagnostic(ts, safeAttribute, 'DoubleEscape', 'Error'));
           continue;
         }
 
@@ -111,11 +119,11 @@ export function diagnoseJsxElement(
           exp.expression
         ) {
           // gets this expression or array of sub expressions
-          const expressions = getNodeExpressions(exp.expression) || [exp.expression];
+          const expressions = getNodeExpressions(ts, exp.expression) || [exp.expression];
 
-          // at least one jsx inside another jsx with safe
-          if (expressions.some((inner) => ts.isJsxElement(inner))) {
-            diagnostics.push(diagnostic(safeAttribute, 'DoubleEscape', 'Error'));
+          // at least one jsx inside another jsx with safe (includes self-closing elements)
+          if (expressions.some((inner) => isJsx(ts, inner))) {
+            diagnostics.push(diagnostic(ts, safeAttribute, 'DoubleEscape', 'Error'));
             continue;
           }
 
@@ -130,7 +138,7 @@ export function diagnoseJsxElement(
               )
             )
           ) {
-            diagnostics.push(diagnostic(safeAttribute, 'UnusedSafe', 'Warning'));
+            diagnostics.push(diagnostic(ts, safeAttribute, 'UnusedSafe', 'Warning'));
           }
         }
       }
@@ -141,7 +149,7 @@ export function diagnoseJsxElement(
 
   // If this expression does not have children, we can ignore it
   // for example it could be a self closing element
-  if (!node.children) {
+  if (ts.isJsxSelfClosingElement(node) || !node.children) {
     return;
   }
 
@@ -185,7 +193,7 @@ function diagnoseExpression(
     return;
   }
 
-  const expressions = getNodeExpressions(node);
+  const expressions = getNodeExpressions(ts, node);
 
   // ternary or binary expressions should be evaluated on each side
   if (expressions) {
@@ -226,9 +234,9 @@ function diagnoseExpression(
 
   // Switch between component and element xss errors
   if (isComponent || ts.isJsxFragment(node)) {
-    diagnostics.push(diagnostic(node, 'ComponentXss', 'Error'));
+    diagnostics.push(diagnostic(ts, node, 'ComponentXss', 'Error'));
   } else {
-    diagnostics.push(diagnostic(node, 'Xss', 'Error'));
+    diagnostics.push(diagnostic(ts, node, 'Xss', 'Error'));
   }
 }
 
@@ -379,11 +387,14 @@ export function proxyObject<T extends object>(obj: T): T {
  * Returns more than one node if the node is a binary expression or a conditional
  * expression
  */
-function getNodeExpressions(node: TS.Node): TS.Expression[] | undefined {
+function getNodeExpressions(
+  ts: typeof TS,
+  node: TS.Expression
+): TS.Expression[] | undefined {
   // Checks operators
   if (ts.isBinaryExpression(node)) {
     // Ignores operations which results in a boolean
-    if (isBooleanBinaryOperatorToken(node.operatorToken)) {
+    if (isBooleanBinaryOperatorToken(ts, node.operatorToken)) {
       return [];
     }
 
@@ -408,7 +419,7 @@ function getNodeExpressions(node: TS.Node): TS.Expression[] | undefined {
   return undefined;
 }
 
-function isBooleanBinaryOperatorToken(operator: BinaryOperatorToken) {
+function isBooleanBinaryOperatorToken(ts: typeof TS, operator: BinaryOperatorToken) {
   switch (operator.kind) {
     case ts.SyntaxKind.EqualsEqualsEqualsToken:
     case ts.SyntaxKind.EqualsEqualsToken:
