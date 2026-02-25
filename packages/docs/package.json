@@ -19,16 +19,22 @@
     "@rspress/plugin-twoslash": "^2.0.3",
     "@rspress/plugin-typedoc": "^2.0.3",
     "@shikijs/transformers": "^3.22.0",
+    "@types/mdast": "^4.0.4",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "material-icon-theme": "^5.31.0",
+    "mdast-util-mdx-jsx": "^3.2.0",
+    "mdast-util-mdxjs-esm": "^2.0.1",
     "react": "catalog:",
     "react-dom": "catalog:",
     "rsbuild-plugin-open-graph": "^1.1.2",
     "rspress-plugin-file-tree": "^1.0.4",
     "rspress-plugin-og": "^0.0.5",
     "rspress-plugin-reading-time": "^1.0.0",
-    "typescript": "catalog:"
+    "shiki": "^1.28.2",
+    "typescript": "catalog:",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.0.0"
   }
 }

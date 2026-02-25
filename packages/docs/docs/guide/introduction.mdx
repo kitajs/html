@@ -1,4 +1,4 @@
-import { Tab, Tabs } from '@rspress/core/theme';
+import { Tab, Tabs } from '@rspress/core/theme'
 
 # What is Kita Html
 
@@ -24,30 +24,29 @@ skips all three. The TypeScript compiler rewrites JSX expressions into `jsx()` a
 strings and child strings into a single result. The output is the final HTML with no
 post-processing.
 
-```tsx twoslash [asd]
-import { jsx as __jsx } from '@kitajs/html/jsx-runtime';
-const username: string = 'Username';
-let result: JSX.Element;
+```tsx twoslash kita
+import { jsx as __jsx } from '@kitajs/html/jsx-runtime'
+const username: string = 'Username'
+export let html: JSX.Element
 
 // ---cut---
 // What you write
-result = (
+html = (
   <div class="card">
     <h1 safe>{username}</h1>
   </div>
-);
+)
 
 // What TypeScript compiles to
-result = __jsx('div', {
+html = __jsx('div', {
   class: 'card',
   children: __jsx('h1', {
     safe: true,
     children: username
   })
-});
+})
 
-// What the runtime returns
-result = '<div class="card"><h1>Username</h1></div>';
+// Click on the <> icon in the top right to see the compiled output
 ```
 
 This directness is why Kita Html benchmarks 7-40x faster than React's `renderToString`
@@ -67,11 +66,12 @@ practically impossible.
 The `safe` attribute escapes children at render time. Adding it to any native element
 causes the runtime to pass all children through HTML entity escaping before concatenation.
 
-```tsx twoslash
-//@noErrors
-const userInput = '<script>alert("XSS")</script>' as const;
+```tsx twoslash kita
+// @noErrors
+let userInput = `<script>alert('XSS')</script>` as const
 // ---cut---
-<div safe>{userInput}</div> === '<div>&lt;script&gt;...&lt;/script&gt;</div>';
+const html = <div safe>{userInput}</div>
+//                        ^?
 ```
 
 A TypeScript language service plugin analyzes every JSX expression in your editor and
@@ -90,19 +90,21 @@ Kita Html supports async components natively. Any function component that return
 `Promise<string>` is valid JSX. When an async child appears anywhere in the tree, the
 entire parent chain becomes a `Promise<string>` through automatic propagation.
 
-```tsx twoslash
-declare const db: {
-  getUser(id: string): Promise<{ name: string }>;
-};
+```tsx twoslash kita
+const db = {
+  async getUser(id: string) {
+    return { name: 'Arthur' }
+  }
+}
 // ---cut---
 async function UserCard({ id }: { id: string }) {
-  const user = await db.getUser(id);
-  return <div safe>{user.name}</div>;
+  const user = await db.getUser(id)
+  return <div safe>{user.name}</div>
 }
 
 // The result is a Promise<string> because UserCard is async,
 // Type still is JSX.Element so it can be used in JSX
-const html = <UserCard id="123" />;
+const html = <UserCard id="123" />
 ```
 
 For streaming scenarios, the Suspense component renders a fallback immediately and
@@ -110,15 +112,17 @@ replaces it with the resolved content as each async subtree completes. This uses
 chunked transfer encoding to stream updates to the client without waiting for the entire
 page to resolve. A small inline script handles the client-side DOM replacement.
 
-```tsx twoslash
-import { Suspense, renderToStream } from '@kitajs/html/suspense';
-declare function UserCard({ id }: { id: string }): Promise<string>;
+```tsx twoslash kita=stream
+import { Suspense, renderToStream } from '@kitajs/html/suspense'
+async function UserCard({ id }: { id: string }) {
+  return <div>Async Component</div>
+}
 // ---cut---
 const stream = renderToStream((rid) => (
   <Suspense rid={rid} fallback={<div>Loading...</div>}>
     <UserCard id="123" />
   </Suspense>
-));
+))
 
 // Pipe the stream to your HTTP response or use one of our integrations.
 ```

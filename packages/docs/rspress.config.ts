@@ -1,10 +1,10 @@
-import createTsHtmlPlugin from '@kitajs/ts-html-plugin';
-import { pluginSass } from '@rsbuild/plugin-sass';
-import { defineConfig, type UserConfig } from '@rspress/core';
-import { pluginClientRedirects } from '@rspress/plugin-client-redirects';
-import { pluginSitemap } from '@rspress/plugin-sitemap';
-import { pluginTwoslash } from '@rspress/plugin-twoslash';
-import { pluginTypeDoc, PluginTypeDocOptions } from '@rspress/plugin-typedoc';
+import createTsHtmlPlugin from '@kitajs/ts-html-plugin'
+import { pluginSass } from '@rsbuild/plugin-sass'
+import { defineConfig, type UserConfig } from '@rspress/core'
+import { pluginClientRedirects } from '@rspress/plugin-client-redirects'
+import { pluginSitemap } from '@rspress/plugin-sitemap'
+import { pluginTwoslash } from '@rspress/plugin-twoslash'
+import { pluginTypeDoc, PluginTypeDocOptions } from '@rspress/plugin-typedoc'
 import {
   transformerMetaHighlight,
   transformerNotationDiff,
@@ -13,43 +13,44 @@ import {
   transformerNotationHighlight,
   transformerRemoveNotationEscape,
   transformerRenderIndentGuides
-} from '@shikijs/transformers';
-import path from 'node:path';
-import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
-import pluginFileTree from 'rspress-plugin-file-tree';
-import pluginOg from 'rspress-plugin-og';
-import readingTime from 'rspress-plugin-reading-time';
-import ts from 'typescript';
+} from '@shikijs/transformers'
+import path from 'node:path'
+import { pluginOpenGraph } from 'rsbuild-plugin-open-graph'
+import pluginFileTree from 'rspress-plugin-file-tree'
+import pluginOg from 'rspress-plugin-og'
+import readingTime from 'rspress-plugin-reading-time'
+import ts from 'typescript'
+import { remarkKitaPlugin } from './plugins/kita/remarkPlugin'
 
 /** Shared TypeDoc setup for compact, public-only API docs. */
 function configureTypeDoc(publicPath: string, tsconfig?: string) {
   return (app: Parameters<Exclude<PluginTypeDocOptions['setup'], undefined>>[0]) => {
     if (tsconfig) {
-      app.options.setValue('tsconfig', tsconfig);
+      app.options.setValue('tsconfig', tsconfig)
     }
-    app.options.setValue('excludeInternal', true);
-    app.options.setValue('excludePrivate', true);
-    app.options.setValue('excludeProtected', true);
-    app.options.setValue('hidePageHeader', true);
-    app.options.setValue('hideBreadcrumbs', true);
-    app.options.setValue('useCodeBlocks', true);
-    app.options.setValue('flattenOutputFiles', true);
-    app.options.setValue('mergeReadme', true);
-    app.options.setValue('readme', 'none');
-    app.options.setValue('formatWithPrettier', true);
-    app.options.setValue('publicPath', publicPath);
-  };
+    app.options.setValue('excludeInternal', true)
+    app.options.setValue('excludePrivate', true)
+    app.options.setValue('excludeProtected', true)
+    app.options.setValue('hidePageHeader', true)
+    app.options.setValue('hideBreadcrumbs', true)
+    app.options.setValue('useCodeBlocks', true)
+    app.options.setValue('flattenOutputFiles', true)
+    app.options.setValue('mergeReadme', true)
+    app.options.setValue('readme', 'none')
+    app.options.setValue('formatWithPrettier', true)
+    app.options.setValue('publicPath', publicPath)
+  }
 }
 
 /** Creates a renamed pluginTypeDoc instance to allow multiple registrations. */
 function namedTypeDoc(name: string, options: Parameters<typeof pluginTypeDoc>[0]) {
-  const plugin = pluginTypeDoc(options);
-  return { ...plugin, name };
+  const plugin = pluginTypeDoc(options)
+  return { ...plugin, name }
 }
 
 // Allow hostname override via env var
-const DOCS_HOSTNAME = process.env.DOCS_HOSTNAME || 'html.kitajs.org';
-const DOCS_URL = `https://${DOCS_HOSTNAME}`;
+const DOCS_HOSTNAME = process.env.DOCS_HOSTNAME || 'html.kitajs.org'
+const DOCS_URL = `https://${DOCS_HOSTNAME}`
 
 export default defineConfig({
   title: 'Kita Html',
@@ -74,7 +75,7 @@ export default defineConfig({
           ...ts,
           createLanguageService(host, registry, syntaxOnlyOrLanguageServiceMode) {
             // Disables URL docs in ts-html-plugin error messages since this is already the docs site.
-            process.env.INTERNAL_DISABLE_URL_DOCS = 'true';
+            process.env.INTERNAL_DISABLE_URL_DOCS = 'true'
 
             return createTsHtmlPlugin({ typescript: ts }).create({
               languageService: ts.createLanguageService(
@@ -82,7 +83,7 @@ export default defineConfig({
                 registry,
                 syntaxOnlyOrLanguageServiceMode
               )
-            });
+            })
           }
         }
       }
@@ -111,12 +112,34 @@ export default defineConfig({
     }),
     pluginClientRedirects({
       redirects: [
-        { from: '/k601', to: '/guide/xss/error-codes#k601' },
-        { from: '/k602', to: '/guide/xss/error-codes#k602' },
-        { from: '/k603', to: '/guide/xss/error-codes#k603' },
-        { from: '/k604', to: '/guide/xss/error-codes#k604' },
-        { from: '/packages/ts-html-plugin', to: '/guide/xss/error-codes' },
-        { from: '/packages/fastify-html-plugin', to: '/integrations/frameworks/fastify' }
+        {
+          from: /^\/TS88601$/i.source,
+          to: '/guide/xss/error-codes#ts88601'
+        },
+        {
+          from: /^\/TS88602$/i.source,
+          to: '/guide/xss/error-codes#ts88602'
+        },
+        {
+          from: /^\/TS88603$/i.source,
+          to: '/guide/xss/error-codes#ts88603'
+        },
+        {
+          from: /^\/TS88604$/i.source,
+          to: '/guide/xss/error-codes#ts88604'
+        },
+        {
+          from: /^\/packages\/html$/i.source,
+          to: '/guide/introduction'
+        },
+        {
+          from: /^\/packages\/ts-html-plugin$/i.source,
+          to: '/guide/xss/error-codes'
+        },
+        {
+          from: /^\/packages\/fastify-html-plugin$/i.source,
+          to: '/integrations/frameworks/fastify'
+        }
       ]
     })
   ],
@@ -181,19 +204,8 @@ export default defineConfig({
   },
 
   markdown: {
+    remarkPlugins: [remarkKitaPlugin],
     shiki: {
-      langs: [
-        'tsx',
-        'typescript',
-        'ts',
-        'jsx',
-        'javascript',
-        'js',
-        'json',
-        'bash',
-        'html',
-        'css'
-      ],
       transformers: [
         transformerNotationDiff(),
         transformerNotationErrorLevel(),
@@ -204,8 +216,7 @@ export default defineConfig({
         transformerMetaHighlight(),
         transformerRenderIndentGuides()
       ]
-    },
-    showLineNumbers: true
+    }
   },
 
   route: {
@@ -214,4 +225,4 @@ export default defineConfig({
 
   // Enable LLM-friendly documentation export
   llms: true
-} satisfies UserConfig);
+} satisfies UserConfig)

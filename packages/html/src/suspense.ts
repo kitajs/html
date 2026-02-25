@@ -1,13 +1,13 @@
-import { PassThrough, Readable } from 'node:stream';
-import type { Children } from './index.js';
-import { contentsToString, contentToString } from './index.js';
+import { PassThrough, Readable } from 'node:stream'
+import type { Children } from './index.js'
+import { contentsToString, contentToString } from './index.js'
 
 declare global {
   /**
    * The `SUSPENSE_ROOT` is a global object that holds the state of all the suspense
    * components rendered in the server.
    */
-  var SUSPENSE_ROOT: SuspenseRoot;
+  var SUSPENSE_ROOT: SuspenseRoot
 }
 
 /**
@@ -20,7 +20,7 @@ export type SuspenseRoot = {
    * the HTML, the number of running promises and if the first suspense has already
    * resolved.
    */
-  requests: Map<number | string, RequestData>;
+  requests: Map<number | string, RequestData>
 
   /**
    * This value is used (and incremented shortly after) when no requestId is provided for
@@ -28,7 +28,7 @@ export type SuspenseRoot = {
    *
    * @default 1
    */
-  requestCounter: number;
+  requestCounter: number
 
   /**
    * If we should automatically stream {@linkcode SuspenseScript} before the first suspense
@@ -38,24 +38,24 @@ export type SuspenseRoot = {
    *
    * @default true
    */
-  autoScript: boolean;
-};
+  autoScript: boolean
+}
 
 /** Everything a suspense needs to know about its request lifecycle. */
 export type RequestData = {
   /** If the first suspense has already resolved */
-  sent: boolean;
+  sent: boolean
 
   /** How many are still running */
-  running: number;
+  running: number
 
   /**
    * The stream we should write
    *
    * WeakRef requires ES2021 typings (node 14+) to be installed.
    */
-  stream: Readable;
-};
+  stream: Readable
+}
 
 /**
  * The props for the `Suspense` component.
@@ -64,13 +64,13 @@ export type RequestData = {
  */
 export interface SuspenseProps {
   /** The request id is used to identify the request for this suspense. */
-  rid: number | string;
+  rid: number | string
 
   /** The fallback to render while the async children are loading. */
-  fallback: JSX.Element;
+  fallback: JSX.Element
 
   /** The async children to render as soon as they are ready. */
-  children: Children;
+  children: Children
 
   /**
    * This error boundary is used to catch any error thrown by an async component and
@@ -81,7 +81,7 @@ export interface SuspenseProps {
    * This does not catches for errors thrown by the suspense itself or async fallback
    * components. Please use {@linkcode ErrorBoundary} to catch them instead.
    */
-  catch?: JSX.Element | ((error: unknown) => JSX.Element);
+  catch?: JSX.Element | ((error: unknown) => JSX.Element)
 }
 
 // Avoids double initialization in case this file is not cached by
@@ -92,7 +92,7 @@ if (!globalThis.SUSPENSE_ROOT) {
     requests: new Map(),
     requestCounter: 1,
     autoScript: true
-  };
+  }
 }
 
 function noop() {}
@@ -116,7 +116,7 @@ function noop() {}
  */
 export const SuspenseScript = /* html */ `
       <script id="kita-html-suspense">
-        /*! MIT License https://kita.js.org */
+        /*! MIT License https://html.kitajs.org */
         function $KITA_RC(i){
           // simple aliases
           var d=document,q=d.querySelector.bind(d),
@@ -165,7 +165,7 @@ export const SuspenseScript = /* html */ `
   // Removes comment lines
   .replace(/^\s*\/\/.*/gm, '')
   // Removes line breaks added for readability
-  .replace(/\n\s*/g, '');
+  .replace(/\n\s*/g, '')
 
 /**
  * A component that returns a fallback while the async children are loading.
@@ -180,18 +180,18 @@ export const SuspenseScript = /* html */ `
 export function Suspense(props: SuspenseProps): JSX.Element {
   const children = Array.isArray(props.children)
     ? contentsToString(props.children)
-    : contentToString(props.children);
+    : contentToString(props.children)
 
   // Returns content if it's not a promise
   if (typeof children === 'string') {
-    return children;
+    return children
   }
 
   if (!props.rid) {
-    throw new Error('Suspense requires a `rid` to be specified.');
+    throw new Error('Suspense requires a `rid` to be specified.')
   }
 
-  let data = SUSPENSE_ROOT.requests.get(props.rid);
+  let data = SUSPENSE_ROOT.requests.get(props.rid)
 
   if (!data) {
     // Creating the request data lazily allows
@@ -201,15 +201,15 @@ export function Suspense(props: SuspenseProps): JSX.Element {
       stream: new Readable({ read: noop }),
       running: 0,
       sent: false
-    };
+    }
 
-    SUSPENSE_ROOT.requests.set(props.rid, data);
+    SUSPENSE_ROOT.requests.set(props.rid, data)
   }
 
   // Gets the current run number for this request
   // Increments first so we can differ 0 as no suspenses
   // were used and 1 as the first suspense component
-  const run = ++data.running;
+  const run = ++data.running
 
   void children
     .then(writeStreamTemplate)
@@ -217,57 +217,57 @@ export function Suspense(props: SuspenseProps): JSX.Element {
       // No catch block was specified, so we can
       // re-throw the error.
       if (!props.catch) {
-        throw error;
+        throw error
       }
 
-      let html;
+      let html
 
       // Unwraps error handler
       if (typeof props.catch === 'function') {
-        html = props.catch(error);
+        html = props.catch(error)
       } else {
-        html = props.catch;
+        html = props.catch
       }
 
       // handles if catch block returns a string
       if (typeof html === 'string') {
-        return writeStreamTemplate(html);
+        return writeStreamTemplate(html)
       }
 
       // must be a promise
-      return html.then(writeStreamTemplate);
+      return html.then(writeStreamTemplate)
     })
     .catch(function writeFatalError(error) {
-      data!.stream.emit('error', error);
+      data!.stream.emit('error', error)
     })
     .finally(function clearRequestData() {
       // reduces current suspense id
       if (data && data.running > 1) {
-        data.running -= 1;
-        return;
+        data.running -= 1
+        return
       }
 
       // Last suspense component, runs cleanup
       if (data && !data.stream.closed) {
-        data.stream.push(null);
+        data.stream.push(null)
       }
 
       // Removes the current state
-      SUSPENSE_ROOT.requests.delete(props.rid);
-    });
+      SUSPENSE_ROOT.requests.delete(props.rid)
+    })
 
   // Always will be a single children because multiple
   // root tags aren't a valid JSX syntax
-  const fallback = contentToString(props.fallback);
+  const fallback = contentToString(props.fallback)
 
   // Keeps string return type
   if (typeof fallback === 'string') {
-    return '<div id="B:' + run + '" data-sf>' + fallback + '</div>';
+    return '<div id="B:' + run + '" data-sf>' + fallback + '</div>'
   }
 
   return fallback.then(function resolveCallback(resolved) {
-    return '<div id="B:' + run + '" data-sf>' + resolved + '</div>';
-  });
+    return '<div id="B:' + run + '" data-sf>' + resolved + '</div>'
+  })
 
   /**
    * This function may be called by the catch handler in case the error could be handled.
@@ -283,22 +283,22 @@ export function Suspense(props: SuspenseProps): JSX.Element {
       // Stream was already closed/cleared out.
       data.stream.closed
     ) {
-      return;
+      return
     }
 
     // Writes the suspense script if its the first
     // suspense component in this request data. This way following
     // templates+scripts can be executed
     if (SUSPENSE_ROOT.autoScript && data.sent === false) {
-      data.stream.push(SuspenseScript);
-      data.sent = true;
+      data.stream.push(SuspenseScript)
+      data.sent = true
     }
 
     // Writes the chunk
     data.stream.push(
       // prettier-ignore
       `<template id="N:${run}" data-sr>${result}</template><script id="S:${run}" data-ss>$KITA_RC(${run})</script>`
-    );
+    )
   }
 }
 
@@ -334,62 +334,62 @@ export function renderToStream(
   rid?: number | string
 ): Readable {
   if (!rid) {
-    rid = SUSPENSE_ROOT.requestCounter++;
+    rid = SUSPENSE_ROOT.requestCounter++
   } else if (SUSPENSE_ROOT.requests.has(rid)) {
     // Ensures the request id is unique within the current request
     // error here to keep original stack trace
-    const error = new Error(`The provided Request Id is already in use: ${rid}.`);
+    const error = new Error(`The provided Request Id is already in use: ${rid}.`)
 
     // returns errored stream to avoid throws
     return new Readable({
       read() {
-        this.emit('error', error);
-        this.push(null);
+        this.emit('error', error)
+        this.push(null)
       }
-    });
+    })
   }
 
   if (typeof html === 'function') {
     try {
-      html = html(rid);
+      html = html(rid)
     } catch (error) {
       // Avoids memory leaks by removing the request data
-      SUSPENSE_ROOT.requests.delete(rid);
+      SUSPENSE_ROOT.requests.delete(rid)
 
       // returns errored stream to avoid throws
       return new Readable({
         read() {
-          this.emit('error', error);
-          this.push(null);
+          this.emit('error', error)
+          this.push(null)
         }
-      });
+      })
     }
   }
 
   // If no suspense component was used, this will not be defined.
-  const requestData = SUSPENSE_ROOT.requests.get(rid);
+  const requestData = SUSPENSE_ROOT.requests.get(rid)
 
   // No suspense was used, just return the HTML as a stream
   if (!requestData) {
     if (typeof html === 'string') {
-      return Readable.from([html]);
+      return Readable.from([html])
     }
 
     return new Readable({
       read() {
         void html
           .then((result) => {
-            this.push(result);
-            this.push(null);
+            this.push(result)
+            this.push(null)
           })
           .catch((error) => {
-            this.emit('error', error);
-          });
+            this.emit('error', error)
+          })
       }
-    });
+    })
   }
 
-  return resolveHtmlStream(html, requestData);
+  return resolveHtmlStream(html, requestData)
 }
 
 /**
@@ -426,21 +426,21 @@ export function resolveHtmlStream(
   // Impossible to sync templates have their
   // streams being written (sent = true) before the fallback
   if (typeof template === 'string') {
-    requestData.stream.push(template);
-    return requestData.stream;
+    requestData.stream.push(template)
+    return requestData.stream
   }
 
-  const prepended = new PassThrough();
+  const prepended = new PassThrough()
 
   void template.then(
     (result) => {
-      prepended.push(result);
-      requestData.stream.pipe(prepended);
+      prepended.push(result)
+      requestData.stream.pipe(prepended)
     },
     (error) => {
-      prepended.emit('error', error);
+      prepended.emit('error', error)
     }
-  );
+  )
 
-  return prepended;
+  return prepended
 }

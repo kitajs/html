@@ -1,4 +1,4 @@
-import { Badge } from '@rspress/core/theme';
+import { Badge } from '@rspress/core/theme'
 
 # Error Codes
 
@@ -15,11 +15,11 @@ attribute.**
 An expression with type `string` or `any` is used as a child of a native element without
 the `safe` attribute.
 
-```tsx twoslash
+```tsx twoslash kita
 //@errors: 88601
-declare let username: string;
+let username = 'Arthur'
 // ---cut---
-const html = <div>{username}</div>;
+const html = <div>{username}</div>
 ```
 
 Variables prefixed with `safe` are exempt from this rule, as are expressions with safe
@@ -29,11 +29,11 @@ types _(numbers, booleans, string literals...)_.
 
 Add the `safe` attribute to escape the content
 
-```tsx twoslash
+```tsx twoslash kita
 //@errors: 88601
-declare let username: string;
+let username: string = 'Arthur'
 // ---cut---
-const html = <div safe>{username}</div>;
+const html = <div safe>{username}</div>
 ```
 
 :::
@@ -48,17 +48,23 @@ Severity: error. The `safe` attribute is applied to an element whose children in
 elements. This would escape the HTML output of those child components, corrupting their
 markup.
 
-```tsx twoslash
+```tsx twoslash kita
 //@errors: 88602
-declare function UserBadge(props: { url: string }): JSX.Element;
-declare let user: { name: string; badgeUrl: string };
+const user = { name: 'Arthur', badgeUrl: 'https://example.com/badge.png' }
+function UserBadge(props: { url: string }) {
+  return (
+    <div class="badge">
+      <img src={props.url} alt="User badge" />
+    </div>
+  )
+}
 // ---cut---
 const html = (
   <div safe>
     {user.name}
     <UserBadge url={user.badgeUrl} />
   </div>
-);
+)
 ```
 
 You can also wrap inner components inside fragments or use `escapeHtml()` manually to
@@ -70,19 +76,25 @@ Remove `safe` from the parent element. You can use `Fragment` to apply `safe` to
 of children without affecting nested components, since fragments don't render actual HTML
 elements.
 
-```tsx twoslash
+```tsx twoslash kita
 //@errors: 88602
-declare function UserBadge(props: { url: string }): JSX.Element;
-declare let user: { name: string; badgeUrl: string };
+const user = { name: 'Arthur', badgeUrl: 'https://example.com/badge.png' }
+function UserBadge(props: { url: string }) {
+  return (
+    <div class="badge">
+      <img src={props.url} alt="User badge" />
+    </div>
+  )
+}
 // ---cut---
-import { Fragment } from '@kitajs/html';
+import { Fragment } from '@kitajs/html'
 
 const html = (
   <div>
     <Fragment safe>{user.name}</Fragment>
     <UserBadge url={user.badgeUrl} />
   </div>
-);
+)
 ```
 
 :::
@@ -97,14 +109,14 @@ An expression with type `string` or `any` is passed as a child to a component (u
 tag name). Unlike native elements, components cannot use the `safe` attribute directly on
 children.
 
-```tsx twoslash
+```tsx twoslash kita
 //@errors: 88603
+let userName: string = 'Arthur'
 function Card({ children }: { children: string }) {
-  return <div>{children}</div>;
+  return <div>{children}</div>
 }
-declare let userName: string;
 // ---cut---
-const html = <Card>{userName}</Card>;
+const html = <Card>{userName}</Card>
 ```
 
 Components cannot apply the `safe` attribute directly to their children. You must either
@@ -114,27 +126,27 @@ escape the content before passing it, or wrap it in a Fragment with the `safe` a
 
 Escape manually using `Html.escapeHtml()`
 
-```tsx twoslash
+```tsx twoslash kita
 //@errors: 88603
-import Html from '@kitajs/html';
+import Html from '@kitajs/html'
 
+let userName: string = 'Arthur'
 function Card({ children }: { children: string }) {
-  return <div>{children}</div>;
+  return <div>{children}</div>
 }
-declare let userName: string;
 // ---cut---
-const html = <Card>{Html.escapeHtml(userName)}</Card>;
+const html = <Card>{Html.escapeHtml(userName)}</Card>
 ```
 
 Or wrap the content in a Fragment with `safe`
 
-```tsx twoslash
+```tsx twoslash kita
 //@errors: 88603
-import { Fragment } from '@kitajs/html';
+import { Fragment } from '@kitajs/html'
 
-let userName: string = 'Arthur';
+let userName: string = 'Arthur'
 function Card({ children }: { children: JSX.Element }) {
-  return <div>{children}</div>;
+  return <div>{children}</div>
 }
 
 // ---cut---
@@ -142,7 +154,7 @@ const html = (
   <Card>
     <Fragment safe>{userName}</Fragment>
   </Card>
-);
+)
 ```
 
 :::
@@ -156,11 +168,11 @@ const html = (
 The `safe` attribute is applied to an element whose children are already safe types
 (numbers, booleans, `JSX.Element`, etc.). The escaping is redundant and can be removed.
 
-```tsx twoslash
+```tsx twoslash kita
 //@errors: 88604
-const count = 42;
+const count = 42
 // ---cut---
-const html = <span safe>{count}</span>;
+const html = <span safe>{count}</span>
 ```
 
 Numbers, booleans, bigints, string literals, and `JSX.Element` types are already safe and
@@ -170,11 +182,11 @@ cannot introduce XSS vulnerabilities. The `safe` attribute has no effect on thes
 
 Remove the `safe` attribute since numbers are already safe
 
-```tsx twoslash
+```tsx twoslash kita
 //@errors: 88604
-const count = 42;
+const count = 42
 // ---cut---
-const html = <span>{count}</span>;
+const html = <span>{count}</span>
 ```
 
 :::

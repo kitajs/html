@@ -10,23 +10,27 @@ TypeScript rewrites every JSX expression into a function call. Elements with a s
 child call `jsx()`. Elements with multiple children call `jsxs()`. Attributes and children
 are passed as a single props object.
 
-```tsx title="Source TSX"
-<ol start={2}>
-  {[1, 2].map((i) => (
-    <li>{i}</li>
-  ))}
-</ol>
+```tsx title="Source TSX" twoslash kita
+const html = (
+  <ol start={2}>
+    {[1, 2].map((i) => (
+      <li>{i}</li>
+    ))}
+  </ol>
+)
 ```
 
 TypeScript compiles this to:
 
-```js title="Compiled output"
-import { jsxs, jsx } from '@kitajs/html/jsx-runtime';
-
-jsxs('ol', {
-  start: 2,
-  children: [1, 2].map((i) => jsx('li', { children: i }))
-});
+```tsx title="Compiled output" twoslash kita
+// @showEmit
+const html = (
+  <ol start={2}>
+    {[1, 2].map((i) => (
+      <li>{i}</li>
+    ))}
+  </ol>
+)
 ```
 
 The JSX syntax is fully removed at compile time. The runtime never parses JSX.
@@ -37,12 +41,6 @@ The `jsx()` and `jsxs()` functions receive the tag name and the props object. Th
 three operations in sequence: serialize attributes into an HTML attribute string,
 serialize children into a content string, and concatenate the opening tag, content, and
 closing tag.
-
-For the example above, the runtime produces:
-
-```js
-'<ol start="2"><li>1</li><li>2</li></ol>';
-```
 
 If any child is a `Promise`, the concatenation returns a `Promise<string>` instead of a
 `string`. This propagation is automatic: a single async component anywhere in the tree

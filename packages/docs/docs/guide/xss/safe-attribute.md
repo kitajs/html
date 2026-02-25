@@ -8,10 +8,12 @@ input, apply the `safe` attribute to the nearest native element wrapping the exp
 Add `safe` to the element that directly contains the dynamic content. The runtime passes
 all children through HTML entity escaping before concatenation.
 
-```tsx
-<div safe>{userInput}</div>
-// If userInput is '<script>alert(1)</script>'
-// Renders: <div>&lt;script&gt;alert(1)&lt;/script&gt;</div>
+```tsx twoslash kita
+// @noErrors
+let userInput = `<script>alert('XSS')</script>` as const
+// ---cut---
+const html = <div safe>{userInput}</div>
+//                        ^?
 ```
 
 Without `safe`, malicious input executes. Consider a user profile where the description
@@ -31,23 +33,33 @@ function UserCard({ name, bio }: { name: string; bio: string }) {
       <h2 safe>{name}</h2>
       <p safe>{bio}</p>
     </div>
-  );
+  )
 }
 ```
 
 ## Component children
 
-Adding `safe` to a component suppresses the XSS diagnostic and passes `safe` as a prop.
-The component is then responsible for applying it to its inner native elements. If the
-component does not forward `safe`, use `Html.escapeHtml()` to escape the value before
-passing it.
+The `safe` attribute only applies to native elements. If you pass an unsafe value as a
+child to a component, you must either escape it manually or wrap it in a Fragment with the
+`safe` attribute to tell the plugin it's already escaped. This prevents components from
+accidentally rendering unescaped HTML when they receive dynamic content as children.
 
-```tsx
-// safe is passed as a prop, the component must handle it
-<MyComponent safe>{userInput}</MyComponent>
+```tsx twoslash kita
+let userInput: string = 'User input!'
+import { Fragment, Children, escapeHtml } from '@kitajs/html'
+function MyComponent({ children }: { children: Children }) {
+  return <div>{children}</div>
+}
+let html: JSX.Element
+// ---cut---
+html = (
+  <MyComponent>
+    <Fragment safe>{userInput}</Fragment>
+  </MyComponent>
+)
 
 // Or escape explicitly when the component doesn't support safe
-<MyComponent>{Html.escapeHtml(userInput)}</MyComponent>
+html = <MyComponent>{escapeHtml(userInput)}</MyComponent>
 ```
 
 ## Template literal helper
@@ -56,22 +68,47 @@ The `e` tagged template escapes interpolated values while preserving literal HTM
 them.
 
 ```tsx
-import { e } from '@kitajs/html';
+import { e } from '@kitajs/html'
 
-const html = e`<p>Hello, ${userName}!</p>`;
+const html = e`<p>Hello, ${userName}!</p>`
 ```
 
 ## Suppression conventions
 
 When the XSS detection plugin flags a value that you know is safe, you can suppress the
-warning without adding `safe` to the element.
+warning without adding `safe` to the element, which would escape all children and
+potentially break components.
+
+::: danger
+
+Suppressing warnings is dangerous because it allows unescaped HTML to slip through. Only
+use these techniques when you have a guarantee of safety.
+
+:::
 
 Prefix the variable name with `safe`. The plugin treats any identifier starting with
 `safe` as pre-escaped.
 
-```tsx
-const safeContent = sanitizeElsewhere(rawInput);
-<div>{safeContent}</div>;
+```tsx twoslash kita
+const rawInput = "<script>alert('XSS')</script>" as const
+function sanitizeElsewhere(raw: string): string {
+  // Some external library or custom logic that guarantees safety
+  return raw.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+// ---cut---
+const safeContent = sanitizeElsewhere(rawInput)
+//                                     ^?
+const html = <div>{safeContent}</div>
+//                      ^?
+```
+
+Following the same logic, prefixing a variable with `unsafe` explicitly marks it as
+unescaped and triggers a warning if used in JSX.
+
+```tsx twoslash kita
+// @errors: 88601
+const unsafeContent = 'My safe string' as const
+const html = <div>{unsafeContent}</div>
 ```
 
 Cast the expression to `'safe'` inline. This tells the plugin to skip the check for that
