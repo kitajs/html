@@ -84,5 +84,5 @@ jobs:
           # https://github.com/changesets/changesets/pull/674
           publish:
             pnpm publish -r --access public --tag ${{ steps.publish-tag.outputs.result }}
-            && changeset tag
-          version: changeset version && pnpm install --no-frozen-lockfile
+            && pnpm changeset tag
+          version: pnpm changeset version && pnpm install --no-frozen-lockfile
