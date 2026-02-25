@@ -4,10 +4,10 @@ import {
   Layout as BasicLayout,
   PackageManagerTabs,
   type HomeHeroProps
-} from '@rspress/core/theme-original';
-import { Banner } from './components/Banner.js';
-import HeroInteractive from './components/HeroInteractive.js';
-import './index.css';
+} from '@rspress/core/theme-original'
+import { Banner } from './components/Banner.js'
+import HeroInteractive from './components/HeroInteractive.js'
+import './index.css'
 
 // Custom home layout with package manager tabs
 function HomeLayout() {
@@ -20,22 +20,22 @@ function HomeLayout() {
         >
           <PackageManagerTabs
             command={{
-              npm: 'npm i @kitajs/html @kitajs/ts-html-plugin',
-              yarn: 'yarn add @kitajs/html @kitajs/ts-html-plugin',
-              pnpm: 'pnpm add @kitajs/html @kitajs/ts-html-plugin',
-              bun: 'bun add @kitajs/html @kitajs/ts-html-plugin'
+              npm: 'npm i @kitajs/html@next @kitajs/ts-html-plugin@next',
+              yarn: 'yarn add @kitajs/html@next @kitajs/ts-html-plugin@next',
+              pnpm: 'pnpm add @kitajs/html@next @kitajs/ts-html-plugin@next',
+              bun: 'bun add @kitajs/html@next @kitajs/ts-html-plugin@next'
             }}
           />
         </div>
       }
     />
-  );
+  )
 }
 
 // Custom home hero with interactive component
 const HomeHero = ({ image: _, ...otherProps }: HomeHeroProps) => {
-  return <BasicHomeHero image={<HeroInteractive />} {...otherProps} />;
-};
+  return <BasicHomeHero image={<HeroInteractive />} {...otherProps} />
+}
 
 // Global layout with dismissible pre-release banner
 function Layout() {
@@ -44,9 +44,9 @@ function Layout() {
       <Banner />
       <BasicLayout />
     </>
-  );
+  )
 }
 
 // Export customizations
-export * from '@rspress/core/theme-original';
-export { HomeHero, HomeLayout, Layout };
+export * from '@rspress/core/theme-original'
+export { HomeHero, HomeLayout, Layout }
