@@ -1,4 +1,4 @@
-import { PackageManagerTabs } from '@rspress/core/theme-original';
+import { PackageManagerTabs } from '@rspress/core/theme-original'
 
 # Getting Started
 
@@ -8,10 +8,10 @@ compile time.
 
 <PackageManagerTabs
   command={{
-    npm: 'npm i @kitajs/html @kitajs/ts-html-plugin',
-    yarn: 'yarn add @kitajs/html @kitajs/ts-html-plugin',
-    pnpm: 'pnpm add @kitajs/html @kitajs/ts-html-plugin',
-    bun: 'bun add @kitajs/html @kitajs/ts-html-plugin'
+    npm: 'npm i @kitajs/html@next @kitajs/ts-html-plugin@next',
+    yarn: 'yarn add @kitajs/html@next @kitajs/ts-html-plugin@next',
+    pnpm: 'pnpm add @kitajs/html@next @kitajs/ts-html-plugin@next',
+    bun: 'bun add @kitajs/html@next @kitajs/ts-html-plugin@next'
   }}
 />
 
@@ -61,7 +61,7 @@ Write the following in a `.tsx` file:
 
 ```tsx twoslash
 // @errors: 88601
-console.log(<div>{String.name}</div>);
+console.log(<div>{String.name}</div>)
 ```
 
 Your editor should show an XSS error on `String.name`, because its type is `string` and it
