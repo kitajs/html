@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@typescript/native-preview": "catalog:",
-    "hono": "^4.12.1",
+    "hono": "^4.12.4",
     "tslib": "catalog:",
     "typescript": "catalog:"
   },
