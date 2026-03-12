@@ -55,8 +55,8 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Link build
-        run: pnpm install --frozen-lockfile
+      - name: Update npm to latest
+        run: npm i -g npm@latest
 
       - name: Resolve publish tag
         id: publish-tag
