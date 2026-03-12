@@ -55,9 +55,6 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Update npm to latest
-        run: npm i -g npm@latest
-
       - name: Resolve publish tag
         id: publish-tag
         uses: actions/github-script@v8
@@ -85,3 +82,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
           PUBLISH_TAG: ${{ steps.publish-tag.outputs.result }}
+          PUBLISH_BRANCH: ${{ github.ref_name }}

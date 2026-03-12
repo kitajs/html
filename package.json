@@ -17,7 +17,7 @@
     "build": "turbo run build --filter=\"./packages/*\"",
     "build-all": "turbo run build",
     "changeset": "changeset",
-    "ci-publish": "pnpm publish -r --access public --tag $PUBLISH_TAG && changeset tag",
+    "ci-publish": "pnpm publish -r --access public --tag $PUBLISH_TAG --publish-branch $PUBLISH_BRANCH && changeset tag",
     "ci-version": "changeset version && pnpm install --no-frozen-lockfile",
     "format": "prettier --write .",
     "preinstall": "npx only-allow pnpm",
