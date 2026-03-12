@@ -1,5 +1,30 @@
 # @kitajs/fastify-html-plugin
 
+## 5.0.0-next.0
+
+### Major Changes
+
+- [`cc33bc3`](https://github.com/kitajs/html/commit/cc33bc3798b1f4b6912ace3381406e155dc0b059)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Major overhaul: Rework
+  the entire codebase to improve performance, reliability, and maintainability. This
+  includes porting all code to TypeScript, improving the test suite, and removing
+  deprecated APIs.
+
+### Patch Changes
+
+- Updated dependencies
+  [[`4d6fa0e`](https://github.com/kitajs/html/commit/4d6fa0e9d257fdfc7e49c45a419cb6cdb068cc69),
+  [`bf6d266`](https://github.com/kitajs/html/commit/bf6d266146af7b8ef8693f9351fc10b9412cebe0),
+  [`3a287d5`](https://github.com/kitajs/html/commit/3a287d568ba140d336bd7f32f92113d950011674),
+  [`86301e4`](https://github.com/kitajs/html/commit/86301e4b282b424c7f832d4ec0c925103c910e5d),
+  [`ee567f8`](https://github.com/kitajs/html/commit/ee567f8a3acfabc19a49f229deea7d1d029f7cbc),
+  [`cc33bc3`](https://github.com/kitajs/html/commit/cc33bc3798b1f4b6912ace3381406e155dc0b059),
+  [`2a32081`](https://github.com/kitajs/html/commit/2a32081f0b283d102c8346a1fbce47642c24ab1a),
+  [`2b37245`](https://github.com/kitajs/html/commit/2b3724528f178050975c73628e7226c2fd2341f8),
+  [`cc33bc3`](https://github.com/kitajs/html/commit/cc33bc3798b1f4b6912ace3381406e155dc0b059)]:
+  - @kitajs/html@5.0.0-next.0
+  - @kitajs/ts-html-plugin@5.0.0-next.0
+
 ## 4.2.1
 
 ### Patch Changes

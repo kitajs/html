@@ -1,5 +1,29 @@
 # @kitajs/html
 
+## 5.0.0-next.0
+
+### Major Changes
+
+- [`cc33bc3`](https://github.com/kitajs/html/commit/cc33bc3798b1f4b6912ace3381406e155dc0b059)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Major overhaul: Rework
+  the entire codebase to improve performance, reliability, and maintainability. This
+  includes porting all code to TypeScript, improving the test suite, and removing
+  deprecated APIs.
+
+- [`2b37245`](https://github.com/kitajs/html/commit/2b3724528f178050975c73628e7226c2fd2341f8)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Removed deprecated
+  @kitajs/html/register
+
+### Patch Changes
+
+- [`4d6fa0e`](https://github.com/kitajs/html/commit/4d6fa0e9d257fdfc7e49c45a419cb6cdb068cc69)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Add safe attribute to
+  Fragment component
+
+- [`2a32081`](https://github.com/kitajs/html/commit/2a32081f0b283d102c8346a1fbce47642c24ab1a)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Broather and more
+  reliable test suite
+
 ## 4.2.13
 
 ### Patch Changes

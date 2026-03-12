@@ -19,5 +19,15 @@
     "@kitajs/html": "4.2.13",
     "@kitajs/ts-html-plugin": "4.1.4"
   },
-  "changesets": []
+  "changesets": [
+    "calm-bears-remain",
+    "fix-double-escape-self-closing",
+    "hip-trams-roll",
+    "metal-corners-type",
+    "metal-hairs-juggle",
+    "sharp-wombats-stay",
+    "slimy-wolves-buy",
+    "stale-shrimps-spend",
+    "tender-regions-cough"
+  ]
 }
