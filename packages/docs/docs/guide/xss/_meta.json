@@ -1,8 +1,8 @@
 [
   "safe-attribute",
-  "detection",
   "scanner-cli",
   "safety-rules",
   "error-codes",
-  "why-not-auto-escape"
+  "why-not-auto-escape",
+  "detection"
 ]

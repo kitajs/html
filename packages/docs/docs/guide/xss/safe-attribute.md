@@ -26,7 +26,7 @@ rendering the payload as harmless text.
 Place `safe` on the innermost element that holds the untrusted value. Do not add it to a
 parent wrapper, as that would escape the HTML of child components too.
 
-```tsx
+```tsx twoslash kita
 function UserCard({ name, bio }: { name: string; bio: string }) {
   return (
     <div class="card">
@@ -35,6 +35,8 @@ function UserCard({ name, bio }: { name: string; bio: string }) {
     </div>
   )
 }
+// ---cut-after---
+const html = <UserCard name="Name" bio="Bio" />
 ```
 
 ## Component children
@@ -64,13 +66,16 @@ html = <MyComponent>{escapeHtml(userInput)}</MyComponent>
 
 ## Template literal helper
 
-The `e` tagged template escapes interpolated values while preserving literal HTML around
-them.
+The `e` tagged template is an alias to `escapeHtml()` that you can use as interpolated
+content in template literals. It provides a convenient way to escape dynamic values
+outside of JSX.
 
-```tsx
+```tsx twoslash kita
+const userName = '<script>untrusted()</script>' as const
+// ---cut---
 import { e } from '@kitajs/html'
 
-const html = e`<p>Hello, ${userName}!</p>`
+const html = e`Hello, ${userName}!`
 ```
 
 ## Suppression conventions
@@ -111,15 +116,29 @@ const unsafeContent = 'My safe string' as const
 const html = <div>{unsafeContent}</div>
 ```
 
-Cast the expression to `'safe'` inline. This tells the plugin to skip the check for that
-specific usage.
+::: warning
 
-```tsx
-<div>{content as 'safe'}</div>
+Manual casts and naming conventions are not enforced by the compiler. They rely on
+developer discipline and code reviews to ensure safety. Use them judiciously and document
+the rationale for any exceptions.
+
+:::
+
+Cast the expression to `'safe'` inline. This tells the plugin to skip the check for that
+specific usage and not warn about possible XSS vulnerabilities.
+
+```tsx twoslash kita
+const content: string = '<script>untrusted()</script>'
+// ---cut---
+const html = <div>{content as 'safe'}</div>
 ```
 
 Call `Html.escapeHtml()` directly. The plugin recognizes the return value as escaped.
 
-```tsx
-<div>{Html.escapeHtml(content)}</div>
+```tsx twoslash kita
+const content: string = '<script>untrusted()</script>'
+// ---cut---
+import { Html } from '@kitajs/html'
+
+const html = <div>{Html.escapeHtml(content)}</div>
 ```
