@@ -1,4 +1,4 @@
-import { resolveHtmlStream } from '@kitajs/html/suspense'
+import { resolveHtmlStream, SuspenseRoot } from '@kitajs/html/suspense'
 import { FastifyReply } from 'fastify'
 import { isTagHtml, kAutoDoctype } from './utils'
 
@@ -35,7 +35,7 @@ function handleSyncHtml(htmlStr: string, reply: FastifyReply) {
   reply.type('text/html; charset=utf-8')
 
   // If no suspense component was used, this will not be defined.
-  const requestData = SUSPENSE_ROOT.requests.get(reply.request.id)
+  const requestData = SuspenseRoot.requests.get(reply.request.id)
 
   if (requestData === undefined) {
     return reply

@@ -84,7 +84,7 @@ app.get('/dashboard', (req, res) => {
 ```
 
 No manual stream handling is required. The plugin detects Suspense usage through the
-global `SUSPENSE_ROOT` and calls `resolveHtmlStream` internally.
+`SuspenseRoot` store and calls `resolveHtmlStream` internally.
 
 If you already have your own request id middleware, register it before
 `expressKitaHtml()`. The plugin will reuse that value for both `res.html()` and Suspense

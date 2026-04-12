@@ -1,4 +1,4 @@
-import { resolveHtmlStream } from '@kitajs/html/suspense'
+import { resolveHtmlStream, SuspenseRoot } from '@kitajs/html/suspense'
 import type { Response } from 'express'
 import { isTagHtml, kAutoDoctype } from './utils'
 
@@ -37,7 +37,7 @@ function handleSyncHtml(htmlStr: string, response: Response) {
   }
 
   // If no suspense component was used, this will not be defined.
-  const requestData = SUSPENSE_ROOT.requests.get(response.req.id)
+  const requestData = SuspenseRoot.requests.get(response.req.id)
 
   if (requestData === undefined) {
     // Compute the byte length before setting the content type so invalid runtime values

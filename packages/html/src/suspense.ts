@@ -3,8 +3,8 @@ import type { Children } from './index.js'
 import { contentsToString, contentToString } from './index.js'
 
 /**
- * The `SuspenseRoot` is a global object that holds the state of all the suspense
- * components rendered in the server.
+ * The `SuspenseRoot` is a store that holds the state of all the suspense components
+ * rendered in the server.
  *
  * This was previously a global object called `SUSPENSE_ROOT`, but it was moved out of the
  * global scope to avoid many issues related to global state.

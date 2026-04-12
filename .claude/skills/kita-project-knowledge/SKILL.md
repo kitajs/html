@@ -101,7 +101,7 @@ When you need information about specific topics, read these documentation files:
 
 - **Streaming internals**: `packages/docs/docs/guide/async/streaming-internals.md`
   - How the streaming system works
-  - Global SUSPENSE_ROOT state
+  - `SuspenseRoot` store state
   - Client-side replacement script
 
 - **Error boundaries**: `packages/docs/docs/guide/async/error-boundaries.md`

@@ -69,7 +69,7 @@ function handleHtml<R extends FastifyReply>(htmlStr: string, reply: R): R {
   reply.type('text/html; charset=utf-8')
 
   // 3. Check for Suspense usage
-  const requestData = SUSPENSE_ROOT.requests.get(reply.request.id)
+  const requestData = SuspenseRoot.requests.get(reply.request.id)
 
   if (requestData === undefined) {
     // No Suspense - send as regular response with Content-Length
@@ -85,9 +85,9 @@ function handleHtml<R extends FastifyReply>(htmlStr: string, reply: R): R {
 
 ### Suspense Integration
 
-The plugin automatically detects Suspense usage via the global `SUSPENSE_ROOT`:
+The plugin automatically detects Suspense usage via the `SuspenseRoot` store:
 
-1. When `<Suspense rid={req.id}>` is used, it registers in `SUSPENSE_ROOT.requests`
+1. When `<Suspense rid={req.id}>` is used, it registers in `SuspenseRoot.requests`
 2. The plugin checks for this registration using `reply.request.id`
 3. If found, it streams the response using `resolveHtmlStream()`
 4. No manual stream handling required by the user

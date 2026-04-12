@@ -5,6 +5,7 @@ import { afterEach, describe, expect, test, vi } from 'vitest'
 import { Html, type PropsWithChildren } from '../src/index.js'
 import {
   Suspense,
+  SuspenseRoot,
   renderToStream,
   SuspenseScript as safeSuspenseScript
 } from '../src/suspense.js'
@@ -20,12 +21,12 @@ function Throw(): string {
 
 // Detect leaks of pending promises
 afterEach(() => {
-  expect(SUSPENSE_ROOT.requests.size).toBe(0)
+  expect(SuspenseRoot.requests.size).toBe(0)
 
   // Reset suspense root
-  SUSPENSE_ROOT.autoScript = true
-  SUSPENSE_ROOT.requestCounter = 1
-  SUSPENSE_ROOT.requests.clear()
+  SuspenseRoot.autoScript = true
+  SuspenseRoot.requestCounter = 1
+  SuspenseRoot.requests.clear()
 })
 
 describe('renderToStream', () => {
@@ -217,7 +218,7 @@ describe('Suspense - autoScript', () => {
   })
 
   test('can disable autoScript', async () => {
-    SUSPENSE_ROOT.autoScript = false
+    SuspenseRoot.autoScript = false
 
     const result = await text(
       renderToStream((r) => (
@@ -229,6 +230,7 @@ describe('Suspense - autoScript', () => {
 
     expect(result).not.toContain('id="kita-html-suspense"')
     expect(result).toContain('$KITA_RC(1)') // still has the call
+    SuspenseRoot.autoScript = true // reset for other tests
   })
 
   test('SuspenseScript is valid JavaScript', () => {

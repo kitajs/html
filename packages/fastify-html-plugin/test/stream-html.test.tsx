@@ -5,7 +5,11 @@
 // This was adapted to work inside a fastify route handler.
 
 import Html, { type PropsWithChildren } from '@kitajs/html'
-import { Suspense, SuspenseScript as safeSuspenseScript } from '@kitajs/html/suspense'
+import {
+  Suspense,
+  SuspenseRoot,
+  SuspenseScript as safeSuspenseScript
+} from '@kitajs/html/suspense'
 import fastify from 'fastify'
 import { JSDOM } from 'jsdom'
 import { setTimeout } from 'node:timers/promises'
@@ -20,12 +24,12 @@ async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
 describe('Suspense', () => {
   // Detect leaks of pending promises
   afterEach(() => {
-    expect(SUSPENSE_ROOT.requests.size).toBe(0)
+    expect(SuspenseRoot.requests.size).toBe(0)
 
     // Reset suspense root
-    SUSPENSE_ROOT.autoScript = true
-    SUSPENSE_ROOT.requestCounter = 1
-    SUSPENSE_ROOT.requests.clear()
+    SuspenseRoot.autoScript = true
+    SuspenseRoot.requestCounter = 1
+    SuspenseRoot.requests.clear()
   })
 
   test('Sync without suspense', async () => {
