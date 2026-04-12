@@ -2,25 +2,20 @@ import { PassThrough, Readable } from 'node:stream'
 import type { Children } from './index.js'
 import { contentsToString, contentToString } from './index.js'
 
-declare global {
-  /**
-   * The `SUSPENSE_ROOT` is a global object that holds the state of all the suspense
-   * components rendered in the server.
-   */
-  var SUSPENSE_ROOT: SuspenseRoot
-}
-
 /**
- * The `SUSPENSE_ROOT` is a global object that holds the state of all the suspense
+ * The `SuspenseRoot` is a global object that holds the state of all the suspense
  * components rendered in the server.
+ *
+ * This was previously a global object called `SUSPENSE_ROOT`, but it was moved out of the
+ * global scope to avoid many issues related to global state.
  */
-export type SuspenseRoot = {
+export const SuspenseRoot = {
   /**
    * The requests map is a map of RequestId x SuspenseData containing the stream to write
    * the HTML, the number of running promises and if the first suspense has already
    * resolved.
    */
-  requests: Map<number | string, RequestData>
+  requests: new Map<number | string, RequestData>(),
 
   /**
    * This value is used (and incremented shortly after) when no requestId is provided for
@@ -28,7 +23,7 @@ export type SuspenseRoot = {
    *
    * @default 1
    */
-  requestCounter: number
+  requestCounter: 1,
 
   /**
    * If we should automatically stream {@linkcode SuspenseScript} before the first suspense
@@ -38,7 +33,7 @@ export type SuspenseRoot = {
    *
    * @default true
    */
-  autoScript: boolean
+  autoScript: true
 }
 
 /** Everything a suspense needs to know about its request lifecycle. */
@@ -84,17 +79,6 @@ export interface SuspenseProps {
   catch?: JSX.Element | ((error: unknown) => JSX.Element)
 }
 
-// Avoids double initialization in case this file is not cached by
-// module bundlers.
-if (!globalThis.SUSPENSE_ROOT) {
-  /* global SUSPENSE_ROOT */
-  globalThis.SUSPENSE_ROOT ??= {
-    requests: new Map(),
-    requestCounter: 1,
-    autoScript: true
-  }
-}
-
 function noop() {}
 
 /**
@@ -104,13 +88,13 @@ function noop() {}
  * As this script is the only residue of this package that is actually sent to the client,
  * it's important to keep it as small as possible and also include the license to avoid
  * legal issues.
- */
-// Pending data-sr elements are kept pending if their fallback has not yet been
-// rendered, on each render a try to switch all pending data-sr is attempted until
-// no elements are substituted.
-/**
+ *
+ * Pending data-sr elements are kept pending if their fallback has not yet been rendered,
+ * on each render a try to switch all pending data-sr is attempted until no elements are
+ * substituted.
+ *
  * This script needs to be loaded at the top of the page. You do not need to load it
- * manually, unless {@linkcode SUSPENSE_ROOT.autoScript} is set to false.
+ * manually, unless {@linkcode SuspenseRoot.autoScript} is set to false.
  *
  * @see {@linkcode Suspense}
  */
@@ -191,7 +175,7 @@ export function Suspense(props: SuspenseProps): JSX.Element {
     throw new Error('Suspense requires a `rid` to be specified.')
   }
 
-  let data = SUSPENSE_ROOT.requests.get(props.rid)
+  let data = SuspenseRoot.requests.get(props.rid)
 
   if (!data) {
     // Creating the request data lazily allows
@@ -203,7 +187,7 @@ export function Suspense(props: SuspenseProps): JSX.Element {
       sent: false
     }
 
-    SUSPENSE_ROOT.requests.set(props.rid, data)
+    SuspenseRoot.requests.set(props.rid, data)
   }
 
   // Gets the current run number for this request
@@ -253,7 +237,7 @@ export function Suspense(props: SuspenseProps): JSX.Element {
       }
 
       // Removes the current state
-      SUSPENSE_ROOT.requests.delete(props.rid)
+      SuspenseRoot.requests.delete(props.rid)
     })
 
   // Always will be a single children because multiple
@@ -277,7 +261,7 @@ export function Suspense(props: SuspenseProps): JSX.Element {
   function writeStreamTemplate(result: string) {
     if (
       // Ensures the stream is still open (.closed may not be already defined at this point)
-      !SUSPENSE_ROOT.requests.has(props.rid) ||
+      !SuspenseRoot.requests.has(props.rid) ||
       // just to typecheck
       !data ||
       // Stream was already closed/cleared out.
@@ -289,7 +273,7 @@ export function Suspense(props: SuspenseProps): JSX.Element {
     // Writes the suspense script if its the first
     // suspense component in this request data. This way following
     // templates+scripts can be executed
-    if (SUSPENSE_ROOT.autoScript && data.sent === false) {
+    if (SuspenseRoot.autoScript && data.sent === false) {
       data.stream.push(SuspenseScript)
       data.sent = true
     }
@@ -334,8 +318,8 @@ export function renderToStream(
   rid?: number | string
 ): Readable {
   if (!rid) {
-    rid = SUSPENSE_ROOT.requestCounter++
-  } else if (SUSPENSE_ROOT.requests.has(rid)) {
+    rid = SuspenseRoot.requestCounter++
+  } else if (SuspenseRoot.requests.has(rid)) {
     // Ensures the request id is unique within the current request
     // error here to keep original stack trace
     const error = new Error(`The provided Request Id is already in use: ${rid}.`)
@@ -354,7 +338,7 @@ export function renderToStream(
       html = html(rid)
     } catch (error) {
       // Avoids memory leaks by removing the request data
-      SUSPENSE_ROOT.requests.delete(rid)
+      SuspenseRoot.requests.delete(rid)
 
       // returns errored stream to avoid throws
       return new Readable({
@@ -367,7 +351,7 @@ export function renderToStream(
   }
 
   // If no suspense component was used, this will not be defined.
-  const requestData = SUSPENSE_ROOT.requests.get(rid)
+  const requestData = SuspenseRoot.requests.get(rid)
 
   // No suspense was used, just return the HTML as a stream
   if (!requestData) {
@@ -402,7 +386,7 @@ export function renderToStream(
  *
  * ```tsx
  * const html = <RootLayout rid={rid} />
- * const requestData = SUSPENSE_ROOT.requests.get(rid);
+ * const requestData = SuspenseRoot.requests.get(rid);
  *
  * if(!requestData) {
  *   return html;
