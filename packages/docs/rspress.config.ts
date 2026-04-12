@@ -68,6 +68,8 @@ export default defineConfig({
     pluginTwoslash({
       twoslashOptions: {
         compilerOptions: {
+          // Twoslash still uses baseUrl, need to wait for a ts6 ready release to remove this flag.
+          ignoreDeprecations: '6.0',
           jsx: ts.JsxEmit.ReactJSX,
           jsxImportSource: '@kitajs/html'
         },
