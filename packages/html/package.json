@@ -38,7 +38,7 @@
     "test-types": "tsgo --noEmit"
   },
   "dependencies": {
-    "csstype": "^3.2.3"
+    "csstype": "3.2.3"
   },
   "devDependencies": {
     "@types/node": "catalog:",

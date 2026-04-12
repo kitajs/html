@@ -1,13 +1,15 @@
 {
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.tsserver.maxTsServerMemory": 4096,
+  "js/ts.tsdk.path": "node_modules/typrscript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "js/ts.tsserver.maxMemory": 4096,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "biome.enabled": false,
   "workbench.colorCustomizations": {
     "statusBar.background": "#bd695e",
     "statusBar.foreground": "#15202b"
-  }
+  },
+  "cSpell.words": ["kita"]
 }

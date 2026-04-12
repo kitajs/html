@@ -238,7 +238,7 @@ export function Suspense(props: SuspenseProps): JSX.Element {
       return html.then(writeStreamTemplate)
     })
     .catch(function writeFatalError(error) {
-      data!.stream.emit('error', error)
+      data.stream.emit('error', error)
     })
     .finally(function clearRequestData() {
       // reduces current suspense id
@@ -262,11 +262,11 @@ export function Suspense(props: SuspenseProps): JSX.Element {
 
   // Keeps string return type
   if (typeof fallback === 'string') {
-    return '<div id="B:' + run + '" data-sf>' + fallback + '</div>'
+    return `<div id="B:${run}" data-sf>${fallback}</div>`
   }
 
   return fallback.then(function resolveCallback(resolved) {
-    return '<div id="B:' + run + '" data-sf>' + resolved + '</div>'
+    return `<div id="B:${run}" data-sf>${resolved}</div>`
   })
 
   /**

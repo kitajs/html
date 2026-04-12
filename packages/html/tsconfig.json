@@ -5,6 +5,8 @@
     "jsxImportSource": "self-html",
     "outDir": "./dist",
     "skipLibCheck": false,
+    "rootDir": "./src",
+    "types": ["node"],
     // Redirect self-html imports to source files so TypeScript doesn't follow
     // package.json exports into dist/, which would cause duplicate JSX namespace
     // declarations alongside the ones in src/. `exclude: ["dist"]` cannot help

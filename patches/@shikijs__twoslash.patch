@@ -1,0 +1,13 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 1720bad9ba3d875f95cdfcba4e3190a44d7a1145..86850cfb6f9d60853c3e0fde9a76c4af1259e09f 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -9,7 +9,7 @@ import { createTwoslasher } from "twoslash";
+ function transformerTwoslash(options = {}) {
+ 	return createTransformerFactory(createTwoslasher({
+ 		cache: options?.cache,
+-		compilerOptions: { moduleResolution: 100 }
++		compilerOptions: { moduleResolution: 100, tsModule: options?.twoslashOptions?.tsModule }
+ 	}), rendererRich(options.rendererRich))(options);
+ }
+ 

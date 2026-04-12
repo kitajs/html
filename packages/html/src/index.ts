@@ -69,6 +69,7 @@ export function toKebabCase(this: void, camel: string): string {
  * @param values Values to interpolate.
  * @returns The escaped string.
  */
+
 export function escape(
   this: void,
   strings: TemplateStringsArray,
@@ -103,7 +104,7 @@ export function escape(
  * @param value The value to escape.
  * @returns The escaped string.
  */
-export let escapeHtml: (this: void, value: any) => string = function (value) {
+export let escapeHtml: (this: void, value: any) => string = (value) => {
   if (typeof value !== 'string') {
     value = value.toString()
   }
