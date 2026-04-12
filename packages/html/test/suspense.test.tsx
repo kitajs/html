@@ -213,7 +213,7 @@ describe('Suspense - autoScript', () => {
       ))
     )
 
-    expect(result).toContain('id="kita-html-suspense"')
+    expect(result).toContain('<script>')
     expect(result).toContain('$KITA_RC')
   })
 
@@ -228,7 +228,7 @@ describe('Suspense - autoScript', () => {
       ))
     )
 
-    expect(result).not.toContain('id="kita-html-suspense"')
+    expect(result).not.toContain('<script>')
     expect(result).toContain('$KITA_RC(1)') // still has the call
     SuspenseRoot.autoScript = true // reset for other tests
   })

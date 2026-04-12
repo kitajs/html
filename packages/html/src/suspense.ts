@@ -82,8 +82,8 @@ export interface SuspenseProps {
 function noop() {}
 
 /**
- * Simple IE11 compatible replace child scripts to replace the template streamed by the
- * server.
+ * Small client-side helper used to replace suspense fallbacks with streamed template
+ * content.
  *
  * As this script is the only residue of this package that is actually sent to the client,
  * it's important to keep it as small as possible and also include the license to avoid
@@ -93,13 +93,14 @@ function noop() {}
  * on each render a try to switch all pending data-sr is attempted until no elements are
  * substituted.
  *
- * This script needs to be loaded at the top of the page. You do not need to load it
- * manually, unless {@linkcode SuspenseRoot.autoScript} is set to false.
+ * This script must be loaded before streamed suspense replacement chunks execute. You do
+ * not need to load it manually unless {@linkcode SuspenseRoot.autoScript} is set to
+ * false.
  *
  * @see {@linkcode Suspense}
  */
 export const SuspenseScript = /* html */ `
-      <script id="kita-html-suspense">
+      <script>
         /*! MIT License https://html.kitajs.org */
         function $KITA_RC(i){
           // simple aliases
@@ -204,7 +205,7 @@ export function Suspense(props: SuspenseProps): JSX.Element {
         throw error
       }
 
-      let html
+      let html: JSX.Element
 
       // Unwraps error handler
       if (typeof props.catch === 'function') {
