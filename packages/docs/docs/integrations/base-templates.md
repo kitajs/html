@@ -74,8 +74,9 @@ const page = (
 )
 ```
 
-## Fastify auto-doctype
+## Framework auto-doctype
 
-When using `@kitajs/fastify-html-plugin`, the plugin automatically prepends
-`<!doctype html>` to responses that start with an `<html>` tag. This means you can omit
-the manual `{'<!doctype html>'}` string in your layout when using Fastify.
+When using `@kitajs/fastify-html-plugin` or `@kitajs/express-html-plugin`, the plugin
+automatically prepends `<!doctype html>` to responses that start with an `<html>` tag.
+This means you can omit the manual `{'<!doctype html>'}` string in your layout when using
+either integration.

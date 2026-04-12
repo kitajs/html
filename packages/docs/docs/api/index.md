@@ -9,6 +9,7 @@ automatically on each build.
 
 - [@kitajs/html](/api/html/)
 - [@kitajs/fastify-html-plugin](/api/fastify/)
+- [@kitajs/express-html-plugin](/api/express/)
 
 ## XSS tooling
 

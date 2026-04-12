@@ -5,3 +5,6 @@ docs/api/html/**/**/*.md
 docs/api/fastify/**/*.md
 docs/api/fastify/**/**/*.md
 !docs/api/fastify/_meta.json
+docs/api/express/**/*.md
+docs/api/express/**/**/*.md
+!docs/api/express/_meta.json

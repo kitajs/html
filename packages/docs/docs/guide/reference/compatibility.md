@@ -22,10 +22,10 @@ in `tsconfig.json`.
 
 ## Frameworks
 
-Official [framework integrations](/integrations/overview) exist for Fastify (4.x and 5.x)
-and Elysia. Kita Html also works with any framework that accepts strings: Express, Hono,
-Bun's built-in server, AdonisJS, and others. Send the string or stream directly in the
-response body.
+Official [framework integrations](/integrations/overview) exist for Fastify (4.x and 5.x),
+Express (4.x and 5.x), and Elysia. Kita Html also works with any framework that accepts
+strings: Hono, Bun's built-in server, AdonisJS, and others. Send the string or stream
+directly in the response body.
 
 ## Editors
 

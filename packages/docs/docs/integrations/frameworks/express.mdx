@@ -1,0 +1,147 @@
+import { PackageManagerTabs } from '@rspress/core/theme-original'
+
+# Express
+
+`@kitajs/express-html-plugin` adds a `res.html()` method to Express that handles content
+type headers, Suspense streaming, automatic doctype injection, and request ids for
+Suspense.
+
+## Setup
+
+:::danger XSS Protection Required
+
+You must install and configure `@kitajs/ts-html-plugin` before using this plugin to avoid
+XSS vulnerabilities. See the [Getting Started](/guide/getting-started) guide for complete
+setup instructions including TypeScript configuration and XSS detection.
+
+:::
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm i @kitajs/express-html-plugin express',
+    yarn: 'yarn add @kitajs/express-html-plugin express',
+    pnpm: 'pnpm add @kitajs/express-html-plugin express',
+    bun: 'bun add @kitajs/express-html-plugin express'
+  }}
+/>
+
+Register the middleware before your routes:
+
+```tsx
+import express from 'express'
+import { expressKitaHtml } from '@kitajs/express-html-plugin'
+
+const app = express()
+app.use(expressKitaHtml())
+```
+
+## Sending HTML
+
+Use `res.html()` with any JSX expression. The plugin sets the `Content-Type` header to
+`text/html; charset=utf-8`.
+
+```tsx
+app.get('/', (req, res) => {
+  res.html(<div>Hello World</div>)
+})
+```
+
+For async components, `res.html()` accepts promises and awaits them before sending.
+
+```tsx
+app.get('/profile', (req, res) => {
+  res.html(<UserProfile id={req.params.id} />)
+})
+```
+
+For synchronous responses, the plugin calculates and sets the `Content-Length` header
+automatically. For Suspense streaming, the response uses chunked transfer encoding without
+a `Content-Length` header.
+
+## Suspense streaming
+
+When the JSX tree contains `Suspense` components, the plugin automatically switches from a
+buffered response to a chunked stream.
+
+The middleware preserves any existing `req.id`. If another middleware already sets a
+request id, this plugin uses that exact value and does not overwrite it.
+
+When `req.id` is missing, the middleware generates one as `req-1`, `req-2`, `req-3`, and
+so on, with the numeric part encoded in base 36.
+
+Use the final `req.id` value as the Suspense `rid`.
+
+```tsx
+import { Suspense } from '@kitajs/html/suspense'
+
+app.get('/dashboard', (req, res) => {
+  res.html(
+    <Suspense rid={req.id} fallback={<div>Loading...</div>}>
+      <AsyncDashboard />
+    </Suspense>
+  )
+})
+```
+
+No manual stream handling is required. The plugin detects Suspense usage through the
+global `SUSPENSE_ROOT` and calls `resolveHtmlStream` internally.
+
+If you already have your own request id middleware, register it before
+`expressKitaHtml()`. The plugin will reuse that value for both `res.html()` and Suspense
+stream detection.
+
+To disable the built-in request id assignment completely, pass `disableRequestId: true`.
+When you do this, your own middleware must populate `req.id` before any route that uses
+`Suspense rid={req.id}`.
+
+```tsx
+app.use(assignCustomRequestId())
+app.use(expressKitaHtml({ disableRequestId: true }))
+```
+
+## Error handling
+
+The plugin supports `ErrorBoundary` components and `Suspense`'s `catch` prop for async
+errors. Wrap async content in one of those boundaries to handle failures gracefully.
+
+```tsx
+import { ErrorBoundary } from '@kitajs/html/error-boundary'
+import { Suspense } from '@kitajs/html/suspense'
+
+app.get('/dashboard', (req, res) => {
+  res.html(
+    <ErrorBoundary catch={(error) => <div>Error: {String(error)}</div>}>
+      <Suspense rid={req.id} fallback={<div>Loading...</div>}>
+        <AsyncDashboard />
+      </Suspense>
+    </ErrorBoundary>
+  )
+})
+```
+
+See the [Error Boundaries](/guide/async/error-boundaries) guide for details on error
+handling patterns.
+
+## Auto-doctype
+
+By default, the plugin prepends `<!doctype html>` to responses that start with an `<html>`
+tag. To disable this globally:
+
+```tsx
+app.use(expressKitaHtml({ autoDoctype: false }))
+```
+
+To disable it for a single response, use the exported `kAutoDoctype` symbol:
+
+```tsx
+import { kAutoDoctype } from '@kitajs/express-html-plugin'
+
+app.get('/fragment', (req, res) => {
+  res[kAutoDoctype] = false
+  res.html(<html lang="en" />)
+})
+```
+
+## Compatibility
+
+The plugin works with Express 4.x and 5.x.

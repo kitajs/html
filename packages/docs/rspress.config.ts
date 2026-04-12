@@ -112,6 +112,11 @@ export default defineConfig({
       outDir: 'api/fastify',
       setup: configureTypeDoc('/api/fastify/')
     }),
+    namedTypeDoc('typedoc-express', {
+      entryPoints: [path.join(__dirname, '../express-html-plugin/src/index.ts')],
+      outDir: 'api/express',
+      setup: configureTypeDoc('/api/express/')
+    }),
     pluginClientRedirects({
       redirects: [
         {
