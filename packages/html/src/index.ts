@@ -611,11 +611,7 @@ export function Fragment(
   return contentsToString([props.children], props.safe)
 }
 
-/**
- * Here for interop with `preact` and many build systems.
- *
- * @internal
- */
+/** @deprecated Here for interop with `preact` and many build systems. */
 export const h: typeof createElement = createElement
 
 /**
@@ -637,6 +633,8 @@ export const e: typeof escape = escape
  * modern `jsx: "react-jsx"` transform, import individual functions directly from
  * `@kitajs/html` instead.
  *
+ * @deprecated This namespace export is only provided for interop with the legacy `jsx:
+ *   "react"`.
  * @see https://github.com/kitajs/html
  * @see https://www.npmjs.com/package/@kitajs/html
  */
