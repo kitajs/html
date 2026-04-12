@@ -9,18 +9,18 @@ Import `ErrorBoundary` from `@kitajs/html/error-boundary` and wrap async compone
 `catch` prop accepts a JSX element or a function that receives the error.
 
 ```tsx
-import { ErrorBoundary } from '@kitajs/html/error-boundary';
+import { ErrorBoundary } from '@kitajs/html/error-boundary'
 
 async function UserProfile({ id }: { id: string }) {
-  const user = await db.getUser(id); // may reject
-  return <div safe>{user.name}</div>;
+  const user = await db.getUser(id) // may reject
+  return <div safe>{user.name}</div>
 }
 
 const html = await (
   <ErrorBoundary catch={(err) => <div>Error: {String(err)}</div>}>
     <UserProfile id="123" />
   </ErrorBoundary>
-);
+)
 ```
 
 If `UserProfile` throws, the boundary renders the catch fallback. If it succeeds, the
@@ -35,10 +35,10 @@ standard try/catch.
 ```tsx
 function SyncComponent() {
   try {
-    const data = riskyOperation();
-    return <div>{data}</div>;
+    const data = riskyOperation()
+    return <div>{data}</div>
   } catch (err) {
-    return <div>Error: {String(err)}</div>;
+    return <div>Error: {String(err)}</div>
   }
 }
 ```

@@ -1,14 +1,14 @@
-import { setTimeout } from 'timers/promises';
-import { describe, expect, it } from 'vitest';
-import { ErrorBoundary, HtmlTimeout } from '../src/error-boundary.js';
+import { setTimeout } from 'timers/promises'
+import { describe, expect, it } from 'vitest'
+import { ErrorBoundary, HtmlTimeout } from '../src/error-boundary.js'
 
 describe('Error Boundary', () => {
   it('should render error boundary', async () => {
     try {
-      await (<div>{Promise.reject(<div>2</div>)}</div>);
-      throw new Error('should throw');
+      await (<div>{Promise.reject(<div>2</div>)}</div>)
+      throw new Error('should throw')
     } catch (error) {
-      expect(error).toMatchInlineSnapshot(`"<div>2</div>"`);
+      expect(error).toMatchInlineSnapshot(`"<div>2</div>"`)
     }
 
     try {
@@ -18,13 +18,13 @@ describe('Error Boundary', () => {
             {Promise.reject(<div>2</div>)}
           </ErrorBoundary>
         </>
-      );
+      )
 
-      expect(html).toMatchInlineSnapshot(`"<div>1</div>"`);
+      expect(html).toMatchInlineSnapshot(`"<div>1</div>"`)
     } catch {
-      throw new Error('should not throw');
+      throw new Error('should not throw')
     }
-  });
+  })
 
   it('should render error boundary as function', async () => {
     const html = await (
@@ -33,10 +33,10 @@ describe('Error Boundary', () => {
           {Promise.reject('my error')}
         </ErrorBoundary>
       </>
-    );
+    )
 
-    expect(html).toMatchInlineSnapshot(`"<div>my error</div>"`);
-  });
+    expect(html).toMatchInlineSnapshot(`"<div>my error</div>"`)
+  })
 
   it('Catches timed out promise', async () => {
     const html = await (
@@ -45,10 +45,10 @@ describe('Error Boundary', () => {
           {setTimeout(100, <div>2</div>)}
         </ErrorBoundary>
       </>
-    );
+    )
 
-    expect(html).toMatchInlineSnapshot(`"<div>1</div>"`);
-  });
+    expect(html).toMatchInlineSnapshot(`"<div>1</div>"`)
+  })
 
   it('Renders non timed out promise', async () => {
     const html = await (
@@ -57,28 +57,28 @@ describe('Error Boundary', () => {
           {setTimeout(10, <div>2</div>)}
         </ErrorBoundary>
       </>
-    );
+    )
 
-    expect(html).toMatchInlineSnapshot(`"<div>2</div>"`);
-  });
+    expect(html).toMatchInlineSnapshot(`"<div>2</div>"`)
+  })
 
   it('Catches timed out promise', async () => {
     const html = await (
       <>
         <ErrorBoundary
           catch={(err) => {
-            expect(err instanceof HtmlTimeout).toBeTruthy();
-            return <div>1</div>;
+            expect(err instanceof HtmlTimeout).toBeTruthy()
+            return <div>1</div>
           }}
           timeout={10}
         >
           {setTimeout(100, <div>2</div>)}
         </ErrorBoundary>
       </>
-    );
+    )
 
-    expect(html).toMatchInlineSnapshot(`"<div>1</div>"`);
-  });
+    expect(html).toMatchInlineSnapshot(`"<div>1</div>"`)
+  })
 
   it('doesnt do nothing on sync children', () => {
     const html = (
@@ -87,8 +87,8 @@ describe('Error Boundary', () => {
           <div>2</div>
         </ErrorBoundary>
       </>
-    );
+    )
 
-    expect(html).toMatchInlineSnapshot(`"<div>2</div>"`);
-  });
-});
+    expect(html).toMatchInlineSnapshot(`"<div>2</div>"`)
+  })
+})

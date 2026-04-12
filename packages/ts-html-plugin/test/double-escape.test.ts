@@ -1,6 +1,6 @@
-import { expect, it } from 'vitest';
-import { DoubleEscape } from '../src/errors';
-import { TSLangServer } from './util/lang-server';
+import { expect, it } from 'vitest'
+import { DoubleEscape } from '../src/errors'
+import { TSLangServer } from './util/lang-server'
 
 /**
  * Comprehensive test for TS88602 DoubleEscape error detection.
@@ -14,7 +14,7 @@ import { TSLangServer } from './util/lang-server';
  * This ensures that HTML content is not double-escaped, which would corrupt the markup.
  */
 it('Avoid escaping twice - comprehensive test', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname)
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     declare function UserBadge(props?: { url?: string, children?: JSX.Element }): JSX.Element;
@@ -71,7 +71,7 @@ it('Avoid escaping twice - comprehensive test', async () => {
         </div>
       </>
     );
-`;
+`
 
   expect(diagnostics.body).toEqual([
     // Direct children - native element with opening/closing tags
@@ -162,5 +162,5 @@ it('Avoid escaping twice - comprehensive test', async () => {
       code: DoubleEscape.code,
       category: 'error'
     }
-  ]);
-});
+  ])
+})

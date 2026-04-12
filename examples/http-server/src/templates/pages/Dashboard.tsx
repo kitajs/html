@@ -1,5 +1,5 @@
-import { Suspense } from '@kitajs/html/suspense';
-import { setTimeout } from 'node:timers/promises';
+import { Suspense } from '@kitajs/html/suspense'
+import { setTimeout } from 'node:timers/promises'
 import {
   Card,
   ListItem,
@@ -8,37 +8,37 @@ import {
   ProgressSkeleton,
   StatCard,
   StatSkeleton
-} from '../components';
-import { Layout } from '../Layout';
+} from '../components'
+import { Layout } from '../Layout'
 
 // Random delay helper (base +/- variance)
 const randomDelay = (base: number, variance = 300) =>
-  base + Math.floor(Math.random() * variance * 2) - variance;
+  base + Math.floor(Math.random() * variance * 2) - variance
 
 // Individual stats with randomized timing
 async function fetchRevenue() {
-  await setTimeout(randomDelay(400, 200));
-  return { label: 'Revenue', value: '$12.4k', change: '+14%', positive: true };
+  await setTimeout(randomDelay(400, 200))
+  return { label: 'Revenue', value: '$12.4k', change: '+14%', positive: true }
 }
 
 async function fetchUsers() {
-  await setTimeout(randomDelay(500, 250));
-  return { label: 'Users', value: '1,429', change: '+7%', positive: true };
+  await setTimeout(randomDelay(500, 250))
+  return { label: 'Users', value: '1,429', change: '+7%', positive: true }
 }
 
 async function fetchOrders() {
-  await setTimeout(randomDelay(600, 300));
-  return { label: 'Orders', value: '284', change: '-3%', positive: false };
+  await setTimeout(randomDelay(600, 300))
+  return { label: 'Orders', value: '284', change: '-3%', positive: false }
 }
 
 async function fetchConversion() {
-  await setTimeout(randomDelay(700, 350));
-  return { label: 'Conversion', value: '3.2%', change: '+0.8%', positive: true };
+  await setTimeout(randomDelay(700, 350))
+  return { label: 'Conversion', value: '3.2%', change: '+0.8%', positive: true }
 }
 
 // Grouped data fetching with randomized timing
 async function fetchRecentActivity() {
-  await setTimeout(randomDelay(1400, 400));
+  await setTimeout(randomDelay(1400, 400))
   return [
     {
       primary: 'New order #1234',
@@ -58,60 +58,60 @@ async function fetchRecentActivity() {
       badge: '$149',
       badgeColor: 'bg-emerald-500/20 text-emerald-400'
     }
-  ];
+  ]
 }
 
 async function fetchSystemStatus() {
-  await setTimeout(randomDelay(1600, 400));
+  await setTimeout(randomDelay(1600, 400))
   return [
     { label: 'CPU', value: 45 },
     { label: 'Memory', value: 72 },
     { label: 'Storage', value: 28 }
-  ];
+  ]
 }
 
 // Individual stat components
 async function RevenueStat() {
-  const data = await fetchRevenue();
-  return <StatCard {...data} />;
+  const data = await fetchRevenue()
+  return <StatCard {...data} />
 }
 
 async function UsersStat() {
-  const data = await fetchUsers();
-  return <StatCard {...data} />;
+  const data = await fetchUsers()
+  return <StatCard {...data} />
 }
 
 async function OrdersStat() {
-  const data = await fetchOrders();
-  return <StatCard {...data} />;
+  const data = await fetchOrders()
+  return <StatCard {...data} />
 }
 
 async function ConversionStat() {
-  const data = await fetchConversion();
-  return <StatCard {...data} />;
+  const data = await fetchConversion()
+  return <StatCard {...data} />
 }
 
 // Grouped section components
 async function ActivitySection() {
-  const items = await fetchRecentActivity();
+  const items = await fetchRecentActivity()
   return (
     <Card title="Recent Activity" icon="⚡">
       {items.map((item) => (
         <ListItem {...item} />
       ))}
     </Card>
-  );
+  )
 }
 
 async function SystemSection() {
-  const metrics = await fetchSystemStatus();
+  const metrics = await fetchSystemStatus()
   return (
     <Card title="System Status" icon="📊">
       {metrics.map((m) => (
         <Progress label={m.label} value={m.value} />
       ))}
     </Card>
-  );
+  )
 }
 
 // Main Dashboard
@@ -209,5 +209,5 @@ export function Dashboard(rid: number | string) {
         </footer>
       </div>
     </Layout>
-  );
+  )
 }

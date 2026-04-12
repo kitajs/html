@@ -28,10 +28,10 @@ const plugin: FastifyPluginCallback<Partial<FastifyKitaHtmlOptions>> = function 
   opts,
   next
 ) {
-  fastify.decorateReply(kAutoDoctype, opts.autoDoctype ?? true);
-  fastify.decorateReply('html', html);
-  return next();
-};
+  fastify.decorateReply(kAutoDoctype, opts.autoDoctype ?? true)
+  fastify.decorateReply('html', html)
+  return next()
+}
 ```
 
 The plugin:
@@ -48,9 +48,9 @@ function html<H extends JSX.Element>(
   htmlStr: H
 ): H extends Promise<string> ? Promise<void> : void {
   if (typeof htmlStr === 'string') {
-    return handleHtml(htmlStr, this);
+    return handleHtml(htmlStr, this)
   }
-  return handleAsyncHtml(htmlStr, this);
+  return handleAsyncHtml(htmlStr, this)
 }
 ```
 
@@ -62,24 +62,24 @@ Handles both sync and async JSX elements with proper TypeScript inference.
 function handleHtml<R extends FastifyReply>(htmlStr: string, reply: R): R {
   // 1. Auto-prepend doctype for <html> tags
   if (reply[kAutoDoctype] && isTagHtml(htmlStr)) {
-    htmlStr = `<!doctype html>${htmlStr}`;
+    htmlStr = `<!doctype html>${htmlStr}`
   }
 
   // 2. Set content type
-  reply.type('text/html; charset=utf-8');
+  reply.type('text/html; charset=utf-8')
 
   // 3. Check for Suspense usage
-  const requestData = SUSPENSE_ROOT.requests.get(reply.request.id);
+  const requestData = SUSPENSE_ROOT.requests.get(reply.request.id)
 
   if (requestData === undefined) {
     // No Suspense - send as regular response with Content-Length
     return reply
       .header('content-length', Buffer.byteLength(htmlStr, 'utf-8'))
-      .send(htmlStr);
+      .send(htmlStr)
   }
 
   // Suspense detected - stream the response
-  return reply.send(resolveHtmlStream(htmlStr, requestData));
+  return reply.send(resolveHtmlStream(htmlStr, requestData))
 }
 ```
 
@@ -101,7 +101,7 @@ export interface FastifyKitaHtmlOptions {
    *
    * @default true
    */
-  autoDoctype: boolean;
+  autoDoctype: boolean
 }
 ```
 
@@ -119,11 +119,11 @@ The plugin extends Fastify's types:
 ```typescript
 declare module 'fastify' {
   interface FastifyReply {
-    [kAutoDoctype]: boolean;
+    [kAutoDoctype]: boolean
     html<H extends JSX.Element>(
       this: this,
       html: H
-    ): H extends Promise<string> ? Promise<void> : void;
+    ): H extends Promise<string> ? Promise<void> : void
   }
 }
 ```
@@ -134,10 +134,10 @@ Multiple export styles are supported for maximum compatibility:
 
 ```typescript
 // Named export
-export const fastifyKitaHtml = Object.assign(plugin_, { kAutoDoctype });
+export const fastifyKitaHtml = Object.assign(plugin_, { kAutoDoctype })
 
 // Default export
-export default fastifyKitaHtml;
+export default fastifyKitaHtml
 
 // Usage examples:
 // const fastifyKitaHtml = require('@kitajs/fastify-html-plugin')
@@ -225,7 +225,7 @@ app.register(fastifyKitaHtml, { autoDoctype: false });
 ### HTML Tag Detection
 
 ```typescript
-const isTagHtml = RegExp.prototype.test.bind(/^\s*<html/i);
+const isTagHtml = RegExp.prototype.test.bind(/^\s*<html/i)
 ```
 
 Uses bound regex test for performance - no new function allocation per call.
@@ -248,7 +248,7 @@ This pattern allows V8 to optimize the sync path without async function overhead
 
 ```typescript
 // Without Suspense: set Content-Length for proper HTTP
-reply.header('content-length', Buffer.byteLength(htmlStr, 'utf-8'));
+reply.header('content-length', Buffer.byteLength(htmlStr, 'utf-8'))
 
 // With Suspense: omit Content-Length (chunked transfer)
 // Per RFC 7230 section 3.3.3, connection is closed after response

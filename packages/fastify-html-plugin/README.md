@@ -63,12 +63,12 @@ npm install @kitajs/fastify-html-plugin
 ```
 
 ```ts
-import kitaHtmlPlugin from '@kitajs/fastify-html-plugin';
-import fastify from 'fastify';
+import kitaHtmlPlugin from '@kitajs/fastify-html-plugin'
+import fastify from 'fastify'
 
-const app = fastify();
+const app = fastify()
 
-app.register(kitaHtmlPlugin);
+app.register(kitaHtmlPlugin)
 ```
 
 <br />
@@ -154,7 +154,7 @@ app
         <MyAsyncComponent />
       </Suspense>
     )
-  );
+  )
 ```
 
 <br />

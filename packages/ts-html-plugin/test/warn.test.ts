@@ -1,9 +1,9 @@
-import { expect, it } from 'vitest';
-import { UnusedSafe } from '../src/errors';
-import { TSLangServer } from './util/lang-server';
+import { expect, it } from 'vitest'
+import { UnusedSafe } from '../src/errors'
+import { TSLangServer } from './util/lang-server'
 
 it('Warn on unused `safe` tags', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname)
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
@@ -17,7 +17,7 @@ it('Warn on unused `safe` tags', async () => {
         <div safe></div>
       </>
     );
-`;
+`
 
   expect(diagnostics.body).toEqual([
     {
@@ -55,5 +55,5 @@ it('Warn on unused `safe` tags', async () => {
       code: UnusedSafe.code,
       category: 'warning'
     }
-  ]);
-});
+  ])
+})

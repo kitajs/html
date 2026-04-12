@@ -1,7 +1,7 @@
-import type { Children } from './index.js';
-import { jsx } from './jsx-runtime.js';
+import type { Children } from './index.js'
+import { jsx } from './jsx-runtime.js'
 
-export { Fragment, jsx, jsxs } from './jsx-runtime.js';
+export { Fragment, jsx, jsxs } from './jsx-runtime.js'
 
 /**
  * Generates a html string from an attribute name of component and it's props.
@@ -17,5 +17,5 @@ export function jsxDEV(
   name: string | Function,
   attributes: { children?: Children; [k: string]: any }
 ): JSX.Element {
-  return jsx(name, attributes);
+  return jsx(name, attributes)
 }

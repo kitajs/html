@@ -4,46 +4,46 @@
 //
 // This was adapted to work inside a fastify route handler.
 
-import Html, { type PropsWithChildren } from '@kitajs/html';
-import { Suspense, SuspenseScript as safeSuspenseScript } from '@kitajs/html/suspense';
-import fastify from 'fastify';
-import { JSDOM } from 'jsdom';
-import { setTimeout } from 'node:timers/promises';
-import { afterEach, describe, expect, test } from 'vitest';
-import { fastifyKitaHtml } from '../src';
+import Html, { type PropsWithChildren } from '@kitajs/html'
+import { Suspense, SuspenseScript as safeSuspenseScript } from '@kitajs/html/suspense'
+import fastify from 'fastify'
+import { JSDOM } from 'jsdom'
+import { setTimeout } from 'node:timers/promises'
+import { afterEach, describe, expect, test } from 'vitest'
+import { fastifyKitaHtml } from '../src'
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
-  await setTimeout(ms * 50);
-  return Html.contentsToString([children || String(ms)]);
+  await setTimeout(ms * 50)
+  return Html.contentsToString([children || String(ms)])
 }
 
 describe('Suspense', () => {
   // Detect leaks of pending promises
   afterEach(() => {
-    expect(SUSPENSE_ROOT.requests.size).toBe(0);
+    expect(SUSPENSE_ROOT.requests.size).toBe(0)
 
     // Reset suspense root
-    SUSPENSE_ROOT.autoScript = true;
-    SUSPENSE_ROOT.requestCounter = 1;
-    SUSPENSE_ROOT.requests.clear();
-  });
+    SUSPENSE_ROOT.autoScript = true
+    SUSPENSE_ROOT.requestCounter = 1
+    SUSPENSE_ROOT.requests.clear()
+  })
 
   test('Sync without suspense', async () => {
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
-    app.get('/', (_, res) => res.html(<div />));
+    app.get('/', (_, res) => res.html(<div />))
 
-    const res = await app.inject({ method: 'GET', url: '/' });
+    const res = await app.inject({ method: 'GET', url: '/' })
 
-    expect(res.body).toBe('<div></div>');
-    expect(res.statusCode).toBe(200);
-    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
-  });
+    expect(res.body).toBe('<div></div>')
+    expect(res.statusCode).toBe(200)
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8')
+  })
 
   test('Suspense sync children', async () => {
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
     app.get('/', (req, res) =>
       res.html(
@@ -51,18 +51,18 @@ describe('Suspense', () => {
           <div>2</div>
         </Suspense>
       )
-    );
+    )
 
-    const res = await app.inject({ method: 'GET', url: '/' });
+    const res = await app.inject({ method: 'GET', url: '/' })
 
-    expect(res.body).toBe('<div>2</div>');
-    expect(res.statusCode).toBe(200);
-    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
-  });
+    expect(res.body).toBe('<div>2</div>')
+    expect(res.statusCode).toBe(200)
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8')
+  })
 
   test('Suspense async children', async () => {
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
     app.get('/', (req, res) =>
       res.html(
@@ -70,12 +70,12 @@ describe('Suspense', () => {
           <SleepForMs ms={2} />
         </Suspense>
       )
-    );
+    )
 
-    const res = await app.inject({ method: 'GET', url: '/' });
+    const res = await app.inject({ method: 'GET', url: '/' })
 
-    expect(res.statusCode).toBe(200);
-    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+    expect(res.statusCode).toBe(200)
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8')
     expect(res.body).toBe(
       <>
         <div id="B:1" data-sf>
@@ -91,12 +91,12 @@ describe('Suspense', () => {
           $KITA_RC(1)
         </script>
       </>
-    );
-  });
+    )
+  })
 
   test('Suspense async children & fallback', async () => {
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
     app.get('/', (req, res) =>
       res.html(
@@ -104,12 +104,12 @@ describe('Suspense', () => {
           <SleepForMs ms={2} />
         </Suspense>
       )
-    );
+    )
 
-    const res = await app.inject({ method: 'GET', url: '/' });
+    const res = await app.inject({ method: 'GET', url: '/' })
 
-    expect(res.statusCode).toBe(200);
-    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+    expect(res.statusCode).toBe(200)
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8')
     expect(res.body).toBe(
       <>
         <div id="B:1" data-sf>
@@ -125,12 +125,12 @@ describe('Suspense', () => {
           $KITA_RC(1)
         </script>
       </>
-    );
-  });
+    )
+  })
 
   test('Suspense async fallback sync children', async () => {
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
     app.get('/', (req, res) =>
       res.html(
@@ -138,18 +138,18 @@ describe('Suspense', () => {
           <div>2</div>
         </Suspense>
       )
-    );
+    )
 
-    const res = await app.inject({ method: 'GET', url: '/' });
+    const res = await app.inject({ method: 'GET', url: '/' })
 
-    expect(res.body).toBe('<div>2</div>');
-    expect(res.statusCode).toBe(200);
-    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
-  });
+    expect(res.body).toBe('<div>2</div>')
+    expect(res.statusCode).toBe(200)
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8')
+  })
 
   test('Multiple async renders cleanup', async () => {
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
     app.get('/', (req, res) =>
       res.html(
@@ -157,15 +157,15 @@ describe('Suspense', () => {
           <SleepForMs ms={2} />
         </Suspense>
       )
-    );
+    )
 
-    const promises = [];
+    const promises = []
 
     for (const _ of Array.from({ length: 100 })) {
       promises.push(
         app.inject({ method: 'GET', url: '/' }).then((res) => {
-          expect(res.statusCode).toBe(200);
-          expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+          expect(res.statusCode).toBe(200)
+          expect(res.headers['content-type']).toBe('text/html; charset=utf-8')
           expect(res.body).toBe(
             <>
               <div id="B:1" data-sf>
@@ -181,17 +181,17 @@ describe('Suspense', () => {
                 $KITA_RC(1)
               </script>
             </>
-          );
+          )
         })
-      );
+      )
     }
 
-    await Promise.all(promises);
-  });
+    await Promise.all(promises)
+  })
 
   test('Multiple sync renders cleanup', async () => {
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
     app.get('/', (req, res) =>
       res.html(
@@ -199,12 +199,12 @@ describe('Suspense', () => {
           <SleepForMs ms={2} />
         </Suspense>
       )
-    );
+    )
 
     for (let i = 0; i < 10; i++) {
-      const res = await app.inject({ method: 'GET', url: '/' });
-      expect(res.statusCode).toBe(200);
-      expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+      const res = await app.inject({ method: 'GET', url: '/' })
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['content-type']).toBe('text/html; charset=utf-8')
       expect(res.body).toBe(
         <>
           <div id="B:1" data-sf>
@@ -220,13 +220,13 @@ describe('Suspense', () => {
             $KITA_RC(1)
           </script>
         </>
-      );
+      )
     }
-  });
+  })
 
   test('Multiple children', async () => {
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
     app.get('/', (req, res) =>
       res.html(
@@ -244,12 +244,12 @@ describe('Suspense', () => {
           </Suspense>
         </div>
       )
-    );
+    )
 
-    const res = await app.inject({ method: 'GET', url: '/' });
+    const res = await app.inject({ method: 'GET', url: '/' })
 
-    expect(res.statusCode).toBe(200);
-    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+    expect(res.statusCode).toBe(200)
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8')
 
     expect(res.body).toBe(
       <>
@@ -288,16 +288,16 @@ describe('Suspense', () => {
           $KITA_RC(3)
         </script>
       </>
-    );
-  });
+    )
+  })
 
   test('Concurrent renders', async () => {
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
     app.get('/', (req, res) => {
-      const seconds = (req.query as { seconds: number }).seconds;
-      res.header('seconds', seconds);
+      const seconds = (req.query as { seconds: number }).seconds
+      res.header('seconds', seconds)
 
       return res.html(
         <div>
@@ -307,10 +307,10 @@ describe('Suspense', () => {
             </Suspense>
           ))}
         </div>
-      );
-    });
+      )
+    })
 
-    const secondsArray = [9, 4, 7];
+    const secondsArray = [9, 4, 7]
     const results = await Promise.all(
       secondsArray.map((seconds) =>
         app.inject({
@@ -319,13 +319,13 @@ describe('Suspense', () => {
           query: { seconds: seconds.toString() }
         })
       )
-    );
+    )
 
     for (const result of results) {
-      const seconds = +result.headers.seconds!;
+      const seconds = +result.headers.seconds!
 
-      expect(result.statusCode).toBe(200);
-      expect(result.headers['content-type']).toBe('text/html; charset=utf-8');
+      expect(result.statusCode).toBe(200)
+      expect(result.headers['content-type']).toBe('text/html; charset=utf-8')
       expect(result.body).toBe(
         <>
           <div>
@@ -349,13 +349,13 @@ describe('Suspense', () => {
             </>
           ))}
         </>
-      );
+      )
     }
-  });
+  })
 
   test('works with parallel deep suspense calls resolving first', async () => {
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
     app.get('/', (req, res) =>
       res.html(
@@ -375,12 +375,12 @@ describe('Suspense', () => {
           ))}
         </div>
       )
-    );
+    )
 
-    const res = await app.inject({ method: 'GET', url: '/' });
+    const res = await app.inject({ method: 'GET', url: '/' })
 
-    expect(res.statusCode).toBe(200);
-    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+    expect(res.statusCode).toBe(200)
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8')
 
     expect(res.body).toBe(
       <>
@@ -489,7 +489,7 @@ describe('Suspense', () => {
           $KITA_RC(9)
         </script>
       </>
-    );
+    )
 
     // Browser simulation
     expect(
@@ -510,12 +510,12 @@ describe('Suspense', () => {
         </div>
         {safeSuspenseScript}
       </>
-    );
-  });
+    )
+  })
 
   test('tests suspense without error boundary', async () => {
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
     app.get('/', (req, res) =>
       res.html(
@@ -523,22 +523,22 @@ describe('Suspense', () => {
           {Promise.reject(new Error('component failed')) as Promise<'safe'>}
         </Suspense>
       )
-    );
+    )
 
-    const res = await app.inject({ method: 'GET', url: '/' });
+    const res = await app.inject({ method: 'GET', url: '/' })
 
     expect(res.json()).toEqual({
       error: 'Internal Server Error',
       message: 'component failed',
       statusCode: 500
-    });
-  });
+    })
+  })
 
   test('tests suspense with function error boundary', async () => {
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
-    const err = new Error('component failed');
+    const err = new Error('component failed')
 
     app.get('/', (req, res) =>
       res.html(
@@ -546,19 +546,19 @@ describe('Suspense', () => {
           rid={req.id}
           fallback={<div>1</div>}
           catch={(err2) => {
-            expect(err2).toBe(err);
-            return <div>3</div>;
+            expect(err2).toBe(err)
+            return <div>3</div>
           }}
         >
           {Promise.reject(err) as Promise<'safe'>}
         </Suspense>
       )
-    );
+    )
 
-    const res = await app.inject({ method: 'GET', url: '/' });
+    const res = await app.inject({ method: 'GET', url: '/' })
 
-    expect(res.statusCode).toBe(200);
-    expect(res.headers['content-type']).toBe('text/html; charset=utf-8');
+    expect(res.statusCode).toBe(200)
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8')
     expect(res.body).toBe(
       <>
         <div id="B:1" data-sf>
@@ -573,16 +573,16 @@ describe('Suspense', () => {
           $KITA_RC(1)
         </script>
       </>
-    );
-  });
+    )
+  })
 
   test('stream outputs raw HTML (Fastify handles chunked transfer encoding at HTTP level)', async () => {
     // This test verifies that the stream output is clean HTML without manual chunk markers.
     // HTTP chunked transfer encoding is handled automatically by Fastify/Node.js at the
     // protocol level when streaming responses without a Content-Length header.
 
-    await using app = fastify();
-    app.register(fastifyKitaHtml);
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
 
     app.get('/', (req, res) =>
       res.html(
@@ -590,14 +590,14 @@ describe('Suspense', () => {
           <SleepForMs ms={1} />
         </Suspense>
       )
-    );
+    )
 
-    const res = await app.inject({ method: 'GET', url: '/' });
+    const res = await app.inject({ method: 'GET', url: '/' })
 
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(200)
     // Response should be clean HTML starting with the actual content
-    expect(res.body.startsWith('<div id="B:1"')).toBe(true);
+    expect(res.body.startsWith('<div id="B:1"')).toBe(true)
     // Should NOT contain manual chunk size markers (e.g., "28\r\n<div>...\r\n")
-    expect(res.body).not.toMatch(/^[0-9a-f]+\r\n/i);
-  });
-});
+    expect(res.body).not.toMatch(/^[0-9a-f]+\r\n/i)
+  })
+})

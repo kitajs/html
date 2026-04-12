@@ -1,6 +1,6 @@
-import { Suspense } from '@kitajs/html/suspense';
-import { TodoItem } from '../../api/todos';
-import { store } from '../../store';
+import { Suspense } from '@kitajs/html/suspense'
+import { TodoItem } from '../../api/todos'
+import { store } from '../../store'
 import {
   Card,
   MemoryStat,
@@ -10,8 +10,8 @@ import {
   StatSkeleton,
   UptimeStat,
   VisitorsStat
-} from '../components';
-import { Layout } from '../Layout';
+} from '../components'
+import { Layout } from '../Layout'
 
 export function Dashboard({ rid }: { rid: number | string }) {
   return (
@@ -212,5 +212,5 @@ export function Dashboard({ rid }: { rid: number | string }) {
         </footer>
       </div>
     </Layout>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import { describe, expect, test } from 'vitest';
-import { Html } from '../src/index.js';
+import { describe, expect, test } from 'vitest'
+import { Html } from '../src/index.js'
 
 describe('Util', () => {
   test('Undefined contents', async () => {
@@ -13,7 +13,7 @@ describe('Util', () => {
         [null, Promise.resolve(null)],
         [[[[[[[]]]]]]]
       ])
-    ).toBe('');
+    ).toBe('')
 
     for (const i of [
       undefined,
@@ -24,16 +24,16 @@ describe('Util', () => {
       [null, Promise.resolve(null)],
       [[[[[[[]]]]]]]
     ]) {
-      expect(await Html.contentToString(i)).toBe('');
+      expect(await Html.contentToString(i)).toBe('')
     }
 
-    expect(await Html.contentsToString([])).toBe('');
-  });
+    expect(await Html.contentsToString([])).toBe('')
+  })
 
   test('Deep scaping', async () => {
     expect(await Html.contentsToString(['<>', Promise.resolve('<>')], true)).toBe(
       '&lt;>&lt;>'
-    );
+    )
 
     expect(
       await Html.contentsToString(
@@ -48,8 +48,8 @@ describe('Util', () => {
         ],
         true
       )
-    ).toBe('&lt;>');
-  });
+    ).toBe('&lt;>')
+  })
 
   test('String contents', async () => {
     expect(
@@ -58,25 +58,25 @@ describe('Util', () => {
         Promise.resolve('b'),
         ['c', Promise.resolve('d')]
       ])
-    ).toBe('abcd');
-  });
+    ).toBe('abcd')
+  })
 
   test('Only string contents', async () => {
-    expect(await Html.contentsToString(['a', 'b', ['c', 'd']])).toBe('abcd');
-  });
+    expect(await Html.contentsToString(['a', 'b', ['c', 'd']])).toBe('abcd')
+  })
 
   test('Promises', async () => {
     const result = Html.contentsToString([
       Promise.resolve('a'),
       Promise.resolve('b'),
       Promise.resolve(['c', Promise.resolve('d')])
-    ]);
+    ])
 
-    expect(result instanceof Promise).toBeTruthy();
-    expect(await result).toBe('abcd');
-  });
+    expect(result instanceof Promise).toBeTruthy()
+    expect(await result).toBe('abcd')
+  })
 
   test('h() function', async () => {
-    expect(Html.h).toBe(Html.createElement);
-  });
-});
+    expect(Html.h).toBe(Html.createElement)
+  })
+})

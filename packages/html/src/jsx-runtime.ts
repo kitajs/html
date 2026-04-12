@@ -1,11 +1,11 @@
-import type { Children } from './index.js';
+import type { Children } from './index.js'
 import {
   attributesToString,
   contentsToString,
   contentToString,
   Fragment,
   isVoidElement
-} from './index.js';
+} from './index.js'
 
 /**
  * Generates a html string from an attribute name of component and it's props.
@@ -24,32 +24,32 @@ export function jsx(
 ): JSX.Element {
   // Calls the element creator function if the name is a function
   if (typeof name === 'function') {
-    return name(attributes);
+    return name(attributes)
   }
 
   // Switches the tag name when this custom `tag` is present.
   if (name === 'tag') {
-    name = attributes.of as string;
+    name = attributes.of as string
   }
 
-  const attrs = attributesToString(attributes);
+  const attrs = attributesToString(attributes)
 
   if (attributes.children === undefined) {
     if (isVoidElement(name as string)) {
-      return `<${name}${attrs}/>`;
+      return `<${name}${attrs}/>`
     }
-    return `<${name}${attrs}></${name}>`;
+    return `<${name}${attrs}></${name}>`
   }
 
-  const contents = contentToString(attributes.children, attributes.safe);
+  const contents = contentToString(attributes.children, attributes.safe)
 
   if (contents instanceof Promise) {
     return contents.then(function resolveContents(child) {
-      return `<${name}${attrs}>${child}</${name}>`;
-    });
+      return `<${name}${attrs}>${child}</${name}>`
+    })
   }
 
-  return `<${name}${attrs}>${contents}</${name}>`;
+  return `<${name}${attrs}>${contents}</${name}>`
 }
 
 /**
@@ -69,33 +69,33 @@ export function jsxs(
 ): JSX.Element {
   // Calls the element creator function if the name is a function
   if (typeof name === 'function') {
-    return name(attributes);
+    return name(attributes)
   }
 
   // Switches the tag name when this custom `tag` is present.
   if (name === 'tag') {
-    name = attributes.of as string;
+    name = attributes.of as string
   }
 
-  const attrs = attributesToString(attributes);
+  const attrs = attributesToString(attributes)
 
   if (attributes.children.length === 0) {
     if (isVoidElement(name as string)) {
-      return `<${name}${attrs}/>`;
+      return `<${name}${attrs}/>`
     }
-    return `<${name}${attrs}></${name}>`;
+    return `<${name}${attrs}></${name}>`
   }
 
-  const contents = contentsToString(attributes.children, attributes.safe);
+  const contents = contentsToString(attributes.children, attributes.safe)
 
   if (contents instanceof Promise) {
     return contents.then(function resolveContents(child) {
-      return `<${name}${attrs}>${child}</${name}>`;
-    });
+      return `<${name}${attrs}>${child}</${name}>`
+    })
   }
 
-  return `<${name}${attrs}>${contents}</${name}>`;
+  return `<${name}${attrs}>${contents}</${name}>`
 }
 
 // According to the jsx-runtime spec we must export the fragment element also
-export { Fragment };
+export { Fragment }

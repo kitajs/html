@@ -1,47 +1,47 @@
-import { JSDOM } from 'jsdom';
-import { text } from 'node:stream/consumers';
-import { setTimeout } from 'node:timers/promises';
-import { afterEach, describe, expect, test, vi } from 'vitest';
-import { Html, type PropsWithChildren } from '../src/index.js';
+import { JSDOM } from 'jsdom'
+import { text } from 'node:stream/consumers'
+import { setTimeout } from 'node:timers/promises'
+import { afterEach, describe, expect, test, vi } from 'vitest'
+import { Html, type PropsWithChildren } from '../src/index.js'
 import {
   Suspense,
   renderToStream,
   SuspenseScript as safeSuspenseScript
-} from '../src/suspense.js';
+} from '../src/suspense.js'
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
-  await setTimeout(ms * 50);
-  return Html.contentsToString([children || String(ms)]);
+  await setTimeout(ms * 50)
+  return Html.contentsToString([children || String(ms)])
 }
 
 function Throw(): string {
-  throw new Error('test');
+  throw new Error('test')
 }
 
 // Detect leaks of pending promises
 afterEach(() => {
-  expect(SUSPENSE_ROOT.requests.size).toBe(0);
+  expect(SUSPENSE_ROOT.requests.size).toBe(0)
 
   // Reset suspense root
-  SUSPENSE_ROOT.autoScript = true;
-  SUSPENSE_ROOT.requestCounter = 1;
-  SUSPENSE_ROOT.requests.clear();
-});
+  SUSPENSE_ROOT.autoScript = true
+  SUSPENSE_ROOT.requestCounter = 1
+  SUSPENSE_ROOT.requests.clear()
+})
 
 describe('renderToStream', () => {
   test('without suspense - sync', async () => {
-    expect(await text(renderToStream(() => <div />))).toBe(<div />);
-  });
+    expect(await text(renderToStream(() => <div />))).toBe(<div />)
+  })
 
   test('without suspense - async', async () => {
-    expect(await text(renderToStream(async () => <div />))).toBe(<div />);
-  });
+    expect(await text(renderToStream(async () => <div />))).toBe(<div />)
+  })
 
   test('with custom rid', async () => {
-    const stream = renderToStream(() => '<div>custom</div>', 'my-custom-rid');
-    expect(stream.readable).toBeTruthy();
-    expect(await text(stream)).toBe('<div>custom</div>');
-  });
+    const stream = renderToStream(() => '<div>custom</div>', 'my-custom-rid')
+    expect(stream.readable).toBeTruthy()
+    expect(await text(stream)).toBe('<div>custom</div>')
+  })
 
   test('with string rid', async () => {
     expect(
@@ -55,8 +55,8 @@ describe('renderToStream', () => {
           'string-rid-123'
         )
       )
-    ).toContain('<div>loaded</div>');
-  });
+    ).toContain('<div>loaded</div>')
+  })
 
   test('emits end event and chunks correctly', async () => {
     const stream = renderToStream((r) => (
@@ -65,21 +65,21 @@ describe('renderToStream', () => {
           {Promise.resolve(<div>resolved</div>)}
         </Suspense>
       </div>
-    ));
+    ))
 
-    const fn = vi.fn();
-    stream.on('end', fn);
+    const fn = vi.fn()
+    stream.on('end', fn)
 
-    const chunks = [];
+    const chunks = []
     for await (const chunk of stream) {
-      chunks.push(chunk.toString());
+      chunks.push(chunk.toString())
     }
 
-    expect(fn).toHaveBeenCalledOnce();
-    expect(chunks.length).toBe(2);
-    expect(chunks[0]).toContain('data-sf');
-    expect(chunks[1]).toContain('data-sr');
-  });
+    expect(fn).toHaveBeenCalledOnce()
+    expect(chunks.length).toBe(2)
+    expect(chunks[0]).toContain('data-sf')
+    expect(chunks[1]).toContain('data-sr')
+  })
 
   test('rejects duplicate rid', async () => {
     const stream = renderToStream(
@@ -89,7 +89,7 @@ describe('renderToStream', () => {
         </Suspense>
       ),
       1
-    );
+    )
 
     await expect(
       text(
@@ -102,19 +102,19 @@ describe('renderToStream', () => {
           1
         )
       )
-    ).rejects.toThrow(/The provided Request Id is already in use: 1./);
+    ).rejects.toThrow(/The provided Request Id is already in use: 1./)
 
-    await text(stream); // consume to cleanup
-  });
+    await text(stream) // consume to cleanup
+  })
 
   test('emits error if factory throws', async () => {
     const stream = renderToStream(async () => {
-      throw new Error('Factory error');
-    });
+      throw new Error('Factory error')
+    })
 
-    await expect(text(stream)).rejects.toThrow('Factory error');
-  });
-});
+    await expect(text(stream)).rejects.toThrow('Factory error')
+  })
+})
 
 describe('Suspense - basic rendering', () => {
   test('sync children returns content directly (no wrapper)', async () => {
@@ -126,8 +126,8 @@ describe('Suspense - basic rendering', () => {
           </Suspense>
         ))
       )
-    ).toBe(<div>sync content</div>);
-  });
+    ).toBe(<div>sync content</div>)
+  })
 
   test('async children renders fallback then streams content', async () => {
     expect(
@@ -151,8 +151,8 @@ describe('Suspense - basic rendering', () => {
           $KITA_RC(1)
         </script>
       </>
-    );
-  });
+    )
+  })
 
   test('async fallback with sync children returns content directly', async () => {
     expect(
@@ -163,8 +163,8 @@ describe('Suspense - basic rendering', () => {
           </Suspense>
         ))
       )
-    ).toBe(<div>sync content</div>);
-  });
+    ).toBe(<div>sync content</div>)
+  })
 
   test('empty children', async () => {
     expect(
@@ -174,8 +174,8 @@ describe('Suspense - basic rendering', () => {
           <Suspense rid={r} fallback={<div>fallback</div>}></Suspense>
         ))
       )
-    ).toBe('');
-  });
+    ).toBe('')
+  })
 
   test('null children', async () => {
     expect(
@@ -186,8 +186,8 @@ describe('Suspense - basic rendering', () => {
           </Suspense>
         ))
       )
-    ).toBe('');
-  });
+    ).toBe('')
+  })
 
   test('immediately resolving promise', async () => {
     expect(
@@ -198,9 +198,9 @@ describe('Suspense - basic rendering', () => {
           </Suspense>
         ))
       )
-    ).toContain('<div>instant</div>');
-  });
-});
+    ).toContain('<div>instant</div>')
+  })
+})
 
 describe('Suspense - autoScript', () => {
   test('includes SuspenseScript automatically for first async suspense', async () => {
@@ -210,14 +210,14 @@ describe('Suspense - autoScript', () => {
           {Promise.resolve(<div>2</div>)}
         </Suspense>
       ))
-    );
+    )
 
-    expect(result).toContain('id="kita-html-suspense"');
-    expect(result).toContain('$KITA_RC');
-  });
+    expect(result).toContain('id="kita-html-suspense"')
+    expect(result).toContain('$KITA_RC')
+  })
 
   test('can disable autoScript', async () => {
-    SUSPENSE_ROOT.autoScript = false;
+    SUSPENSE_ROOT.autoScript = false
 
     const result = await text(
       renderToStream((r) => (
@@ -225,20 +225,20 @@ describe('Suspense - autoScript', () => {
           {Promise.resolve(<div>2</div>)}
         </Suspense>
       ))
-    );
+    )
 
-    expect(result).not.toContain('id="kita-html-suspense"');
-    expect(result).toContain('$KITA_RC(1)'); // still has the call
-  });
+    expect(result).not.toContain('id="kita-html-suspense"')
+    expect(result).toContain('$KITA_RC(1)') // still has the call
+  })
 
   test('SuspenseScript is valid JavaScript', () => {
     const scriptContent = safeSuspenseScript.slice(
       safeSuspenseScript.indexOf('>') + 1,
       -'</script>'.length
-    );
-    expect(() => eval(scriptContent)).not.toThrow();
-  });
-});
+    )
+    expect(() => eval(scriptContent)).not.toThrow()
+  })
+})
 
 describe('Suspense - multiple components', () => {
   test('multiple sibling suspense components', async () => {
@@ -279,8 +279,8 @@ describe('Suspense - multiple components', () => {
           $KITA_RC(2)
         </script>
       </>
-    );
-  });
+    )
+  })
 
   test('mixed sync and async suspense components', async () => {
     const result = await text(
@@ -294,13 +294,13 @@ describe('Suspense - multiple components', () => {
           </Suspense>
         </div>
       ))
-    );
+    )
 
     // Sync content appears inline, async has wrapper
-    expect(result).toContain('<div>sync-content</div>');
-    expect(result).toContain('data-sf');
-    expect(result).toContain('<div>async-content</div>');
-  });
+    expect(result).toContain('<div>sync-content</div>')
+    expect(result).toContain('data-sf')
+    expect(result).toContain('<div>async-content</div>')
+  })
 
   test('concurrent renders with unique rids', async () => {
     const results = await Promise.all([
@@ -318,11 +318,11 @@ describe('Suspense - multiple components', () => {
           </Suspense>
         ))
       )
-    ]);
+    ])
 
-    expect(results[0]).toContain('A');
-    expect(results[1]).toContain('B');
-  });
+    expect(results[0]).toContain('A')
+    expect(results[1]).toContain('B')
+  })
 
   test('handles 100 concurrent renders without leaks', async () => {
     await Promise.all(
@@ -335,10 +335,10 @@ describe('Suspense - multiple components', () => {
           ))
         )
       )
-    );
+    )
     // afterEach verifies no leaks
-  });
-});
+  })
+})
 
 describe('Suspense - nested', () => {
   test('nested suspense - inner resolves first', async () => {
@@ -357,12 +357,12 @@ describe('Suspense - nested', () => {
           </Suspense>
         </div>
       ))
-    );
+    )
 
     // Inner resolves first, so N:1 appears before N:2
-    expect(html.indexOf('N:1')).toBeLessThan(html.indexOf('N:2'));
-    expect(html).toContain('inner-content');
-  });
+    expect(html.indexOf('N:1')).toBeLessThan(html.indexOf('N:2'))
+    expect(html).toContain('inner-content')
+  })
 
   test('nested suspense - outer resolves first', async () => {
     const html = await text(
@@ -380,10 +380,10 @@ describe('Suspense - nested', () => {
           </Suspense>
         </div>
       ))
-    );
+    )
 
-    expect(html).toContain('inner-content');
-  });
+    expect(html).toContain('inner-content')
+  })
 
   test('deeply nested parallel suspense with JSDOM validation', async () => {
     const html = await text(
@@ -403,18 +403,18 @@ describe('Suspense - nested', () => {
           ))}
         </div>
       ))
-    );
+    )
 
     // Validate final DOM structure after script execution
-    const dom = new JSDOM(html, { runScripts: 'dangerously' });
-    const body = dom.window.document.body.innerHTML;
+    const dom = new JSDOM(html, { runScripts: 'dangerously' })
+    const body = dom.window.document.body.innerHTML
 
-    expect(body).toContain('<div>Outer 0</div>');
-    expect(body).toContain('<div>Inner 0</div>');
-    expect(body).toContain('<div>Outer 2</div>');
-    expect(body).toContain('<div>Inner 2</div>');
-  });
-});
+    expect(body).toContain('<div>Outer 0</div>')
+    expect(body).toContain('<div>Inner 0</div>')
+    expect(body).toContain('<div>Outer 2</div>')
+    expect(body).toContain('<div>Inner 2</div>')
+  })
+})
 
 describe('Suspense - error handling', () => {
   test('throws when rid is not provided', async () => {
@@ -425,8 +425,8 @@ describe('Suspense - error handling', () => {
           <Suspense fallback={<div>1</div>}>{Promise.resolve('test')}</Suspense>
         ))
       )
-    ).rejects.toThrow(/Suspense requires a `rid` to be specified./);
-  });
+    ).rejects.toThrow(/Suspense requires a `rid` to be specified./)
+  })
 
   test('sync error in children propagates', async () => {
     await expect(
@@ -437,11 +437,11 @@ describe('Suspense - error handling', () => {
           </Suspense>
         ))
       )
-    ).rejects.toThrow(/test/);
-  });
+    ).rejects.toThrow(/test/)
+  })
 
   test('async error without catch handler propagates', async () => {
-    const err = new Error('async error');
+    const err = new Error('async error')
 
     await expect(
       text(
@@ -451,8 +451,8 @@ describe('Suspense - error handling', () => {
           </Suspense>
         ))
       )
-    ).rejects.toBe(err);
-  });
+    ).rejects.toBe(err)
+  })
 
   test('catch handler as JSX element', async () => {
     const result = await text(
@@ -461,13 +461,13 @@ describe('Suspense - error handling', () => {
           {Promise.reject(new Error('fail'))}
         </Suspense>
       ))
-    );
+    )
 
-    expect(result).toContain('<div>error occurred</div>');
-  });
+    expect(result).toContain('<div>error occurred</div>')
+  })
 
   test('catch handler as function receives error', async () => {
-    const err = new Error('specific error');
+    const err = new Error('specific error')
 
     const result = await text(
       renderToStream((r) => (
@@ -475,17 +475,17 @@ describe('Suspense - error handling', () => {
           rid={r}
           fallback={<div>loading</div>}
           catch={(e) => {
-            expect(e).toBe(err);
-            return <div>caught: {(e as Error).message}</div>;
+            expect(e).toBe(err)
+            return <div>caught: {(e as Error).message}</div>
           }}
         >
           {Promise.reject(err)}
         </Suspense>
       ))
-    );
+    )
 
-    expect(result).toContain('caught: specific error');
-  });
+    expect(result).toContain('caught: specific error')
+  })
 
   test('async catch handler', async () => {
     const result = await text(
@@ -498,10 +498,10 @@ describe('Suspense - error handling', () => {
           {Promise.reject(new Error('fail'))}
         </Suspense>
       ))
-    );
+    )
 
-    expect(result).toContain('<div>async error handler</div>');
-  });
+    expect(result).toContain('<div>async error handler</div>')
+  })
 
   test('error in sync children after suspense registration', async () => {
     await expect(
@@ -517,6 +517,6 @@ describe('Suspense - error handling', () => {
           </div>
         ))
       )
-    ).rejects.toThrow('test');
-  });
-});
+    ).rejects.toThrow('test')
+  })
+})

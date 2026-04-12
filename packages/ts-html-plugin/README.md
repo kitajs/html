@@ -142,22 +142,22 @@ address this:
    After all, what's the problem of being safe twice?
 
    ```tsx
-   const html = <div safe>{content}</div>;
+   const html = <div safe>{content}</div>
    ```
 
 2. **Prepend the Variable with `safe`:** Indicate to the plugin that you are confident the
    variable is safe to use by adding `safe` before it.
 
    ```tsx
-   const safeContent = '';
-   const html = <div>{safeContent}</div>;
+   const safeContent = ''
+   const html = <div>{safeContent}</div>
    ```
 
 3. **Cast to `'safe'`:** When using raw values or function calls without saving them into
    a variable, you can append `as 'safe'` to the expression to inform the plugin.
 
    ```tsx
-   const html = <div>{content as 'safe'}</div>;
+   const html = <div>{content as 'safe'}</div>
    ```
 
 <br />
@@ -208,17 +208,17 @@ Please use the safe attribute on the JSX element or prepend your variable with `
 ```tsx
 // ❌ Content variable may have a value of `<script>alert('xss')</script>`
 // which will lead to XSS vulnerabilities.
-const html = <div>{content}</div>;
+const html = <div>{content}</div>
 
 // ✅ Content variable may have a value of `<script>alert('xss')</script>`,
 // but it's safe to use because it will get escaped to =
 // `&lt;script&gt;alert('xss')&lt;/script&gt;`.
-const html = <div safe>{content}</div>;
+const html = <div safe>{content}</div>
 
 // ⚠️ Content variable may have a value of `<script>alert('xss')</script>`,
 // but variable starts with safe, so the error is suppressed.
-const safeContent = content;
-const html = <div>{safeContent}</div>;
+const safeContent = content
+const html = <div>{safeContent}</div>
 ```
 
 <br />
@@ -239,7 +239,7 @@ const html = (
   <a safe>
     <b>1</b>
   </a>
-);
+)
 
 // ✅ Safe attribute in the inner element will escape only the inner element.
 // In this case the <b> tag will be escaped, resulting into
@@ -248,7 +248,7 @@ const html = (
   <a>
     <b safe>1</b>
   </a>
-);
+)
 ```
 
 <br />
@@ -267,16 +267,16 @@ native JSX.
 ```tsx
 // ❌ Content variable may have a value of `<script>alert('xss')</script>`
 // which will lead to XSS vulnerabilities.
-const html = <Component>{content}</Component>;
+const html = <Component>{content}</Component>
 
 // ✅ Content variable may have a value of `<script>alert('xss')</script>`,
 // but it's safe to use because you manually call the escape function.
-const html = <Component>{Html.escapeHtml(content)}</Component>;
+const html = <Component>{Html.escapeHtml(content)}</Component>
 
 // ⚠️ Content variable may have a value of `<script>alert('xss')</script>`,
 // but variable starts with safe, so the error is suppressed.
-const safeContent = content;
-const html = <Component>{safeContent}</Component>;
+const safeContent = content
+const html = <Component>{safeContent}</Component>
 ```
 
 <br />
@@ -291,16 +291,16 @@ vulnerabilities. Please remove the safe attribute or prepend your variable with 
 ```tsx
 // ⚠️ The variable will never have any harmful XSS content, so the safe attribute is
 // not needed and can be removed.
-const html = <div safe>{numberVariable}</div>;
+const html = <div safe>{numberVariable}</div>
 
 // ✅ This variable will never have any harmful XSS content, so we can use it
 // as is.
-const html = <div>{numberVariable}</div>;
+const html = <div>{numberVariable}</div>
 
 // ✅ You manually told this plugin that the variable is unsafe, so errors will
 // be thrown.
-const unsafeVariable = numberVariable;
-const html = <div safe>{unsafeVariable}</div>;
+const unsafeVariable = numberVariable
+const html = <div safe>{unsafeVariable}</div>
 ```
 
 <br />
@@ -318,14 +318,14 @@ information.
    execute the content anyways.
 
    ```tsx
-   const html = <script>{content}</script>;
+   const html = <script>{content}</script>
    ```
 
 2. Ternary and binary operations are evaluated in both sides separately and will throw
    errors if any of the sides is not safe, even their condition never gets hit at runtime.
 
    ```tsx
-   const html = <div>{true ? safeContent : content}</div>;
+   const html = <div>{true ? safeContent : content}</div>
    //                                      ~~~~~~~
    ```
 

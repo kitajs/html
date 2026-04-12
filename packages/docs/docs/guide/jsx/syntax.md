@@ -14,7 +14,7 @@ const html = (
     <div>First</div>
     <div>Second</div>
   </>
-);
+)
 // '<div>First</div><div>Second</div>'
 ```
 

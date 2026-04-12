@@ -2,7 +2,7 @@ import {
   type JsxFragment,
   type JsxSelfClosingElement,
   type default as ts
-} from 'typescript';
+} from 'typescript'
 import type {
   BinaryOperatorToken,
   Diagnostic,
@@ -12,11 +12,11 @@ import type {
   default as TS,
   Type,
   TypeChecker
-} from 'typescript/lib/tsserverlibrary';
-import * as Errors from './errors';
+} from 'typescript/lib/tsserverlibrary'
+import * as Errors from './errors'
 
-const UPPERCASE = /[A-Z]/;
-const ESCAPE_HTML_REGEX = /^(\w+\.)?(escapeHtml|e\s*`|escape)/i;
+const UPPERCASE = /[A-Z]/
+const ESCAPE_HTML_REGEX = /^(\w+\.)?(escapeHtml|e\s*`|escape)/i
 
 /** If the node is a JSX element or fragment */
 function isJsx(
@@ -25,7 +25,7 @@ function isJsx(
 ): node is JsxElement | JsxFragment | JsxSelfClosingElement {
   return (
     ts.isJsxElement(node) || ts.isJsxFragment(node) || ts.isJsxSelfClosingElement(node)
-  );
+  )
 }
 
 export function recursiveDiagnoseJsxElements(
@@ -36,14 +36,14 @@ export function recursiveDiagnoseJsxElements(
 ) {
   ts.forEachChild(node, function loopSourceNodes(node) {
     // Recurse through children first
-    ts.forEachChild(node, loopSourceNodes);
+    ts.forEachChild(node, loopSourceNodes)
 
     // Adds children to the array
     if (isJsx(ts, node)) {
       // Diagnose the node
-      diagnoseJsxElement(ts, node, typeChecker, original);
+      diagnoseJsxElement(ts, node, typeChecker, original)
     }
-  });
+  })
 
   // Filter out duplicates
   for (let i = 0; i < original.length; i++) {
@@ -52,7 +52,7 @@ export function recursiveDiagnoseJsxElements(
         original[i]!.start === original[j]!.start &&
         original[i]!.length === original[j]!.length
       ) {
-        original.splice(j--, 1);
+        original.splice(j--, 1)
       }
     }
   }
@@ -71,7 +71,7 @@ function diagnostic(
     file: node.getSourceFile(),
     length: node.getWidth(),
     start: node.getStart()
-  };
+  }
 }
 
 export function diagnoseJsxElement(
@@ -84,10 +84,10 @@ export function diagnoseJsxElement(
   if (ts.isJsxElement(node)) {
     // Script tags should be ignored
     if (node.openingElement.tagName.getText() === 'script') {
-      return;
+      return
     }
 
-    const safeAttribute = getSafeAttribute(node.openingElement);
+    const safeAttribute = getSafeAttribute(node.openingElement)
 
     // Safe mode warnings
     if (safeAttribute && node.children) {
@@ -97,8 +97,8 @@ export function diagnoseJsxElement(
         // Only text elements
         (node.children.length === 1 && node.children[0]!.kind === ts.SyntaxKind.JsxText)
       ) {
-        diagnostics.push(diagnostic(ts, safeAttribute, 'UnusedSafe', 'Warning'));
-        return;
+        diagnostics.push(diagnostic(ts, safeAttribute, 'UnusedSafe', 'Warning'))
+        return
       }
 
       for (const exp of node.children) {
@@ -108,8 +108,8 @@ export function diagnoseJsxElement(
           // Element is using safe with escapeHtml
           (ts.isJsxExpression(exp) && exp.expression?.getText().match(ESCAPE_HTML_REGEX))
         ) {
-          diagnostics.push(diagnostic(ts, safeAttribute, 'DoubleEscape', 'Error'));
-          continue;
+          diagnostics.push(diagnostic(ts, safeAttribute, 'DoubleEscape', 'Error'))
+          continue
         }
 
         // Warn on unnecessary safe attributes
@@ -119,12 +119,12 @@ export function diagnoseJsxElement(
           exp.expression
         ) {
           // gets this expression or array of sub expressions
-          const expressions = getNodeExpressions(ts, exp.expression) || [exp.expression];
+          const expressions = getNodeExpressions(ts, exp.expression) || [exp.expression]
 
           // at least one jsx inside another jsx with safe (includes self-closing elements)
           if (expressions.some((inner) => isJsx(ts, inner))) {
-            diagnostics.push(diagnostic(ts, safeAttribute, 'DoubleEscape', 'Error'));
-            continue;
+            diagnostics.push(diagnostic(ts, safeAttribute, 'DoubleEscape', 'Error'))
+            continue
           }
 
           // all of them must be safe
@@ -138,30 +138,30 @@ export function diagnoseJsxElement(
               )
             )
           ) {
-            diagnostics.push(diagnostic(ts, safeAttribute, 'UnusedSafe', 'Warning'));
+            diagnostics.push(diagnostic(ts, safeAttribute, 'UnusedSafe', 'Warning'))
           }
         }
       }
 
-      return;
+      return
     }
   }
 
   // If this expression does not have children, we can ignore it
   // for example it could be a self closing element
   if (ts.isJsxSelfClosingElement(node) || !node.children) {
-    return;
+    return
   }
 
   // Look for expressions
   for (const exp of node.children) {
     if (!ts.isJsxExpression(exp)) {
-      continue;
+      continue
     }
 
     // Should always have an expression
     if (!exp.expression) {
-      continue;
+      continue
     }
 
     diagnoseExpression(
@@ -170,10 +170,10 @@ export function diagnoseJsxElement(
       typeChecker,
       diagnostics,
       ts.isJsxElement(node) && !!node.openingElement.tagName.getText().match(UPPERCASE)
-    );
+    )
   }
 
-  return;
+  return
 }
 
 function diagnoseExpression(
@@ -185,58 +185,58 @@ function diagnoseExpression(
 ): void {
   // Unwrap parenthesis
   if (ts.isParenthesizedExpression(node)) {
-    node = node.expression;
+    node = node.expression
   }
 
   // Ignores JSX elements as they are already diagnosed by the loopChildNodes
   if (isJsx(ts, node)) {
-    return;
+    return
   }
 
-  const expressions = getNodeExpressions(ts, node);
+  const expressions = getNodeExpressions(ts, node)
 
   // ternary or binary expressions should be evaluated on each side
   if (expressions) {
     for (const inner of expressions) {
-      diagnoseExpression(ts, inner, typeChecker, diagnostics, isComponent);
+      diagnoseExpression(ts, inner, typeChecker, diagnostics, isComponent)
     }
 
-    return;
+    return
   }
 
-  const type = typeChecker.getTypeAtLocation(node);
+  const type = typeChecker.getTypeAtLocation(node)
 
   // Safe can be ignored
   if (isSafeAttribute(ts, type, typeChecker, node)) {
-    return;
+    return
   }
 
   // Anything other than a identifier should be diagnosed
   if (!ts.isIdentifier(node)) {
-    let hadJsx = false;
+    let hadJsx = false
 
     for (const tag of node.getChildren()) {
       if (!isJsx(ts, tag)) {
-        continue;
+        continue
       }
 
-      hadJsx = true;
+      hadJsx = true
 
-      diagnoseJsxElement(ts, tag, typeChecker, diagnostics);
+      diagnoseJsxElement(ts, tag, typeChecker, diagnostics)
     }
 
     // If root JSX element found inside array, diagnose it,
     // otherwise let the diagnostic pass
     if (hadJsx) {
-      return;
+      return
     }
   }
 
   // Switch between component and element xss errors
   if (isComponent || ts.isJsxFragment(node)) {
-    diagnostics.push(diagnostic(ts, node, 'ComponentXss', 'Error'));
+    diagnostics.push(diagnostic(ts, node, 'ComponentXss', 'Error'))
   } else {
-    diagnostics.push(diagnostic(ts, node, 'Xss', 'Error'));
+    diagnostics.push(diagnostic(ts, node, 'Xss', 'Error'))
   }
 }
 
@@ -248,26 +248,26 @@ export function isSafeAttribute(
 ): boolean {
   // Nothing to do if type cannot be resolved
   if (!type) {
-    return true;
+    return true
   }
 
   // Check if this is a property access to .children (from PropsWithChildren)
   // This must be checked BEFORE union recursion to avoid false positives
   if (ts.isPropertyAccessExpression(node) && node.name.text === 'children') {
-    return true;
+    return true
   }
 
   // Consolidated identifier checks - MUST be before union recursion
   if (ts.isIdentifier(node)) {
     // Destructured or direct `children` parameter (e.g., function Test({ children }: PropsWithChildren))
     if (node.text === 'children') {
-      return true;
+      return true
     }
 
     // Check if variable is initialized with JSX (e.g., const element = <div />)
-    const symbol = checker.getSymbolAtLocation(node);
+    const symbol = checker.getSymbolAtLocation(node)
     if (symbol) {
-      const declarations = symbol.getDeclarations();
+      const declarations = symbol.getDeclarations()
       if (declarations) {
         for (const decl of declarations) {
           if (
@@ -275,7 +275,7 @@ export function isSafeAttribute(
             decl.initializer &&
             isJsx(ts, decl.initializer)
           ) {
-            return true;
+            return true
           }
         }
       }
@@ -284,7 +284,7 @@ export function isSafeAttribute(
 
   // Any type is never safe
   if (type.flags & ts.TypeFlags.Any) {
-    return false;
+    return false
   }
 
   // Check type aliases for JSX.Element and Html.Children
@@ -298,7 +298,7 @@ export function isSafeAttribute(
       // Only allows in .map(), other method calls or the expression itself
       (ts.isCallExpression(node) || ts.isIdentifier(node))
     ) {
-      return true;
+      return true
     }
 
     // Allows Html.Children
@@ -317,25 +317,25 @@ export function isSafeAttribute(
           // @ts-expect-error - When using export as namespace X, parent.escapedName ends up
           type.aliasSymbol.parent?.escapedName.endsWith('packages/html/index"')))
     ) {
-      return true;
+      return true
     }
   }
 
   // Union types should be checked recursively
   if (type.isUnionOrIntersection()) {
-    return type.types.every((innerType) => isSafeAttribute(ts, innerType, checker, node));
+    return type.types.every((innerType) => isSafeAttribute(ts, innerType, checker, node))
   }
 
   // For Array or Promise, we check the type of the first generic
   if (checker.isArrayType(type) || type.symbol?.escapedName === 'Promise') {
-    return isSafeAttribute(ts, (type as any).resolvedTypeArguments?.[0], checker, node);
+    return isSafeAttribute(ts, (type as any).resolvedTypeArguments?.[0], checker, node)
   }
 
-  const text = node.getText();
+  const text = node.getText()
 
   // manual unsafe variables should not pass
   if (text.startsWith('unsafe')) {
-    return false;
+    return false
   }
 
   // We allow literal string types here, as if they have XSS content,
@@ -346,7 +346,7 @@ export function isSafeAttribute(
     // Objects may have toString() overridden
     !(type.flags & ts.TypeFlags.Object)
   ) {
-    return true;
+    return true
   }
 
   if (
@@ -355,32 +355,32 @@ export function isSafeAttribute(
     // Starts with a call to a escapeHtml function name
     text.match(ESCAPE_HTML_REGEX)
   ) {
-    return true;
+    return true
   }
 
-  return false;
+  return false
 }
 
 export function getSafeAttribute(element: JsxOpeningElement) {
   for (const attribute of element.attributes.properties) {
     if (attribute.getText() === 'safe') {
-      return attribute;
+      return attribute
     }
   }
 
-  return undefined;
+  return undefined
 }
 
 export function proxyObject<T extends object>(obj: T): T {
-  const proxy: T = Object.create(null);
+  const proxy: T = Object.create(null)
 
   for (const k of Object.keys(obj) as Array<keyof T>) {
-    const x = obj[k]!;
+    const x = obj[k]!
     // @ts-expect-error - JS runtime trickery which is tricky to type tersely
-    proxy[k] = (...args: Array<{}>) => x.apply(obj, args);
+    proxy[k] = (...args: Array<{}>) => x.apply(obj, args)
   }
 
-  return proxy;
+  return proxy
 }
 
 /**
@@ -395,28 +395,28 @@ function getNodeExpressions(
   if (ts.isBinaryExpression(node)) {
     // Ignores operations which results in a boolean
     if (isBooleanBinaryOperatorToken(ts, node.operatorToken)) {
-      return [];
+      return []
     }
 
     // For && operator, the left side is only rendered when falsy
     // (empty string, null, undefined, 0, false, NaN) - none of which are XSS risks
     // So we only need to diagnose the right side
     if (node.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken) {
-      return [node.right];
+      return [node.right]
     }
 
     // For || and ?? operators, both sides can be rendered with potentially unsafe values
     // So we diagnose both sides
-    return [node.left, node.right];
+    return [node.left, node.right]
   }
 
   // Checks the inner expression
   if (ts.isConditionalExpression(node)) {
     // ignore node.condition because its value will never be rendered
-    return [node.whenTrue, node.whenFalse];
+    return [node.whenTrue, node.whenFalse]
   }
 
-  return undefined;
+  return undefined
 }
 
 function isBooleanBinaryOperatorToken(ts: typeof TS, operator: BinaryOperatorToken) {
@@ -431,8 +431,8 @@ function isBooleanBinaryOperatorToken(ts: typeof TS, operator: BinaryOperatorTok
     case ts.SyntaxKind.LessThanToken:
     case ts.SyntaxKind.InstanceOfKeyword:
     case ts.SyntaxKind.InKeyword:
-      return true;
+      return true
   }
 
-  return false;
+  return false
 }

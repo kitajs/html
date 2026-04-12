@@ -37,28 +37,28 @@ The plugin entry point that hooks into TypeScript's language service:
 module.exports = function (modules: { typescript: typeof TS }) {
   return {
     create(info: server.PluginCreateInfo) {
-      const proxy = proxyObject(info.languageService);
+      const proxy = proxyObject(info.languageService)
 
       proxy.getSemanticDiagnostics = function (filename) {
-        const diagnostics = info.languageService.getSemanticDiagnostics(filename);
+        const diagnostics = info.languageService.getSemanticDiagnostics(filename)
 
         // Only process .tsx/.jsx files
         if (!filename.endsWith('.tsx') && !filename.endsWith('.jsx')) {
-          return diagnostics;
+          return diagnostics
         }
 
         // Walk the AST and add XSS diagnostics
         ts.forEachChild(source, (node) => {
-          recursiveDiagnoseJsxElements(ts, node, typeChecker, diagnostics);
-        });
+          recursiveDiagnoseJsxElements(ts, node, typeChecker, diagnostics)
+        })
 
-        return diagnostics;
-      };
+        return diagnostics
+      }
 
-      return proxy;
+      return proxy
     }
-  };
-};
+  }
+}
 ```
 
 #### `cli.ts` - XSS Scanner CLI
@@ -118,35 +118,35 @@ Four error codes with documentation links:
 ```typescript
 function isSafeAttribute(ts, type, checker, node): boolean {
   // 1. `children` prop from PropsWithChildren - always safe
-  if (node.name?.text === 'children') return true;
+  if (node.name?.text === 'children') return true
 
   // 2. Variables initialized with JSX - safe
-  if (decl.initializer && isJsx(ts, decl.initializer)) return true;
+  if (decl.initializer && isJsx(ts, decl.initializer)) return true
 
   // 3. `any` type - NEVER safe
-  if (type.flags & ts.TypeFlags.Any) return false;
+  if (type.flags & ts.TypeFlags.Any) return false
 
   // 4. JSX.Element alias - safe
-  if (type.aliasSymbol?.escapedName === 'Element') return true;
+  if (type.aliasSymbol?.escapedName === 'Element') return true
 
   // 5. Html.Children alias - safe
-  if (type.aliasSymbol?.escapedName === 'Children') return true;
+  if (type.aliasSymbol?.escapedName === 'Children') return true
 
   // 6. Union types - all members must be safe
   if (type.isUnionOrIntersection()) {
-    return type.types.every((t) => isSafeAttribute(ts, t, checker, node));
+    return type.types.every((t) => isSafeAttribute(ts, t, checker, node))
   }
 
   // 7. Non-string primitives (number, boolean, etc.) - safe
-  if (!(type.flags & ts.TypeFlags.String)) return true;
+  if (!(type.flags & ts.TypeFlags.String)) return true
 
   // 8. Variables starting with "safe" - suppressed
-  if (text.startsWith('safe')) return true;
+  if (text.startsWith('safe')) return true
 
   // 9. escapeHtml() calls - safe
-  if (text.match(/^(\w+\.)?(escapeHtml|e`|escape)/i)) return true;
+  if (text.match(/^(\w+\.)?(escapeHtml|e`|escape)/i)) return true
 
-  return false;
+  return false
 }
 ```
 
@@ -199,7 +199,7 @@ handling for monorepo paths.
 The `TSLangServer` test helper accepts a second parameter to enable debug output:
 
 ```typescript
-const server = new TSLangServer(projectPath, true); // Enable debug mode
+const server = new TSLangServer(projectPath, true) // Enable debug mode
 ```
 
 When debug mode is enabled:
@@ -261,12 +261,12 @@ The plugin wraps the original language service methods:
 
 ```typescript
 export function proxyObject<T extends object>(obj: T): T {
-  const proxy: T = Object.create(null);
+  const proxy: T = Object.create(null)
   for (const k of Object.keys(obj) as Array<keyof T>) {
-    const x = obj[k]!;
-    proxy[k] = (...args) => x.apply(obj, args);
+    const x = obj[k]!
+    proxy[k] = (...args) => x.apply(obj, args)
   }
-  return proxy;
+  return proxy
 }
 ```
 
@@ -281,7 +281,7 @@ function diagnostic(node, error, category): ts.Diagnostic {
     file: node.getSourceFile(),
     length: node.getWidth(),
     start: node.getStart()
-  };
+  }
 }
 ```
 

@@ -1,7 +1,7 @@
-import type { PropsWithChildren } from '@kitajs/html';
+import type { PropsWithChildren } from '@kitajs/html'
 
 interface LayoutProps {
-  title: string;
+  title: string
 }
 
 export function Layout({ title, children }: PropsWithChildren<LayoutProps>) {
@@ -59,5 +59,5 @@ export function Layout({ title, children }: PropsWithChildren<LayoutProps>) {
         </body>
       </html>
     )
-  );
+  )
 }

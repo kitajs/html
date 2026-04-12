@@ -1,9 +1,9 @@
-import { expect, it } from 'vitest';
-import { Xss } from '../src/errors';
-import { TSLangServer } from './util/lang-server';
+import { expect, it } from 'vitest'
+import { Xss } from '../src/errors'
+import { TSLangServer } from './util/lang-server'
 
 it('Ensures readme checks will throw error', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname)
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
@@ -11,7 +11,7 @@ it('Ensures readme checks will throw error', async () => {
         <div>{String.name}</div>
       </>
     );
-`;
+`
 
   expect(diagnostics.body).toEqual([
     {
@@ -21,5 +21,5 @@ it('Ensures readme checks will throw error', async () => {
       start: { line: 36, offset: 15 },
       text: Xss.message
     }
-  ]);
-});
+  ])
+})

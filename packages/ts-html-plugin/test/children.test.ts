@@ -1,8 +1,8 @@
-import { expect, it } from 'vitest';
-import { TSLangServer } from './util/lang-server';
+import { expect, it } from 'vitest'
+import { TSLangServer } from './util/lang-server'
 
 it('Ensure PropsWithChildren works as normal', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname)
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export interface Extension extends PropsWithChildren {
@@ -46,7 +46,7 @@ it('Ensure PropsWithChildren works as normal', async () => {
         </div>
       </>
     );
-`;
+`
 
-  expect(diagnostics.body).toEqual([]);
-});
+  expect(diagnostics.body).toEqual([])
+})

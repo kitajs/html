@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import styles from './HeroInteractive.module.scss';
+import { useState } from 'react'
+import styles from './HeroInteractive.module.scss'
 
 // Import file icons
-import HtmlIcon from 'material-icon-theme/icons/html.svg?raw';
-import ReactTsIcon from 'material-icon-theme/icons/react_ts.svg?raw';
+import HtmlIcon from 'material-icon-theme/icons/html.svg?raw'
+import ReactTsIcon from 'material-icon-theme/icons/react_ts.svg?raw'
 
 // Helper component to render raw SVG
 const FileIcon = ({ svg, className = '' }: { svg: string; className?: string }) => (
@@ -12,10 +12,10 @@ const FileIcon = ({ svg, className = '' }: { svg: string; className?: string }) 
     style={{ display: 'inline-flex', width: '16px', height: '16px' }}
     dangerouslySetInnerHTML={{ __html: svg }}
   />
-);
+)
 
 export default function HeroInteractive() {
-  const [activeTab, setActiveTab] = useState<'index.tsx' | 'output.html'>('index.tsx');
+  const [activeTab, setActiveTab] = useState<'index.tsx' | 'output.html'>('index.tsx')
   return (
     <div className={styles.wrapper}>
       {/* Doug turtle at bottom left */}
@@ -175,5 +175,5 @@ export default function HeroInteractive() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,9 +1,9 @@
-import { expect, it } from 'vitest';
-import { ComponentXss } from '../src/errors';
-import { TSLangServer } from './util/lang-server';
+import { expect, it } from 'vitest'
+import { ComponentXss } from '../src/errors'
+import { TSLangServer } from './util/lang-server'
 
 it('Ensure <Component /> children are safe', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname)
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
@@ -35,7 +35,7 @@ it('Ensure <Component /> children are safe', async () => {
         </div>
       </>
     );
-`;
+`
 
   expect(diagnostics.body).toEqual([
     {
@@ -52,11 +52,11 @@ it('Ensure <Component /> children are safe', async () => {
       code: ComponentXss.code,
       category: 'error'
     }
-  ]);
-});
+  ])
+})
 
 it('Ensure <Component /> children are safe using "e" tag function', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname)
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
@@ -97,7 +97,7 @@ it('Ensure <Component /> children are safe using "e" tag function', async () => 
         </div>
       </>
     );
-`;
+`
 
   expect(diagnostics.body).toEqual([
     {
@@ -114,5 +114,5 @@ it('Ensure <Component /> children are safe using "e" tag function', async () => 
       code: ComponentXss.code,
       category: 'error'
     }
-  ]);
-});
+  ])
+})

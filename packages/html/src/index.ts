@@ -1,10 +1,10 @@
-import './jsx.js';
+import './jsx.js'
 
 /// <reference path="./suspense.ts" />
 /// <reference path="./error-boundary.ts" />
 
-const ESCAPED_REGEX = /[<"'&]/;
-const CAMEL_REGEX = /[a-z][A-Z]/;
+const ESCAPED_REGEX = /[<"'&]/
+const CAMEL_REGEX = /[a-z][A-Z]/
 
 /**
  * Returns true if the character at the given index is an uppercase character.
@@ -15,8 +15,8 @@ const CAMEL_REGEX = /[a-z][A-Z]/;
  * @internal
  */
 export function isUpper(this: void, input: string, index: number): boolean {
-  const code = input.charCodeAt(index);
-  return code >= 65 /* A */ && code <= 90; /* Z */
+  const code = input.charCodeAt(index)
+  return code >= 65 /* A */ && code <= 90 /* Z */
 }
 
 /**
@@ -29,36 +29,36 @@ export function toKebabCase(this: void, camel: string): string {
   // This is a optimization to avoid the whole conversion process when the
   // string does not contain any uppercase characters.
   if (!CAMEL_REGEX.test(camel)) {
-    return camel;
+    return camel
   }
 
-  const length = camel.length;
+  const length = camel.length
 
   let start = 0,
     end = 0,
     kebab = '',
     prev = true,
     curr = isUpper(camel, 0),
-    next;
+    next
 
   for (; end < length; end++) {
-    next = isUpper(camel, end + 1);
+    next = isUpper(camel, end + 1)
 
     // detects the start of a new camel case word and avoid lowercasing abbreviations.
     if (!prev && curr && !next) {
       // @ts-expect-error - this indexing is safe.
-      kebab += camel.slice(start, end) + '-' + camel[end].toLowerCase();
-      start = end + 1;
+      kebab += camel.slice(start, end) + '-' + camel[end].toLowerCase()
+      start = end + 1
     }
 
-    prev = curr;
-    curr = next;
+    prev = curr
+    curr = next
   }
 
   // Appends the remaining string.
-  kebab += camel.slice(start, end);
+  kebab += camel.slice(start, end)
 
-  return kebab;
+  return kebab
 }
 
 /**
@@ -75,22 +75,22 @@ export function escape(
   ...values: any[]
 ): string {
   const stringsLength = strings.length,
-    valuesLength = values.length;
+    valuesLength = values.length
 
   let index = 0,
-    result = '';
+    result = ''
 
   for (; index < stringsLength; index++) {
-    result += strings[index];
+    result += strings[index]
 
     if (index < valuesLength) {
-      result += values[index];
+      result += values[index]
     }
   }
 
   // Escape the entire string at once.
   // This is faster than escaping each piece individually.
-  return escapeHtml(result);
+  return escapeHtml(result)
 }
 
 /**
@@ -105,20 +105,20 @@ export function escape(
  */
 export let escapeHtml: (this: void, value: any) => string = function (value) {
   if (typeof value !== 'string') {
-    value = value.toString();
+    value = value.toString()
   }
 
   // This is a optimization to avoid the whole conversion process when the
   // string does not contain any uppercase characters.
   if (!ESCAPED_REGEX.test(value)) {
-    return value;
+    return value
   }
 
-  const length = value.length;
+  const length = value.length
 
   let escaped = '',
     start = 0,
-    end = 0;
+    end = 0
 
   // Escapes double quotes to be used inside attributes
   // Faster than using regex
@@ -127,35 +127,35 @@ export let escapeHtml: (this: void, value: any) => string = function (value) {
     // https://wonko.com/post/html-escaping
     switch (value[end]) {
       case '&':
-        escaped += value.slice(start, end) + '&amp;';
-        start = end + 1;
-        continue;
+        escaped += value.slice(start, end) + '&amp;'
+        start = end + 1
+        continue
       // We don't need to escape > because it is only used to close tags.
       // https://stackoverflow.com/a/9189067
       case '<':
-        escaped += value.slice(start, end) + '&lt;';
-        start = end + 1;
-        continue;
+        escaped += value.slice(start, end) + '&lt;'
+        start = end + 1
+        continue
       case '"':
-        escaped += value.slice(start, end) + '&#34;';
-        start = end + 1;
-        continue;
+        escaped += value.slice(start, end) + '&#34;'
+        start = end + 1
+        continue
       case "'":
-        escaped += value.slice(start, end) + '&#39;';
-        start = end + 1;
-        continue;
+        escaped += value.slice(start, end) + '&#39;'
+        start = end + 1
+        continue
     }
   }
 
   // Appends the remaining string.
-  escaped += value.slice(start, end);
+  escaped += value.slice(start, end)
 
-  return escaped;
-};
+  return escaped
+}
 
 /* v8 ignore next 2 */
 // @ts-ignore - bun runtime have its own escapeHTML function.
-if (typeof Bun !== 'undefined') escapeHtml = Bun.escapeHTML;
+if (typeof Bun !== 'undefined') escapeHtml = Bun.escapeHTML
 
 /**
  * Returns true if the element is a html void element.
@@ -182,7 +182,7 @@ export function isVoidElement(this: void, tag: string): boolean {
     tag === 'source' ||
     tag === 'track' ||
     tag === 'wbr'
-  );
+  )
 }
 
 /**
@@ -196,90 +196,90 @@ export function styleToString(this: void, style: object | string): string {
   // Faster escaping process that only looks for the " character.
   // As we use the " character to wrap the style string, we need to escape it.
   if (typeof style === 'string') {
-    let end = style.indexOf('"');
+    let end = style.indexOf('"')
 
     // This is a optimization to avoid having to look twice for the " character.
     // And make the loop already start in the middle
     if (end === -1) {
-      return style;
+      return style
     }
 
-    const length = style.length;
+    const length = style.length
 
     let escaped = '',
-      start = 0;
+      start = 0
 
     // Escapes double quotes to be used inside attributes
     // Faster than using regex
     // https://jsperf.app/kakihu
     for (; end < length; end++) {
       if (style[end] === '"') {
-        escaped += style.slice(start, end) + '&#34;';
-        start = end + 1;
+        escaped += style.slice(start, end) + '&#34;'
+        start = end + 1
       }
     }
 
     // Appends the remaining string.
-    escaped += style.slice(start, end);
+    escaped += style.slice(start, end)
 
-    return escaped;
+    return escaped
   }
 
   const keys = Object.keys(style),
-    length = keys.length;
+    length = keys.length
 
   let key,
     value,
     end,
     start,
     index = 0,
-    result = '';
+    result = ''
 
   for (; index < length; index++) {
-    key = keys[index];
+    key = keys[index]
     // @ts-expect-error - this indexing is safe.
-    value = style[key];
+    value = style[key]
 
     if (value === null || value === undefined) {
-      continue;
+      continue
     }
 
     // @ts-expect-error - this indexing is safe.
-    result += toKebabCase(key) + ':';
+    result += toKebabCase(key) + ':'
 
     // Only needs escaping when the value is a string.
     if (typeof value !== 'string') {
-      result += value.toString() + ';';
-      continue;
+      result += value.toString() + ';'
+      continue
     }
 
-    end = value.indexOf('"');
+    end = value.indexOf('"')
 
     // This is a optimization to avoid having to look twice for the " character.
     // And make the loop already start in the middle
     if (end === -1) {
-      result += value + ';';
-      continue;
+      result += value + ';'
+      continue
     }
 
-    const length = value.length;
-    start = 0;
+    const length = value.length
+    start = 0
 
     // Escapes double quotes to be used inside attributes
     // Faster than using regex
     // https://jsperf.app/kakihu
     for (; end < length; end++) {
       if (value[end] === '"') {
-        result += value.slice(start, end) + '&#34;';
-        start = end + 1;
+        result += value.slice(start, end) + '&#34;'
+        start = end + 1
       }
     }
 
     // Appends the remaining string.
-    result += value.slice(start, end) + ';';
+    result += value.slice(start, end) + ';'
   }
 
-  return result;
+  return result
 }
 
 /**
@@ -300,121 +300,121 @@ export function attributesToString(this: void, attributes: object): string {
     start,
     classItems,
     valueLength,
-    result = '';
+    result = ''
 
   for (key in attributes) {
     // Skips all @kitajs/html specific attributes.
     if (key === 'children' || key === 'safe' || key === 'of') {
-      continue;
+      continue
     }
 
     // @ts-expect-error - this indexing is safe.
-    value = attributes[key];
+    value = attributes[key]
 
     if (value === null || value === undefined) {
-      continue;
+      continue
     }
 
     // React className compatibility.
     if (key === 'className') {
       // @ts-expect-error - both were provided, so use the class attribute.
       if (attributes.class !== undefined) {
-        continue;
+        continue
       }
 
-      key = 'class';
+      key = 'class'
     } else if (key === 'class' && Array.isArray(value)) {
-      classItems = value;
-      valueLength = value.length;
+      classItems = value
+      valueLength = value.length
 
       // Reuses the value variable
-      value = '';
+      value = ''
 
       for (let i = 0; i < valueLength; i++) {
         if (classItems[i] && classItems[i].length > 0) {
           if (value) {
-            value += ' ' + classItems[i].trim();
+            value += ' ' + classItems[i].trim()
           } else {
-            value += classItems[i].trim();
+            value += classItems[i].trim()
           }
         }
       }
 
       // All attributes may have been disabled.
       if (value.length === 0) {
-        continue;
+        continue
       }
     } else if (key === 'style') {
-      result += ` style="${styleToString(value)}"`;
-      continue;
+      result += ` style="${styleToString(value)}"`
+      continue
     } else if (key === 'attrs') {
       if (typeof value === 'string') {
-        result += ' ' + value;
+        result += ' ' + value
       } else {
-        result += attributesToString(value);
+        result += attributesToString(value)
       }
 
-      continue;
+      continue
     }
 
-    type = typeof value;
+    type = typeof value
 
     if (type === 'boolean') {
       // Only add the attribute if the value is true.
       if (value) {
-        result += ' ' + key;
+        result += ' ' + key
       }
 
-      continue;
+      continue
     }
 
     if (type !== 'string') {
       // Non objects are
       if (type !== 'object') {
-        result += ` ${key}="${value}"`;
-        continue;
+        result += ` ${key}="${value}"`
+        continue
       }
 
       // Dates are always safe
       if (value instanceof Date) {
-        result += ` ${key}="${value.toISOString()}"`;
-        continue;
+        result += ` ${key}="${value.toISOString()}"`
+        continue
       }
 
       // The object may have a overridden toString method.
       // Which results in a non escaped string.
-      value = value.toString();
+      value = value.toString()
     }
 
-    end = value.indexOf('"');
+    end = value.indexOf('"')
 
     // This is a optimization to avoid having to look twice for the " character.
     // And make the loop already start in the middle
     if (end === -1) {
-      result += ` ${key}="${value}"`;
-      continue;
+      result += ` ${key}="${value}"`
+      continue
     }
 
-    result += ` ${key}="`;
+    result += ` ${key}="`
 
-    valueLength = value.length;
-    start = 0;
+    valueLength = value.length
+    start = 0
 
     // Escapes double quotes to be used inside attributes
     // Faster than using regex
     // https://jsperf.app/kakihu
     for (; end < valueLength; end++) {
       if (value[end] === '"') {
-        result += value.slice(start, end) + '&#34;';
-        start = end + 1;
+        result += value.slice(start, end) + '&#34;'
+        start = end + 1
       }
     }
 
     // Appends the remaining string.
-    result += value.slice(start, end) + '"';
+    result += value.slice(start, end) + '"'
   }
 
-  return result;
+  return result
 }
 
 export type Children =
@@ -425,11 +425,11 @@ export type Children =
   | undefined
   | bigint
   | Promise<Children>
-  | Children[];
+  | Children[]
 
-export type PropsWithChildren<T = {}> = { children?: Children } & T;
+export type PropsWithChildren<T = {}> = { children?: Children } & T
 
-export type Component<T = {}> = (this: void, props: PropsWithChildren<T>) => JSX.Element;
+export type Component<T = {}> = (this: void, props: PropsWithChildren<T>) => JSX.Element
 
 /**
  * Joins raw string html elements into a single html string.
@@ -446,11 +446,11 @@ export function contentsToString(
   contents: Children[],
   escape?: boolean
 ): JSX.Element {
-  let length = contents.length;
-  let result = '';
+  let length = contents.length
+  let result = ''
 
   for (let index = 0; index < length; index++) {
-    const content = contents[index];
+    const content = contents[index]
 
     switch (typeof content) {
       case 'string':
@@ -458,40 +458,40 @@ export function contentsToString(
       // Bigint is the only case where it differs from React.
       // where React renders a empty string and we render the whole number.
       case 'bigint':
-        result += content;
-        continue;
+        result += content
+        continue
       case 'boolean':
-        continue;
+        continue
     }
 
     if (!content) {
-      continue;
+      continue
     }
 
     if (Array.isArray(content)) {
-      contents.splice(index--, 1, ...content);
-      length += content.length - 1;
-      continue;
+      contents.splice(index--, 1, ...content)
+      length += content.length - 1
+      continue
     }
 
     if (typeof content.then === 'function') {
       // @ts-ignore - Type instantiation is excessively deep and possibly infinite.
       return Promise.all(contents.slice(index)).then(function resolveContents(resolved) {
-        resolved.unshift(result);
-        return contentsToString(resolved, escape);
-      });
+        resolved.unshift(result)
+        return contentsToString(resolved, escape)
+      })
     }
 
-    throw new Error('Objects are not valid as a KitaJSX child');
+    throw new Error('Objects are not valid as a KitaJSX child')
   }
 
   // escapeHtml is faster with longer strings, that's
   // why we escape the entire result once
   if (escape === true) {
-    return escapeHtml(result);
+    return escapeHtml(result)
   }
 
-  return result;
+  return result
 }
 
 /**
@@ -510,31 +510,31 @@ export function contentToString(
 ): JSX.Element {
   switch (typeof content) {
     case 'string':
-      return escape ? escapeHtml(content) : content;
+      return escape ? escapeHtml(content) : content
     case 'number':
     // Bigint is the only case where it differs from React.
     // where React renders a empty string and we render the whole number.
     case 'bigint':
-      return content.toString();
+      return content.toString()
     case 'boolean':
-      return '';
+      return ''
   }
 
   if (!content) {
-    return '';
+    return ''
   }
 
   if (Array.isArray(content)) {
-    return contentsToString(content, escape);
+    return contentsToString(content, escape)
   }
 
   if (typeof content.then === 'function') {
     return content.then(function resolveContent(resolved) {
-      return contentToString(resolved, escape);
-    });
+      return contentToString(resolved, escape)
+    })
   }
 
-  throw new Error('Objects are not valid as a KitaJSX child');
+  throw new Error('Objects are not valid as a KitaJSX child')
 }
 
 /**
@@ -552,43 +552,43 @@ export function createElement(
   attributes: PropsWithChildren<any> | null,
   ...children: Children[]
 ): JSX.Element {
-  const hasAttrs = attributes !== null;
+  const hasAttrs = attributes !== null
 
   // Calls the element creator function if the name is a function
   if (typeof name === 'function') {
     // We at least need to pass the children to the function component. We may receive null if this
     // component was called without any children.
     if (!hasAttrs) {
-      return name({ children: children.length > 1 ? children : children[0] });
+      return name({ children: children.length > 1 ? children : children[0] })
     }
 
-    attributes.children = children.length > 1 ? children : children[0];
-    return name(attributes);
+    attributes.children = children.length > 1 ? children : children[0]
+    return name(attributes)
   }
 
   // Switches the tag name when this custom `tag` is present.
   if (hasAttrs && name === 'tag') {
-    name = attributes.of as string;
+    name = attributes.of as string
   }
 
-  const attrs = hasAttrs ? attributesToString(attributes) : '';
+  const attrs = hasAttrs ? attributesToString(attributes) : ''
 
   if (children.length === 0) {
     if (isVoidElement(name as string)) {
-      return `<${name}${attrs}/>`;
+      return `<${name}${attrs}/>`
     }
-    return `<${name}${attrs}></${name}>`;
+    return `<${name}${attrs}></${name}>`
   }
 
-  const contentsStr = contentsToString(children, hasAttrs && attributes.safe);
+  const contentsStr = contentsToString(children, hasAttrs && attributes.safe)
 
   if (typeof contentsStr === 'string') {
-    return `<${name}${attrs}>${contentsStr}</${name}>`;
+    return `<${name}${attrs}>${contentsStr}</${name}>`
   }
 
   return contentsStr.then(function resolveContents(contents) {
-    return `<${name}${attrs}>${contents}</${name}>`;
-  });
+    return `<${name}${attrs}>${contents}</${name}>`
+  })
 }
 
 /**
@@ -607,7 +607,7 @@ export function createElement(
 export function Fragment(
   props: PropsWithChildren<Pick<JSX.HtmlTag, 'safe'>>
 ): JSX.Element {
-  return contentsToString([props.children], props.safe);
+  return contentsToString([props.children], props.safe)
 }
 
 /**
@@ -615,7 +615,7 @@ export function Fragment(
  *
  * @internal
  */
-export const h: typeof createElement = createElement;
+export const h: typeof createElement = createElement
 
 /**
  * Alias of {@linkcode escape} to reduce verbosity.
@@ -628,7 +628,7 @@ export const h: typeof createElement = createElement;
  * <div>{e`My name is ${user.name}!`}</div>;
  * ```
  */
-export const e: typeof escape = escape;
+export const e: typeof escape = escape
 
 /**
  * Namespace export containing all core runtime functions. Used with the legacy `jsx:
@@ -653,4 +653,4 @@ export const Html: Omit<typeof import('./index.js'), 'Html' | 'default'> = {
   contentsToString,
   contentToString,
   Fragment
-};
+}

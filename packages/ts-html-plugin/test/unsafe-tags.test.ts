@@ -1,9 +1,9 @@
-import { expect, it } from 'vitest';
-import { Xss } from '../src/errors';
-import { TSLangServer } from './util/lang-server';
+import { expect, it } from 'vitest'
+import { Xss } from '../src/errors'
+import { TSLangServer } from './util/lang-server'
 
 it('Detect xss prone usage', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname)
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
@@ -27,7 +27,7 @@ it('Detect xss prone usage', async () => {
       </div>
       </>
     );
-`;
+`
 
   expect(diagnostics.body).toEqual([
     {
@@ -79,5 +79,5 @@ it('Detect xss prone usage', async () => {
       code: Xss.code,
       category: 'error'
     }
-  ]);
-});
+  ])
+})

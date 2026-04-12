@@ -1,5 +1,5 @@
-import type { FastifyInstance } from 'fastify';
-import { store } from '../store';
+import type { FastifyInstance } from 'fastify'
+import { store } from '../store'
 
 // Todo item component
 export function TodoItem({
@@ -7,9 +7,9 @@ export function TodoItem({
   text,
   done
 }: {
-  id: number;
-  text: string;
-  done: boolean;
+  id: number
+  text: string
+  done: boolean
 }) {
   return (
     <div
@@ -41,30 +41,30 @@ export function TodoItem({
         ✕
       </button>
     </div>
-  );
+  )
 }
 
 export async function todosRoutes(app: FastifyInstance) {
   app.post('/api/todos', async (req, rep) => {
-    const { text } = req.body as { text: string };
-    const todo = { id: store.nextTodoId++, text, done: false };
-    store.todos.push(todo);
-    return rep.html(<TodoItem {...todo} />);
-  });
+    const { text } = req.body as { text: string }
+    const todo = { id: store.nextTodoId++, text, done: false }
+    store.todos.push(todo)
+    return rep.html(<TodoItem {...todo} />)
+  })
 
   app.post('/api/todos/:id/toggle', async (req, rep) => {
-    const id = Number((req.params as { id: string }).id);
-    const todo = store.todos.find((t) => t.id === id);
+    const id = Number((req.params as { id: string }).id)
+    const todo = store.todos.find((t) => t.id === id)
     if (todo) {
-      todo.done = !todo.done;
-      return rep.html(<TodoItem {...todo} />);
+      todo.done = !todo.done
+      return rep.html(<TodoItem {...todo} />)
     }
-    return '';
-  });
+    return ''
+  })
 
   app.delete('/api/todos/:id', async (req) => {
-    const id = Number((req.params as { id: string }).id);
-    store.todos = store.todos.filter((t) => t.id !== id);
-    return '';
-  });
+    const id = Number((req.params as { id: string }).id)
+    store.todos = store.todos.filter((t) => t.id !== id)
+    return ''
+  })
 }

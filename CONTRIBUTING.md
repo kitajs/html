@@ -128,7 +128,7 @@ For `@kitajs/ts-html-plugin` tests, you can enable debug output by passing `true
 second parameter to `TSLangServer`:
 
 ```typescript
-const server = new TSLangServer(projectPath, true); // Enable debug mode
+const server = new TSLangServer(projectPath, true) // Enable debug mode
 ```
 
 Debug mode provides:

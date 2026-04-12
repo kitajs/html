@@ -6,7 +6,7 @@ Html, layouts are regular components that accept children and slot props.
 ## Basic layout
 
 ```tsx
-import type { PropsWithChildren } from '@kitajs/html';
+import type { PropsWithChildren } from '@kitajs/html'
 
 function Layout({ title, children }: PropsWithChildren<{ title?: string }>) {
   return (
@@ -21,7 +21,7 @@ function Layout({ title, children }: PropsWithChildren<{ title?: string }>) {
         <body>{children}</body>
       </html>
     </>
-  );
+  )
 }
 ```
 
@@ -35,9 +35,9 @@ For layouts with multiple content regions, use additional props for each slot.
 ```tsx
 function Layout(
   props: PropsWithChildren<{
-    title?: string;
-    head?: JSX.Element;
-    footer?: JSX.Element;
+    title?: string
+    head?: JSX.Element
+    footer?: JSX.Element
   }>
 ) {
   return (
@@ -55,7 +55,7 @@ function Layout(
         </body>
       </html>
     </>
-  );
+  )
 }
 
 const page = (
@@ -71,7 +71,7 @@ const page = (
   >
     <main>Page content</main>
   </Layout>
-);
+)
 ```
 
 ## Fastify auto-doctype

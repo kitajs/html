@@ -13,14 +13,14 @@ declare global {
   namespace JSX {
     interface IntrinsicElements {
       'math-power': HtmlTag & {
-        exponent: number;
-        children: number;
-      };
+        exponent: number
+        children: number
+      }
     }
   }
 }
 
-<math-power exponent={2}>{3}</math-power>;
+;<math-power exponent={2}>{3}</math-power>
 // '<math-power exponent="2">3</math-power>'
 ```
 
@@ -32,12 +32,12 @@ Extend the `HtmlTag` interface to add attributes to every native HTML element.
 declare global {
   namespace JSX {
     interface HtmlTag {
-      'data-testid'?: string;
+      'data-testid'?: string
     }
   }
 }
 
-<div data-testid="header">content</div>;
+;<div data-testid="header">content</div>
 ```
 
 ## Allow any tag and attribute

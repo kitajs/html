@@ -24,7 +24,7 @@ When an async child resolves, the runtime pushes two elements to the stream: a
 ```html
 <template id="N:1" data-sr><div>Actual content</div></template>
 <script id="S:1" data-ss>
-  $KITA_RC(1);
+  $KITA_RC(1)
 </script>
 ```
 

@@ -1,13 +1,13 @@
-import type { PropsWithChildren } from '@kitajs/html';
-import { setTimeout } from 'node:timers/promises';
+import type { PropsWithChildren } from '@kitajs/html'
+import { setTimeout } from 'node:timers/promises'
 
 // Helper for random delay
-const randomDelay = (): Promise<number> => setTimeout(300 + Math.random() * 700);
+const randomDelay = (): Promise<number> => setTimeout(300 + Math.random() * 700)
 
 // Card component
 interface CardProps {
-  title?: string;
-  icon?: string;
+  title?: string
+  icon?: string
 }
 
 export function Card({ title, icon, children }: PropsWithChildren<CardProps>) {
@@ -32,15 +32,15 @@ export function Card({ title, icon, children }: PropsWithChildren<CardProps>) {
       )}
       {children}
     </div>
-  );
+  )
 }
 
 // Stat card
 interface StatCardProps {
-  label: string;
-  value: string;
-  change?: string;
-  positive?: boolean;
+  label: string
+  value: string
+  change?: string
+  positive?: boolean
 }
 
 export function StatCard({ label, value, change, positive }: StatCardProps) {
@@ -61,7 +61,7 @@ export function StatCard({ label, value, change, positive }: StatCardProps) {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 // Stat skeleton
@@ -72,37 +72,37 @@ export function StatSkeleton() {
       <div class="h-7 w-20 skeleton rounded mb-1" />
       <div class="h-3 w-12 skeleton rounded" />
     </div>
-  );
+  )
 }
 
 // Async Stat Components - These demonstrate Suspense
 export async function VisitorsStat() {
-  await randomDelay();
-  return <StatCard label="Visitors" value="2,847" change="+12%" positive />;
+  await randomDelay()
+  return <StatCard label="Visitors" value="2,847" change="+12%" positive />
 }
 
 export async function RequestsStat() {
-  await randomDelay();
-  return <StatCard label="Requests" value="14.2k" change="+28%" positive />;
+  await randomDelay()
+  return <StatCard label="Requests" value="14.2k" change="+28%" positive />
 }
 
 export async function UptimeStat() {
-  await randomDelay();
-  return <StatCard label="Uptime" value="99.9%" change="Stable" positive />;
+  await randomDelay()
+  return <StatCard label="Uptime" value="99.9%" change="Stable" positive />
 }
 
 export async function MemoryStat() {
-  await randomDelay();
-  const used = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
-  return <StatCard label="Memory" value={`${used} MB`} />;
+  await randomDelay()
+  const used = Math.round(process.memoryUsage().heapUsed / 1024 / 1024)
+  return <StatCard label="Memory" value={`${used} MB`} />
 }
 
 // List item
 interface ListItemProps {
-  primary: string;
-  secondary?: string;
-  badge?: string;
-  badgeColor?: string;
+  primary: string
+  secondary?: string
+  badge?: string
+  badgeColor?: string
 }
 
 export function ListItem({
@@ -129,13 +129,13 @@ export function ListItem({
         </span>
       )}
     </div>
-  );
+  )
 }
 
 // Button
 interface ButtonProps {
-  variant?: 'primary' | 'secondary';
-  size?: 'sm' | 'md';
+  variant?: 'primary' | 'secondary'
+  size?: 'sm' | 'md'
 }
 
 export function Button({
@@ -144,19 +144,19 @@ export function Button({
   children
 }: PropsWithChildren<ButtonProps>) {
   const baseClass =
-    'rounded-lg font-medium transition-colors inline-flex items-center gap-2';
+    'rounded-lg font-medium transition-colors inline-flex items-center gap-2'
   const variantClass =
     variant === 'primary'
       ? 'bg-kita-500 hover:bg-kita-600 text-white'
-      : 'bg-stone-800 hover:bg-stone-700 text-stone-200';
-  const sizeClass = size === 'sm' ? 'px-3 py-1.5 text-xs' : 'px-4 py-2 text-sm';
+      : 'bg-stone-800 hover:bg-stone-700 text-stone-200'
+  const sizeClass = size === 'sm' ? 'px-3 py-1.5 text-xs' : 'px-4 py-2 text-sm'
 
-  return <button class={`${baseClass} ${variantClass} ${sizeClass}`}>{children}</button>;
+  return <button class={`${baseClass} ${variantClass} ${sizeClass}`}>{children}</button>
 }
 
 // Loading spinner
 export function Spinner({ size = 'sm' }: { size?: 'sm' | 'md' }) {
-  const sizeClass = size === 'sm' ? 'w-4 h-4' : 'w-6 h-6';
+  const sizeClass = size === 'sm' ? 'w-4 h-4' : 'w-6 h-6'
   return (
     <svg
       class={`animate-spin ${sizeClass} text-kita-400`}
@@ -177,13 +177,13 @@ export function Spinner({ size = 'sm' }: { size?: 'sm' | 'md' }) {
         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
       />
     </svg>
-  );
+  )
 }
 
 // Progress bar
 interface ProgressProps {
-  value: number;
-  label: string;
+  value: number
+  label: string
 }
 
 export function Progress({ value, label }: ProgressProps) {
@@ -202,13 +202,13 @@ export function Progress({ value, label }: ProgressProps) {
         />
       </div>
     </div>
-  );
+  )
 }
 
 // Toast notification
 interface ToastProps {
-  message: string;
-  type?: 'success' | 'error' | 'info';
+  message: string
+  type?: 'success' | 'error' | 'info'
 }
 
 export function Toast({ message, type = 'info' }: ToastProps) {
@@ -216,11 +216,11 @@ export function Toast({ message, type = 'info' }: ToastProps) {
     success: 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300',
     error: 'bg-red-500/20 border-red-500/50 text-red-300',
     info: 'bg-kita-500/20 border-kita-500/50 text-kita-300'
-  }[type];
+  }[type]
 
   return (
     <div class={`px-4 py-2 rounded-lg border text-sm ${colorClass}`} safe>
       {message}
     </div>
-  );
+  )
 }

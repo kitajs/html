@@ -9,11 +9,11 @@ Wrap async components in a `Suspense` element with a `rid`, a `fallback`, and op
 stream.
 
 ```tsx
-import { Suspense, renderToStream } from '@kitajs/html/suspense';
+import { Suspense, renderToStream } from '@kitajs/html/suspense'
 
 async function UserStats({ id }: { id: string }) {
-  const stats = await api.getStats(id);
-  return <div>{stats.totalPosts} posts</div>;
+  const stats = await api.getStats(id)
+  return <div>{stats.totalPosts} posts</div>
 }
 
 const stream = renderToStream((rid) => (
@@ -25,20 +25,20 @@ const stream = renderToStream((rid) => (
       </Suspense>
     </body>
   </html>
-));
+))
 ```
 
 The `renderToStream` callback receives the `rid` automatically. Pipe the returned stream
 to your HTTP response.
 
 ```tsx
-import { text } from 'node:stream/consumers';
+import { text } from 'node:stream/consumers'
 
 // As a stream
-stream.pipe(response);
+stream.pipe(response)
 
 // Or consume entirely (loses streaming benefits, useful for testing)
-const html = await text(stream);
+const html = await text(stream)
 ```
 
 ## Custom request IDs
@@ -52,7 +52,7 @@ const stream = renderToStream(
     <AsyncContent />
   </Suspense>,
   myCustomId
-);
+)
 ```
 
 ## Error handling
@@ -90,7 +90,7 @@ const stream = renderToStream((rid) => (
       </Suspense>
     </body>
   </html>
-));
+))
 ```
 
 The same `rid` is shared across all Suspense boundaries in the same request. The stream
@@ -103,15 +103,15 @@ fallback resolves. The server will not send any HTML until the async fallback is
 
 ```tsx
 async function LoadingMessage() {
-  await loadTranslations();
-  return <div>Loading user data...</div>;
+  await loadTranslations()
+  return <div>Loading user data...</div>
 }
 
 const stream = renderToStream((rid) => (
   <Suspense rid={rid} fallback={<LoadingMessage />}>
     <UserProfile id="123" />
   </Suspense>
-));
+))
 ```
 
 The stream waits for `LoadingMessage` to resolve before sending anything to the client.

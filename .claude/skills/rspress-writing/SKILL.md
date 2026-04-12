@@ -222,7 +222,7 @@ beneath the heading (text, blockquotes, code blocks) becomes the step body:
 ### Write your first component
 
 ```tsx
-const greeting = <h1>Hello</h1>;
+const greeting = <h1>Hello</h1>
 ```
 
 </Steps>

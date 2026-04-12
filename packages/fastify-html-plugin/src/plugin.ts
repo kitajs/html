@@ -1,7 +1,7 @@
-import type { FastifyPluginCallback } from 'fastify';
-import fp from 'fastify-plugin';
-import { handleHtml } from './html';
-import { kAutoDoctype } from './utils';
+import type { FastifyPluginCallback } from 'fastify'
+import fp from 'fastify-plugin'
+import { handleHtml } from './html'
+import { kAutoDoctype } from './utils'
 
 /** Options for @kitajs/fastify-html-plugin plugin. */
 export interface FastifyKitaHtmlOptions {
@@ -19,7 +19,7 @@ export interface FastifyKitaHtmlOptions {
    *
    * @default true
    */
-  autoDoctype: boolean;
+  autoDoctype: boolean
 }
 
 /**
@@ -53,15 +53,15 @@ export const fastifyKitaHtml: FastifyPluginCallback<
   NonNullable<Partial<FastifyKitaHtmlOptions>>
 > = fp(
   function (fastify, opts: NonNullable<Partial<FastifyKitaHtmlOptions>>, next) {
-    fastify.decorateReply(kAutoDoctype, opts.autoDoctype ?? true);
-    fastify.decorateReply('html', handleHtml);
-    return next();
+    fastify.decorateReply(kAutoDoctype, opts.autoDoctype ?? true)
+    fastify.decorateReply('html', handleHtml)
+    return next()
   },
   {
     fastify: '4.x || 5.x',
     name: '@kitajs/fastify-html-plugin'
   }
-);
+)
 
 // Module augmentation for FastifyReply
 declare module 'fastify' {
@@ -70,7 +70,7 @@ declare module 'fastify' {
      * This gets assigned to every reply instance. You can manually change this value to
      * `false` if you want to "hand pick" when or when not to add the doctype.
      */
-    [kAutoDoctype]: boolean;
+    [kAutoDoctype]: boolean
 
     /**
      * Returns an HTML response to the browser. The response stream might remain open if
@@ -109,6 +109,6 @@ declare module 'fastify' {
     html<H extends JSX.Element>(
       this: this,
       html: H
-    ): H extends Promise<string> ? Promise<void> : void;
+    ): H extends Promise<string> ? Promise<void> : void
   }
 }

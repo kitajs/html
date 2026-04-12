@@ -165,7 +165,7 @@ const html = (
     <h1>Hello, world!</h1>
     <p>Welcome to the Kita Html package.</p>
   </div>
-);
+)
 ```
 
 Always use the `safe` attribute or manually call `Html.escapeHtml` to protect against XSS
@@ -212,27 +212,27 @@ Here's an example of how this is **DANGEROUS** for your application:
 user = {
   name: 'Bad guy',
   description: '</div><script>getStoredPasswordAndSentToBadGuysServer()</script>'
-};
+}
 
 // Executes malicious code:
-input = <div class="user-card">{user.description}</div>;
+input = <div class="user-card">{user.description}</div>
 output = (
   <div class="user-card">
     <script>getStoredPasswordAndSentToBadGuysServer()</script>
   </div>
-);
+)
 
 // Does not execute any malicious code:
 input = (
   <div class="user-card" safe>
     {user.description}
   </div>
-);
+)
 output = (
   <div class="user-card">
     &lt;/div&gt;&lt;script&gt;getStoredPasswordAndSentToBadGuysServer()&lt;/script&gt;
   </div>
-);
+)
 ```
 
 <br />
@@ -255,7 +255,7 @@ function UserCard({ name, description, date, about }) {
       <br />
       <p safe>{about}</p>
     </div>
-  );
+  )
 }
 ```
 
@@ -295,29 +295,29 @@ cast it into a string.
 
 ```tsx
 async function Async() {
-  await callApi();
-  return <div>Async!</div>;
+  await callApi()
+  return <div>Async!</div>
 }
 
 function Sync() {
-  return <div>Sync!</div>;
+  return <div>Sync!</div>
 }
 
 const async = (
   <div>
     <Async />
   </div>
-);
+)
 
-async instanceof Promise;
+async instanceof Promise
 
 const sync: string = (
   <div>
     <Sync />
   </div>
-);
+)
 
-typeof sync === 'string';
+typeof sync === 'string'
 ```
 
 A `JSX.Element` will always be a string. Once a children element is a async component, the
@@ -338,11 +338,11 @@ his children to be rendered. This is a perfect combo to use with
 [async components](#async-components).
 
 ```tsx
-import { Suspense, renderToStream } from '@kitajs/html/suspense';
+import { Suspense, renderToStream } from '@kitajs/html/suspense'
 
 async function MyAsyncComponent() {
-  const data = await database.query();
-  return <User name={data.username} />;
+  const data = await database.query()
+  return <User name={data.username} />
 }
 
 function renderUserPage(rid: number) {
@@ -354,11 +354,11 @@ function renderUserPage(rid: number) {
     >
       <MyAsyncComponent />
     </Suspense>
-  );
+  )
 }
 
 // Html is a string readable stream that can be piped to the client
-const html = renderToStream(renderUserPage);
+const html = renderToStream(renderUserPage)
 ```
 
 <br />
@@ -393,7 +393,7 @@ function renderTemplate(rid: number) {
     >
       <MyAsyncComponent />
     </Suspense>
-  );
+  )
 }
 ```
 
@@ -412,11 +412,11 @@ The same way as promises must be awaited to resolve its own html, errors must be
 Outside of suspense components, you can use the provided error boundaries to catch errors.
 
 ```tsx
-import { ErrorBoundary } from '@kitajs/html/error-boundary';
+import { ErrorBoundary } from '@kitajs/html/error-boundary'
 
 async function MyAsyncComponent() {
-  const data = await database.query(); // this promise may reject
-  return <User name={data.username} />;
+  const data = await database.query() // this promise may reject
+  return <User name={data.username} />
 }
 
 function renderTemplate() {
@@ -424,11 +424,11 @@ function renderTemplate() {
     <ErrorBoundary catch={(err) => <div>Error: {err.stack}</div>}>
       <MyAsyncComponent />
     </ErrorBoundary>
-  );
+  )
 }
 
 // If MyAsyncComponent throws an error, it will render <div>Error: ...</div>
-const html = await renderTemplate();
+const html = await renderTemplate()
 ```
 
 Error boundaries will only work for errors thrown inside async components, for sync
@@ -437,10 +437,10 @@ components you must use try/catch.
 ```tsx
 function MySyncComponent() {
   try {
-    const data = database.query(); // this may throw an error
-    return <User name={data.username} />;
+    const data = database.query() // this may throw an error
+    return <User name={data.username} />
   } catch (err) {
-    return <div>Error: {err.stack}</div>;
+    return <div>Error: {err.stack}</div>
   }
 }
 ```
@@ -461,10 +461,10 @@ function renderTemplate(rid: number) {
         <MyAsyncComponent />
       </Suspense>
     </ErrorBoundary>
-  );
+  )
 }
 
-const html = renderToStream(renderTemplate);
+const html = renderToStream(renderTemplate)
 ```
 
 The above example would render `<div>Children error</div>` if `MyAsyncComponent` throws an
@@ -492,14 +492,14 @@ handle both string and promise cases.
 
 ```tsx
 // It may or may not have inner async components.
-const html = <Layout />;
+const html = <Layout />
 
 if (html instanceof Promise) {
   // I'm a promise, I should be awaited
-  console.log(await html);
+  console.log(await html)
 } else {
   // I'm a string, I can be used as is
-  console.log(html);
+  console.log(html)
 }
 ```
 
@@ -542,7 +542,7 @@ app.get('/', (request, response) => (
       <YourSubMenu path={request.url} username={request.user?.name} />
     </YourLayout>
   </YourDoctype>
-));
+))
 ```
 
 <br />
@@ -566,14 +566,14 @@ If you choose this approach keep in mind that you will need to manually import t
 namespace in every file you use JSX.
 
 ```tsx
-import { Html } from '@kitajs/html';
+import { Html } from '@kitajs/html'
 
 const html = (
   <div>
     <h1>Hello, world!</h1>
     <p>Welcome to the Kita Html package.</p>
   </div>
-);
+)
 ```
 
 And also there is a light performance penalty when using this approach. It's minimal, but
@@ -625,7 +625,7 @@ const html = (
   <div hx-get="/api" hx-trigger="click" hx-target="#target">
     Click me!
   </div>
-);
+)
 ```
 
 Or you can use the type option in your tsconfig to import the types globally:
@@ -652,7 +652,7 @@ You just need to add this triple slash directive to the top of your file:
 const html = (
   // Type checking and intellisense for all HTMX attributes
   <div x-data="{ open: false }">...</div>
-);
+)
 ```
 
 Or you can use the type option in your tsconfig to import the types globally:
@@ -685,7 +685,7 @@ const html = (
 
     <form action="/messages">Show response from this form within this frame.</form>
   </turbo-frame>
-);
+)
 ```
 
 Or you can use the type option in your tsconfig to import the types globally:
@@ -724,7 +724,7 @@ export function Layout(props: Html.PropsWithChildren<{ head: string; title?: str
         <body>{props.children}</body>
       </html>
     </>
-  );
+  )
 }
 
 const html = (
@@ -738,7 +738,7 @@ const html = (
   >
     <div>Hello World</div>
   </Layout>
-);
+)
 ```
 
 <br />
@@ -754,7 +754,7 @@ const html = (
     <div>1</div>
     <div>2</div>
   </>
-);
+)
 ```
 
 [Learn more about JSX syntax here!](https://react.dev/learn/writing-markup-with-jsx)
@@ -827,15 +827,15 @@ declare global {
     interface IntrinsicElements {
       mathPower: HtmlTag & {
         // Changes properties to the math-power element
-        ['my-exponential']: number;
+        ['my-exponential']: number
         // this property becomes the <>{children}</> type
-        children: number;
-      };
+        children: number
+      }
     }
 
     // Adds hxBoost property to all elements native elements (those who extends HtmlTag)
     interface HtmlTag {
-      ['hx-boost']: boolean;
+      ['hx-boost']: boolean
       // TIP: We already provide HTMX types, check them out!
     }
   }
@@ -845,7 +845,7 @@ const element = (
   <mathPower my-exponential={2} hx-boost>
     {3}
   </mathPower>
-);
+)
 // Becomes <math-power my-exponential="2" hx-boost>3</math-power>
 ```
 
@@ -948,18 +948,18 @@ you [tell tsc to transpile](#getting-started) JSX syntax to calls to our own JSX
 Gets transpiled by tsc to plain javascript:
 
 ```js
-const runtime = require('@kitajs/html/jsx-runtime');
+const runtime = require('@kitajs/html/jsx-runtime')
 
 runtime.jsx('ol', {
   start: 2,
   children: [1, 2].map((i) => jsx('li', { children: i }))
-});
+})
 ```
 
 Which, when called, returns this string:
 
 ```js
-'<ol start="2"><li>1</li><li>2</li></ol>';
+'<ol start="2"><li>1</li><li>2</li></ol>'
 ```
 
 <br />
@@ -995,19 +995,19 @@ an external JS library to do so, like
 [html-prettify](https://www.npmjs.com/package/html-prettify).
 
 ```tsx
-import prettify from 'html-prettify';
+import prettify from 'html-prettify'
 
 const html = (
   <div>
     <div>1</div>
     <div>2</div>
   </div>
-);
+)
 
-console.log(html);
+console.log(html)
 // <div><div>1</div><div>2</div></div>
 
-console.log(prettify(html));
+console.log(prettify(html))
 // <div>
 //   <div>1</div>
 //   <div>2</div>

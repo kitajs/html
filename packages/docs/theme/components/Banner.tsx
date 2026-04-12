@@ -1,4 +1,4 @@
-import styles from './Banner.module.scss';
+import styles from './Banner.module.scss'
 
 export function Banner() {
   return (
@@ -23,5 +23,5 @@ export function Banner() {
         .
       </span>
     </div>
-  );
+  )
 }

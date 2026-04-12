@@ -34,11 +34,11 @@ branch is unreachable at runtime, the engine still analyzes its type.
 
 ```tsx twoslash
 // @errors: 88601
-const condition = true;
-const safeValue = 42;
-const unsafeString = 'user input';
+const condition = true
+const safeValue = 42
+const unsafeString = 'user input'
 
-<div>{condition ? safeValue : unsafeString}</div>;
+;<div>{condition ? safeValue : unsafeString}</div>
 ```
 
 ## Exceptions

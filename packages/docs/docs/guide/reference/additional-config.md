@@ -7,19 +7,19 @@ pretty-printed output for debugging or readability, use
 [html-prettify](https://www.npmjs.com/package/html-prettify).
 
 ```tsx
-import prettify from 'html-prettify';
+import prettify from 'html-prettify'
 
 const html = (
   <div>
     <div>1</div>
     <div>2</div>
   </div>
-);
+)
 
-console.log(html);
+console.log(html)
 // '<div><div>1</div><div>2</div></div>'
 
-console.log(prettify(html));
+console.log(prettify(html))
 // '<div>\n  <div>1</div>\n  <div>2</div>\n</div>'
 ```
 
@@ -40,9 +40,9 @@ that uses JSX.
 ```
 
 ```tsx
-import { Html } from '@kitajs/html';
+import { Html } from '@kitajs/html'
 
-const html = <div>Hello</div>;
+const html = <div>Hello</div>
 ```
 
 This approach has a slight performance penalty because TypeScript generates

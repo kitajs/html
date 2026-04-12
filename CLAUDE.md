@@ -49,13 +49,13 @@ commands, and pull request guidelines.
 
 ```tsx
 // Input (JSX)
-<div class="hello">{name}</div>;
+;<div class="hello">{name}</div>
 
 // TypeScript transforms to
-jsx('div', { class: 'hello', children: name });
+jsx('div', { class: 'hello', children: name })
 
 // Output (string)
-('<div class="hello">Arthur</div>');
+;('<div class="hello">Arthur</div>')
 ```
 
 ### Key Architectural Decisions
@@ -185,7 +185,7 @@ The codebase uses several optimization patterns:
 1. **Check Before Convert**: Regex test before expensive operations
 
    ```typescript
-   if (!CAMEL_REGEX.test(camel)) return camel;
+   if (!CAMEL_REGEX.test(camel)) return camel
    ```
 
 2. **Loop vs Regex**: Character loops faster than regex for replacements
@@ -240,7 +240,7 @@ documentation change.
 ### Component Definition
 
 ```tsx
-import type { PropsWithChildren } from '@kitajs/html';
+import type { PropsWithChildren } from '@kitajs/html'
 
 function Card({ title, children }: PropsWithChildren<{ title: string }>) {
   return (
@@ -248,7 +248,7 @@ function Card({ title, children }: PropsWithChildren<{ title: string }>) {
       <h2 safe>{title}</h2>
       {children}
     </div>
-  );
+  )
 }
 ```
 
@@ -256,8 +256,8 @@ function Card({ title, children }: PropsWithChildren<{ title: string }>) {
 
 ```tsx
 async function UserProfile({ id }: { id: string }) {
-  const user = await db.getUser(id);
-  return <div safe>{user.name}</div>;
+  const user = await db.getUser(id)
+  return <div safe>{user.name}</div>
 }
 ```
 
@@ -269,11 +269,11 @@ function Page({ rid }: { rid: number }) {
     <Suspense rid={rid} fallback={<Loading />} catch={(e) => <Error error={e} />}>
       <AsyncContent />
     </Suspense>
-  );
+  )
 }
 
 // With Fastify
-app.get('/', (req, reply) => reply.html(<Page rid={req.id} />));
+app.get('/', (req, reply) => reply.html(<Page rid={req.id} />))
 ```
 
 ### Conditional Classes

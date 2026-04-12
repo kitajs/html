@@ -1,9 +1,9 @@
-import type { PropsWithChildren } from '@kitajs/html';
+import type { PropsWithChildren } from '@kitajs/html'
 
 // Card component
 interface CardProps {
-  title?: string;
-  icon?: string;
+  title?: string
+  icon?: string
 }
 
 export function Card({ title, icon, children }: PropsWithChildren<CardProps>) {
@@ -28,7 +28,7 @@ export function Card({ title, icon, children }: PropsWithChildren<CardProps>) {
       )}
       {children}
     </div>
-  );
+  )
 }
 
 // Card skeleton
@@ -44,15 +44,15 @@ export function CardSkeleton({ height = 'h-32' }: { height?: string }) {
         <div class="h-3 skeleton rounded w-3/4" />
       </div>
     </div>
-  );
+  )
 }
 
 // Stat card
 interface StatCardProps {
-  label: string;
-  value: string;
-  change?: string;
-  positive?: boolean;
+  label: string
+  value: string
+  change?: string
+  positive?: boolean
 }
 
 export function StatCard({ label, value, change, positive }: StatCardProps) {
@@ -73,7 +73,7 @@ export function StatCard({ label, value, change, positive }: StatCardProps) {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 // Stat skeleton
@@ -84,15 +84,15 @@ export function StatSkeleton() {
       <div class="h-7 w-20 skeleton rounded mb-1" />
       <div class="h-3 w-12 skeleton rounded" />
     </div>
-  );
+  )
 }
 
 // List item
 interface ListItemProps {
-  primary: string;
-  secondary?: string;
-  badge?: string;
-  badgeColor?: string;
+  primary: string
+  secondary?: string
+  badge?: string
+  badgeColor?: string
 }
 
 export function ListItem({
@@ -119,7 +119,7 @@ export function ListItem({
         </span>
       )}
     </div>
-  );
+  )
 }
 
 // List skeleton
@@ -136,13 +136,13 @@ export function ListSkeleton({ items = 3 }: { items?: number }) {
         </div>
       ))}
     </div>
-  );
+  )
 }
 
 // Progress bar
 interface ProgressProps {
-  value: number;
-  label: string;
+  value: number
+  label: string
 }
 
 export function Progress({ value, label }: ProgressProps) {
@@ -161,7 +161,7 @@ export function Progress({ value, label }: ProgressProps) {
         />
       </div>
     </div>
-  );
+  )
 }
 
 // Progress skeleton
@@ -178,5 +178,5 @@ export function ProgressSkeleton({ items = 3 }: { items?: number }) {
         </div>
       ))}
     </div>
-  );
+  )
 }

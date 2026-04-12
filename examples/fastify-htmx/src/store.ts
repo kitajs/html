@@ -1,9 +1,9 @@
 // Simulated data store for the demo
 
 export interface Todo {
-  id: number;
-  text: string;
-  done: boolean;
+  id: number
+  text: string
+  done: boolean
 }
 
 export const store = {
@@ -14,4 +14,4 @@ export const store = {
     { id: 3, text: 'Build something awesome', done: false }
   ] as Todo[],
   nextTodoId: 4
-};
+}

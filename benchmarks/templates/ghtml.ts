@@ -5,7 +5,7 @@ function Purchase(html: Function, { name, price, quantity }) {
       <div class="purchase-price">${price}</div>
       <div class="purchase-quantity">${quantity}</div>
     </div>
-  `;
+  `
 }
 
 function Layout(html: Function, { children, head }: any) {
@@ -16,7 +16,7 @@ function Layout(html: Function, { children, head }: any) {
         !${children}
       </body>
     </html>
-  `;
+  `
 }
 
 function Head(html: Function, { title }) {
@@ -40,7 +40,7 @@ function Head(html: Function, { title }) {
       <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dev/index.bundle.js" />
       <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dist/index.bundle.js" />
     </head>
-  `;
+  `
 }
 
 function Header(html: Function, { name }) {
@@ -58,7 +58,7 @@ function Header(html: Function, { name }) {
         </ul>
       </nav>
     </header>
-  `;
+  `
 }
 
 function Footer(html: Function, { name }) {
@@ -71,7 +71,7 @@ function Footer(html: Function, { name }) {
         <a href="/privacy">Privacy</a>
       </p>
     </footer>
-  `;
+  `
 }
 
 function Main(html: Function, { children, name }: any) {
@@ -81,7 +81,7 @@ function Main(html: Function, { children, name }: any) {
       <main class="main-content">!${children}</main>
       !${Footer(html, { name })}
     </div>
-  `;
+  `
 }
 
 function UserProfile(html: Function, { name }) {
@@ -93,7 +93,7 @@ function UserProfile(html: Function, { name }) {
       <p class="user-profile info">Address: 123 Main St, City, Country</p>
       <p class="user-profile info">Phone: 123-456-7890</p>
     </section>
-  `;
+  `
 }
 
 function Sidebar(html: Function, { purchases }) {
@@ -112,7 +112,7 @@ function Sidebar(html: Function, { purchases }) {
           )}
       </ul>
     </aside>
-  `;
+  `
 }
 
 function PageContent(html: Function) {
@@ -131,7 +131,7 @@ function PageContent(html: Function) {
         sollicitudin.
       </p>
     </div>
-  `;
+  `
 }
 
 export function RealWorldPage(html: Function, name: string, purchases: any[]) {
@@ -155,5 +155,5 @@ export function RealWorldPage(html: Function, name: string, purchases: any[]) {
         PageContent(html)
       ]
     })
-  })}`;
+  })}`
 }

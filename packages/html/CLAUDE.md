@@ -96,16 +96,16 @@ The library uses several optimizations for fast string generation:
 ```typescript
 // Regex check before conversion (avoid unnecessary work)
 if (!CAMEL_REGEX.test(camel)) {
-  return camel;
+  return camel
 }
 
 // Character-by-character escaping (faster than regex replace)
 for (; end < length; end++) {
   switch (value[end]) {
     case '&':
-      escaped += value.slice(start, end) + '&amp;';
-      start = end + 1;
-      continue;
+      escaped += value.slice(start, end) + '&amp;'
+      start = end + 1
+      continue
     // ...
   }
 }
@@ -118,9 +118,9 @@ When any child is a Promise, the entire parent tree becomes async:
 ```typescript
 if (typeof content.then === 'function') {
   return Promise.all(contents.slice(index)).then(function resolveContents(resolved) {
-    resolved.unshift(result);
-    return contentsToString(resolved, escape);
-  });
+    resolved.unshift(result)
+    return contentsToString(resolved, escape)
+  })
 }
 ```
 

@@ -7,9 +7,9 @@
 The library transforms JSX into function calls that generate HTML strings:
 
 ```tsx
-<div class="foo">{content}</div>;
+;<div class="foo">{content}</div>
 // Transpiles to:
-jsx('div', { class: 'foo', children: content });
+jsx('div', { class: 'foo', children: content })
 // Returns: '<div class="foo">content</div>'
 ```
 
@@ -34,7 +34,7 @@ Core pattern: Efficient string concatenation without intermediate objects
 ```javascript
 // From index.js
 function createElement(tag, attrs, ...children) {
-  return `<${tag}${attributesToString(attrs)}>${contentsToString(children)}</${tag}>`;
+  return `<${tag}${attributesToString(attrs)}>${contentsToString(children)}</${tag}>`
 }
 ```
 
@@ -108,7 +108,7 @@ declare namespace JSX {
   interface IntrinsicElements {
     div: HtmlTag & {
       /* div-specific */
-    };
+    }
   }
 }
 ```
@@ -121,7 +121,7 @@ Users can extend types globally:
 declare global {
   namespace JSX {
     interface HtmlTag {
-      'hx-get'?: string; // HTMX support
+      'hx-get'?: string // HTMX support
     }
   }
 }
@@ -152,8 +152,8 @@ describe('component', () => {
 When DOM testing is needed:
 
 ```typescript
-import { JSDOM } from 'jsdom';
-const dom = new JSDOM(htmlString);
+import { JSDOM } from 'jsdom'
+const dom = new JSDOM(htmlString)
 ```
 
 ### 3. Vitest Type Testing
@@ -180,7 +180,7 @@ Special handling for self-closing tags:
 
 ```javascript
 if (isVoidElement(tag)) {
-  return `<${tag}${attributesToString(attrs)}>`;
+  return `<${tag}${attributesToString(attrs)}>`
 }
 ```
 

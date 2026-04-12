@@ -5,11 +5,11 @@ to a `Promise<string>` instead of a `string`.
 
 ```tsx
 async function UserCard({ id }: { id: string }) {
-  const user = await db.getUser(id);
-  return <div safe>{user.name}</div>;
+  const user = await db.getUser(id)
+  return <div safe>{user.name}</div>
 }
 
-const html = <UserCard id="123" />;
+const html = <UserCard id="123" />
 // html is Promise<string>
 ```
 
@@ -26,7 +26,7 @@ function Page() {
       <UserCard id="123" />
       <p>Static content</p>
     </div>
-  );
+  )
 }
 
 // Page() returns Promise<string> because UserCard is async
@@ -43,7 +43,7 @@ a tree is fully synchronous, you can cast the result to `string`.
 
 ```tsx
 // When you know the tree is sync-only
-const html = (<StaticPage />) as string;
+const html = (<StaticPage />) as string
 ```
 
 TypeScript cannot infer whether a component tree is synchronous or asynchronous at the
@@ -59,9 +59,9 @@ pass the promise directly without awaiting.
 
 ```tsx
 // Await when you need the string
-const html = await (<Page />);
-response.end(html);
+const html = await (<Page />)
+response.end(html)
 
 // Pass directly when the consumer handles promises
-reply.html(<Page />);
+reply.html(<Page />)
 ```

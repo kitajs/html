@@ -1,12 +1,12 @@
-import chalk from 'chalk';
-import fs from 'node:fs';
-import path from 'node:path';
-import ts from 'typescript';
-import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
-import { recursiveDiagnoseJsxElements } from './util';
+import chalk from 'chalk'
+import fs from 'node:fs'
+import path from 'node:path'
+import ts from 'typescript'
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import { recursiveDiagnoseJsxElements } from './util'
 
-const { version } = require('../package.json');
+const { version } = require('../package.json')
 
 const help = `
 
@@ -34,13 +34,13 @@ Exit codes:
   1 - XSS vulnerabilities were found
   2 - Only warnings were found
 
-`.trim();
+`.trim()
 
 function readCompilerOptions(tsconfigPath: string) {
-  const { config, error } = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
+  const { config, error } = ts.readConfigFile(tsconfigPath, ts.sys.readFile)
 
   if (error) {
-    return { errors: [error] };
+    return { errors: [error] }
   }
 
   const { options, errors, fileNames } = ts.parseJsonConfigFileContent(
@@ -49,38 +49,38 @@ function readCompilerOptions(tsconfigPath: string) {
     path.dirname(tsconfigPath),
     undefined,
     tsconfigPath
-  );
+  )
 
   if (errors.length) {
-    return { errors };
+    return { errors }
   }
 
-  return { options, fileNames, errors: undefined };
+  return { options, fileNames, errors: undefined }
 }
 
 function prettyPrintErrorCount(diagnostics: ts.Diagnostic[], root: string) {
-  const files = new Map<string, number>();
+  const files = new Map<string, number>()
 
   // Counts the amount of errors per file
   for (const diagnostic of diagnostics) {
     if (!diagnostic.file) {
-      continue;
+      continue
     }
 
-    const file = files.get(diagnostic.file.fileName);
+    const file = files.get(diagnostic.file.fileName)
 
     if (file !== undefined) {
-      files.set(diagnostic.file.fileName, file + 1);
-      continue;
+      files.set(diagnostic.file.fileName, file + 1)
+      continue
     }
 
-    files.set(diagnostic.file.fileName, 1);
+    files.set(diagnostic.file.fileName, 1)
   }
 
   if (files.size > 1) {
     console.error(
       chalk.red(`Found a total of ${diagnostics.length} errors in ${files.size} files\n`)
-    );
+    )
   }
 
   for (const [file, amount] of files.entries()) {
@@ -88,31 +88,31 @@ function prettyPrintErrorCount(diagnostics: ts.Diagnostic[], root: string) {
       chalk.red(
         `Found ${amount} error${amount === 1 ? '' : 's'} in ${path.relative(root, file)}`
       )
-    );
+    )
   }
 }
 
 function fileExists(p: string) {
   try {
-    fs.statSync(p);
-    return true;
+    fs.statSync(p)
+    return true
   } catch {
-    return false;
+    return false
   }
 }
 
 export async function main() {
-  const args = await yargs(hideBin(process.argv)).help(false).version(version).argv;
+  const args = await yargs(hideBin(process.argv)).help(false).version(version).argv
 
   if (args.help || args.h) {
-    console.log(help);
-    return process.exit(0);
+    console.log(help)
+    return process.exit(0)
   }
 
   // Detects unknown arguments
   for (const key in args) {
     if (key === '_' || key === '$0') {
-      continue;
+      continue
     }
 
     switch (key) {
@@ -121,56 +121,56 @@ export async function main() {
       case 'p':
       case 's':
       case 'simplified':
-        continue;
+        continue
       default:
-        console.error(`Unknown argument: ${key}. Run --help for more information.`);
-        return process.exit(1);
+        console.error(`Unknown argument: ${key}. Run --help for more information.`)
+        return process.exit(1)
     }
   }
 
-  const root = args.cwd ? String(args.cwd) : process.cwd();
+  const root = args.cwd ? String(args.cwd) : process.cwd()
 
-  const tsconfigPath = String(args.project || args.p || 'tsconfig.json');
+  const tsconfigPath = String(args.project || args.p || 'tsconfig.json')
 
-  const simplified = !!(args.simplified || args.s);
+  const simplified = !!(args.simplified || args.s)
 
   const diagnosticFormatter =
     !process.stdout.isTTY || simplified
       ? ts.formatDiagnostics
-      : ts.formatDiagnosticsWithColorAndContext;
+      : ts.formatDiagnosticsWithColorAndContext
 
   if (!fileExists(tsconfigPath)) {
-    console.error((!simplified ? chalk.red : String)(`Could not find ${tsconfigPath}`));
-    return process.exit(1);
+    console.error((!simplified ? chalk.red : String)(`Could not find ${tsconfigPath}`))
+    return process.exit(1)
   }
 
-  const tsconfig = readCompilerOptions(tsconfigPath);
+  const tsconfig = readCompilerOptions(tsconfigPath)
 
   const diagnosticHost: ts.FormatDiagnosticsHost = {
     getCurrentDirectory: ts.sys.getCurrentDirectory,
     getCanonicalFileName: (fileName) => fileName,
     getNewLine: () => ts.sys.newLine
-  };
-
-  if (tsconfig.errors) {
-    console.error(diagnosticFormatter(tsconfig.errors, diagnosticHost));
-    return process.exit(1);
   }
 
-  let files = tsconfig.fileNames;
+  if (tsconfig.errors) {
+    console.error(diagnosticFormatter(tsconfig.errors, diagnosticHost))
+    return process.exit(1)
+  }
+
+  let files = tsconfig.fileNames
 
   if (args._.length) {
     // Prefer the files passed as arguments, otherwise use the files in tsconfig.json
-    files = [];
+    files = []
 
     for (let i = 0; i < args._.length; i++) {
-      const file = String(args._[i]);
+      const file = String(args._[i])
 
       if (!fileExists(file)) {
         console.error(
           (!simplified ? chalk.red : String)(`Could not find provided '${file}' file.`)
-        );
-        return process.exit(1);
+        )
+        return process.exit(1)
       }
 
       if (!file.match(/(t|j)sx$/)) {
@@ -178,52 +178,52 @@ export async function main() {
           (!simplified ? chalk.yellow : String)(
             `Provided '${file}' file is not a TSX/JSX file.`
           )
-        );
-        continue;
+        )
+        continue
       }
 
-      files.push(file);
+      files.push(file)
     }
   }
 
   if (!files.length) {
-    console.error((!simplified ? chalk.red : String)('No files were found to check.'));
-    return process.exit(1);
+    console.error((!simplified ? chalk.red : String)('No files were found to check.'))
+    return process.exit(1)
   }
 
-  const program = ts.createProgram(files, tsconfig.options);
-  const typeChecker = program.getTypeChecker();
-  const sources = program.getSourceFiles();
+  const program = ts.createProgram(files, tsconfig.options)
+  const typeChecker = program.getTypeChecker()
+  const sources = program.getSourceFiles()
 
-  const diagnostics: ts.Diagnostic[] = [];
+  const diagnostics: ts.Diagnostic[] = []
 
   for (const source of sources) {
-    const filename = source.fileName;
+    const filename = source.fileName
 
     // Not a tsx file, so don't do anything
     if (!filename.match(/(t|j)sx$/)) {
-      continue;
+      continue
     }
 
     ts.forEachChild(source, function loopSourceNodes(node) {
-      recursiveDiagnoseJsxElements(ts, node, typeChecker, diagnostics);
-    });
+      recursiveDiagnoseJsxElements(ts, node, typeChecker, diagnostics)
+    })
   }
 
   if (diagnostics.length) {
     const hasError = diagnostics.some(
       (diagnostic) => diagnostic.category === ts.DiagnosticCategory.Error
-    );
+    )
 
-    console.error(diagnosticFormatter(diagnostics, diagnosticHost));
+    console.error(diagnosticFormatter(diagnostics, diagnosticHost))
 
     if (!simplified) {
-      prettyPrintErrorCount(diagnostics, root);
+      prettyPrintErrorCount(diagnostics, root)
     }
 
-    process.exit(hasError ? 1 : 2);
+    process.exit(hasError ? 1 : 2)
   }
 
-  console.log(chalk.green(`No XSS vulnerabilities found in ${files.length} files!`));
-  process.exit(0);
+  console.log(chalk.green(`No XSS vulnerabilities found in ${files.length} files!`))
+  process.exit(0)
 }
