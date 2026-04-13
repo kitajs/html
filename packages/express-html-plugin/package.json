@@ -1,6 +1,6 @@
 {
   "name": "@kitajs/express-html-plugin",
-  "version": "4.0.0",
+  "version": "5.0.0-next.0",
   "description": "An Express middleware to add support for @kitajs/html",
   "homepage": "https://github.com/kitajs/html/tree/master/packages/express-html-plugin#readme",
   "bugs": "https://github.com/kitajs/html/issues",
