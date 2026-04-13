@@ -22,13 +22,22 @@
     "label": "JSX"
   },
   {
-    "type": "section-header",
-    "label": "Architecture"
-  },
-  "design-decisions",
-  {
     "type": "dir-section-header",
     "name": "reference",
     "label": "Reference"
+  },
+  {
+    "type": "section-header",
+    "label": "AI Support"
+  },
+  {
+    "type": "custom-link",
+    "link": "./llms.txt",
+    "label": "llms.txt"
+  },
+  {
+    "type": "custom-link",
+    "link": "./llms-full.txt",
+    "label": "llms-full.txt"
   }
 ]

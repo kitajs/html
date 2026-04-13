@@ -11,5 +11,15 @@
     "statusBar.background": "#bd695e",
     "statusBar.foreground": "#15202b"
   },
-  "cSpell.words": ["kita"]
+  "cSpell.words": ["kita"],
+  "json.schemas": [
+    {
+      "fileMatch": ["**/_meta.json"],
+      "url": "https://unpkg.com/@rspress/core/meta-json-schema.json"
+    },
+    {
+      "fileMatch": ["**/_nav.json"],
+      "url": "https://unpkg.com/@rspress/core/nav-json-schema.json"
+    }
+  ]
 }
