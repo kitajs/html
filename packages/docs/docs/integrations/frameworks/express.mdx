@@ -50,7 +50,7 @@ For async components, `res.html()` accepts promises and awaits them before sendi
 
 ```tsx
 app.get('/profile', (req, res) => {
-  res.html(<UserProfile id={req.params.id} />)
+  res.html(<UserProfile id={req.params.userId} />)
 })
 ```
 
