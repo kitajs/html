@@ -628,16 +628,6 @@ const html = (
 )
 ```
 
-Or you can use the type option in your tsconfig to import the types globally:
-
-```json
-{
-  "compilerOptions": {
-    "types": ["@kitajs/html/htmx.d.ts"]
-  }
-}
-```
-
 <br />
 
 ### Alpinejs
@@ -653,16 +643,6 @@ const html = (
   // Type checking and intellisense for all HTMX attributes
   <div x-data="{ open: false }">...</div>
 )
-```
-
-Or you can use the type option in your tsconfig to import the types globally:
-
-```json
-{
-  "compilerOptions": {
-    "types": ["@kitajs/html/alpine.d.ts"]
-  }
-}
 ```
 
 <br />
@@ -686,16 +666,6 @@ const html = (
     <form action="/messages">Show response from this form within this frame.</form>
   </turbo-frame>
 )
-```
-
-Or you can use the type option in your tsconfig to import the types globally:
-
-```json
-{
-  "compilerOptions": {
-    "types": ["@kitajs/html/hotwire-turbo.d.ts"]
-  }
-}
 ```
 
 <br />

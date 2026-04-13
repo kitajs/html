@@ -3,10 +3,18 @@
 A Kita Html component can be an `async` function. When it is, the JSX expression evaluates
 to a `Promise<string>` instead of a `string`.
 
-```tsx
+```tsx twoslash kita
+import { jsx as __jsx } from '@kitajs/html/jsx-runtime'
+let db = {
+  async getUser(id: string): Promise<{ name: string }> {
+    return { name: 'John Doe' }
+  }
+}
+
+// ---cut---
 async function UserCard({ id }: { id: string }) {
   const user = await db.getUser(id)
-  return <div safe>{user.name}</div>
+  return <div safe>User card for user: {user.name}</div>
 }
 
 const html = <UserCard id="123" />
@@ -19,7 +27,11 @@ When any child in a component tree is async, the entire parent chain becomes asy
 automatically. The runtime detects promises during child concatenation and wraps the
 result in `Promise.all`. No manual promise handling is required at intermediate levels.
 
-```tsx
+```tsx twoslash kita
+async function UserCard({ id }: { id: string }) {
+  return <div safe>User card for id: {id}</div>
+}
+// ---cut---
 function Page() {
   return (
     <div>
@@ -29,6 +41,7 @@ function Page() {
   )
 }
 
+const html = <Page />
 // Page() returns Promise<string> because UserCard is async
 ```
 
@@ -41,7 +54,11 @@ The type `JSX.Element` is defined as `string | Promise<string>`. This reflects t
 that any component tree may or may not contain async components. When you are certain that
 a tree is fully synchronous, you can cast the result to `string`.
 
-```tsx
+```tsx twoslash kita
+function StaticPage() {
+  return <div>Static page content</div>
+}
+// ---cut---
 // When you know the tree is sync-only
 const html = (<StaticPage />) as string
 ```
@@ -62,6 +79,6 @@ pass the promise directly without awaiting.
 const html = await (<Page />)
 response.end(html)
 
-// Pass directly when the consumer handles promises
+// Pass directly when the consumer handles promises, e.g our fastify or express plugins
 reply.html(<Page />)
 ```

@@ -7,10 +7,10 @@ HTML response to the client-side DOM replacement.
 
 When `renderToStream` produces the initial HTML, each Suspense boundary renders its
 fallback content wrapped in a `<div>` with a `data-sf` attribute and a unique ID derived
-from the boundary's run number.
+from the request id and the boundary's run number.
 
 ```html
-<div id="B:1" data-sf>Loading...</div>
+<div id="B:req-1:1" data-sf>Loading...</div>
 ```
 
 This div is part of the initial HTML chunk sent to the client. The browser renders it
@@ -22,9 +22,9 @@ When an async child resolves, the runtime pushes two elements to the stream: a
 `<template>` containing the resolved HTML and a `<script>` that triggers the replacement.
 
 ```html
-<template id="N:1" data-sr><div>Actual content</div></template>
-<script id="S:1" data-ss>
-  $KITA_RC(1)
+<template id="N:req-1:1" data-sr><div>Actual content</div></template>
+<script id="S:req-1:1" data-ss>
+  $KITA_RC('req-1:1')
 </script>
 ```
 

@@ -8,8 +8,17 @@ Wrap async components in a `Suspense` element with a `rid`, a `fallback`, and op
 `catch` handler. Then pass the tree to `renderToStream`, which returns a `Readable`
 stream.
 
-```tsx
+```tsx twoslash kita=stream
+import { jsx as __jsx } from '@kitajs/html/jsx-runtime'
 import { Suspense, renderToStream } from '@kitajs/html/suspense'
+
+let api = {
+  async getStats(id: string): Promise<{ totalPosts: number }> {
+    return { totalPosts: Number(id) }
+  }
+}
+
+// ---cut---
 
 async function UserStats({ id }: { id: string }) {
   const stats = await api.getStats(id)
@@ -46,11 +55,23 @@ const html = await text(stream)
 If you need to control the request ID, pass it as the second argument and use it directly
 in your JSX.
 
-```tsx
+```tsx twoslash kita=stream
+import { jsx as __jsx } from '@kitajs/html/jsx-runtime'
+import { Suspense, renderToStream } from '@kitajs/html/suspense'
+
+const myCustomId = `req-${Math.random().toString(36).slice(2)}`
+
+async function AsyncContent() {
+  return <div>Loaded content</div>
+}
+
+// ---cut---
 const stream = renderToStream(
-  <Suspense rid={myCustomId} fallback={<div>Loading...</div>}>
-    <AsyncContent />
-  </Suspense>,
+  (rid) => (
+    <Suspense rid={rid} fallback={<div>Loading...</div>}>
+      <AsyncContent />
+    </Suspense>
+  ),
   myCustomId
 )
 ```
@@ -60,14 +81,24 @@ const stream = renderToStream(
 The `catch` prop handles errors thrown by async children. It accepts a JSX element or a
 function that receives the error and returns JSX.
 
-```tsx
-<Suspense
-  rid={rid}
-  fallback={<div>Loading...</div>}
-  catch={(error) => <div>Failed: {String(error)}</div>}
->
-  <AsyncContent />
-</Suspense>
+```tsx twoslash kita
+import { Suspense } from '@kitajs/html/suspense'
+
+const rid = 'req-1'
+
+async function AsyncContent() {
+  return <div>Loaded content</div>
+}
+// ---cut---
+const html = (
+  <Suspense
+    rid={rid}
+    fallback={<div>Loading...</div>}
+    catch={(error) => <div>Failed: {String(error)}</div>}
+  >
+    <AsyncContent />
+  </Suspense>
+)
 ```
 
 Without a `catch` prop, errors propagate to the stream as an `'error'` event. Always
@@ -78,7 +109,17 @@ provide a `catch` handler in production to prevent the stream from closing unexp
 Each Suspense boundary resolves independently. Place separate boundaries around sections
 that fetch different data so they can appear as soon as their data is ready.
 
-```tsx
+```tsx twoslash kita=stream
+import { Suspense, renderToStream } from '@kitajs/html/suspense'
+
+async function UserProfile({ id }: { id: string }) {
+  return <div>User {id}</div>
+}
+
+async function ActivityFeed({ id }: { id: string }) {
+  return <div>Feed {id}</div>
+}
+// ---cut---
 const stream = renderToStream((rid) => (
   <html>
     <body>
@@ -101,7 +142,17 @@ closes automatically when the last boundary resolves.
 The `fallback` prop can be an async component, but this blocks the entire stream until the
 fallback resolves. The server will not send any HTML until the async fallback is ready.
 
-```tsx
+```tsx twoslash kita=stream
+import { Suspense, renderToStream } from '@kitajs/html/suspense'
+
+async function loadTranslations() {
+  return
+}
+
+async function UserProfile({ id }: { id: string }) {
+  return <div>User {id}</div>
+}
+// ---cut---
 async function LoadingMessage() {
   await loadTranslations()
   return <div>Loading user data...</div>

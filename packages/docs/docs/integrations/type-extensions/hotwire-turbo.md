@@ -13,16 +13,6 @@ already have this file for another type extension, append the new directive to i
 /// <reference types="@kitajs/html/hotwire-turbo.d.ts" />
 ```
 
-Or enable it globally in `tsconfig.json`:
-
-```json title="tsconfig.json"
-{
-  "compilerOptions": {
-    "types": ["@kitajs/html/hotwire-turbo.d.ts"]
-  }
-}
-```
-
 ## Usage
 
 Turbo Frames for partial page updates:

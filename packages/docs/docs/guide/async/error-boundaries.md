@@ -8,9 +8,16 @@ crashing the entire tree.
 Import `ErrorBoundary` from `@kitajs/html/error-boundary` and wrap async components. The
 `catch` prop accepts a JSX element or a function that receives the error.
 
-```tsx
+```tsx twoslash
 import { ErrorBoundary } from '@kitajs/html/error-boundary'
 
+let db = {
+  async getUser(id: string): Promise<{ name: string }> {
+    return { name: `user-${id}` }
+  }
+}
+
+// ---cut---
 async function UserProfile({ id }: { id: string }) {
   const user = await db.getUser(id) // may reject
   return <div safe>{user.name}</div>
@@ -32,7 +39,12 @@ Error boundaries only catch errors from async components, because synchronous er
 propagate before the boundary can intercept them. For synchronous components, use a
 standard try/catch.
 
-```tsx
+```tsx twoslash kita
+function riskyOperation() {
+  return 'Loaded safely'
+}
+
+// ---cut---
 function SyncComponent() {
   try {
     const data = riskyOperation()
@@ -41,6 +53,10 @@ function SyncComponent() {
     return <div>Error: {String(err)}</div>
   }
 }
+
+// ---cut-start---
+const html = <SyncComponent />
+// ---cut-end---
 ```
 
 ## Combining with Suspense
@@ -49,12 +65,27 @@ Error boundaries and Suspense serve different purposes and are used together. Su
 `catch` prop handles errors from its async children. An `ErrorBoundary` wrapping the
 Suspense handles errors from the fallback itself.
 
-```tsx
-<ErrorBoundary catch={<div>Fallback failed</div>}>
-  <Suspense rid={rid} fallback={<AsyncFallback />} catch={<div>Children failed</div>}>
-    <AsyncContent />
-  </Suspense>
-</ErrorBoundary>
+```tsx twoslash
+import { ErrorBoundary } from '@kitajs/html/error-boundary'
+import { Suspense } from '@kitajs/html/suspense'
+
+const rid = 'req-1'
+
+async function AsyncFallback() {
+  return <div>Loading fallback...</div>
+}
+
+async function AsyncContent() {
+  return <div>Loaded content</div>
+}
+// ---cut---
+const html = (
+  <ErrorBoundary catch={<div>Fallback failed</div>}>
+    <Suspense rid={rid} fallback={<AsyncFallback />} catch={<div>Children failed</div>}>
+      <AsyncContent />
+    </Suspense>
+  </ErrorBoundary>
+)
 ```
 
 If `AsyncContent` throws, Suspense renders "Children failed". If `AsyncFallback` throws,

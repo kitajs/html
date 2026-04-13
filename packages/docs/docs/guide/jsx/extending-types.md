@@ -48,13 +48,3 @@ If you need to bypass type checking entirely, add a triple-slash directive to yo
 ```ts title="src/kita.d.ts"
 /// <reference types="@kitajs/html/all-types.d.ts" />
 ```
-
-Or add it globally in `tsconfig.json`:
-
-```json title="tsconfig.json"
-{
-  "compilerOptions": {
-    "types": ["@kitajs/html/all-types.d.ts"]
-  }
-}
-```

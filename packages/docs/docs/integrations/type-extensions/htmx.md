@@ -12,16 +12,6 @@ Create a `src/kita.d.ts` file in your project and add the triple-slash directive
 /// <reference types="@kitajs/html/htmx.d.ts" />
 ```
 
-Or enable it globally in `tsconfig.json`:
-
-```json title="tsconfig.json"
-{
-  "compilerOptions": {
-    "types": ["@kitajs/html/htmx.d.ts"]
-  }
-}
-```
-
 ## Usage
 
 ```tsx
