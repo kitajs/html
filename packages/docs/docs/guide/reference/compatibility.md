@@ -8,12 +8,13 @@ library has no native dependencies.
 
 ## TypeScript
 
-TypeScript 5.0 or later is required. TypeScript 5.9+ is recommended for full compatibility
-with the latest type definitions.
+TypeScript 6.0 or later is required for full compatibility with the latest type
+definitions.
 
 The native TypeScript compiler `tsgo` works for building projects that use Kita Html. The
 language service plugin (`@kitajs/ts-html-plugin`) requires the standard TypeScript
-language server and does not work with `tsgo`.
+language server and will not work with `tsgo` while
+[`tsgo` doesn't publish its own support for plugins](https://github.com/microsoft/typescript-go#what-works-so-far).
 
 ## Module system
 
