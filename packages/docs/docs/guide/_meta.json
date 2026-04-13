@@ -6,6 +6,7 @@
   "introduction",
   "getting-started",
   "how-jsx-becomes-html",
+  "ai-support",
   {
     "type": "dir-section-header",
     "name": "xss",
@@ -25,19 +26,5 @@
     "type": "dir-section-header",
     "name": "reference",
     "label": "Reference"
-  },
-  {
-    "type": "section-header",
-    "label": "AI Support"
-  },
-  {
-    "type": "custom-link",
-    "link": "./llms.txt",
-    "label": "llms.txt"
-  },
-  {
-    "type": "custom-link",
-    "link": "./llms-full.txt",
-    "label": "llms-full.txt"
   }
 ]

@@ -1,0 +1,23 @@
+{
+  "skill_name": "kita-html",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I have a Fastify route in a Kita project and need a streamed dashboard page with two async sections. Please write the route and page in TSX, use the right Kita APIs, and make sure user names are rendered safely.",
+      "expected_output": "Uses Fastify's Kita plugin, reply.html(...), Suspense with rid={req.id}, and safe escaping for user-controlled text instead of React SSR patterns.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "Can you scaffold an Express page component and route for Kita Html? The page shows a user bio coming from the database and I don't want XSS issues. Include any setup changes you think are necessary.",
+      "expected_output": "Uses expressKitaHtml, res.html(...), safe or escapeHtml for the bio, and recommends tsconfig plugin plus xss-scan in test/CI.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I need a minimal Kita TSX example for plain server rendering, no framework plugin. Show async components, Suspense streaming, and how to catch async errors correctly. Don't use React.",
+      "expected_output": "Uses @kitajs/html and @kitajs/html/suspense APIs, renderToStream, Suspense rid, ErrorBoundary for async failures, and avoids React-specific APIs.",
+      "files": []
+    }
+  ]
+}
