@@ -1,3 +1,9 @@
+---
+description:
+  Use async function components, understand promise propagation, and know when JSX results
+  must be awaited.
+---
+
 # Async Components
 
 A Kita Html component can be an `async` function. When it is, the JSX expression evaluates

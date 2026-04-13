@@ -1,3 +1,9 @@
+---
+description:
+  Convert HTML templates to JSX by fixing attributes, void elements, comments, styles, and
+  multiple roots.
+---
+
 # Migrating from HTML
 
 Converting existing HTML templates to JSX requires a few mechanical transformations.

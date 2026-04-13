@@ -1,3 +1,9 @@
+---
+description:
+  Build shared HTML layouts in Kita Html, add doctype strings, define slot props, and use
+  framework auto-doctype support.
+---
+
 # Base Templates
 
 Most applications use a shared layout with a doctype, `<head>`, and `<body>`. In Kita

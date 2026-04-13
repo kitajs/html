@@ -1,3 +1,9 @@
+---
+description:
+  Format compact output with html-prettify and configure the legacy JSX transform when
+  react-jsx is not used.
+---
+
 # Additional Configuration
 
 ## Formatting HTML output

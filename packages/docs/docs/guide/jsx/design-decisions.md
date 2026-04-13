@@ -1,3 +1,9 @@
+---
+description:
+  Architectural rationale for omitting context and for defining JSX.Element as string or
+  Promise<string>.
+---
+
 # Design Decisions
 
 This page documents the major architectural decisions in Kita Html and their rationale.

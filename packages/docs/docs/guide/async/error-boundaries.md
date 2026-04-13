@@ -1,3 +1,9 @@
+---
+description:
+  Catch errors from async components with ErrorBoundary, handle fallback failures, and
+  combine boundaries with Suspense.
+---
+
 # Error Boundaries
 
 Error boundaries catch errors thrown by async components and render a fallback instead of

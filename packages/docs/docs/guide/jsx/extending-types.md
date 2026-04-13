@@ -1,3 +1,9 @@
+---
+description:
+  Extend JSX.IntrinsicElements and HtmlTag to support custom elements, custom attributes,
+  or unrestricted tags.
+---
+
 # Extending JSX Types
 
 Kita Html's type system can be extended to support custom elements, custom attributes, or

@@ -1,3 +1,9 @@
+---
+description:
+  Enable typed Hotwire Turbo elements and attributes in Kita Html, including turbo-frame,
+  turbo-stream, and Turbo Drive.
+---
+
 # Hotwire Turbo
 
 Kita Html provides type definitions for [Hotwire Turbo](https://turbo.hotwired.dev/)

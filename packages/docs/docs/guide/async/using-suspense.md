@@ -1,3 +1,9 @@
+---
+description:
+  Wrap async sections with Suspense, stream fallbacks, handle errors, share request IDs,
+  and avoid async fallback delays.
+---
+
 # Using Suspense
 
 Import `Suspense` and `renderToStream` from `@kitajs/html/suspense`.

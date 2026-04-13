@@ -1,3 +1,9 @@
+---
+description:
+  Escape untrusted JSX children with safe, Fragment safe, escapeHtml, and the supported
+  suppression conventions.
+---
+
 # Using the Safe Attribute
 
 Every child expression in Kita Html renders without escaping by default. To escape user

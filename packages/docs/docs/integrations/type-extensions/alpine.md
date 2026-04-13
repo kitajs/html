@@ -1,3 +1,9 @@
+---
+description:
+  Enable typed Alpine.js directives in Kita Html with triple-slash references and use
+  x-data, x-show, and x-on in JSX.
+---
+
 # Alpine.js
 
 Kita Html provides type definitions for [Alpine.js](https://alpinejs.dev/) directives.

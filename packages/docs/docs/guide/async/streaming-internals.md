@@ -1,3 +1,9 @@
+---
+description:
+  Understand the HTML, template, script, and chunked transfer protocol behind Suspense
+  streaming.
+---
+
 # Streaming Internals
 
 This page describes how Suspense streaming works at the protocol level, from the initial

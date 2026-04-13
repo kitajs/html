@@ -1,3 +1,9 @@
+---
+description:
+  See which TypeScript types the XSS engine treats as safe, unsafe, composite, or exempt
+  inside JSX children.
+---
+
 # Safety Rules
 
 The XSS detection engine classifies every JSX child expression as safe or unsafe based on

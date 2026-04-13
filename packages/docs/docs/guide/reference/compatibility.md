@@ -1,3 +1,9 @@
+---
+description:
+  Runtime, TypeScript, module, framework, browser, and editor compatibility requirements
+  for Kita Html.
+---
+
 # Compatibility
 
 ## Runtimes

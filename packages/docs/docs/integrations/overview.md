@@ -1,3 +1,9 @@
+---
+description:
+  How Kita Html integrates with servers and frontend libraries, including official plugins
+  and opt-in HTML attribute type extensions.
+---
+
 # Integrations
 
 Kita Html produces strings. Any framework or library that can send a string as an HTTP

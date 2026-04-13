@@ -1,3 +1,9 @@
+---
+description:
+  Reference supported JSX features such as fragments, void elements, boolean attributes,
+  styles, classes, and dynamic tags.
+---
+
 # JSX Syntax
 
 Kita Html uses standard JSX syntax. All HTML elements and attributes defined in the

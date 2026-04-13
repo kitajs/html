@@ -1,3 +1,9 @@
+---
+description:
+  Enable typed HTMX attributes in Kita Html with a triple-slash reference and use hx-get,
+  hx-post, and hx-swap in JSX.
+---
+
 # HTMX
 
 Kita Html provides type definitions for all [HTMX](https://htmx.org/) attributes. Once

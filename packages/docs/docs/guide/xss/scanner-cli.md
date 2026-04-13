@@ -1,3 +1,9 @@
+---
+description:
+  Run xss-scan from the command line, target files or projects, interpret exit codes, and
+  integrate it into CI.
+---
+
 # Running the XSS Scanner
 
 The `xss-scan` CLI ships with `@kitajs/ts-html-plugin` and performs project-wide XSS

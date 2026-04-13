@@ -1,3 +1,9 @@
+---
+description:
+  Benchmark results, methodology, and the architecture choices that make Kita Html faster
+  than virtual DOM renderers.
+---
+
 # Benchmarks
 
 Kita Html is a string builder. The most representative way to measure its performance is

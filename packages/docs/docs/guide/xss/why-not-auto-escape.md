@@ -1,3 +1,9 @@
+---
+description:
+  Why string-based rendering cannot auto-escape children and why Kita Html relies on
+  compile-time XSS checks instead.
+---
+
 # Why Not Auto-Escape
 
 In React, every JSX element is an object with a `$$typeof` symbol, a type field, and a

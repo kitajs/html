@@ -1,6 +1,9 @@
 ---
 pageType: home
 title: Kita Html
+description:
+  Fast server-side JSX runtime with compile-time XSS protection, async components, and
+  Suspense streaming.
 titleSuffix: Super-fast JSX Runtime
 
 hero:

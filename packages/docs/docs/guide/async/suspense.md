@@ -1,3 +1,9 @@
+---
+description:
+  Conceptual guide to Suspense streaming, request isolation, and when progressive async
+  rendering is worth using.
+---
+
 # Suspense Streaming
 
 Without Suspense, the server must wait for every async component to resolve before sending

@@ -1,3 +1,9 @@
+---
+description:
+  How the editor plugin and xss-scan CLI analyze JSX child types to report XSS issues
+  before production.
+---
+
 # How XSS Detection Works
 
 Kita Html catches XSS vulnerabilities before they reach production through two tools that
