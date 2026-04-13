@@ -1,6 +1,0 @@
-{
-  "eval_id": 2,
-  "eval_name": "base-streaming-errors",
-  "prompt": "I need a minimal Kita TSX example for plain server rendering, no framework plugin. Show async components, Suspense streaming, and how to catch async errors correctly. Don't use React.",
-  "assertions": []
-}

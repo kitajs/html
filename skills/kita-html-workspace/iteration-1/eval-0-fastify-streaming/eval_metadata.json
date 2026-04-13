@@ -1,6 +1,0 @@
-{
-  "eval_id": 0,
-  "eval_name": "fastify-streaming",
-  "prompt": "I have a Fastify route in a Kita project and need a streamed dashboard page with two async sections. Please write the route and page in TSX, use the right Kita APIs, and make sure user names are rendered safely.",
-  "assertions": []
-}

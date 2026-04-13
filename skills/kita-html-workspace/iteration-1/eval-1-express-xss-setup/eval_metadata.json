@@ -1,6 +1,0 @@
-{
-  "eval_id": 1,
-  "eval_name": "express-xss-setup",
-  "prompt": "Can you scaffold an Express page component and route for Kita Html? The page shows a user bio coming from the database and I don't want XSS issues. Include any setup changes you think are necessary.",
-  "assertions": []
-}
