@@ -1,4 +1,4 @@
-import { Badge } from '@rspress/core/theme'
+import { Badge } from '@rspress/core/theme-original'
 import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styles from './KitaCodeBlock.module.scss'
@@ -42,6 +42,8 @@ function markDiscovered() {
 
 export const KitaCodeSvg: React.FC = () => (
   <svg
+    aria-hidden="true"
+    focusable="false"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -58,6 +60,7 @@ export const KitaCodeSvg: React.FC = () => (
 const KitaHtmlButton: React.FC<KitaHtmlButtonProps> = ({ isActive, onClick }) => {
   return (
     <button
+      type="button"
       className={`rp-code-button-group__button ${styles.button} ${isActive ? styles.active : ''}`}
       title={isActive ? 'Hide HTML Output' : 'Show HTML Output'}
       aria-label={isActive ? 'Hide HTML Output' : 'Show HTML Output'}
@@ -133,7 +136,11 @@ const KitaCodeBlock: React.FC<KitaCodeBlockProps> = ({ htmlOutput, children }) =
           buttonGroupEl
         )}
       {showBadge && (
-        <button className={styles.discoveryBadge} onClick={handleBadgeClick}>
+        <button
+          type="button"
+          className={styles.discoveryBadge}
+          onClick={handleBadgeClick}
+        >
           <Badge type="info" text="💡 Click to see HTML output" />
         </button>
       )}
