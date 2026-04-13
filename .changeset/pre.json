@@ -17,17 +17,22 @@
     "@kitajs/docs-html": "1.0.0",
     "@kitajs/fastify-html-plugin": "4.2.1",
     "@kitajs/html": "4.2.13",
-    "@kitajs/ts-html-plugin": "4.1.4"
+    "@kitajs/ts-html-plugin": "4.1.4",
+    "@kitajs/express-html-plugin": "4.0.0"
   },
   "changesets": [
+    "add-express-html-plugin",
     "calm-bears-remain",
+    "eighty-taxes-jam",
     "fix-double-escape-self-closing",
     "hip-trams-roll",
     "metal-corners-type",
     "metal-hairs-juggle",
+    "remove-suspense-root-global",
     "sharp-wombats-stay",
     "slimy-wolves-buy",
     "stale-shrimps-spend",
-    "tender-regions-cough"
+    "tender-regions-cough",
+    "update-suspense-script-protocol"
   ]
 }
