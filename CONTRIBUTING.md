@@ -3,7 +3,7 @@
 ## Prerequisites
 
 pnpm is the only supported package manager. The `preinstall` script enforces this. Node.js
-20.13 or later is required.
+24 or later and pnpm 10 or later are required.
 
 ```bash
 pnpm install
@@ -16,6 +16,7 @@ packages/
   html/                  @kitajs/html            Core JSX runtime
   ts-html-plugin/        @kitajs/ts-html-plugin  XSS detection (TS plugin + CLI)
   fastify-html-plugin/   @kitajs/fastify-html-plugin  Fastify integration
+  express-html-plugin/   @kitajs/express-html-plugin  Express integration
   docs/                  @kitajs/docs-html       Documentation site
 benchmarks/              Performance benchmarks
 examples/                Usage examples (fastify-htmx, http-server)
@@ -26,7 +27,8 @@ examples/                Usage examples (fastify-htmx, http-server)
 ### Root-level (all packages)
 
 ```bash
-pnpm build          # Build all packages (via Turbo)
+pnpm build          # Build published packages under packages/*
+pnpm build-all      # Build the full workspace
 pnpm test           # Run all tests (via Turbo)
 pnpm format         # Format all files with Prettier
 pnpm bench          # Run benchmarks
@@ -40,15 +42,24 @@ Use `-F` (short for `--filter`) to target a specific package.
 ```bash
 pnpm -F @kitajs/html build
 pnpm -F @kitajs/html test
+pnpm -F @kitajs/html test-types
 pnpm -F @kitajs/ts-html-plugin build
 pnpm -F @kitajs/ts-html-plugin test
+pnpm -F @kitajs/ts-html-plugin test-types
+pnpm -F @kitajs/fastify-html-plugin build
 pnpm -F @kitajs/fastify-html-plugin test
+pnpm -F @kitajs/fastify-html-plugin test-types
+pnpm -F @kitajs/express-html-plugin build
+pnpm -F @kitajs/express-html-plugin test
+pnpm -F @kitajs/express-html-plugin test-types
 pnpm -F @kitajs/docs-html build
 pnpm -F @kitajs/docs-html dev        # Dev server on port 1229
+pnpm -F @kitajs/docs-html preview
 ```
 
-All packages use `tsgo -p tsconfig.build.json` for building and
-`vitest --coverage --typecheck --run` for testing.
+The library packages (`html`, `ts-html-plugin`, `fastify-html-plugin`, and
+`express-html-plugin`) use `tsgo -p tsconfig.build.json` for building and
+`vitest --coverage --typecheck --run` for testing. The docs package uses Rspress.
 
 ### Formatting
 
@@ -85,7 +96,8 @@ easier than gathering all feedback at the end.
 
 The documentation site lives at `packages/docs/`. All docs are markdown files under
 `packages/docs/docs/`. The site uses Rspress and follows the Information Mapping
-methodology. See `packages/docs/CLAUDE.md` for the full conventions.
+methodology. API reference pages are also generated for the core runtime and current
+adapter packages. See `packages/docs/CLAUDE.md` for the full conventions.
 
 After editing any documentation file:
 
@@ -144,7 +156,7 @@ debugging.
 ## Changesets
 
 This project uses [Changesets](https://github.com/changesets/changesets) for version
-management. After making your changes, create a changeset:
+management. After making user-facing changes to a published package, create a changeset:
 
 ```bash
 pnpm changeset
@@ -152,6 +164,10 @@ pnpm changeset
 
 Select the affected packages, choose the semver bump level, and write a short description.
 The changeset file is committed with your PR.
+
+Documentation-only changes in `@kitajs/docs-html` and changes limited to examples or
+benchmarks do not need a changeset. Those packages are ignored in
+`.changeset/config.json`.
 
 ## Pre-Push Checklist
 
@@ -161,13 +177,14 @@ Before pushing code or submitting a PR, complete these steps in order:
 2. **Build all packages**: `pnpm build` (must exit with code 0)
 3. **Type-check all packages**: `pnpm test-types` (must exit with code 0)
 4. **Run all tests**: `pnpm test` (must exit with code 0)
-5. **Create changeset**: `pnpm changeset` (see Changesets section)
+5. **Create changeset**: `pnpm changeset` for published-package changes (see Changesets
+   section)
 
-The changeset file must be committed with your changes.
+If required, the changeset file must be committed with your changes.
 
 ## Pull Requests
 
-Every PR must include a changeset entry.
+PRs that change a published package must include a changeset entry.
 
 1. Fork and clone the repository
 2. Create a branch for your changes

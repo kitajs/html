@@ -15,6 +15,7 @@ kitajs/html/
 │   ├── html/               # Core JSX runtime (@kitajs/html)
 │   ├── ts-html-plugin/     # XSS detection TypeScript plugin (@kitajs/ts-html-plugin)
 │   ├── fastify-html-plugin/# Fastify integration (@kitajs/fastify-html-plugin)
+│   ├── express-html-plugin/# Express integration (@kitajs/express-html-plugin)
 │   └── docs/               # Documentation site (@kitajs/docs-html)
 ├── benchmarks/             # Performance benchmarks
 └── examples/               # Usage examples
@@ -27,18 +28,28 @@ kitajs/html/
     ↑
     ├── @kitajs/ts-html-plugin (peer dependency)
     │
-    └── @kitajs/fastify-html-plugin (peer dependency)
+    ├── @kitajs/fastify-html-plugin (peer dependency)
+    │
+    └── @kitajs/express-html-plugin (peer dependency)
 ```
+
+The adapter packages add framework-specific HTML response glue on top of the core runtime.
+The docs site also generates API reference pages for the core runtime and current adapter
+packages.
 
 ## Quick Start
 
 ```bash
-pnpm install        # Install dependencies (pnpm required)
-pnpm build          # Build all packages
+pnpm install        # Install dependencies (pnpm >=10 required)
+pnpm build          # Build published packages under packages/*
+pnpm build-all      # Build the full workspace
 pnpm test           # Run all tests
+pnpm test-types     # Type-check all packages
 pnpm format         # Format code
 pnpm bench          # Run benchmarks
 ```
+
+Use Node.js 24 or later. The root `package.json` enforces `node >=24` and `pnpm >=10`.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for full development workflow, per-package
 commands, and pull request guidelines.
@@ -123,14 +134,16 @@ TypeScript plugin for XSS detection. Key files:
 
 **See:** [`packages/ts-html-plugin/CLAUDE.md`](packages/ts-html-plugin/CLAUDE.md)
 
-### @kitajs/fastify-html-plugin
+### Framework Adapters
 
-Fastify integration. Key file:
+Framework adapters follow the same general shape: a thin integration layer that wires the
+framework request/response objects to the core runtime, handles HTML response headers, and
+supports Suspense streaming.
 
-- `src/index.ts`: Plugin registration, `reply.html()`, Suspense streaming
+- `packages/fastify-html-plugin/`
+- `packages/express-html-plugin/`
 
-**See:**
-[`packages/fastify-html-plugin/CLAUDE.md`](packages/fastify-html-plugin/CLAUDE.md)
+Package-specific details live in each package's own `CLAUDE.md`.
 
 ### @kitajs/docs-html
 
@@ -231,9 +244,9 @@ The codebase uses several optimization patterns:
 Any change to the runtime, types, API surface, configuration, or behavior of any package
 must include a corresponding update to the documentation at `packages/docs/`. If a code
 change would make any existing documentation page inaccurate, update that page in the same
-commit. Use the `docs-writer` agent at `.claude/agents/docs-writer/` for documentation
-work. Run `pnpm -F @kitajs/docs-html build` to verify the docs site compiles after any
-documentation change.
+commit. Follow `packages/docs/CLAUDE.md` for docs structure and writing conventions. Run
+`pnpm -F @kitajs/docs-html build` to verify the docs site compiles after any documentation
+change.
 
 ## Common Patterns
 
@@ -274,6 +287,9 @@ function Page({ rid }: { rid: number }) {
 
 // With Fastify
 app.get('/', (req, reply) => reply.html(<Page rid={req.id} />))
+
+// With Express
+app.get('/', (req, res) => res.html(<Page rid={req.id} />))
 ```
 
 ### Conditional Classes
