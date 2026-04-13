@@ -107,6 +107,7 @@ export default function HeroInteractive() {
                     <div>5</div>
                     <div>6</div>
                     <div>7</div>
+                    <div>{'\u00A0'}</div>
                   </div>
                   <div className={styles.codeContent}>
                     <div>
@@ -124,8 +125,10 @@ export default function HeroInteractive() {
                       {'  '}
                       <span className={styles.jsx}>&lt;p&gt;</span>
                     </div>
+                    <div>{'    '}Hello,</div>
                     <div>
-                      {'    '}Hello, <span className={styles.jsx}>&lt;b</span>{' '}
+                      {'    '}
+                      <span className={styles.jsx}>&lt;b</span>{' '}
                       <span className={styles.keyword}>safe</span>
                       <span className={styles.jsx}>&gt;</span>
                       <span className={styles.punctuation}>{'{'}</span>
@@ -140,6 +143,7 @@ export default function HeroInteractive() {
                     <div>
                       <span className={styles.punctuation}>);</span>
                     </div>
+                    <div>{'\u00A0'}</div>
                   </div>
                 </>
               ) : (
@@ -152,17 +156,21 @@ export default function HeroInteractive() {
                     <div>{'\u00A0'}</div>
                     <div>{'\u00A0'}</div>
                     <div>{'\u00A0'}</div>
+                    <div>{'\u00A0'}</div>
                   </div>
                   <div className={styles.codeContent}>
                     <div>
                       <span className={styles.jsx}>&lt;p&gt;</span>
-                      Hello, <span className={styles.jsx}>&lt;b&gt;</span>
+                    </div>
+                    <div>Hello,</div>
+                    <div>
+                      <span className={styles.jsx}>&lt;b&gt;</span>
                       Arthur
                       <span className={styles.jsx}>&lt;/b&gt;</span>!
+                    </div>
+                    <div>
                       <span className={styles.jsx}>&lt;/p&gt;</span>
                     </div>
-                    <div>{'\u00A0'}</div>
-                    <div>{'\u00A0'}</div>
                     <div>{'\u00A0'}</div>
                     <div>{'\u00A0'}</div>
                     <div>{'\u00A0'}</div>
