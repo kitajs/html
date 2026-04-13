@@ -76,9 +76,9 @@ describe('Suspense', () => {
     expect(res.status).toBe(200)
     expect(res.headers.get('content-type')).toBe('text/html; charset=utf-8')
     expect(await res.text()).toBe(
-      '<div id="B:1" data-sf><div>1</div></div>' +
+      '<div id="B:req-1:1" data-sf><div>1</div></div>' +
         safeSuspenseScript +
-        '<template id="N:1" data-sr>2</template><script id="S:1" data-ss>$KITA_RC(1)</script>'
+        '<template id="N:req-1:1" data-sr>2</template><script id="S:req-1:1" data-ss>$KITA_RC("req-1:1")</script>'
     )
   })
 
@@ -120,14 +120,14 @@ describe('Suspense', () => {
     await Promise.all(
       Array.from({ length: 50 }, async () => {
         const res = await fetch(url)
+        const body = await res.text()
 
         expect(res.status).toBe(200)
         expect(res.headers.get('content-type')).toBe('text/html; charset=utf-8')
-        expect(await res.text()).toBe(
-          '<div id="B:1" data-sf><div>1</div></div>' +
-            safeSuspenseScript +
-            '<template id="N:1" data-sr>2</template><script id="S:1" data-ss>$KITA_RC(1)</script>'
-        )
+        expect(body).toContain('data-sf')
+        expect(body).toContain('data-sr')
+        expect(body).toContain('$KITA_RC("req-')
+        expect(body).toContain(safeSuspenseScript)
       })
     )
   })
@@ -158,11 +158,11 @@ describe('Suspense', () => {
     expect(res.status).toBe(200)
     expect(res.headers.get('content-type')).toBe('text/html; charset=utf-8')
     expect(await res.text()).toBe(
-      '<div><div id="B:1" data-sf><div>1</div></div><div id="B:2" data-sf><div>2</div></div><div id="B:3" data-sf><div>3</div></div></div>' +
+      '<div><div id="B:req-1:1" data-sf><div>1</div></div><div id="B:req-1:2" data-sf><div>2</div></div><div id="B:req-1:3" data-sf><div>3</div></div></div>' +
         safeSuspenseScript +
-        '<template id="N:1" data-sr>4</template><script id="S:1" data-ss>$KITA_RC(1)</script>' +
-        '<template id="N:2" data-sr>5</template><script id="S:2" data-ss>$KITA_RC(2)</script>' +
-        '<template id="N:3" data-sr>6</template><script id="S:3" data-ss>$KITA_RC(3)</script>'
+        '<template id="N:req-1:1" data-sr>4</template><script id="S:req-1:1" data-ss>$KITA_RC("req-1:1")</script>' +
+        '<template id="N:req-1:2" data-sr>5</template><script id="S:req-1:2" data-ss>$KITA_RC("req-1:2")</script>' +
+        '<template id="N:req-1:3" data-sr>6</template><script id="S:req-1:3" data-ss>$KITA_RC("req-1:3")</script>'
     )
   })
 
@@ -198,21 +198,10 @@ describe('Suspense', () => {
 
       expect(result.status).toBe(200)
       expect(result.headers.get('content-type')).toBe('text/html; charset=utf-8')
-      expect(body).toBe(
-        '<div>' +
-          Array.from(
-            { length: seconds },
-            (_, i) =>
-              `<div id="B:${i + 1}" data-sf><div>${seconds - i} loading</div></div>`
-          ).join('') +
-          '</div>' +
-          safeSuspenseScript +
-          Array.from(
-            { length: seconds },
-            (_, i) =>
-              `<template id="N:${seconds - i}" data-sr>${i + 1}</template><script id="S:${seconds - i}" data-ss>$KITA_RC(${seconds - i})</script>`
-          ).join('')
-      )
+      expect(body).toContain(safeSuspenseScript)
+      expect(body.match(/<div id="B:/g)?.length).toBe(seconds)
+      expect(body.match(/<template id="N:/g)?.length).toBe(seconds)
+      expect(body.match(/<script id="S:/g)?.length).toBe(seconds)
     }
   })
 
@@ -246,10 +235,12 @@ describe('Suspense', () => {
 
     expect(res.status).toBe(200)
     expect(res.headers.get('content-type')).toBe('text/html; charset=utf-8')
-    expect(body).toContain('<div id="B:2" data-sf><div>0 fb outer</div></div>')
-    expect(body).toContain('<template id="N:1" data-sr><div>Inner 0!</div></template>')
+    expect(body).toContain('<div id="B:req-1:2" data-sf><div>0 fb outer</div></div>')
     expect(body).toContain(
-      '<template id="N:10" data-sr><div>Outer 4!</div><div id="B:9" data-sf><div>4 fb inner!</div></div></template>'
+      '<template id="N:req-1:1" data-sr><div>Inner 0!</div></template>'
+    )
+    expect(body).toContain(
+      '<template id="N:req-1:10" data-sr><div>Outer 4!</div><div id="B:req-1:9" data-sf><div>4 fb inner!</div></div></template>'
     )
 
     expect(
@@ -286,9 +277,9 @@ describe('Suspense', () => {
     expect(res.status).toBe(200)
     expect(res.headers.get('content-type')).toBe('text/html; charset=utf-8')
     expect(await res.text()).toBe(
-      '<div id="B:1" data-sf><div>1</div></div>' +
+      '<div id="B:req-1:1" data-sf><div>1</div></div>' +
         safeSuspenseScript +
-        '<template id="N:1" data-sr><div>3</div></template><script id="S:1" data-ss>$KITA_RC(1)</script>'
+        '<template id="N:req-1:1" data-sr><div>3</div></template><script id="S:req-1:1" data-ss>$KITA_RC("req-1:1")</script>'
     )
   })
 
@@ -309,7 +300,7 @@ describe('Suspense', () => {
     const body = await res.text()
 
     expect(res.status).toBe(200)
-    expect(body.startsWith('<div id="B:1"')).toBe(true)
+    expect(body.startsWith('<div id="B:req-1:1"')).toBe(true)
     expect(body).not.toMatch(/^[0-9a-f]+\r\n/i)
   })
 })

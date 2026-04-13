@@ -22,6 +22,7 @@ export async function renderKitaCode(
     jsDocParsingMode: ts.JSDocParsingMode.ParseNone,
     moduleName: 'kita-code-block',
     compilerOptions: {
+      types: ['node'],
       module: ts.ModuleKind.CommonJS,
       target: ts.ScriptTarget.ES2020,
       jsx: ts.JsxEmit.ReactJSX,
@@ -49,9 +50,14 @@ export async function renderKitaCode(
     }
   })
 
-  vm.runInContext(transpiled.outputText, context, {
-    filename: 'kita-code-block.js'
-  })
+  // Wrap the transpiled CommonJS in an async IIFE so examples can use top-level await.
+  await vm.runInContext(
+    `(async () => {\n${transpiled.outputText}\n})().catch(console.error)`,
+    context,
+    {
+      filename: 'kita-code-block.js'
+    }
+  )
 
   // Extract the variable from the context
   let htmlOutput: string =

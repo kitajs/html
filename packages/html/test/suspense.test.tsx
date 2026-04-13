@@ -141,15 +141,15 @@ describe('Suspense - basic rendering', () => {
       )
     ).toBe(
       <>
-        <div id="B:1" data-sf>
+        <div id="B:1:1" data-sf>
           <div>loading</div>
         </div>
         {safeSuspenseScript}
-        <template id="N:1" data-sr>
+        <template id="N:1:1" data-sr>
           1
         </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
+        <script id="S:1:1" data-ss>
+          $KITA_RC("1:1")
         </script>
       </>
     )
@@ -229,7 +229,7 @@ describe('Suspense - autoScript', () => {
     )
 
     expect(result).not.toContain('<script>')
-    expect(result).toContain('$KITA_RC(1)') // still has the call
+    expect(result).toContain('$KITA_RC("1:1")') // still has the call
     SuspenseRoot.autoScript = true // reset for other tests
   })
 
@@ -260,25 +260,25 @@ describe('Suspense - multiple components', () => {
     ).toBe(
       <>
         <div>
-          <div id="B:1" data-sf>
+          <div id="B:1:1" data-sf>
             <div>1</div>
           </div>
-          <div id="B:2" data-sf>
+          <div id="B:1:2" data-sf>
             <div>2</div>
           </div>
         </div>
         {safeSuspenseScript}
-        <template id="N:1" data-sr>
+        <template id="N:1:1" data-sr>
           1
         </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
+        <script id="S:1:1" data-ss>
+          $KITA_RC("1:1")
         </script>
-        <template id="N:2" data-sr>
+        <template id="N:1:2" data-sr>
           2
         </template>
-        <script id="S:2" data-ss>
-          $KITA_RC(2)
+        <script id="S:1:2" data-ss>
+          $KITA_RC("1:2")
         </script>
       </>
     )
@@ -361,8 +361,8 @@ describe('Suspense - nested', () => {
       ))
     )
 
-    // Inner resolves first, so N:1 appears before N:2
-    expect(html.indexOf('N:1')).toBeLessThan(html.indexOf('N:2'))
+    // Inner resolves first, so N:1:1 appears before N:1:2
+    expect(html.indexOf('N:1:1')).toBeLessThan(html.indexOf('N:1:2'))
     expect(html).toContain('inner-content')
   })
 

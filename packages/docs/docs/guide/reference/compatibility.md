@@ -27,6 +27,15 @@ Express (4.x and 5.x), and Elysia. Kita Html also works with any framework that 
 strings: Hono, Bun's built-in server, AdonisJS, and others. Send the string or stream
 directly in the response body.
 
+## Browsers
+
+The core HTML string output works anywhere the browser can render HTML. Suspense streaming
+has a stricter client requirement because the injected replacement script depends on
+`HTMLTemplateElement.content` and `Element.remove()`.
+
+In practice, Suspense streaming supports modern evergreen browsers released since
+late 2015. IE11 is not supported.
+
 ## Editors
 
 The XSS detection plugin works in any editor that supports TypeScript language service

@@ -89,6 +89,9 @@ function noop() {}
  * it's important to keep it as small as possible and also include the license to avoid
  * legal issues.
  *
+ * It requires support for `<template>.content` and `Element.remove()`. IE11 is not
+ * supported.
+ *
  * Pending data-sr elements are kept pending if their fallback has not yet been rendered,
  * on each render a try to switch all pending data-sr is attempted until no elements are
  * substituted.
@@ -122,12 +125,14 @@ export const SuspenseScript = /* html */ `
             while(c=t.content.firstChild)
               f.appendChild(c);
 
-            // replaces the div and removes the script and template
+            // Intentionally throws if something else already removed or moved the fallback.
+            // That means the streamed suspense markers and the live DOM are out of sync.
             v.parentNode.replaceChild(f,v);
             t.remove();
             s.remove();
 
             // looks for pending templates
+            // TODO: Avoid a full document rescan after every replacement.
             r=d.querySelectorAll('template[id][data-sr]');
 
             do{
@@ -195,6 +200,7 @@ export function Suspense(props: SuspenseProps): JSX.Element {
   // Increments first so we can differ 0 as no suspenses
   // were used and 1 as the first suspense component
   const run = ++data.running
+  const suspenseKey = `${props.rid}:${run}`
 
   void children
     .then(writeStreamTemplate)
@@ -247,11 +253,11 @@ export function Suspense(props: SuspenseProps): JSX.Element {
 
   // Keeps string return type
   if (typeof fallback === 'string') {
-    return `<div id="B:${run}" data-sf>${fallback}</div>`
+    return `<div id="B:${suspenseKey}" data-sf>${fallback}</div>`
   }
 
   return fallback.then(function resolveCallback(resolved) {
-    return `<div id="B:${run}" data-sf>${resolved}</div>`
+    return `<div id="B:${suspenseKey}" data-sf>${resolved}</div>`
   })
 
   /**
@@ -282,7 +288,7 @@ export function Suspense(props: SuspenseProps): JSX.Element {
     // Writes the chunk
     data.stream.push(
       // prettier-ignore
-      `<template id="N:${run}" data-sr>${result}</template><script id="S:${run}" data-ss>$KITA_RC(${run})</script>`
+      `<template id="N:${suspenseKey}" data-sr>${result}</template><script id="S:${suspenseKey}" data-ss>$KITA_RC(${JSON.stringify(suspenseKey)})</script>`
     )
   }
 }
