@@ -3,7 +3,7 @@ import styles from './Banner.module.scss'
 export function Banner() {
   return (
     <div className={styles.banner} role="banner">
-      <span>
+      <span className="rp-not-doc">
         You are viewing documentation for the upcoming{' '}
         <a
           href="https://github.com/kitajs/html/tree/next"
