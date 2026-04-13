@@ -42,7 +42,7 @@ export interface ExpressKitaHtmlOptions {
  *
  * @example
  *
- * ```ts
+ * ```tsx
  * import express from 'express'
  * import { expressKitaHtml } from '@kitajs/express-html-plugin'
  *

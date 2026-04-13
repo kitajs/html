@@ -27,7 +27,7 @@ export interface FastifyKitaHtmlOptions {
  *
  * @example
  *
- * ```ts
+ * ```tsx
  * import Fastify from 'fastify';
  * import { fastifyKitaHtml } from '@kitajs/fastify-html-plugin';
  *
