@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node: [lts/-2, lts/-1, lts/*]
+        node: [lts/-1, lts/*]
 
     # Set an environment variable to distinguish cache for each OS/Node
     # and distinguish between CI matrix runs in turbo.json
@@ -87,7 +87,7 @@ jobs:
       - name: Setup node and restore cached dependencies
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: lts/*
           cache: 'pnpm'
 
       - name: Install packages
