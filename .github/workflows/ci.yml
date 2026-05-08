@@ -87,7 +87,7 @@ jobs:
       - name: Setup node and restore cached dependencies
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version-file: '.nvmrc'
           cache: 'pnpm'
 
       - name: Install packages
