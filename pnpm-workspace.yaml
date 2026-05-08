@@ -23,7 +23,7 @@ catalog:
   '@vitest/coverage-v8': 4.1.4
   c8: 11.0.0
   express: 5.1.0
-  fastify: 5.8.4
+  fastify: 5.8.5
   fastify-plugin: 5.1.0
   jsdom: 29.0.2
   react: 19.2.5
