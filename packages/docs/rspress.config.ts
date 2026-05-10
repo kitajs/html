@@ -202,11 +202,12 @@ export default defineConfig({
       }
     ],
     footer: {
-      message: 'Released under the MIT License.'
+      message:
+        'Created in the beautiful mountains of Domingos Martins 🇧🇷<br/>Released under the MIT License.'
     },
     lastUpdated: true,
     editLink: {
-      docRepoBaseUrl: 'https://github.com/kitajs/html/tree/master/packages/docs-new/docs'
+      docRepoBaseUrl: 'https://github.com/kitajs/html/tree/next/packages/docs/docs'
     }
   },
 

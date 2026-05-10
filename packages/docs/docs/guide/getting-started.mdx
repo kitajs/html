@@ -43,8 +43,8 @@ TypeScript:
 
 ```json title=".vscode/settings.json"
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "js/ts.tsdk.path": "node_modules/typrscript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true
 }
 ```
 
@@ -65,9 +65,9 @@ the same XSS analysis as the editor plugin, but against your entire codebase.
 
 Write the following in a `.tsx` file:
 
-```tsx twoslash
+```tsx twoslash kita
 // @errors: 88601
-console.log(<div>{String.name}</div>)
+const html = <div>{String.name}</div>
 ```
 
 Your editor should show an XSS error on `String.name`, because its type is `string` and it

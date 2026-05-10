@@ -100,7 +100,7 @@ const html = (
   <Suspense
     rid={rid}
     fallback={<div>Loading...</div>}
-    catch={(error) => <div>Failed: {String(error)}</div>}
+    catch={(error) => <div safe>Failed: {String(error)}</div>}
   >
     <AsyncContent />
   </Suspense>
@@ -119,11 +119,11 @@ that fetch different data so they can appear as soon as their data is ready.
 import { Suspense, renderToStream } from '@kitajs/html/suspense'
 
 async function UserProfile({ id }: { id: string }) {
-  return <div>User {id}</div>
+  return <div safe>User {id}</div>
 }
 
 async function ActivityFeed({ id }: { id: string }) {
-  return <div>Feed {id}</div>
+  return <div safe>Feed {id}</div>
 }
 // ---cut---
 const stream = renderToStream((rid) => (
@@ -156,7 +156,7 @@ async function loadTranslations() {
 }
 
 async function UserProfile({ id }: { id: string }) {
-  return <div>User {id}</div>
+  return <div safe>User {id}</div>
 }
 // ---cut---
 async function LoadingMessage() {

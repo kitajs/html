@@ -293,8 +293,8 @@ For the `// @errors` syntax and other twoslash directives, see the `twoslash` sk
 **XSS section**: Solution-first ordering. Safe attribute and detection tooling before the
 "why not auto-escape" explanation.
 
-**API section**: XSS tooling documented by capability (analysis engine, editor plugin, CLI
-scanner) not by package name. This anticipates the ts-html-plugin package split.
+**XSS section**: XSS tooling is documented in the guide. Keep editor diagnostics and the
+`xss-scan` CLI together on `docs/guide/xss/cli-scanner.md`.
 
 **Integrations section**: Split into Frameworks (with official plugins) and Type
 Extensions (HTMX, Alpine, Turbo). When mentioning specific frameworks, link to the

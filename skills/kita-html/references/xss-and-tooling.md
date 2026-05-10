@@ -6,8 +6,9 @@ Latest docs:
 
 - Doc link, safe attribute raw markdown:
   `https://html.kitajs.org/guide/xss/safe-attribute.md`
-- Doc link, safety rules raw markdown: `https://html.kitajs.org/guide/xss/safety-rules.md`
-- Doc link, scanner CLI raw markdown: `https://html.kitajs.org/guide/xss/scanner-cli.md`
+- Doc link, safe attribute and safety rules raw markdown:
+  `https://html.kitajs.org/guide/xss/safe-attribute.md`
+- Doc link, CLI scanner raw markdown: `https://html.kitajs.org/guide/xss/cli-scanner.md`
 - Doc link, error codes raw markdown: `https://html.kitajs.org/guide/xss/error-codes.md`
 
 These doc links are the most up-to-date reference if this file and the docs ever diverge.
@@ -79,8 +80,8 @@ import { Fragment, escapeHtml } from '@kitajs/html'
 
 ```json
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "js/ts.tsdk.path": "node_modules/typrscript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true
 }
 ```
 

@@ -130,8 +130,7 @@ Each generated directory has a `_meta.json` that controls sidebar ordering. Type
 generates this file once (if missing), so edits persist. Remove the `"index"` entry from
 these files to hide the module-list landing pages from the sidebar.
 
-The XSS tooling API pages (`api/xss-analysis.md`, `api/editor-plugin.md`,
-`api/scanner-cli.md`) are handwritten and must be updated manually when
+XSS tooling is documented in the guide under `docs/guide/xss/`. Update those pages when
 `@kitajs/ts-html-plugin` changes.
 
 ## Sidebar Structure

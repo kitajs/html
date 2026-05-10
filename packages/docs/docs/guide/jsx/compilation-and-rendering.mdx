@@ -1,15 +1,16 @@
 ---
 description:
-  Follow the compile-time JSX rewrite and the runtime steps that turn props and children
-  into HTML strings.
+  Follow how TypeScript compiles JSX expressions and how Kita Html renders the resulting
+  function calls into HTML strings.
 ---
 
-# How JSX Becomes HTML
+# Compilation and Rendering
 
-The transformation from JSX to an HTML string happens in two stages: a compile-time
-rewrite by TypeScript and a runtime evaluation by the Kita Html functions.
+Kita Html turns JSX source into an HTML string in two stages: TypeScript compilation and
+runtime rendering. Compilation removes the JSX syntax. Rendering serializes the resulting
+function calls into the final HTML string.
 
-## Compile time
+## Compilation
 
 When `tsconfig.json` specifies `jsx: "react-jsx"` and `jsxImportSource: "@kitajs/html"`,
 TypeScript rewrites every JSX expression into a function call. Elements with a single
@@ -26,7 +27,7 @@ const html = (
 )
 ```
 
-TypeScript compiles this to:
+TypeScript compiles the expression to function calls:
 
 ```tsx title="Compiled output" twoslash kita
 // @showEmit
@@ -39,14 +40,13 @@ const html = (
 )
 ```
 
-The JSX syntax is fully removed at compile time. The runtime never parses JSX.
+After compilation, no JSX syntax remains. The runtime never parses JSX.
 
-## Runtime
+## Rendering
 
-The `jsx()` and `jsxs()` functions receive the tag name and the props object. They perform
-three operations in sequence: serialize attributes into an HTML attribute string,
-serialize children into a content string, and concatenate the opening tag, content, and
-closing tag.
+The `jsx()` and `jsxs()` functions receive the tag name and the props object produced by
+compilation. They render HTML by serializing attributes, serializing children, and
+concatenating the opening tag, content, and closing tag.
 
 If any child is a `Promise`, the concatenation returns a `Promise<string>` instead of a
 `string`. This propagation is automatic: a single async component anywhere in the tree
