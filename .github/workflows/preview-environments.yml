@@ -44,7 +44,7 @@ jobs:
       - name: Build docs
         if: ${{ github.event.action != 'closed' }}
         env:
-          ZE_SERVER_TOKEN: ${{ secrets.ZE_SERVER_TOKEN }}
+          ZE_CI_TOKEN: ${{ secrets.ZE_CI_TOKEN }}
         run: pnpm turbo build -F @kitajs/docs-html
 
       - name: Zephyr Preview Environments

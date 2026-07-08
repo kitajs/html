@@ -95,5 +95,5 @@ jobs:
 
       - name: Build docs
         env:
-          ZE_SERVER_TOKEN: ${{ secrets.ZE_SERVER_TOKEN }}
+          ZE_CI_TOKEN: ${{ secrets.ZE_CI_TOKEN }}
         run: pnpm turbo build -F @kitajs/docs-html
