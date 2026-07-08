@@ -1,0 +1,53 @@
+name: Zephyr Preview Environments
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    name: Preview Docs
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup node and restore cached dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache turbo build setup
+        uses: actions/cache@v5
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Build docs
+        if: ${{ github.event.action != 'closed' }}
+        env:
+          ZE_SERVER_TOKEN: ${{ secrets.ZE_SERVER_TOKEN }}
+        run: pnpm turbo build -F @kitajs/docs-html
+
+      - name: Zephyr Preview Environments
+        uses: ZephyrCloudIO/zephyr-preview-environment-action@v0.1.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

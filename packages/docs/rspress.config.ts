@@ -20,6 +20,7 @@ import pluginFileTree from 'rspress-plugin-file-tree'
 import pluginOg from 'rspress-plugin-og'
 import readingTime from 'rspress-plugin-reading-time'
 import ts from 'typescript'
+import { withZephyr } from 'zephyr-rspress-plugin'
 import { remarkKitaPlugin } from './plugins/kita/remarkPlugin'
 
 /** Shared TypeDoc setup for compact, public-only API docs. */
@@ -64,6 +65,7 @@ export default defineConfig({
   },
 
   plugins: [
+    withZephyr(),
     readingTime(),
     pluginTwoslash({
       twoslashOptions: {
