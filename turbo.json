@@ -8,7 +8,8 @@
     "build": {
       "dependsOn": ["^build"],
       "outputLogs": "new-only",
-      "outputs": ["dist"]
+      "outputs": ["dist"],
+      "env": ["ZE_CI_TOKEN"]
     },
     "test": {
       "dependsOn": ["^build"],

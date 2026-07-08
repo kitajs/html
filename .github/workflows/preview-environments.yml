@@ -48,6 +48,6 @@ jobs:
         run: pnpm turbo build -F @kitajs/docs-html
 
       - name: Zephyr Preview Environments
-        uses: ZephyrCloudIO/zephyr-preview-environment-action@v0.1.1
+        uses: ZephyrCloudIO/zephyr-preview-environment-action@v0.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
