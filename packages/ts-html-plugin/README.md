@@ -171,7 +171,7 @@ current project's typescript version.
 // .vscode/settings.json
 
 {
-  "js/ts.tsdk.path": "node_modules/typrscript/lib",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
   "js/ts.tsdk.promptToUseWorkspaceVersion": true
 }
 ```

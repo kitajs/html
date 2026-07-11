@@ -237,7 +237,7 @@ node dist/cli.js src/file.tsx  # Scan specific files
 ```json
 // .vscode/settings.json
 {
-  "js/ts.tsdk.path": "node_modules/typrscript/lib",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
   "js/ts.tsdk.promptToUseWorkspaceVersion": true
 }
 ```
