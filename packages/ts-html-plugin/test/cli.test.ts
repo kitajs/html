@@ -1,4 +1,4 @@
-import { execSync } from 'node:child_process'
+import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { expect, it } from 'vitest'
@@ -41,7 +41,7 @@ it('handles rootDirs with outDir without crashing', () => {
   )
 
   try {
-    const output = execSync(`node ${CLI}`, {
+    const output = execFileSync('node', [CLI], {
       cwd: tmpDir,
       encoding: 'utf-8',
       stdio: 'pipe'
@@ -59,7 +59,7 @@ it('exits non-zero when tsconfig is missing', () => {
 
   try {
     expect(() =>
-      execSync(`node ${CLI} --project missing.json`, {
+      execFileSync('node', [CLI, '--project', 'missing.json'], {
         cwd: tmpDir,
         encoding: 'utf-8',
         stdio: 'pipe'
