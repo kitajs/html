@@ -130,7 +130,7 @@ export async function main() {
 
   const root = args.cwd ? String(args.cwd) : process.cwd()
 
-  const tsconfigPath = String(args.project || args.p || 'tsconfig.json')
+  const tsconfigPath = path.resolve(String(args.project || args.p || 'tsconfig.json'))
 
   const simplified = !!(args.simplified || args.s)
 
