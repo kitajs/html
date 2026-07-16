@@ -1,5 +1,15 @@
 # @kitajs/ts-html-plugin
 
+## 5.0.0-next.2
+
+### Patch Changes
+
+- [#510](https://github.com/kitajs/html/pull/510)
+  [`bc04db5`](https://github.com/kitajs/html/commit/bc04db563c9f51df007652c5f0c1645aaf4c63e2)
+  Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Resolve
+  tsconfig path to absolute in `xss-scan` CLI to avoid TypeScript 6 crash with
+  `rootDirs`/`outDir`.
+
 ## 5.0.0-next.1
 
 ### Major Changes
