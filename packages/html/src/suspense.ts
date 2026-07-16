@@ -1,3 +1,4 @@
+import { AsyncLocalStorage } from 'node:async_hooks'
 import { PassThrough, Readable } from 'node:stream'
 import type { Children } from './index.js'
 import { contentsToString, contentToString } from './index.js'
@@ -77,6 +78,33 @@ export interface SuspenseProps {
    * components. Please use {@linkcode ErrorBoundary} to catch them instead.
    */
   catch?: JSX.Element | ((error: unknown) => JSX.Element)
+}
+
+/** Props accepted by {@linkcode AutoSuspense}. */
+export type AutoSuspenseProps = Omit<SuspenseProps, 'rid'>
+
+type AutoSuspenseContext = {
+  rid: number | string
+}
+
+const autoSuspenseStorage = new AsyncLocalStorage<AutoSuspenseContext>()
+
+/**
+ * Runs a callback with the request ID used by {@linkcode AutoSuspense}.
+ *
+ * Framework integrations use this before route handlers execute so nested synchronous and
+ * asynchronous components can share the request ID without receiving it as a prop.
+ *
+ * @param rid The request ID to associate with automatic Suspense boundaries.
+ * @param callback The callback that constructs the JSX tree.
+ * @returns The callback result without awaiting or otherwise changing it.
+ */
+export function runWithAutoSuspense<R>(rid: number | string, callback: () => R): R {
+  if (rid === undefined) {
+    throw new Error('Automatic Suspense requires a request ID.')
+  }
+
+  return autoSuspenseStorage.run({ rid }, callback)
 }
 
 function noop() {}
@@ -291,6 +319,35 @@ export function Suspense(props: SuspenseProps): JSX.Element {
       `<template id="N:${suspenseKey}" data-sr>${result}</template><script id="S:${suspenseKey}" data-ss>$KITA_RC(${JSON.stringify(suspenseKey)})</script>`
     )
   }
+}
+
+/**
+ * A Suspense boundary that obtains its request ID from the current automatic Suspense
+ * scope.
+ *
+ * Framework integrations establish this scope when their `autoSuspense` option is
+ * enabled. Use {@linkcode Suspense} with an explicit `rid` outside those environments.
+ *
+ * @example
+ *
+ * ```tsx
+ * <AutoSuspense fallback={<div>Loading...</div>}>
+ *   <AsyncContent />
+ * </AutoSuspense>
+ * ```
+ *
+ * @throws If no automatic Suspense scope is active.
+ */
+export function AutoSuspense(props: AutoSuspenseProps): JSX.Element {
+  const context = autoSuspenseStorage.getStore()
+
+  if (!context) {
+    throw new Error(
+      'AutoSuspense requires automatic Suspense support. Enable `autoSuspense` in your framework integration or use `Suspense` with an explicit `rid`.'
+    )
+  }
+
+  return Suspense({ ...props, rid: context.rid })
 }
 
 /**

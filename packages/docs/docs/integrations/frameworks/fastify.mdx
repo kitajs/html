@@ -1,7 +1,7 @@
 ---
 description:
-  Render JSX with Fastify using reply.html(), stream Suspense, handle async errors, and
-  control automatic doctype injection.
+  Render JSX with Fastify using reply.html(), stream automatic or explicit Suspense,
+  handle async errors, and control automatic doctype injection.
 ---
 
 import { PackageManagerTabs } from '@rspress/core/theme'
@@ -83,6 +83,26 @@ app.get('/dashboard', (req, reply) => {
 
 No manual stream handling is required. The plugin detects Suspense usage through the
 `SuspenseRoot` store and calls `resolveHtmlStream` internally.
+
+To avoid passing `req.id` through the component tree, enable automatic Suspense support
+when registering the plugin:
+
+```tsx
+import { AutoSuspense } from '@kitajs/html/suspense'
+
+await app.register(fastifyKitaHtml, { autoSuspense: true })
+
+app.get('/dashboard', (req, reply) => {
+  reply.html(
+    <AutoSuspense fallback={<div>Loading...</div>}>
+      <AsyncDashboard />
+    </AutoSuspense>
+  )
+})
+```
+
+Rendering `AutoSuspense` directly in a route without `autoSuspense: true` throws an error.
+Keep using regular `Suspense` when you prefer an explicit `rid`.
 
 ## Error handling
 

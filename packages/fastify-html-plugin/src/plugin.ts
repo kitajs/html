@@ -1,3 +1,4 @@
+import { runWithAutoSuspense } from '@kitajs/html/suspense'
 import type { FastifyPluginCallback } from 'fastify'
 import fp from 'fastify-plugin'
 import { handleHtml } from './html'
@@ -19,7 +20,16 @@ export interface FastifyKitaHtmlOptions {
    *
    * @default true
    */
-  autoDoctype: boolean
+  autoDoctype?: boolean
+
+  /**
+   * Whether to provide the request ID to `AutoSuspense` components automatically.
+   *
+   * Regular `Suspense` components with an explicit `rid` do not require this option.
+   *
+   * @default false
+   */
+  autoSuspense?: boolean
 }
 
 /**
@@ -49,12 +59,17 @@ export interface FastifyKitaHtmlOptions {
  * app.listen({ port: 3000 });
  * ```
  */
-export const fastifyKitaHtml: FastifyPluginCallback<
-  NonNullable<Partial<FastifyKitaHtmlOptions>>
-> = fp(
-  function (fastify, opts: NonNullable<Partial<FastifyKitaHtmlOptions>>, next) {
+export const fastifyKitaHtml: FastifyPluginCallback<FastifyKitaHtmlOptions> = fp(
+  function (fastify, opts: FastifyKitaHtmlOptions, next) {
     fastify.decorateReply(kAutoDoctype, opts.autoDoctype ?? true)
     fastify.decorateReply('html', handleHtml)
+
+    if (opts.autoSuspense) {
+      fastify.addHook('onRequest', function autoSuspenseHook(request, _reply, done) {
+        runWithAutoSuspense(request.id, done)
+      })
+    }
+
     return next()
   },
   {

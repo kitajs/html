@@ -4,9 +4,11 @@ import { setTimeout } from 'node:timers/promises'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { Html, type PropsWithChildren } from '../src/index.js'
 import {
+  AutoSuspense,
   Suspense,
   SuspenseRoot,
   renderToStream,
+  runWithAutoSuspense,
   SuspenseScript as safeSuspenseScript
 } from '../src/suspense.js'
 
@@ -57,6 +59,21 @@ describe('renderToStream', () => {
         )
       )
     ).toContain('<div>loaded</div>')
+  })
+
+  test('streams AutoSuspense from an automatic scope', async () => {
+    const result = await text(
+      renderToStream((rid) =>
+        runWithAutoSuspense(rid, () => (
+          <AutoSuspense fallback={<div>loading</div>}>
+            {Promise.resolve(<div>loaded</div>)}
+          </AutoSuspense>
+        ))
+      )
+    )
+
+    expect(result).toContain('id="B:1:1"')
+    expect(result).toContain('<div>loaded</div>')
   })
 
   test('emits end event and chunks correctly', async () => {
@@ -114,6 +131,44 @@ describe('renderToStream', () => {
     })
 
     await expect(text(stream)).rejects.toThrow('Factory error')
+  })
+})
+
+describe('AutoSuspense', () => {
+  test('requires a request id when entering a scope', () => {
+    expect(() => runWithAutoSuspense(undefined as never, () => null)).toThrow(
+      /Automatic Suspense requires a request ID/
+    )
+  })
+
+  test('throws outside an automatic Suspense scope', () => {
+    expect(() => (
+      <AutoSuspense fallback={<div>loading</div>}>
+        {Promise.resolve(<div>loaded</div>)}
+      </AutoSuspense>
+    )).toThrow(/AutoSuspense requires automatic Suspense support/)
+  })
+
+  test('isolates concurrent render request ids', async () => {
+    const render = (rid: string) =>
+      text(
+        renderToStream(
+          (requestId) =>
+            runWithAutoSuspense(requestId, () => (
+              <AutoSuspense fallback={<div>loading</div>}>
+                <SleepForMs ms={1}>{rid}</SleepForMs>
+              </AutoSuspense>
+            )),
+          rid
+        )
+      )
+
+    const [first, second] = await Promise.all([render('first'), render('second')])
+
+    expect(first).toContain('id="B:first:1"')
+    expect(first).not.toContain('id="B:second:1"')
+    expect(second).toContain('id="B:second:1"')
+    expect(second).not.toContain('id="B:first:1"')
   })
 })
 

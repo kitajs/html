@@ -30,7 +30,7 @@ async function UserProfile({ id }: { id: string }) {
 }
 
 const html = await (
-  <ErrorBoundary catch={(err) => <div>Error: {String(err)}</div>}>
+  <ErrorBoundary catch={(err) => <div safe>Error: {String(err)}</div>}>
     <UserProfile id="123" />
   </ErrorBoundary>
 )
@@ -54,9 +54,9 @@ function riskyOperation() {
 function SyncComponent() {
   try {
     const data = riskyOperation()
-    return <div>{data}</div>
+    return <div safe>{data}</div>
   } catch (err) {
-    return <div>Error: {String(err)}</div>
+    return <div safe>Error: {String(err)}</div>
   }
 }
 
