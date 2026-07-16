@@ -1,7 +1,7 @@
 ---
 description:
-  Render JSX with Express using res.html(), stream Suspense with request ids, handle async
-  errors, and control auto-doctype.
+  Render JSX with Express using res.html(), stream automatic or explicit Suspense, handle
+  async errors, and control auto-doctype.
 ---
 
 import { PackageManagerTabs } from '@rspress/core/theme'
@@ -91,6 +91,25 @@ app.get('/dashboard', (req, res) => {
 
 No manual stream handling is required. The plugin detects Suspense usage through the
 `SuspenseRoot` store and calls `resolveHtmlStream` internally.
+
+To avoid passing `req.id` through the component tree, enable automatic Suspense support:
+
+```tsx
+import { AutoSuspense } from '@kitajs/html/suspense'
+
+app.use(expressKitaHtml({ autoSuspense: true }))
+
+app.get('/dashboard', (req, res) => {
+  res.html(
+    <AutoSuspense fallback={<div>Loading...</div>}>
+      <AsyncDashboard />
+    </AutoSuspense>
+  )
+})
+```
+
+Rendering `AutoSuspense` directly in a route without `autoSuspense: true` throws an error.
+Keep using regular `Suspense` when you prefer an explicit `rid`.
 
 If you already have your own request id middleware, register it before
 `expressKitaHtml()`. The plugin will reuse that value for both `res.html()` and Suspense

@@ -1,3 +1,4 @@
+import { runWithAutoSuspense } from '@kitajs/html/suspense'
 import type { RequestHandler } from 'express'
 import { handleHtml } from './html'
 import { kAutoDoctype } from './utils'
@@ -21,7 +22,7 @@ export interface ExpressKitaHtmlOptions {
    *
    * @default true
    */
-  autoDoctype: boolean
+  autoDoctype?: boolean
 
   /**
    * Whether the middleware should avoid assigning `req.id`.
@@ -31,7 +32,17 @@ export interface ExpressKitaHtmlOptions {
    *
    * @default false
    */
-  disableRequestId: boolean
+  disableRequestId?: boolean
+
+  /**
+   * Whether to provide the request ID to `AutoSuspense` components automatically.
+   *
+   * When `disableRequestId` is also enabled, earlier middleware must assign `req.id`.
+   * Regular `Suspense` components with an explicit `rid` do not require this option.
+   *
+   * @default false
+   */
+  autoSuspense?: boolean
 }
 
 /**
@@ -61,9 +72,7 @@ export interface ExpressKitaHtmlOptions {
  * })
  * ```
  */
-export function expressKitaHtml(
-  opts: NonNullable<Partial<ExpressKitaHtmlOptions>> = {}
-): RequestHandler {
+export function expressKitaHtml(opts: ExpressKitaHtmlOptions = {}): RequestHandler {
   const genReqId = opts.disableRequestId ? null : buildDefaultGenReqId()
 
   return function kitaHtmlMiddleware(req, res, next) {
@@ -73,6 +82,12 @@ export function expressKitaHtml(
 
     res[kAutoDoctype] = opts.autoDoctype ?? true
     res.html = handleHtml
+
+    if (opts.autoSuspense) {
+      runWithAutoSuspense(req.id, next)
+      return
+    }
+
     next()
   }
 }

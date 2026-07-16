@@ -6,6 +6,7 @@
 
 import Html, { type PropsWithChildren } from '@kitajs/html'
 import {
+  AutoSuspense,
   Suspense,
   SuspenseRoot,
   SuspenseScript as safeSuspenseScript
@@ -96,6 +97,57 @@ describe('Suspense', () => {
         </script>
       </>
     )
+  })
+
+  test('AutoSuspense uses the current request id when enabled', async () => {
+    await using app = fastify()
+    app.register(fastifyKitaHtml, { autoSuspense: true })
+
+    app.get('/', async (_, res) => {
+      await setTimeout(1)
+
+      return res.html(
+        <AutoSuspense fallback={<div>1</div>}>
+          <SleepForMs ms={2} />
+        </AutoSuspense>
+      )
+    })
+
+    const res = await app.inject({ method: 'GET', url: '/' })
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toContain('id="B:req-1:1"')
+    expect(res.body).toContain('id="N:req-1:1"')
+  })
+
+  test('isolates concurrent AutoSuspense requests', async () => {
+    await using app = fastify()
+    app.register(fastifyKitaHtml, { autoSuspense: true })
+
+    app.get('/', async (req, res) => {
+      const delay = Number((req.query as { delay: string }).delay)
+      res.header('request-id', req.id)
+      await setTimeout(delay)
+
+      return res.html(
+        <AutoSuspense fallback={<div>loading</div>}>
+          <SleepForMs ms={1} />
+        </AutoSuspense>
+      )
+    })
+
+    const results = await Promise.all([
+      app.inject({ method: 'GET', url: '/?delay=20' }),
+      app.inject({ method: 'GET', url: '/?delay=5' })
+    ])
+
+    for (const [index, result] of results.entries()) {
+      const ownId = result.headers['request-id']
+      const otherId = results[1 - index]!.headers['request-id']
+
+      expect(result.body).toContain(`id="B:${ownId}:1"`)
+      expect(result.body).not.toContain(`id="B:${otherId}:1"`)
+    }
   })
 
   test('Suspense async children & fallback', async () => {

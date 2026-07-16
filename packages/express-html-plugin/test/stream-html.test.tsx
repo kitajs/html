@@ -1,5 +1,6 @@
 import Html, { type PropsWithChildren } from '@kitajs/html'
 import {
+  AutoSuspense,
   Suspense,
   SuspenseRoot,
   SuspenseScript as safeSuspenseScript
@@ -80,6 +81,62 @@ describe('Suspense', () => {
         safeSuspenseScript +
         '<template id="N:req-1:1" data-sr>2</template><script id="S:req-1:1" data-ss>$KITA_RC("req-1:1")</script>'
     )
+  })
+
+  test('AutoSuspense uses the current request id when enabled', async () => {
+    const app = express()
+    app.use(expressKitaHtml({ autoSuspense: true }))
+
+    app.get('/', async (_, res) => {
+      await setTimeout(1)
+
+      res.html(
+        <AutoSuspense fallback={<div>1</div>}>
+          <SleepForMs ms={2} />
+        </AutoSuspense>
+      )
+    })
+
+    await using server = await startServer(app)
+    const res = await fetch(`${getServerUrl(server)}/`)
+    const body = await res.text()
+
+    expect(res.status).toBe(200)
+    expect(body).toContain('id="B:req-1:1"')
+    expect(body).toContain('id="N:req-1:1"')
+  })
+
+  test('isolates concurrent AutoSuspense requests', async () => {
+    const app = express()
+    app.use(expressKitaHtml({ autoSuspense: true }))
+
+    app.get('/', async (req, res) => {
+      const delay = Number(req.query.delay)
+      res.setHeader('request-id', req.id)
+      await setTimeout(delay)
+
+      res.html(
+        <AutoSuspense fallback={<div>loading</div>}>
+          <SleepForMs ms={1} />
+        </AutoSuspense>
+      )
+    })
+
+    await using server = await startServer(app)
+    const url = getServerUrl(server)
+    const results = await Promise.all([
+      fetch(`${url}/?delay=20`),
+      fetch(`${url}/?delay=5`)
+    ])
+    const bodies = await Promise.all(results.map((result) => result.text()))
+
+    for (const [index, result] of results.entries()) {
+      const ownId = result.headers.get('request-id')
+      const otherId = results[1 - index]!.headers.get('request-id')
+
+      expect(bodies[index]).toContain(`id="B:${ownId}:1"`)
+      expect(bodies[index]).not.toContain(`id="B:${otherId}:1"`)
+    }
   })
 
   test('suspense async fallback sync children', async () => {

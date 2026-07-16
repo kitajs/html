@@ -1,4 +1,4 @@
-import { Suspense } from '@kitajs/html/suspense'
+import { AutoSuspense, Suspense } from '@kitajs/html/suspense'
 import fastify from 'fastify'
 import { expectTypeOf, test } from 'vitest'
 import { fastifyKitaHtml, kAutoDoctype } from '../src'
@@ -12,7 +12,8 @@ test('fastify-html-plugin types', () => {
   app.register(fastifyKitaHtml)
 
   app.register(fastifyKitaHtml, {
-    autoDoctype: true
+    autoDoctype: true,
+    autoSuspense: true
   })
 
   app.get('/', async (_, reply) => {
@@ -39,6 +40,20 @@ test('fastify-html-plugin types', () => {
       </Suspense>
     )
   })
+
+  app.get('/stream/auto-suspense', async (_, reply) => {
+    reply.html(
+      <AutoSuspense fallback={<div>fallback</div>}>{Promise.resolve(1)}</AutoSuspense>
+    )
+  })
+
+  const invalidAutoProps: Parameters<typeof AutoSuspense>[0] = {
+    // @ts-expect-error - AutoSuspense obtains the request id from its scope
+    rid: 'req-1',
+    fallback: 'fallback',
+    children: 'content'
+  }
+  void invalidAutoProps
 
   // @ts-expect-error - should not accept number
   app.get('/invalid', async (_, reply) => reply.html(12345))

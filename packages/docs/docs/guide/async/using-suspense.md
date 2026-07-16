@@ -1,6 +1,6 @@
 ---
 description:
-  Wrap async sections with Suspense, stream fallbacks, handle errors, share request IDs,
+  Wrap async sections with Suspense, use automatic or explicit request IDs, handle errors,
   and avoid async fallback delays.
 ---
 
@@ -55,6 +55,30 @@ stream.pipe(response)
 // Or consume entirely (loses streaming benefits, useful for testing)
 const html = await text(stream)
 ```
+
+## Automatic request-ID propagation
+
+Use `AutoSuspense` with a supported framework integration to avoid passing the request ID
+through components.
+
+```tsx twoslash
+import { AutoSuspense } from '@kitajs/html/suspense'
+
+async function UserStats() {
+  return <div>42 posts</div>
+}
+
+// ---cut---
+const section = (
+  <AutoSuspense fallback={<div>Loading stats...</div>}>
+    <UserStats />
+  </AutoSuspense>
+)
+```
+
+Enable the `autoSuspense` integration option before rendering `AutoSuspense` directly from
+a Fastify or Express route. The regular `Suspense` component remains available when you
+want to pass the request ID explicitly.
 
 ## Custom request IDs
 

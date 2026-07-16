@@ -29,13 +29,13 @@ DOM.
 
 ## Request isolation
 
-Every Suspense boundary requires a `rid` (request ID) that ties it to a specific HTTP
-request. This is necessary because multiple requests may be rendering concurrently, and
-the global Suspense state must track which stream belongs to which request.
+Every Suspense boundary must be tied to a request ID so concurrent renders write to the
+correct stream. The regular `Suspense` component receives this ID through its `rid` prop.
+`AutoSuspense` reads it from an automatic Suspense scope instead.
 
 When using `renderToStream`, the `rid` is generated automatically and passed to your
-component function. When using a [framework integration](/integrations/overview), use the
-request's built-in ID (e.g. `req.id` in Fastify).
+component function. Framework integrations can instead establish the scope used by
+`AutoSuspense` when their `autoSuspense` option is enabled.
 
 ## When to use Suspense
 

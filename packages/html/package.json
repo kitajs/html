@@ -53,6 +53,6 @@
     "vitest": "catalog:"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=12.17"
   }
 }
