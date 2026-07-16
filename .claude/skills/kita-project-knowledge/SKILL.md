@@ -52,7 +52,10 @@ When you need information about specific topics, read these documentation files:
 
 ### XSS Detection & Safety
 
-- **Safety rules** (what's safe/unsafe): `packages/docs/docs/guide/xss/safety-rules.md`
+- **Safe attribute and safety rules**: `packages/docs/docs/guide/xss/safe-attribute.md`
+  - How the safe attribute works
+  - When to use it
+  - Fragment with safe pattern
   - Safe types (numbers, booleans, JSX.Element, etc.)
   - Unsafe types (string, any, objects)
   - Composite types (unions, ternaries)
@@ -65,25 +68,13 @@ When you need information about specific topics, read these documentation files:
   - TS88604: Unnecessary safe attribute
   - Full examples and fixes for each
 
-- **Safe attribute usage**: `packages/docs/docs/guide/xss/safe-attribute.md`
-  - How the safe attribute works
-  - When to use it
-  - Fragment with safe pattern
-
-- **Detection algorithm**: `packages/docs/docs/api/xss-analysis.md`
-  - Analysis functions (recursiveDiagnoseJsxElements, isSafeAttribute)
-  - Component vs element detection
-  - AST traversal logic
-
-- **Why not auto-escape**: `packages/docs/docs/guide/xss/why-not-auto-escape.md`
+- **Explicit escaping by design**: `packages/docs/docs/guide/xss/explicit-escaping.md`
   - Performance rationale
   - Three-layer protection model
 
-- **Detection in editor**: `packages/docs/docs/api/editor-plugin.md`
+- **CLI scanner**: `packages/docs/docs/guide/xss/cli-scanner.md`
   - Language Service Plugin setup
   - Real-time diagnostics
-
-- **Scanner CLI**: `packages/docs/docs/api/scanner-cli.md`
   - xss-scan command usage
   - CI/CD integration
 

@@ -1,5 +1,15 @@
 # @kitajs/fastify-html-plugin
 
+## 5.0.0-next.2
+
+### Minor Changes
+
+- [#487](https://github.com/kitajs/html/pull/487)
+  [`6753fd5`](https://github.com/kitajs/html/commit/6753fd59f91c6e9857656926e18a9f25d6915ea9)
+  Thanks [@skwee357](https://github.com/skwee357)! - Remove the value `identity` from
+  `transfer-encoding` header, as `identity` is deprecated per
+  [RFC 7230](https://www.rfc-editor.org/rfc/rfc7230.html).
+
 ## 5.0.0-next.1
 
 ### Major Changes

@@ -39,7 +39,6 @@ function handleSyncHtml(htmlStr: string, reply: FastifyReply) {
 
   if (requestData === undefined) {
     return reply
-      .header('transfer-encoding', 'identity')
       .header('content-length', Buffer.byteLength(htmlStr, 'utf-8'))
       .send(htmlStr)
   }

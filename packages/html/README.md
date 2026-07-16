@@ -131,8 +131,8 @@ To use the `@kitajs/html` package, follow these steps:
    // .vscode/settings.json
 
    {
-     "typescript.tsdk": "node_modules/typescript/lib",
-     "typescript.enablePromptUseWorkspaceTsdk": true
+     "js/ts.tsdk.path": "node_modules/typescript/lib",
+     "js/ts.tsdk.promptToUseWorkspaceVersion": true
    }
    ```
 

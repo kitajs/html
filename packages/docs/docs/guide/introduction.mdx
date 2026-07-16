@@ -59,7 +59,7 @@ This directness is why Kita Html benchmarks 7-40x faster than React's `renderToS
 across real-world component trees. The runtime has zero dependencies beyond TypeScript
 itself.
 
-[Read more about how JSX becomes HTML](./how-jsx-becomes-html.md)
+[Read more about compilation and rendering](./jsx/compilation-and-rendering.mdx)
 
 ## XSS protection
 
@@ -82,7 +82,7 @@ const html = <div safe>{userInput}</div>
 
 A TypeScript language service plugin analyzes every JSX expression in your editor and
 flags any child whose type could carry unescaped HTML. The same analysis runs as a CLI
-tool [`xss-scan`](./xss/scanner-cli.md) in CI/CD pipelines, failing the build on any
+tool [`xss-scan`](./xss/cli-scanner.md) in CI/CD pipelines, failing the build on any
 finding. Between the editor diagnostics and the CI gate, unsafe expressions are caught
 before they reach production.
 
@@ -151,3 +151,6 @@ Official [framework integrations](/integrations/overview) are available for Fast
 Elysia, and others. The core runtime works with any framework that accepts strings.
 
 - [Read more about the packages and integrations](../integrations/overview.md)
+
+Built something interesting with Kita Html?
+[Show us where you're using it](https://github.com/kitajs/html/discussions/496).

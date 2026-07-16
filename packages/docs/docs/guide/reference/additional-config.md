@@ -45,7 +45,7 @@ that uses JSX.
 }
 ```
 
-```tsx
+```tsx title="Html import required"
 import { Html } from '@kitajs/html'
 
 const html = <div>Hello</div>

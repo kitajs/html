@@ -47,7 +47,7 @@ function Page() {
   )
 }
 
-const html = <Page />
+const html = await (<Page />)
 // Page() returns Promise<string> because UserCard is async
 ```
 

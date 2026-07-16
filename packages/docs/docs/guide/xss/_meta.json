@@ -1,8 +1,1 @@
-[
-  "safe-attribute",
-  "scanner-cli",
-  "safety-rules",
-  "error-codes",
-  "why-not-auto-escape",
-  "detection"
-]
+["safe-attribute", "cli-scanner", "error-codes", "explicit-escaping"]

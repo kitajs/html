@@ -4,8 +4,8 @@
     "label": "Getting Started"
   },
   "introduction",
+  "not-a-react-killer",
   "getting-started",
-  "how-jsx-becomes-html",
   "ai-support",
   {
     "type": "dir-section-header",

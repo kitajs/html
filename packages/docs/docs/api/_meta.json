@@ -1,13 +1,6 @@
 [
   "index",
   {
-    "type": "section-header",
-    "label": "XSS Tooling"
-  },
-  "xss-analysis",
-  "editor-plugin",
-  "scanner-cli",
-  {
     "type": "dir-section-header",
     "name": "html",
     "label": "@kitajs/html"

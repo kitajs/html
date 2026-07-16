@@ -70,6 +70,41 @@ html = (
 html = <MyComponent>{escapeHtml(userInput)}</MyComponent>
 ```
 
+## Safety rules
+
+The XSS tooling classifies JSX child expressions by TypeScript type. These types are safe
+without escaping:
+
+| Type or expression                                      | Why it is safe                       |
+| ------------------------------------------------------- | ------------------------------------ |
+| `number`, `boolean`, `bigint`, `null`, `undefined`      | Cannot contain HTML markup.          |
+| String literals, such as `'hello'`                      | Known at compile time.               |
+| `JSX.Element` and `Html.Children`                       | Already rendered by Kita Html.       |
+| `Html.escapeHtml()`, `Html.escape()`, and `e` templates | Escaped explicitly.                  |
+| Variables starting with `safe`                          | Treated as a deliberate suppression. |
+
+These types need `safe`, explicit escaping, or a justified suppression:
+
+| Type or expression                    | Why it is unsafe                                 |
+| ------------------------------------- | ------------------------------------------------ |
+| `string`                              | Dynamic text may contain HTML.                   |
+| `any`                                 | The tooling cannot verify the actual value type. |
+| Objects rendered through `toString()` | The output may contain HTML.                     |
+
+Union types are safe only when every member is safe. For example, `number | boolean` is
+safe, but `string | number` is unsafe because one branch may contain dynamic text. Content
+inside `<script>` elements is exempt from analysis because script content is intended to
+be executable and is not subject to HTML escaping rules.
+
+```tsx twoslash
+// @errors: 88601
+const condition = true
+const safeValue = 42
+const unsafeString = 'user input'
+
+;<div>{condition ? safeValue : unsafeString}</div>
+```
+
 ## Template literal helper
 
 The `e` tagged template is an alias to `escapeHtml()` that you can use as interpolated
