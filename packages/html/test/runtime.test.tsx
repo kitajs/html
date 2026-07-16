@@ -90,7 +90,7 @@ describe('Runtime behavior of JSX', () => {
       `"<div id="test">Hello</div>"`
     )
 
-    // epmty childrens
+    // empty children
     expect(jsxs('div', { id: 'test', children: [] })).toMatchInlineSnapshot(
       `"<div id="test"></div>"`
     )
