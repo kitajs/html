@@ -8,10 +8,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-permissions:
-  pages: write
-  id-token: write
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -73,10 +69,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy Docs
 
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -102,13 +94,6 @@ jobs:
             ${{ runner.os }}-turbo-
 
       - name: Build docs
+        env:
+          ZE_CI_TOKEN: ${{ secrets.ZE_CI_TOKEN }}
         run: pnpm turbo build -F @kitajs/docs-html
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: packages/docs/dist
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
