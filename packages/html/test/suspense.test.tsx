@@ -4,12 +4,13 @@ import { setTimeout } from 'node:timers/promises'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { Html, type PropsWithChildren } from '../src/index.js'
 import {
+  abortSuspenseRequest,
   AutoSuspense,
-  Suspense,
-  SuspenseRoot,
   renderToStream,
   runWithAutoSuspense,
-  SuspenseScript as safeSuspenseScript
+  SuspenseScript as safeSuspenseScript,
+  Suspense,
+  SuspenseRoot
 } from '../src/suspense.js'
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
@@ -55,6 +56,34 @@ describe('renderToStream', () => {
 
     expect(result.indexOf('data-sf')).toBeLessThan(result.indexOf('data-sr'))
     expect(result).toContain('loaded')
+  })
+
+  test('closes a pending root stream when its response is aborted', async () => {
+    const root = Promise.withResolvers<void>()
+    const child = Promise.withResolvers<string>()
+    const stream = renderToStream(async (rid) => {
+      const fallback = (
+        <Suspense rid={rid} fallback="loading">
+          {child.promise}
+        </Suspense>
+      )
+
+      await root.promise
+      return fallback
+    }, 'aborted-root')
+    const requestData = SuspenseRoot.requests.get('aborted-root')!
+    const closed = Promise.withResolvers<void>()
+
+    stream.once('close', closed.resolve)
+    abortSuspenseRequest('aborted-root', requestData)
+    await closed.promise
+
+    root.resolve()
+    child.resolve('late')
+    await Promise.resolve()
+    await Promise.resolve()
+
+    expect(SuspenseRoot.requests.has('aborted-root')).toBe(false)
   })
 
   test('with custom rid', async () => {
@@ -499,7 +528,9 @@ describe('Suspense - error handling', () => {
           <Suspense fallback={<div>1</div>}>{Promise.resolve('test')}</Suspense>
         ))
       )
-    ).rejects.toThrow(/Suspense requires a `rid` to be specified./)
+    ).rejects.toMatchInlineSnapshot(
+      '[Error: Suspense requires a truthy `rid` to be specified.]'
+    )
   })
 
   test('sync error in children propagates', async () => {

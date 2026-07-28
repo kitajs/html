@@ -9,6 +9,8 @@ import type {
   JsxElement,
   JsxOpeningElement,
   Node,
+  StringLiteralType,
+  TemplateLiteralType,
   default as TS,
   Type,
   TypeChecker
@@ -16,7 +18,8 @@ import type {
 import * as Errors from './errors'
 
 const UPPERCASE = /[A-Z]/
-const ESCAPE_HTML_REGEX = /^(\w+\.)?(escapeHtml|e\s*`|escape)/i
+const ESCAPE_HTML_REGEX = /^(\w+\.)?((escapeHtml|escape)(<[^(`]*>)?\s*[(`]|e\s*`)/i
+const SAFE_PREFIX_REGEX = /^safe($|[^a-z])/
 
 /** If the node is a JSX element or fragment */
 function isJsx(
@@ -184,7 +187,7 @@ function diagnoseExpression(
   isComponent: boolean
 ): void {
   // Unwrap parenthesis
-  if (ts.isParenthesizedExpression(node)) {
+  while (ts.isParenthesizedExpression(node)) {
     node = node.expression
   }
 
@@ -251,40 +254,109 @@ export function isSafeAttribute(
     return true
   }
 
-  // Check if this is a property access to .children (from PropsWithChildren)
-  // This must be checked BEFORE union recursion to avoid false positives
-  if (ts.isPropertyAccessExpression(node) && node.name.text === 'children') {
+  // PropsWithChildren `children` names are only trusted when the type is not raw
+  // string content (checked right below)
+  const isChildrenName =
+    (ts.isPropertyAccessExpression(node) && node.name.text === 'children') ||
+    (ts.isIdentifier(node) && node.text === 'children')
+
+  // Any and unknown types are never safe, not even when named `children`
+  if (type.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown)) {
+    return false
+  }
+
+  if (isChildrenName) {
+    // Raw string types are user content, not framework children
+    if (isRawStringType(ts, type)) {
+      return false
+    }
+
+    // Unions are only framework children when they contain framework content
+    // (thenables or arrays), like Html.Children does. `children?: string` and
+    // `string & {}` are user content.
+    if (type.isUnionOrIntersection()) {
+      const hasUserContent = type.types.some(
+        (innerType) =>
+          isRawStringType(ts, innerType) ||
+          !!(innerType.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown))
+      )
+
+      if (!hasUserContent) {
+        return true
+      }
+
+      return type.types.some(
+        (innerType) =>
+          checker.isArrayType(innerType) ||
+          checker.isTupleType(innerType) ||
+          innerType.symbol?.escapedName === 'Promise' ||
+          innerType.symbol?.escapedName === 'PromiseLike'
+      )
+    }
+
+    // Arrays and tuples are checked by their element types
+    if (checker.isArrayType(type)) {
+      return isSafeAttribute(ts, (type as any).resolvedTypeArguments?.[0], checker, node)
+    }
+
+    if (checker.isTupleType(type)) {
+      const elements = ((type as any).resolvedTypeArguments ?? []) as Type[]
+      return elements.every((innerType) => isSafeAttribute(ts, innerType, checker, node))
+    }
+
+    // Thenables are checked by their resolved type: `children: Promise<string>`
+    // resolves to raw strings, while Promise<Children> stays safe
+    if (
+      type.symbol?.escapedName === 'Promise' ||
+      type.symbol?.escapedName === 'PromiseLike'
+    ) {
+      return isSafeAttribute(ts, (type as any).resolvedTypeArguments?.[0], checker, node)
+    }
+
+    // Generic children are trusted unless constrained to a raw string
+    if (type.flags & ts.TypeFlags.TypeParameter) {
+      const constraint = checker.getBaseConstraintOfType(type)
+
+      if (
+        !constraint ||
+        constraint === type ||
+        constraint.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown) ||
+        isRawStringType(ts, constraint)
+      ) {
+        return false
+      }
+    }
+
     return true
   }
 
-  // Consolidated identifier checks - MUST be before union recursion
+  // Variables initialized with JSX (e.g., const element = <div />) are safe, but only
+  // while their use-site type is still JSX-ish and they were not reassigned to user
+  // content. Reassignment inside nested functions is ignored since deferred callbacks
+  // run after rendering.
   if (ts.isIdentifier(node)) {
-    // Destructured or direct `children` parameter (e.g., function Test({ children }: PropsWithChildren))
-    if (node.text === 'children') {
-      return true
-    }
-
-    // Check if variable is initialized with JSX (e.g., const element = <div />)
     const symbol = checker.getSymbolAtLocation(node)
-    if (symbol) {
-      const declarations = symbol.getDeclarations()
-      if (declarations) {
-        for (const decl of declarations) {
-          if (
-            ts.isVariableDeclaration(decl) &&
-            decl.initializer &&
-            isJsx(ts, decl.initializer)
-          ) {
-            return true
-          }
-        }
+    const declarations = symbol?.getDeclarations()
+    const jsxDeclaration = declarations?.find(
+      (decl): decl is TS.VariableDeclaration =>
+        ts.isVariableDeclaration(decl) &&
+        !!decl.initializer &&
+        isJsx(ts, decl.initializer)
+    )
+
+    if (symbol && jsxDeclaration) {
+      // Reassignment to user content invalidates the JSX initializer regardless of the
+      // static type, which may still be the Element alias (Element contains `string`)
+      if (
+        hasPriorUnsafeAssignment(ts, checker, jsxDeclaration, symbol, node.getStart())
+      ) {
+        return false
+      }
+
+      if (isJsxTypedUse(ts, type)) {
+        return true
       }
     }
-  }
-
-  // Any type is never safe
-  if (type.flags & ts.TypeFlags.Any) {
-    return false
   }
 
   // Check type aliases for JSX.Element and Html.Children
@@ -338,10 +410,58 @@ export function isSafeAttribute(
     return false
   }
 
-  // We allow literal string types here, as if they have XSS content,
-  // the user has explicitly written it
+  // Generic type parameters (e.g. `T extends string`) hold the constraint's runtime
+  // value, so safety is resolved by the constraint
+  if (type.flags & ts.TypeFlags.TypeParameter) {
+    const constraint = checker.getBaseConstraintOfType(type)
+
+    // Unconstrained parameters fall back to unknown, which is never safe
+    if (!constraint || constraint === type) {
+      return false
+    }
+
+    return isSafeAttribute(ts, constraint, checker, node)
+  }
+
+  // Template literal types (e.g. `<b>${string}</b>`) are runtime strings whose safety
+  // depends on each placeholder type
+  if (type.flags & ts.TypeFlags.TemplateLiteral) {
+    return (type as TemplateLiteralType).types.every((innerType) =>
+      isSafeAttribute(ts, innerType, checker, node)
+    )
+  }
+
+  // Intrinsic string mappings (e.g. Uppercase<string>) are runtime strings
+  if (type.flags & ts.TypeFlags.StringMapping) {
+    const source = (type as any).type as Type | undefined
+    return source !== undefined && isSafeAttribute(ts, source, checker, node)
+  }
+
+  // Unresolved conditional and indexed access types (e.g. `T extends x ? y : z`,
+  // `T['key']`) may hold runtime strings, so safety is resolved by their constraint
+  if (type.flags & (ts.TypeFlags.Conditional | ts.TypeFlags.IndexedAccess)) {
+    const constraint = checker.getBaseConstraintOfType(type)
+
+    if (!constraint || constraint === type) {
+      return false
+    }
+
+    return isSafeAttribute(ts, constraint, checker, node)
+  }
+
+  // `as 'safe'` is the documented escape hatch. Casts to any other string literal
+  // launder arbitrary content into an explicitly-written literal type.
   if (
-    // Non string types cannot have XSS values
+    ts.isAsExpression(node) &&
+    type.flags & ts.TypeFlags.StringLiteral &&
+    (type as StringLiteralType).value !== 'safe'
+  ) {
+    return false
+  }
+
+  if (
+    // We allow literal string types here, as if they have XSS content,
+    // the user has explicitly written it
     !(type.flags & ts.TypeFlags.String) &&
     // Objects may have toString() overridden
     !(type.flags & ts.TypeFlags.Object)
@@ -350,12 +470,133 @@ export function isSafeAttribute(
   }
 
   if (
-    // Variables starting with safe are suppressed
-    text.startsWith('safe') ||
+    // Variables starting with safe (camelCase boundary) are suppressed
+    SAFE_PREFIX_REGEX.test(text) ||
     // Starts with a call to a escapeHtml function name
     text.match(ESCAPE_HTML_REGEX)
   ) {
     return true
+  }
+
+  return false
+}
+
+/**
+ * True for types that are runtime strings holding arbitrary content. String literals are
+ * excluded since their value is explicitly written at compile time.
+ */
+function isRawStringType(ts: typeof TS, type: Type): boolean {
+  return !!(
+    type.flags &
+    (ts.TypeFlags.String | ts.TypeFlags.TemplateLiteral | ts.TypeFlags.StringMapping)
+  )
+}
+
+/**
+ * True when a JSX-initialized variable is still JSX.Element-ish at the use site.
+ * Reassignment narrows the type to user content: a raw string directly, or a fresh union
+ * like `Element | string`. The Element alias itself is a union containing a raw string
+ * (`string | Promise<string>`), so it is checked by name.
+ */
+function isJsxTypedUse(ts: typeof TS, type: Type): boolean {
+  if (
+    isRawStringType(ts, type) ||
+    type.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown | ts.TypeFlags.TypeParameter)
+  ) {
+    return false
+  }
+
+  if (
+    type.isUnionOrIntersection() &&
+    type.types.some((innerType) => isRawStringType(ts, innerType))
+  ) {
+    return (
+      type.aliasSymbol?.escapedName === 'Element' &&
+      // @ts-expect-error - Fast way of checking
+      type.aliasSymbol.parent?.escapedName === 'JSX'
+    )
+  }
+
+  return true
+}
+
+/**
+ * True when `symbol` is assigned user content before `usePos` in the scope containing
+ * `declaration`. Nested functions are skipped: deferred callbacks run after rendering, so
+ * their writes cannot be ordered against the use.
+ */
+function hasPriorUnsafeAssignment(
+  ts: typeof TS,
+  checker: TypeChecker,
+  declaration: TS.VariableDeclaration,
+  symbol: TS.Symbol,
+  usePos: number
+): boolean {
+  let scope: ts.Node = declaration
+  while (scope.parent && !ts.isFunctionLike(scope) && !ts.isSourceFile(scope)) {
+    scope = scope.parent
+  }
+
+  let found = false
+
+  function visit(current: ts.Node): void {
+    if (found) {
+      return
+    }
+
+    if (current !== scope && ts.isFunctionLike(current)) {
+      return
+    }
+
+    if (
+      // `x = value` or `x += value` assignment expression
+      ts.isBinaryExpression(current) &&
+      (current.operatorToken.kind === ts.SyntaxKind.EqualsToken ||
+        current.operatorToken.kind === ts.SyntaxKind.PlusEqualsToken) &&
+      // plain variable writes only; destructuring and member writes are not tracked
+      ts.isIdentifier(current.left) &&
+      // only assignments that textually precede the use site
+      current.left.getEnd() <= usePos &&
+      // the assignment targets the JSX-initialized variable
+      checker.getSymbolAtLocation(current.left) === symbol &&
+      // JSX assigned values keep the variable JSX-ish
+      !isJsx(ts, current.right) &&
+      // the assigned value is user content (raw string, any, etc.)
+      isUnsafeAssignedValue(ts, checker.getTypeAtLocation(current.right))
+    ) {
+      found = true
+      return
+    }
+
+    ts.forEachChild(current, visit)
+  }
+
+  visit(scope)
+  return found
+}
+
+/**
+ * True for assigned values that invalidate a JSX initializer. The Element alias itself
+ * contains a raw string member by design (`string | Promise<string>`), so it is checked
+ * by name to keep `content = element` assignments safe.
+ */
+function isUnsafeAssignedValue(ts: typeof TS, type: Type): boolean {
+  if (
+    isRawStringType(ts, type) ||
+    type.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown | ts.TypeFlags.TypeParameter)
+  ) {
+    return true
+  }
+
+  if (
+    type.isUnionOrIntersection() &&
+    type.types.some((innerType) => isRawStringType(ts, innerType))
+  ) {
+    return (
+      type.aliasSymbol?.escapedName !== 'Element' ||
+      // @ts-expect-error - Fast way of checking
+      type.aliasSymbol.parent?.escapedName !== 'JSX'
+    )
   }
 
   return false

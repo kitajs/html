@@ -117,14 +117,17 @@ Four error codes with documentation links:
 
 ```typescript
 function isSafeAttribute(ts, type, checker, node): boolean {
-  // 1. `children` prop from PropsWithChildren - always safe
-  if (node.name?.text === 'children') return true
+  // 1. `any` and `unknown` types - NEVER safe
+  if (type.flags & (Any | Unknown)) return false
 
-  // 2. Variables initialized with JSX - safe
-  if (decl.initializer && isJsx(ts, decl.initializer)) return true
+  // 2. `children` from PropsWithChildren - safe unless the type is user content
+  //    (raw strings, unions/tuples/arrays of raw strings, thenables resolving to
+  //    raw strings, or a type parameter constrained to one)
+  if (isChildrenName && !isUserContent(type)) return true
 
-  // 3. `any` type - NEVER safe
-  if (type.flags & ts.TypeFlags.Any) return false
+  // 3. Variables initialized with JSX - safe while the use-site type stays JSX-ish
+  //    and the variable was not reassigned to user content in the same scope
+  if (decl.initializer && isJsx(ts, decl.initializer) && !reassigned) return true
 
   // 4. JSX.Element alias - safe
   if (type.aliasSymbol?.escapedName === 'Element') return true
@@ -137,14 +140,26 @@ function isSafeAttribute(ts, type, checker, node): boolean {
     return type.types.every((t) => isSafeAttribute(ts, t, checker, node))
   }
 
-  // 7. Non-string primitives (number, boolean, etc.) - safe
+  // 7. Type parameters - resolved by their base constraint
+  if (type.flags & TypeParameter) return isSafeAttribute(ts, constraint, checker, node)
+
+  // 8. Template literal / intrinsic string mapping types - resolved by their inner types
+  if (type.flags & (TemplateLiteral | StringMapping)) return checkInnerTypes()
+
+  // 9. Unresolved conditional / indexed access types - resolved by their constraint
+  if (type.flags & (Conditional | IndexedAccess)) return checkConstraint()
+
+  // 10. `as 'safe'` casts - suppressed; casts to other string literals are flagged
+  if (isAsExpression(node) && type.value !== 'safe') return false
+
+  // 11. Non-string primitives (number, boolean, literals, etc.) - safe
   if (!(type.flags & ts.TypeFlags.String)) return true
 
-  // 8. Variables starting with "safe" - suppressed
-  if (text.startsWith('safe')) return true
+  // 12. Variables starting with "safe" (camelCase boundary) - suppressed
+  if (SAFE_PREFIX_REGEX.test(text)) return true
 
-  // 9. escapeHtml() calls - safe
-  if (text.match(/^(\w+\.)?(escapeHtml|e`|escape)/i)) return true
+  // 13. escapeHtml()/escape() calls and e`` template tags - safe
+  if (text.match(/^(\w+\.)?((escapeHtml|escape)(<...>)?\s*[(`]|e\s*`)/i)) return true
 
   return false
 }
@@ -290,14 +305,15 @@ function diagnostic(node, error, category): ts.Diagnostic {
 Users can suppress warnings in several ways:
 
 1. **`safe` attribute**: `<div safe>{content}</div>`
-2. **`safe`-prefixed variable**: `const safeContent = content;`
-3. **Cast to 'safe'**: `{content as 'safe'}`
+2. **`safe`-prefixed variable**: `const safeContent = content;` (requires a camelCase
+   boundary, so `safetyRating` does not count)
+3. **Cast to 'safe'**: `{content as 'safe'}` (no other string literal type works)
 4. **escapeHtml call**: `{Html.escapeHtml(content)}`
 
 ## Common Gotchas
 
 1. **Script tags are exempt**: Content inside `<script>` is intentionally executable
 2. **Both ternary branches checked**: Even "impossible" branches are analyzed
-3. **`any` type is never safe**: Strict types help XSS detection
+3. **`any` and `unknown` are never safe**: Strict types help XSS detection
 4. **Components need `Html.escapeHtml()`**: The `safe` attribute only works on native
    elements
