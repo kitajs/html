@@ -1,9 +1,7 @@
-import chalk from 'chalk'
 import fs from 'node:fs'
 import path from 'node:path'
+import { parseArgs, styleText } from 'node:util'
 import ts from 'typescript'
-import yargs from 'yargs'
-import { hideBin } from 'yargs/helpers'
 import { recursiveDiagnoseJsxElements } from './util'
 
 const { version } = require('../package.json')
@@ -79,13 +77,17 @@ function prettyPrintErrorCount(diagnostics: ts.Diagnostic[], root: string) {
 
   if (files.size > 1) {
     console.error(
-      chalk.red(`Found a total of ${diagnostics.length} errors in ${files.size} files\n`)
+      styleText(
+        'red',
+        `Found a total of ${diagnostics.length} errors in ${files.size} files\n`
+      )
     )
   }
 
   for (const [file, amount] of files.entries()) {
     console.error(
-      chalk.red(
+      styleText(
+        'red',
         `Found ${amount} error${amount === 1 ? '' : 's'} in ${path.relative(root, file)}`
       )
     )
@@ -101,38 +103,42 @@ function fileExists(p: string) {
   }
 }
 
-export async function main() {
-  const args = await yargs(hideBin(process.argv)).help(false).version(version).argv
+function parseCliArgs() {
+  try {
+    return parseArgs({
+      allowPositionals: true,
+      options: {
+        cwd: { type: 'string' },
+        help: { type: 'boolean', short: 'h' },
+        project: { type: 'string', short: 'p' },
+        simplified: { type: 'boolean', short: 's' },
+        version: { type: 'boolean' }
+      }
+    })
+  } catch (error) {
+    console.error(`${(error as Error).message}. Run --help for more information.`)
+    return process.exit(1)
+  }
+}
 
-  if (args.help || args.h) {
+export async function main() {
+  const args = parseCliArgs()
+
+  if (args.values.help) {
     console.log(help)
     return process.exit(0)
   }
 
-  // Detects unknown arguments
-  for (const key in args) {
-    if (key === '_' || key === '$0') {
-      continue
-    }
-
-    switch (key) {
-      case 'cwd':
-      case 'project':
-      case 'p':
-      case 's':
-      case 'simplified':
-        continue
-      default:
-        console.error(`Unknown argument: ${key}. Run --help for more information.`)
-        return process.exit(1)
-    }
+  if (args.values.version) {
+    console.log(version)
+    return process.exit(0)
   }
 
-  const root = args.cwd ? String(args.cwd) : process.cwd()
+  const root = args.values.cwd ?? process.cwd()
 
-  const tsconfigPath = path.resolve(String(args.project || args.p || 'tsconfig.json'))
+  const tsconfigPath = path.resolve(args.values.project ?? 'tsconfig.json')
 
-  const simplified = !!(args.simplified || args.s)
+  const simplified = !!args.values.simplified
 
   const diagnosticFormatter =
     !process.stdout.isTTY || simplified
@@ -140,7 +146,11 @@ export async function main() {
       : ts.formatDiagnosticsWithColorAndContext
 
   if (!fileExists(tsconfigPath)) {
-    console.error((!simplified ? chalk.red : String)(`Could not find ${tsconfigPath}`))
+    console.error(
+      !simplified
+        ? styleText('red', `Could not find ${tsconfigPath}`)
+        : `Could not find ${tsconfigPath}`
+    )
     return process.exit(1)
   }
 
@@ -159,25 +169,25 @@ export async function main() {
 
   let files = tsconfig.fileNames
 
-  if (args._.length) {
+  if (args.positionals.length) {
     // Prefer the files passed as arguments, otherwise use the files in tsconfig.json
     files = []
 
-    for (let i = 0; i < args._.length; i++) {
-      const file = String(args._[i])
-
+    for (const file of args.positionals) {
       if (!fileExists(file)) {
         console.error(
-          (!simplified ? chalk.red : String)(`Could not find provided '${file}' file.`)
+          !simplified
+            ? styleText('red', `Could not find provided '${file}' file.`)
+            : `Could not find provided '${file}' file.`
         )
         return process.exit(1)
       }
 
       if (!file.match(/(t|j)sx$/)) {
         console.warn(
-          (!simplified ? chalk.yellow : String)(
-            `Provided '${file}' file is not a TSX/JSX file.`
-          )
+          !simplified
+            ? styleText('yellow', `Provided '${file}' file is not a TSX/JSX file.`)
+            : `Provided '${file}' file is not a TSX/JSX file.`
         )
         continue
       }
@@ -187,7 +197,11 @@ export async function main() {
   }
 
   if (!files.length) {
-    console.error((!simplified ? chalk.red : String)('No files were found to check.'))
+    console.error(
+      !simplified
+        ? styleText('red', 'No files were found to check.')
+        : 'No files were found to check.'
+    )
     return process.exit(1)
   }
 
@@ -224,6 +238,8 @@ export async function main() {
     process.exit(hasError ? 1 : 2)
   }
 
-  console.log(chalk.green(`No XSS vulnerabilities found in ${files.length} files!`))
+  console.log(
+    styleText('green', `No XSS vulnerabilities found in ${files.length} files!`)
+  )
   process.exit(0)
 }
