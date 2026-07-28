@@ -40,6 +40,23 @@ describe('renderToStream', () => {
     expect(await text(renderToStream(async () => <div />))).toBe(<div />)
   })
 
+  test('streams a boundary created after the async root yields', async () => {
+    const result = await text(
+      renderToStream(async (rid) => {
+        await Promise.resolve()
+
+        return (
+          <Suspense rid={rid} fallback="loading">
+            {Promise.resolve('loaded')}
+          </Suspense>
+        )
+      })
+    )
+
+    expect(result.indexOf('data-sf')).toBeLessThan(result.indexOf('data-sr'))
+    expect(result).toContain('loaded')
+  })
+
   test('with custom rid', async () => {
     const stream = renderToStream(() => '<div>custom</div>', 'my-custom-rid')
     expect(stream.readable).toBeTruthy()

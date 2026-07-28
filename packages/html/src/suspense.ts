@@ -83,11 +83,8 @@ export interface SuspenseProps {
 /** Props accepted by {@linkcode AutoSuspense}. */
 export type AutoSuspenseProps = Omit<SuspenseProps, 'rid'>
 
-type AutoSuspenseContext = {
-  rid: number | string
-}
-
-const autoSuspenseStorage = new AsyncLocalStorage<AutoSuspenseContext>()
+const autoSuspenseStorage = new AsyncLocalStorage<{ rid: number | string }>()
+const pendingRoots = new WeakMap<RequestData, number | string>()
 
 /**
  * Runs a callback with the request ID used by {@linkcode AutoSuspense}.
@@ -108,6 +105,28 @@ export function runWithAutoSuspense<R>(rid: number | string, callback: () => R):
 }
 
 function noop() {}
+
+/**
+ * Closes request state after its async root and all Suspense boundaries have settled.
+ *
+ * @param rid The request ID associated with the state.
+ * @param data The request state to close when it is no longer active.
+ */
+function finishRequest(rid: number | string, data: RequestData) {
+  if (data.running !== 0 || pendingRoots.has(data)) {
+    return
+  }
+
+  if (!data.stream.closed) {
+    data.stream.push(null)
+  }
+
+  // The same public ID may already belong to a newer request, which must not be deleted
+  // when older state finishes late.
+  if (SuspenseRoot.requests.get(rid) === data) {
+    SuspenseRoot.requests.delete(rid)
+  }
+}
 
 /**
  * Small client-side helper used to replace suspense fallbacks with streamed template
@@ -260,19 +279,15 @@ export function Suspense(props: SuspenseProps): JSX.Element {
       data.stream.emit('error', error)
     })
     .finally(function clearRequestData() {
-      // reduces current suspense id
-      if (data && data.running > 1) {
-        data.running -= 1
+      if (!data) {
+        // Without request state this boundary never incremented the running count.
         return
       }
 
-      // Last suspense component, runs cleanup
-      if (data && !data.stream.closed) {
-        data.stream.push(null)
-      }
+      data.running -= 1
 
-      // Removes the current state
-      SuspenseRoot.requests.delete(props.rid)
+      // The last boundary cannot close the stream while its async root still owns it.
+      finishRequest(props.rid, data)
     })
 
   // Always will be a single children because multiple
@@ -398,11 +413,31 @@ export function renderToStream(
   }
 
   if (typeof html === 'function') {
+    const requestData = {
+      stream: new Readable({ read: noop }),
+      running: 0,
+      sent: false
+    }
+
+    // Reserve request state before an async factory can resume and create its first
+    // Suspense boundary.
+    SuspenseRoot.requests.set(rid, requestData)
+    pendingRoots.set(requestData, rid)
+
     try {
       html = html(rid)
     } catch (error) {
-      // Avoids memory leaks by removing the request data
-      SuspenseRoot.requests.delete(rid)
+      pendingRoots.delete(requestData)
+
+      // No root will consume this reservation, and registered children may settle after
+      // the returned error stream has already closed.
+      if (!requestData.stream.closed) {
+        requestData.stream.push(null)
+      }
+
+      if (SuspenseRoot.requests.get(rid) === requestData) {
+        SuspenseRoot.requests.delete(rid)
+      }
 
       // returns errored stream to avoid throws
       return new Readable({
@@ -411,6 +446,18 @@ export function renderToStream(
           this.push(null)
         }
       })
+    }
+
+    if (typeof html === 'string') {
+      // A synchronous factory cannot create more boundaries after returning, so its root
+      // reservation is no longer needed.
+      pendingRoots.delete(requestData)
+
+      // Preserve the ordinary stream path when the reservation was never used.
+      if (requestData.running === 0) {
+        finishRequest(rid, requestData)
+        return Readable.from([html])
+      }
     }
   }
 
@@ -480,15 +527,26 @@ export function resolveHtmlStream(
 
   const prepended = new PassThrough()
 
-  void template.then(
-    (result) => {
-      prepended.push(result)
-      requestData.stream.pipe(prepended)
-    },
-    (error) => {
-      prepended.emit('error', error)
-    }
-  )
+  void template
+    .then(
+      function resolveTemplateHtml(result) {
+        prepended.push(result)
+        requestData.stream.pipe(prepended)
+      },
+      function handleTemplateError(error) {
+        prepended.emit('error', error)
+      }
+    )
+    .finally(function releasePendingRoot() {
+      // Release only after the initial template is queued, keeping buffered replacement
+      // chunks behind the fallbacks they target.
+      const rid = pendingRoots.get(requestData)
+
+      if (rid !== undefined) {
+        pendingRoots.delete(requestData)
+        finishRequest(rid, requestData)
+      }
+    })
 
   return prepended
 }
