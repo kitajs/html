@@ -86,6 +86,34 @@ describe('renderToStream', () => {
     expect(SuspenseRoot.requests.has('aborted-root')).toBe(false)
   })
 
+  test('keeps boundary IDs unique after out-of-order settlement', async () => {
+    const first = Promise.withResolvers<string>()
+    const second = Promise.withResolvers<string>()
+    const third = Promise.withResolvers<string>()
+    const stream = renderToStream(async (rid) => {
+      const fallbacks = [
+        Suspense({ rid, fallback: 'first', children: first.promise }),
+        Suspense({ rid, fallback: 'second', children: second.promise })
+      ]
+
+      first.resolve('A')
+      await first.promise
+      await Promise.resolve()
+      await Promise.resolve()
+
+      fallbacks.push(Suspense({ rid, fallback: 'third', children: third.promise }))
+      second.resolve('B')
+      third.resolve('C')
+
+      return Html.contentsToString(fallbacks)
+    }, 'unique-boundaries')
+    const result = await text(stream)
+
+    expect(result).toContain('id="B:unique-boundaries:1"')
+    expect(result).toContain('id="B:unique-boundaries:2"')
+    expect(result).toContain('id="B:unique-boundaries:3"')
+  })
+
   test('with custom rid', async () => {
     const stream = renderToStream(() => '<div>custom</div>', 'my-custom-rid')
     expect(stream.readable).toBeTruthy()

@@ -1,4 +1,8 @@
-import { runWithAutoSuspense } from '@kitajs/html/suspense'
+import {
+  abortSuspenseRequest,
+  runWithAutoSuspense,
+  SuspenseRoot
+} from '@kitajs/html/suspense'
 import type { FastifyPluginCallback } from 'fastify'
 import fp from 'fastify-plugin'
 import { handleHtml } from './html'
@@ -64,7 +68,20 @@ export const fastifyKitaHtml: FastifyPluginCallback<FastifyKitaHtmlOptions> = fp
     fastify.decorateReply(kAutoDoctype, opts.autoDoctype ?? true)
     fastify.decorateReply('html', handleHtml)
 
+    fastify.addHook('onRequestAbort', function suspenseAbortHook(request, done) {
+      const requestData = SuspenseRoot.requests.get(request.id)
+
+      if (requestData) {
+        // Fastify reports transport aborts separately from successful response closure.
+        abortSuspenseRequest(request.id, requestData)
+      }
+
+      done()
+    })
+
     if (opts.autoSuspense) {
+      // Enter at the earliest request hook so parsing, validation, user hooks, and the
+      // route handler all inherit the same async-local request ID.
       fastify.addHook('onRequest', function autoSuspenseHook(request, _reply, done) {
         runWithAutoSuspense(request.id, done)
       })

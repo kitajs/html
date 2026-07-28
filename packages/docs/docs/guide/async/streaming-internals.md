@@ -55,5 +55,14 @@ resolved Suspense boundary produces an additional chunk. The response has no
 `Content-Length` header, so the connection remains open until the last boundary resolves
 and the stream is closed.
 
+Framework integrations capture Suspense request state before awaiting an asynchronous
+root. This keeps replacement chunks available when a fast boundary resolves before a
+slower root sibling. The resolved root is queued before those buffered replacements, so
+every replacement follows the fallback it targets.
+
+Express and Fastify integrations also release captured request state when the client
+disconnects. User promises continue independently, but later settlements cannot write to
+the closed stream or delete state belonging to another request.
+
 Runtimes like Node.js and Bun handle chunked encoding automatically when data is written
 to the response without a content-length header.

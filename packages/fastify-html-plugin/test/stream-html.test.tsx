@@ -22,6 +22,8 @@ async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
   return Html.contentsToString([children || String(ms)])
 }
 
+function noop() {}
+
 describe('Suspense', () => {
   // Detect leaks of pending promises
   afterEach(() => {
@@ -97,6 +99,61 @@ describe('Suspense', () => {
         </script>
       </>
     )
+  })
+
+  test('streams replacements after a slower async root', async () => {
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
+
+    app.get('/', (req, res) =>
+      res.html(
+        <div>
+          <Suspense rid={req.id} fallback="loading">
+            {Promise.resolve('loaded')}
+          </Suspense>
+          <SleepForMs ms={1}>sibling</SleepForMs>
+        </div>
+      )
+    )
+
+    const res = await app.inject({ method: 'GET', url: '/' })
+
+    expect(res.body.indexOf('data-sf')).toBeLessThan(res.body.indexOf('data-sr'))
+    expect(res.body).toContain('loaded')
+  })
+
+  test('cleans suspense state when the client disconnects', async () => {
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
+    const child = Promise.withResolvers<string>()
+    const sibling = Promise.withResolvers<string>()
+
+    app.get('/', (req, res) =>
+      res.html(
+        <div>
+          <Suspense rid={req.id} fallback="loading">
+            {child.promise}
+          </Suspense>
+          {sibling.promise}
+        </div>
+      )
+    )
+
+    const address = await app.listen({ host: '127.0.0.1', port: 0 })
+    const controller = new AbortController()
+    const response = fetch(address, { signal: controller.signal }).catch(noop)
+
+    await expect.poll(() => SuspenseRoot.requests.size).toBe(1)
+    controller.abort()
+    await response
+
+    await expect.poll(() => SuspenseRoot.requests.size).toBe(0)
+
+    sibling.resolve('sibling')
+    child.resolve('late')
+    await Promise.resolve()
+    await Promise.resolve()
+    expect(SuspenseRoot.requests.size).toBe(0)
   })
 
   test('AutoSuspense uses the current request id when enabled', async () => {

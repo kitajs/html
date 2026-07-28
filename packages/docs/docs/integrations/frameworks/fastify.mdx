@@ -104,6 +104,11 @@ app.get('/dashboard', (req, reply) => {
 Rendering `AutoSuspense` directly in a route without `autoSuspense: true` throws an error.
 Keep using regular `Suspense` when you prefer an explicit `rid`.
 
+The plugin establishes the automatic request-ID scope in Fastify's `onRequest` hook. This
+is intentionally earlier than `preHandler`, so parsing, validation, later user hooks, and
+the route handler inherit the same async-local request ID. A scope created in `preHandler`
+would not cover asynchronous work started by earlier hooks.
+
 ## Error handling
 
 The plugin supports `ErrorBoundary` components for catching async errors. Wrap async

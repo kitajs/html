@@ -17,6 +17,8 @@ async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
   return Html.contentsToString([children || String(ms)])
 }
 
+function noop() {}
+
 describe('Suspense', () => {
   afterEach(() => {
     expect(SuspenseRoot.requests.size).toBe(0)
@@ -81,6 +83,59 @@ describe('Suspense', () => {
         safeSuspenseScript +
         '<template id="N:req-1:1" data-sr>2</template><script id="S:req-1:1" data-ss>$KITA_RC("req-1:1")</script>'
     )
+  })
+
+  test('streams replacements after a slower async root', async () => {
+    const app = express()
+    app.use(expressKitaHtml())
+
+    app.get('/', (req, res) =>
+      res.html(
+        <div>
+          <Suspense rid={req.id} fallback="loading">
+            {Promise.resolve('loaded')}
+          </Suspense>
+          <SleepForMs ms={1}>sibling</SleepForMs>
+        </div>
+      )
+    )
+
+    await using server = await startServer(app)
+    const res = await fetch(`${getServerUrl(server)}/`)
+    const body = await res.text()
+
+    expect(body.indexOf('data-sf')).toBeLessThan(body.indexOf('data-sr'))
+    expect(body).toContain('loaded')
+  })
+
+  test('cleans suspense state when the client disconnects', async () => {
+    const app = express()
+    app.use(expressKitaHtml())
+    const child = Promise.withResolvers<string>()
+
+    app.get('/', (req, res) =>
+      res.html(
+        <Suspense rid={req.id} fallback="loading">
+          {child.promise}
+        </Suspense>
+      )
+    )
+
+    await using server = await startServer(app)
+    const controller = new AbortController()
+    const res = await fetch(`${getServerUrl(server)}/`, { signal: controller.signal })
+    const reader = res.body!.getReader()
+
+    await reader.read()
+    controller.abort()
+    await reader.cancel().catch(noop)
+
+    await expect.poll(() => SuspenseRoot.requests.size).toBe(0)
+
+    child.resolve('late')
+    await Promise.resolve()
+    await Promise.resolve()
+    expect(SuspenseRoot.requests.size).toBe(0)
   })
 
   test('AutoSuspense uses the current request id when enabled', async () => {
