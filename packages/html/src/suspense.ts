@@ -205,8 +205,8 @@ export function Suspense(props: SuspenseProps): JSX.Element {
     return children
   }
 
-  if (!props.rid) {
-    throw new Error('Suspense requires a `rid` to be specified.')
+  if (!props.rid && props.rid !== 0) {
+    throw new Error('Suspense requires a truthy `rid` to be specified.')
   }
 
   let data = SuspenseRoot.requests.get(props.rid)
@@ -381,7 +381,7 @@ export function renderToStream(
   html: JSX.Element | ((rid: number | string) => JSX.Element),
   rid?: number | string
 ): Readable {
-  if (!rid) {
+  if (!rid && rid !== 0) {
     rid = SuspenseRoot.requestCounter++
   } else if (SuspenseRoot.requests.has(rid)) {
     // Ensures the request id is unique within the current request
