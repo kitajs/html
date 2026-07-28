@@ -32,7 +32,3 @@ catalog:
   tsx: 4.21.0
   typescript: 6.0.2
   vitest: 4.1.4
-
-patchedDependencies:
-  # https://github.com/shikijs/shiki/pull/1271
-  '@shikijs/twoslash': patches/@shikijs__twoslash.patch
