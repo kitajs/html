@@ -1,0 +1,157 @@
+---
+description:
+  Render JSX with Fastify using reply.html(), stream automatic or explicit Suspense,
+  handle async errors, and control automatic doctype injection.
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme'
+
+# Fastify
+
+`@kitajs/fastify-html-plugin` adds a `reply.html()` method to Fastify that handles content
+type headers, Suspense streaming, and automatic doctype injection.
+
+## Setup
+
+:::danger XSS Protection Required
+
+You must install and configure `@kitajs/ts-html-plugin` before using this plugin to avoid
+XSS vulnerabilities. See the [Getting Started](/guide/getting-started) guide for complete
+setup instructions including TypeScript configuration and XSS detection.
+
+:::
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm i @kitajs/fastify-html-plugin',
+    yarn: 'yarn add @kitajs/fastify-html-plugin',
+    pnpm: 'pnpm add @kitajs/fastify-html-plugin',
+    bun: 'bun add @kitajs/fastify-html-plugin'
+  }}
+/>
+
+Register the plugin on your Fastify instance:
+
+```tsx
+import fastify from 'fastify'
+import fastifyKitaHtml from '@kitajs/fastify-html-plugin'
+
+const app = fastify()
+await app.register(fastifyKitaHtml)
+```
+
+## Sending HTML
+
+Use `reply.html()` with any JSX expression. The plugin sets the `Content-Type` header to
+`text/html; charset=utf-8`.
+
+```tsx
+app.get('/', (req, reply) => {
+  reply.html(<div>Hello World</div>)
+})
+```
+
+For async components, `reply.html()` accepts promises and awaits them before sending.
+
+```tsx
+app.get('/profile', (req, reply) => {
+  reply.html(<UserProfile id={req.params.userId} />)
+})
+```
+
+For synchronous responses, the plugin calculates and sets the `Content-Length` header
+automatically. For Suspense streaming (below), the response uses chunked transfer encoding
+without a `Content-Length` header.
+
+## Suspense streaming
+
+When the JSX tree contains `Suspense` components, the plugin automatically switches from a
+buffered response to a chunked stream. Use `req.id` as the Suspense `rid` to tie the
+stream to the request.
+
+```tsx
+import { Suspense } from '@kitajs/html/suspense'
+
+app.get('/dashboard', (req, reply) => {
+  reply.html(
+    <Suspense rid={req.id} fallback={<div>Loading...</div>}>
+      <AsyncDashboard />
+    </Suspense>
+  )
+})
+```
+
+No manual stream handling is required. The plugin detects Suspense usage through the
+`SuspenseRoot` store and calls `resolveHtmlStream` internally.
+
+To avoid passing `req.id` through the component tree, enable automatic Suspense support
+when registering the plugin:
+
+```tsx
+import { AutoSuspense } from '@kitajs/html/suspense'
+
+await app.register(fastifyKitaHtml, { autoSuspense: true })
+
+app.get('/dashboard', (req, reply) => {
+  reply.html(
+    <AutoSuspense fallback={<div>Loading...</div>}>
+      <AsyncDashboard />
+    </AutoSuspense>
+  )
+})
+```
+
+Rendering `AutoSuspense` directly in a route without `autoSuspense: true` throws an error.
+Keep using regular `Suspense` when you prefer an explicit `rid`.
+
+The plugin establishes the automatic request-ID scope in Fastify's `onRequest` hook. This
+is intentionally earlier than `preHandler`, so parsing, validation, later user hooks, and
+the route handler inherit the same async-local request ID. A scope created in `preHandler`
+would not cover asynchronous work started by earlier hooks.
+
+## Error handling
+
+The plugin supports `ErrorBoundary` components for catching async errors. Wrap async
+content in an `ErrorBoundary` to handle failures gracefully.
+
+```tsx
+import { ErrorBoundary } from '@kitajs/html/error-boundary'
+import { Suspense } from '@kitajs/html/suspense'
+
+app.get('/dashboard', (req, reply) => {
+  reply.html(
+    <ErrorBoundary catch={(error) => <div>Error: {String(error)}</div>}>
+      <Suspense rid={req.id} fallback={<div>Loading...</div>}>
+        <AsyncDashboard />
+      </Suspense>
+    </ErrorBoundary>
+  )
+})
+```
+
+See the [Error Boundaries](/guide/async/error-boundaries) guide for details on error
+handling patterns.
+
+## Auto-doctype
+
+By default, the plugin prepends `<!doctype html>` to responses that start with an `<html>`
+tag. To disable this globally:
+
+```tsx
+await app.register(fastifyKitaHtml, { autoDoctype: false })
+```
+
+To disable it for a single request, use the exported `kAutoDoctype` symbol:
+
+```tsx
+import { kAutoDoctype } from '@kitajs/fastify-html-plugin'
+
+app.get('/fragment', (req, reply) => {
+  reply[kAutoDoctype] = false
+  reply.html(<div>Just a fragment</div>)
+})
+```
+
+## Compatibility
+
+The plugin works with Fastify 4.x and 5.x.

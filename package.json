@@ -13,32 +13,35 @@
   "license": "MIT",
   "author": "Arthur Fiorette <kita@arthur.place>",
   "scripts": {
-    "bench": "pnpm -r --filter \"@kitajs/bench-html-*\" build && pnpm --filter \"@kitajs/bench-html-runner\" start",
-    "build": "pnpm -r --aggregate-output build",
-    "change": "changeset",
-    "ci-publish": "pnpm publish -r --access public && changeset tag",
+    "bench": "turbo run benchmark",
+    "build": "turbo run build --filter=\"./packages/*\"",
+    "build-all": "turbo run build",
+    "changeset": "changeset",
+    "ci-publish": "pnpm publish -r --access public --tag $PUBLISH_TAG --publish-branch $PUBLISH_BRANCH && changeset tag",
     "ci-version": "changeset version && pnpm install --no-frozen-lockfile",
     "format": "prettier --write .",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky",
-    "test": "pnpm -r --no-bail --aggregate-output --parallel test",
-    "watch": "pnpm -r --parallel --no-bail build --watch"
+    "test": "turbo run test",
+    "test-types": "turbo run test-types"
   },
   "devDependencies": {
     "@arthurfiorette/prettier-config": "^1.0.12",
-    "@changesets/changelog-github": "^0.5.1",
-    "@changesets/cli": "^2.29.7",
+    "@changesets/changelog-github": "^0.6.0",
+    "@changesets/cli": "^2.30.0",
     "@kitajs/html": "workspace:*",
     "husky": "^9.1.7",
-    "prettier": "^3.6.2",
-    "prettier-plugin-jsdoc": "^1.3.3",
-    "prettier-plugin-organize-imports": "^4.2.0",
-    "prettier-plugin-packagejson": "^2.5.19",
-    "typescript": "^5.9.2"
+    "prettier": "^3.8.2",
+    "prettier-plugin-jsdoc": "^1.8.0",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "prettier-plugin-packagejson": "^3.0.2",
+    "self-ts-plugin": "link:packages/ts-html-plugin",
+    "turbo": "^2.9.6",
+    "typescript": "catalog:"
   },
-  "packageManager": "pnpm@10.15.1",
+  "packageManager": "pnpm@10.33.0",
   "engines": {
-    "node": ">=20.13",
-    "pnpm": ">=9"
+    "node": ">=24",
+    "pnpm": ">=10"
   }
 }

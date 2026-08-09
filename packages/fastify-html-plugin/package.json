@@ -1,6 +1,6 @@
 {
   "name": "@kitajs/fastify-html-plugin",
-  "version": "4.2.1",
+  "version": "5.0.0-next.2",
   "description": "A Fastify plugin to add support for @kitajs/html",
   "homepage": "https://github.com/kitajs/html/tree/master/packages/fastify-html-plugin#readme",
   "bugs": "https://github.com/kitajs/html/issues",
@@ -13,30 +13,37 @@
   "license": "MIT",
   "author": "Arthur Fiorette <kita@arthur.place>",
   "type": "commonjs",
-  "main": "index.js",
-  "types": "types/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "!dist/*.tsbuildinfo"
+  ],
   "scripts": {
-    "test": "tsd && c8 --reporter lcov --reporter text node -r @swc-node/register --test test/**/*.test.tsx",
-    "test:watch": "c8 --reporter lcov --reporter text node -r @swc-node/register --test --watch test/**/*.test.tsx"
+    "build": "tsgo -p tsconfig.build.json",
+    "test": "vitest --coverage --typecheck --run",
+    "test-types": "tsgo --noEmit"
   },
   "dependencies": {
-    "fastify-plugin": "^5.0.1"
+    "fastify-plugin": "catalog:"
   },
   "devDependencies": {
-    "@fastify/formbody": "^8.0.2",
-    "@swc-node/register": "^1.11.1",
-    "@swc/helpers": "^0.5.17",
-    "@types/jsdom": "^21.1.7",
-    "@types/node": "^24.5.0",
-    "c8": "^10.1.3",
-    "fastify": "^5.7.3",
-    "jsdom": "^27.0.0",
-    "tsd": "^0.33.0",
-    "tslib": "^2.8.1"
+    "@fastify/formbody": "catalog:",
+    "@kitajs/html": "workspace:^",
+    "@types/jsdom": "catalog:",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "fastify": "catalog:",
+    "jsdom": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "peerDependencies": {
-    "@kitajs/html": "workspace:^4.2.10",
-    "@kitajs/ts-html-plugin": "workspace:^4.1.3"
+    "@kitajs/html": "workspace:^",
+    "@kitajs/ts-html-plugin": "workspace:^"
   },
   "peerDependenciesMeta": {
     "@kitajs/ts-html-plugin": {

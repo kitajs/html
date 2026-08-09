@@ -1,6 +1,6 @@
 {
   "name": "@kitajs/ts-html-plugin",
-  "version": "4.1.4",
+  "version": "5.0.0-next.2",
   "homepage": "https://github.com/kitajs/html/tree/master/packages/ts-html-plugin#readme",
   "bugs": "https://github.com/kitajs/html/issues",
   "repository": {
@@ -16,31 +16,37 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "ts-html-plugin": "dist/cli.js",
-    "xss-scan": "dist/cli.js"
+    "ts-html-plugin": "bin/index.js",
+    "xss-scan": "bin/index.js"
   },
+  "files": [
+    "dist",
+    "src",
+    "!dist/*.tsbuildinfo"
+  ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "dev": "tsc -p tsconfig.build.json --watch",
-    "prepack": "npm run build",
-    "test": "pnpm build && pnpm install && pnpm test-exec",
-    "test-exec": "node --require @swc-node/register --test test/**/*.test.ts"
+    "build": "tsgo -p tsconfig.build.json",
+    "test": "vitest --coverage --typecheck --run",
+    "test-types": "tsgo --noEmit"
   },
   "dependencies": {
-    "chalk": "^5.6.2",
-    "tslib": "^2.8.1",
-    "yargs": "^18.0.0"
+    "tslib": "catalog:"
   },
   "devDependencies": {
-    "@swc-node/register": "^1.11.1",
-    "@swc/helpers": "^0.5.17",
-    "@types/node": "^24.5.0",
-    "@types/yargs": "^17.0.33",
+    "@kitajs/html": "workspace:^",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
     "fast-defer": "^1.1.9",
-    "self": "file:"
+    "self-ts-plugin": "link:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "peerDependencies": {
-    "@kitajs/html": "workspace:^4.2.10",
-    "typescript": "^5.9.3"
+    "@kitajs/html": "workspace:^",
+    "typescript": "catalog:"
+  },
+  "engines": {
+    "node": ">=20.12"
   }
 }

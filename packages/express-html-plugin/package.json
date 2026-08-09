@@ -1,0 +1,51 @@
+{
+  "name": "@kitajs/express-html-plugin",
+  "version": "5.0.0-next.0",
+  "description": "An Express middleware to add support for @kitajs/html",
+  "homepage": "https://github.com/kitajs/html/tree/master/packages/express-html-plugin#readme",
+  "bugs": "https://github.com/kitajs/html/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kitajs/html.git",
+    "directory": "packages/express-html-plugin"
+  },
+  "funding": "https://github.com/kitajs/html?sponsor=1",
+  "license": "MIT",
+  "author": "Arthur Fiorette <kita@arthur.place>",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "!dist/*.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsgo -p tsconfig.build.json",
+    "test": "vitest --coverage --typecheck --run",
+    "test-types": "tsgo --noEmit"
+  },
+  "devDependencies": {
+    "@kitajs/html": "workspace:^",
+    "@types/express": "catalog:",
+    "@types/jsdom": "catalog:",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "express": "catalog:",
+    "jsdom": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@kitajs/html": "workspace:^",
+    "@kitajs/ts-html-plugin": "workspace:^",
+    "express": "^4.18.0 || ^5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@kitajs/ts-html-plugin": {
+      "optional": true
+    }
+  }
+}

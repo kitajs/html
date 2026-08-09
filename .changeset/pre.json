@@ -1,0 +1,40 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "@kitajs/bench-html-honojsx": "1.0.0",
+    "@kitajs/bench-html-jsxte": "1.0.0",
+    "@kitajs/bench-html-kitajs": "1.0.0",
+    "@kitajs/bench-html-preact": "1.0.0",
+    "@kitajs/bench-html-react": "1.0.0",
+    "@kitajs/bench-html-reactjsx": "1.0.0",
+    "@kitajs/bench-html-runner": "1.0.0",
+    "@kitajs/bench-html-templates": "1.0.0",
+    "@kitajs/bench-html-typed-html": "1.0.0",
+    "@kitajs/bench-html-vhtml": "1.0.0",
+    "@kitajs/example-fastify-htmx": "1.0.0",
+    "@kitajs/example-http-server": "1.0.0",
+    "@kitajs/docs-html": "1.0.0",
+    "@kitajs/fastify-html-plugin": "4.2.1",
+    "@kitajs/html": "4.2.13",
+    "@kitajs/ts-html-plugin": "4.1.4",
+    "@kitajs/express-html-plugin": "4.0.0"
+  },
+  "changesets": [
+    "add-express-html-plugin",
+    "calm-bears-remain",
+    "eighty-taxes-jam",
+    "fix-double-escape-self-closing",
+    "fix-tsconfig-absolute-path",
+    "hip-trams-roll",
+    "metal-corners-type",
+    "metal-hairs-juggle",
+    "remove-identity-value",
+    "remove-suspense-root-global",
+    "sharp-wombats-stay",
+    "slimy-wolves-buy",
+    "stale-shrimps-spend",
+    "tender-regions-cough",
+    "update-suspense-script-protocol"
+  ]
+}

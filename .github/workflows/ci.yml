@@ -2,9 +2,19 @@ name: CI Flow
 
 on:
   push:
+    branches:
+      - master
   pull_request:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+permissions:
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -13,8 +23,14 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
-        node: [20]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [lts/-1, lts/*]
+
+    # Set an environment variable to distinguish cache for each OS/Node
+    # and distinguish between CI matrix runs in turbo.json
+    env:
+      TURBO_OS_ENV: ${{ matrix.os }}
+      TURBO_NODE_ENV: ${{ matrix.node }}
 
     steps:
       - name: Checkout
@@ -29,18 +45,70 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'
 
+      - run: echo "Using Node $(node --version) on ${{ matrix.os }}"
+
       - name: Install packages
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm build
+        run: pnpm build-all
+
+      - name: Check types
+        run: pnpm test-types
 
       - name: Test
         run: pnpm test
 
       - name: Publish to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
+        if: ${{ matrix.os != 'windows-latest' }}
         with:
           # Codecov backend may be unstable
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  deploy-docs:
+    needs: build
+    if: ${{ github.head_ref == 'next' || github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-latest
+    name: Deploy Docs
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup node and restore cached dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache turbo build setup
+        uses: actions/cache@v5
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Build docs
+        run: pnpm turbo build -F @kitajs/docs-html
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: packages/docs/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

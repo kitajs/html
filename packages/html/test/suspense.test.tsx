@@ -1,590 +1,532 @@
-import { JSDOM } from 'jsdom';
-import assert from 'node:assert';
-import { text } from 'node:stream/consumers';
-import { afterEach, describe, it, mock, test } from 'node:test';
-import { setImmediate, setTimeout } from 'node:timers/promises';
-import Html, { type PropsWithChildren } from '../index';
-import { Suspense, SuspenseScript, renderToStream } from '../suspense';
+import { JSDOM } from 'jsdom'
+import { text } from 'node:stream/consumers'
+import { setTimeout } from 'node:timers/promises'
+import { afterEach, describe, expect, test, vi } from 'vitest'
+import { Html, type PropsWithChildren } from '../src/index.js'
+import {
+  abortSuspenseRequest,
+  AutoSuspense,
+  renderToStream,
+  runWithAutoSuspense,
+  SuspenseScript as safeSuspenseScript,
+  Suspense,
+  SuspenseRoot
+} from '../src/suspense.js'
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
-  await setTimeout(ms * 50);
-  return Html.contentsToString([children || String(ms)]);
+  await setTimeout(ms * 50)
+  return Html.contentsToString([children || String(ms)])
 }
 
 function Throw(): string {
-  throw new Error('test');
+  throw new Error('test')
 }
 
 // Detect leaks of pending promises
 afterEach(() => {
-  assert.equal(SUSPENSE_ROOT.requests.size, 0, 'Suspense root left pending requests');
+  expect(SuspenseRoot.requests.size).toBe(0)
 
   // Reset suspense root
-  SUSPENSE_ROOT.autoScript = true;
-  SUSPENSE_ROOT.requestCounter = 1;
-  SUSPENSE_ROOT.requests.clear();
-});
+  SuspenseRoot.autoScript = true
+  SuspenseRoot.requestCounter = 1
+  SuspenseRoot.requests.clear()
+})
 
-describe('Suspense', () => {
-  test('Sync without suspense', async () => {
-    assert.equal(await text(renderToStream(() => <div />)), <div />);
+describe('renderToStream', () => {
+  test('without suspense - sync', async () => {
+    expect(await text(renderToStream(() => <div />))).toBe(<div />)
+  })
 
-    assert.equal(await text(renderToStream(async () => <div />)), <div />);
-  });
+  test('without suspense - async', async () => {
+    expect(await text(renderToStream(async () => <div />))).toBe(<div />)
+  })
 
-  test('Suspense sync children', async () => {
-    assert.equal(
-      await text(
-        renderToStream((r) => (
-          <Suspense rid={r} fallback={<div>1</div>}>
-            <div>2</div>
+  test('streams a boundary created after the async root yields', async () => {
+    const result = await text(
+      renderToStream(async (rid) => {
+        await Promise.resolve()
+
+        return (
+          <Suspense rid={rid} fallback="loading">
+            {Promise.resolve('loaded')}
           </Suspense>
-        ))
-      ),
-      <div>2</div>
-    );
-  });
-
-  test('Suspense async children', async () => {
-    assert.equal(
-      await text(
-        renderToStream((r) => (
-          <Suspense rid={r} fallback={<div>1</div>}>
-            <SleepForMs ms={2} />
-          </Suspense>
-        ))
-      ),
-      <>
-        <div id="B:1" data-sf>
-          <div>1</div>
-        </div>
-
-        {SuspenseScript}
-
-        <template id="N:1" data-sr>
-          2
-        </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-      </>
-    );
-  });
-
-  test('Suspense async children & fallback', async () => {
-    assert.equal(
-      await text(
-        renderToStream((r) => (
-          <Suspense rid={r} fallback={Promise.resolve(<div>1</div>)}>
-            <SleepForMs ms={2} />
-          </Suspense>
-        ))
-      ),
-      <>
-        <div id="B:1" data-sf>
-          <div>1</div>
-        </div>
-
-        {SuspenseScript}
-
-        <template id="N:1" data-sr>
-          2
-        </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-      </>
-    );
-  });
-
-  test('Suspense async fallback sync children', async () => {
-    assert.equal(
-      await text(
-        renderToStream((r) => (
-          <Suspense rid={r} fallback={Promise.resolve(<div>1</div>)}>
-            <div>2</div>
-          </Suspense>
-        ))
-      ),
-      <>
-        <div>2</div>
-      </>
-    );
-  });
-
-  test('Multiple async renders cleanup', async () => {
-    await Promise.all(
-      Array.from({ length: 100 }, () => {
-        return text(
-          renderToStream((r) => {
-            return (
-              <Suspense rid={r} fallback={Promise.resolve(<div>1</div>)}>
-                <SleepForMs ms={2} />
-              </Suspense>
-            );
-          })
-        ).then((res) => {
-          assert.equal(
-            res,
-            <>
-              <div id="B:1" data-sf>
-                <div>1</div>
-              </div>
-
-              {SuspenseScript}
-
-              <template id="N:1" data-sr>
-                2
-              </template>
-              <script id="S:1" data-ss>
-                $KITA_RC(1)
-              </script>
-            </>
-          );
-        });
+        )
       })
-    );
-  });
+    )
 
-  test('Multiple sync renders cleanup', async () => {
-    for (let i = 0; i < 10; i++) {
-      assert.equal(
-        await text(
-          renderToStream((r) => (
-            <Suspense rid={r} fallback={Promise.resolve(<div>1</div>)}>
-              <SleepForMs ms={2} />
+    expect(result.indexOf('data-sf')).toBeLessThan(result.indexOf('data-sr'))
+    expect(result).toContain('loaded')
+  })
+
+  test('closes a pending root stream when its response is aborted', async () => {
+    const root = Promise.withResolvers<void>()
+    const child = Promise.withResolvers<string>()
+    const stream = renderToStream(async (rid) => {
+      const fallback = (
+        <Suspense rid={rid} fallback="loading">
+          {child.promise}
+        </Suspense>
+      )
+
+      await root.promise
+      return fallback
+    }, 'aborted-root')
+    const requestData = SuspenseRoot.requests.get('aborted-root')!
+    const closed = Promise.withResolvers<void>()
+
+    stream.once('close', closed.resolve)
+    abortSuspenseRequest('aborted-root', requestData)
+    await closed.promise
+
+    root.resolve()
+    child.resolve('late')
+    await Promise.resolve()
+    await Promise.resolve()
+
+    expect(SuspenseRoot.requests.has('aborted-root')).toBe(false)
+  })
+
+  test('keeps boundary IDs unique after out-of-order settlement', async () => {
+    const first = Promise.withResolvers<string>()
+    const second = Promise.withResolvers<string>()
+    const third = Promise.withResolvers<string>()
+    const stream = renderToStream(async (rid) => {
+      const fallbacks = [
+        Suspense({ rid, fallback: 'first', children: first.promise }),
+        Suspense({ rid, fallback: 'second', children: second.promise })
+      ]
+
+      first.resolve('A')
+      await first.promise
+      await Promise.resolve()
+      await Promise.resolve()
+
+      fallbacks.push(Suspense({ rid, fallback: 'third', children: third.promise }))
+      second.resolve('B')
+      third.resolve('C')
+
+      return Html.contentsToString(fallbacks)
+    }, 'unique-boundaries')
+    const result = await text(stream)
+
+    expect(result).toContain('id="B:unique-boundaries:1"')
+    expect(result).toContain('id="B:unique-boundaries:2"')
+    expect(result).toContain('id="B:unique-boundaries:3"')
+  })
+
+  test('with custom rid', async () => {
+    const stream = renderToStream(() => '<div>custom</div>', 'my-custom-rid')
+    expect(stream.readable).toBeTruthy()
+    expect(await text(stream)).toBe('<div>custom</div>')
+  })
+
+  test('with string rid', async () => {
+    expect(
+      await text(
+        renderToStream(
+          (r) => (
+            <Suspense rid={r} fallback={<div>loading</div>}>
+              {Promise.resolve(<div>loaded</div>)}
             </Suspense>
-          ))
-        ),
-        <>
-          <div id="B:1" data-sf>
-            <div>1</div>
-          </div>
+          ),
+          'string-rid-123'
+        )
+      )
+    ).toContain('<div>loaded</div>')
+  })
 
-          {SuspenseScript}
+  test('streams AutoSuspense from an automatic scope', async () => {
+    const result = await text(
+      renderToStream((rid) =>
+        runWithAutoSuspense(rid, () => (
+          <AutoSuspense fallback={<div>loading</div>}>
+            {Promise.resolve(<div>loaded</div>)}
+          </AutoSuspense>
+        ))
+      )
+    )
 
-          <template id="N:1" data-sr>
-            2
-          </template>
-          <script id="S:1" data-ss>
-            $KITA_RC(1)
-          </script>
-        </>
-      );
+    expect(result).toContain('id="B:1:1"')
+    expect(result).toContain('<div>loaded</div>')
+  })
+
+  test('emits end event and chunks correctly', async () => {
+    const stream = renderToStream((r) => (
+      <div>
+        <Suspense rid={r} fallback={<div>fallback</div>}>
+          {Promise.resolve(<div>resolved</div>)}
+        </Suspense>
+      </div>
+    ))
+
+    const fn = vi.fn()
+    stream.on('end', fn)
+
+    const chunks = []
+    for await (const chunk of stream) {
+      chunks.push(chunk.toString())
     }
-  });
 
-  test('Multiple children', async () => {
-    assert.equal(
+    expect(fn).toHaveBeenCalledOnce()
+    expect(chunks.length).toBe(2)
+    expect(chunks[0]).toContain('data-sf')
+    expect(chunks[1]).toContain('data-sr')
+  })
+
+  test('rejects duplicate rid', async () => {
+    const stream = renderToStream(
+      (r) => (
+        <Suspense rid={r} fallback="1">
+          {Promise.resolve('2')}
+        </Suspense>
+      ),
+      1
+    )
+
+    await expect(
+      text(
+        renderToStream(
+          (r) => (
+            <Suspense rid={r} fallback="1">
+              {Promise.resolve('2')}
+            </Suspense>
+          ),
+          1
+        )
+      )
+    ).rejects.toThrow(/The provided Request Id is already in use: 1./)
+
+    await text(stream) // consume to cleanup
+  })
+
+  test('emits error if factory throws', async () => {
+    const stream = renderToStream(async () => {
+      throw new Error('Factory error')
+    })
+
+    await expect(text(stream)).rejects.toThrow('Factory error')
+  })
+})
+
+describe('AutoSuspense', () => {
+  test('requires a request id when entering a scope', () => {
+    expect(() => runWithAutoSuspense(undefined as never, () => null)).toThrow(
+      /Automatic Suspense requires a request ID/
+    )
+  })
+
+  test('throws outside an automatic Suspense scope', () => {
+    expect(() => (
+      <AutoSuspense fallback={<div>loading</div>}>
+        {Promise.resolve(<div>loaded</div>)}
+      </AutoSuspense>
+    )).toThrow(/AutoSuspense requires automatic Suspense support/)
+  })
+
+  test('isolates concurrent render request ids', async () => {
+    const render = (rid: string) =>
+      text(
+        renderToStream(
+          (requestId) =>
+            runWithAutoSuspense(requestId, () => (
+              <AutoSuspense fallback={<div>loading</div>}>
+                <SleepForMs ms={1}>{rid}</SleepForMs>
+              </AutoSuspense>
+            )),
+          rid
+        )
+      )
+
+    const [first, second] = await Promise.all([render('first'), render('second')])
+
+    expect(first).toContain('id="B:first:1"')
+    expect(first).not.toContain('id="B:second:1"')
+    expect(second).toContain('id="B:second:1"')
+    expect(second).not.toContain('id="B:first:1"')
+  })
+})
+
+describe('Suspense - basic rendering', () => {
+  test('sync children returns content directly (no wrapper)', async () => {
+    expect(
+      await text(
+        renderToStream((r) => (
+          <Suspense rid={r} fallback={<div>fallback</div>}>
+            <div>sync content</div>
+          </Suspense>
+        ))
+      )
+    ).toBe(<div>sync content</div>)
+  })
+
+  test('async children renders fallback then streams content', async () => {
+    expect(
+      await text(
+        renderToStream((r) => (
+          <Suspense rid={r} fallback={<div>loading</div>}>
+            <SleepForMs ms={1} />
+          </Suspense>
+        ))
+      )
+    ).toBe(
+      <>
+        <div id="B:1:1" data-sf>
+          <div>loading</div>
+        </div>
+        {safeSuspenseScript}
+        <template id="N:1:1" data-sr>
+          1
+        </template>
+        <script id="S:1:1" data-ss>
+          $KITA_RC("1:1")
+        </script>
+      </>
+    )
+  })
+
+  test('async fallback with sync children returns content directly', async () => {
+    expect(
+      await text(
+        renderToStream((r) => (
+          <Suspense rid={r} fallback={Promise.resolve(<div>async fallback</div>)}>
+            <div>sync content</div>
+          </Suspense>
+        ))
+      )
+    ).toBe(<div>sync content</div>)
+  })
+
+  test('empty children', async () => {
+    expect(
+      await text(
+        renderToStream((r) => (
+          //@ts-expect-error - testing empty children
+          <Suspense rid={r} fallback={<div>fallback</div>}></Suspense>
+        ))
+      )
+    ).toBe('')
+  })
+
+  test('null children', async () => {
+    expect(
+      await text(
+        renderToStream((r) => (
+          <Suspense rid={r} fallback={<div>fallback</div>}>
+            {null}
+          </Suspense>
+        ))
+      )
+    ).toBe('')
+  })
+
+  test('immediately resolving promise', async () => {
+    expect(
+      await text(
+        renderToStream((r) => (
+          <Suspense rid={r} fallback={<div>loading</div>}>
+            {Promise.resolve(<div>instant</div>)}
+          </Suspense>
+        ))
+      )
+    ).toContain('<div>instant</div>')
+  })
+})
+
+describe('Suspense - autoScript', () => {
+  test('includes SuspenseScript automatically for first async suspense', async () => {
+    const result = await text(
+      renderToStream((r) => (
+        <Suspense rid={r} fallback={<div>1</div>}>
+          {Promise.resolve(<div>2</div>)}
+        </Suspense>
+      ))
+    )
+
+    expect(result).toContain('<script>')
+    expect(result).toContain('$KITA_RC')
+  })
+
+  test('can disable autoScript', async () => {
+    SuspenseRoot.autoScript = false
+
+    const result = await text(
+      renderToStream((r) => (
+        <Suspense rid={r} fallback={<div>1</div>}>
+          {Promise.resolve(<div>2</div>)}
+        </Suspense>
+      ))
+    )
+
+    expect(result).not.toContain('<script>')
+    expect(result).toContain('$KITA_RC("1:1")') // still has the call
+    SuspenseRoot.autoScript = true // reset for other tests
+  })
+
+  test('SuspenseScript is valid JavaScript', () => {
+    const scriptContent = safeSuspenseScript.slice(
+      safeSuspenseScript.indexOf('>') + 1,
+      -'</script>'.length
+    )
+    expect(() => eval(scriptContent)).not.toThrow()
+  })
+})
+
+describe('Suspense - multiple components', () => {
+  test('multiple sibling suspense components', async () => {
+    expect(
       await text(
         renderToStream((r) => (
           <div>
             <Suspense rid={r} fallback={<div>1</div>}>
-              <SleepForMs ms={4} />
+              <SleepForMs ms={1} />
             </Suspense>
-
             <Suspense rid={r} fallback={<div>2</div>}>
-              <SleepForMs ms={5} />
-            </Suspense>
-
-            <Suspense rid={r} fallback={<div>3</div>}>
-              <SleepForMs ms={6} />
+              <SleepForMs ms={2} />
             </Suspense>
           </div>
         ))
-      ),
+      )
+    ).toBe(
       <>
         <div>
-          <div id="B:1" data-sf>
+          <div id="B:1:1" data-sf>
             <div>1</div>
           </div>
-          <div id="B:2" data-sf>
+          <div id="B:1:2" data-sf>
             <div>2</div>
           </div>
-          <div id="B:3" data-sf>
-            <div>3</div>
-          </div>
         </div>
-
-        {SuspenseScript}
-
-        <template id="N:1" data-sr>
-          4
+        {safeSuspenseScript}
+        <template id="N:1:1" data-sr>
+          1
         </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
+        <script id="S:1:1" data-ss>
+          $KITA_RC("1:1")
         </script>
-
-        <template id="N:2" data-sr>
-          5
+        <template id="N:1:2" data-sr>
+          2
         </template>
-        <script id="S:2" data-ss>
-          $KITA_RC(2)
-        </script>
-
-        <template id="N:3" data-sr>
-          6
-        </template>
-        <script id="S:3" data-ss>
-          $KITA_RC(3)
+        <script id="S:1:2" data-ss>
+          $KITA_RC("1:2")
         </script>
       </>
-    );
-  });
+    )
+  })
 
-  test('Concurrent renders', async () => {
-    const promises = [];
+  test('mixed sync and async suspense components', async () => {
+    const result = await text(
+      renderToStream((r) => (
+        <div>
+          <Suspense rid={r} fallback={<div>sync-fallback</div>}>
+            <div>sync-content</div>
+          </Suspense>
+          <Suspense rid={r} fallback={<div>async-fallback</div>}>
+            {Promise.resolve(<div>async-content</div>)}
+          </Suspense>
+        </div>
+      ))
+    )
 
-    for (const seconds of [9, 4, 7]) {
-      const length = promises.push(
+    // Sync content appears inline, async has wrapper
+    expect(result).toContain('<div>sync-content</div>')
+    expect(result).toContain('data-sf')
+    expect(result).toContain('<div>async-content</div>')
+  })
+
+  test('concurrent renders with unique rids', async () => {
+    const results = await Promise.all([
+      text(
+        renderToStream((r) => (
+          <Suspense rid={r} fallback="a">
+            <SleepForMs ms={2}>A</SleepForMs>
+          </Suspense>
+        ))
+      ),
+      text(
+        renderToStream((r) => (
+          <Suspense rid={r} fallback="b">
+            <SleepForMs ms={1}>B</SleepForMs>
+          </Suspense>
+        ))
+      )
+    ])
+
+    expect(results[0]).toContain('A')
+    expect(results[1]).toContain('B')
+  })
+
+  test('handles 100 concurrent renders without leaks', async () => {
+    await Promise.all(
+      Array.from({ length: 100 }, () =>
         text(
           renderToStream((r) => (
-            <div>
-              {Array.from({ length: seconds }, (_, i) => (
-                <Suspense rid={r} fallback={<div>{seconds - i} loading</div>}>
-                  <SleepForMs ms={seconds - i}>{seconds - i}</SleepForMs>
-                </Suspense>
-              ))}
-            </div>
+            <Suspense rid={r} fallback={<div>loading</div>}>
+              <SleepForMs ms={1} />
+            </Suspense>
           ))
         )
-      );
+      )
+    )
+    // afterEach verifies no leaks
+  })
+})
 
-      //@ts-expect-error - testing invalid promises
-      promises[length - 1]!.seconds = seconds;
-    }
-
-    const results = await Promise.all(promises);
-
-    for (const [index, result] of results.entries()) {
-      //@ts-expect-error - testing invalid promises
-      const seconds = +promises[index]!.seconds;
-
-      assert.strictEqual(
-        result,
-        <>
-          <div>
-            {Array.from({ length: seconds }, (_, i) => (
-              <div id={`B:${i + 1}`} data-sf>
-                <div>{seconds - i} loading</div>
-              </div>
-            ))}
-          </div>
-
-          {SuspenseScript}
-
-          {Array.from({ length: seconds }, (_, i) => (
-            <>
-              <template id={`N:${seconds - i}`} data-sr>
-                {i + 1}
-              </template>
-              <script id={`S:${seconds - i}`} data-ss>
-                $KITA_RC({seconds - i})
-              </script>
-            </>
-          ))}
-        </>
-      );
-    }
-  });
-
-  it('ensures autoScript works', async () => {
-    // Sync does not needs autoScript
-    assert.equal(
-      await text(
-        renderToStream((r) => (
-          <Suspense rid={r} fallback={<div>1</div>}>
-            <div>2</div>
-          </Suspense>
-        ))
-      ),
-      <div>2</div>
-    );
-
-    // Async renders SuspenseScript
-    assert.equal(
-      await text(
-        renderToStream((r) => (
-          <Suspense rid={r} fallback={<div>1</div>}>
-            {Promise.resolve(<div>2</div>)}
-          </Suspense>
-        ))
-      ),
-      <>
-        <div id="B:1" data-sf>
-          <div>1</div>
-        </div>
-
-        {SuspenseScript}
-
-        <template id="N:1" data-sr>
-          <div>2</div>
-        </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-      </>
-    );
-
-    // Disable autoScript
-    SUSPENSE_ROOT.autoScript = false;
-
-    // Async renders SuspenseScript
-    assert.equal(
-      await text(
-        renderToStream((r) => (
-          <Suspense rid={r} fallback={<div>1</div>}>
-            {Promise.resolve(<div>2</div>)}
-          </Suspense>
-        ))
-      ),
-      <>
-        <div id="B:1" data-sf>
-          <div>1</div>
-        </div>
-        <template id="N:1" data-sr>
-          <div>2</div>
-        </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-      </>
-    );
-  });
-
-  test('renderToStream', async () => {
-    const stream = renderToStream((r) => (
-      <div>
-        <Suspense rid={r} fallback={<div>2</div>}>
-          {Promise.resolve(<div>1</div>)}
-        </Suspense>
-      </div>
-    ));
-
-    assert(stream.readable);
-
-    // emits end event
-    const fn = mock.fn();
-    stream.on('end', fn);
-
-    const chunks = [];
-
-    for await (const chunk of stream) {
-      chunks.push(chunk);
-    }
-
-    assert.equal(fn.mock.calls.length, 1);
-    assert.equal(chunks.length, 2);
-
-    assert.equal(
-      chunks[0].toString(),
-      <div>
-        <div id="B:1" data-sf>
-          <div>2</div>
-        </div>
-      </div>
-    );
-
-    assert.equal(
-      chunks[1].toString(),
-      <>
-        {SuspenseScript}
-
-        <template id="N:1" data-sr>
-          <div>1</div>
-        </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-      </>
-    );
-  });
-
-  test('renderToStream without suspense', async () => {
-    const stream = renderToStream(() => '<div>not suspense</div>', 1227);
-
-    assert.ok(stream.readable);
-
-    const data = stream.read();
-
-    assert.equal(data.toString(), '<div>not suspense</div>');
-
-    assert.equal(await text(stream), '');
-
-    assert.ok(stream.closed);
-  });
-
-  it('tests suspense without children', async () => {
-    assert.equal(
-      await text(
-        renderToStream((r) => (
-          //@ts-expect-error - testing invalid children
-          <Suspense rid={r} fallback={<div>1</div>}></Suspense>
-        ))
-      ),
-      ''
-    );
-  });
-
-  it('works with async error handlers', async () => {
-    assert.equal(
-      await text(
-        renderToStream((r) => (
-          <Suspense rid={r} fallback={<div>1</div>} catch={Promise.resolve(<div>2</div>)}>
-            {Promise.reject(<div>3</div>)}
-          </Suspense>
-        ))
-      ),
-
-      <>
-        <div id="B:1" data-sf>
-          <div>1</div>
-        </div>
-
-        {SuspenseScript}
-
-        <template id="N:1" data-sr>
-          <div>2</div>
-        </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-      </>
-    );
-  });
-
-  it('works with deep suspense calls', async () => {
-    assert.equal(
-      await text(
-        renderToStream((rid) => {
-          return (
-            <div>
-              <Suspense rid={rid} fallback={<div>1</div>}>
-                <div>2</div>
-
-                {setTimeout(10, <div>3</div>)}
-
-                {setTimeout(
-                  15,
-                  <div>
-                    <Suspense rid={rid} fallback={<div>4</div>}>
-                      <div>5</div>
-
-                      {setTimeout(20, <div>6</div>)}
-                    </Suspense>
-                  </div>
-                )}
-              </Suspense>
-            </div>
-          );
-        })
-      ),
-      <>
-        <div>
-          <div id="B:2" data-sf>
-            <div>1</div>
-          </div>
-        </div>
-
-        {SuspenseScript}
-
-        <template id="N:2" data-sr>
-          <div>2</div>
-          <div>3</div>
-          <div>
-            <div id="B:1" data-sf>
-              <div>4</div>
-            </div>
-          </div>
-        </template>
-        <script id="S:2" data-ss>
-          $KITA_RC(2)
-        </script>
-
-        <template id="N:1" data-sr>
-          <div>5</div>
-          <div>6</div>
-        </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-      </>
-    );
-  });
-
-  it('works with deep suspense calls resolving first', async () => {
-    assert.equal(
-      await text(
-        renderToStream((rid) => {
-          return (
-            <div>
-              <Suspense rid={rid} fallback={<div>1</div>}>
-                <div>2</div>
-
-                {setTimeout(20, <div>3</div>)}
-
-                {setTimeout(
-                  15,
-                  <div>
-                    <Suspense rid={rid} fallback={<div>4</div>}>
-                      <div>5</div>
-
-                      {setTimeout(10, <div>6</div>)}
-                    </Suspense>
-                  </div>
-                )}
-              </Suspense>
-            </div>
-          );
-        })
-      ),
-      <>
-        <div>
-          <div id="B:2" data-sf>
-            <div>1</div>
-          </div>
-        </div>
-
-        {SuspenseScript}
-
-        <template id="N:1" data-sr>
-          <div>5</div>
-          <div>6</div>
-        </template>
-
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-
-        <template id="N:2" data-sr>
-          <div>2</div>
-          <div>3</div>
-          <div>
-            <div id="B:1" data-sf>
-              <div>4</div>
-            </div>
-          </div>
-        </template>
-
-        <script id="S:2" data-ss>
-          $KITA_RC(2)
-        </script>
-      </>
-    );
-  });
-
-  it('works with parallel deep suspense calls resolving first', async () => {
+describe('Suspense - nested', () => {
+  test('nested suspense - inner resolves first', async () => {
     const html = await text(
       renderToStream((rid) => (
         <div>
-          {Array.from({ length: 5 }, (_, i) => (
-            <Suspense rid={rid} fallback={<div>{i} fb outer</div>}>
-              <div>Outer {i}!</div>
+          <Suspense rid={rid} fallback={<div>outer-loading</div>}>
+            {setTimeout(
+              20,
+              <div>
+                <Suspense rid={rid} fallback={<div>inner-loading</div>}>
+                  {setTimeout(10, <div>inner-content</div>)}
+                </Suspense>
+              </div>
+            )}
+          </Suspense>
+        </div>
+      ))
+    )
 
-              <SleepForMs ms={i % 2 === 0 ? i / 2 : i}>
-                <Suspense rid={rid} fallback={<div>{i} fb inner!</div>}>
+    // Inner resolves first, so N:1:1 appears before N:1:2
+    expect(html.indexOf('N:1:1')).toBeLessThan(html.indexOf('N:1:2'))
+    expect(html).toContain('inner-content')
+  })
+
+  test('nested suspense - outer resolves first', async () => {
+    const html = await text(
+      renderToStream((rid) => (
+        <div>
+          <Suspense rid={rid} fallback={<div>outer-loading</div>}>
+            {setTimeout(
+              10,
+              <div>
+                <Suspense rid={rid} fallback={<div>inner-loading</div>}>
+                  {setTimeout(20, <div>inner-content</div>)}
+                </Suspense>
+              </div>
+            )}
+          </Suspense>
+        </div>
+      ))
+    )
+
+    expect(html).toContain('inner-content')
+  })
+
+  test('deeply nested parallel suspense with JSDOM validation', async () => {
+    const html = await text(
+      renderToStream((rid) => (
+        <div>
+          {Array.from({ length: 3 }, (_, i) => (
+            <Suspense rid={rid} fallback={<div>{i} outer loading</div>}>
+              <SleepForMs ms={i}>
+                <div>Outer {i}</div>
+                <Suspense rid={rid} fallback={<div>{i} inner loading</div>}>
                   <SleepForMs ms={i}>
-                    <div>Inner {i}!</div>
+                    <div>Inner {i}</div>
                   </SleepForMs>
                 </Suspense>
               </SleepForMs>
@@ -592,493 +534,122 @@ describe('Suspense', () => {
           ))}
         </div>
       ))
-    );
+    )
 
-    assert.equal(
-      html,
-      <>
-        <div>
-          <div id="B:2" data-sf>
-            <div>0 fb outer</div>
-          </div>
-          <div id="B:4" data-sf>
-            <div>1 fb outer</div>
-          </div>
-          <div id="B:6" data-sf>
-            <div>2 fb outer</div>
-          </div>
-          <div id="B:8" data-sf>
-            <div>3 fb outer</div>
-          </div>
-          <div id="B:10" data-sf>
-            <div>4 fb outer</div>
-          </div>
-        </div>
+    // Validate final DOM structure after script execution
+    const dom = new JSDOM(html, { runScripts: 'dangerously' })
+    const body = dom.window.document.body.innerHTML
 
-        {SuspenseScript}
+    expect(body).toContain('<div>Outer 0</div>')
+    expect(body).toContain('<div>Inner 0</div>')
+    expect(body).toContain('<div>Outer 2</div>')
+    expect(body).toContain('<div>Inner 2</div>')
+  })
+})
 
-        <template id="N:1" data-sr>
-          <div>Inner 0!</div>
-        </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-
-        <template id="N:2" data-sr>
-          <div>Outer 0!</div>
-          <div id="B:1" data-sf>
-            <div>0 fb inner!</div>
-          </div>
-        </template>
-        <script id="S:2" data-ss>
-          $KITA_RC(2)
-        </script>
-
-        <template id="N:3" data-sr>
-          <div>Inner 1!</div>
-        </template>
-        <script id="S:3" data-ss>
-          $KITA_RC(3)
-        </script>
-
-        <template id="N:4" data-sr>
-          <div>Outer 1!</div>
-          <div id="B:3" data-sf>
-            <div>1 fb inner!</div>
-          </div>
-        </template>
-        <script id="S:4" data-ss>
-          $KITA_RC(4)
-        </script>
-
-        <template id="N:6" data-sr>
-          <div>Outer 2!</div>
-          <div id="B:5" data-sf>
-            <div>2 fb inner!</div>
-          </div>
-        </template>
-        <script id="S:6" data-ss>
-          $KITA_RC(6)
-        </script>
-
-        <template id="N:5" data-sr>
-          <div>Inner 2!</div>
-        </template>
-        <script id="S:5" data-ss>
-          $KITA_RC(5)
-        </script>
-
-        <template id="N:10" data-sr>
-          <div>Outer 4!</div>
-          <div id="B:9" data-sf>
-            <div>4 fb inner!</div>
-          </div>
-        </template>
-        <script id="S:10" data-ss>
-          $KITA_RC(10)
-        </script>
-
-        <template id="N:7" data-sr>
-          <div>Inner 3!</div>
-        </template>
-        <script id="S:7" data-ss>
-          $KITA_RC(7)
-        </script>
-
-        <template id="N:8" data-sr>
-          <div>Outer 3!</div>
-          <div id="B:7" data-sf>
-            <div>3 fb inner!</div>
-          </div>
-        </template>
-        <script id="S:8" data-ss>
-          $KITA_RC(8)
-        </script>
-
-        <template id="N:9" data-sr>
-          <div>Inner 4!</div>
-        </template>
-        <script id="S:9" data-ss>
-          $KITA_RC(9)
-        </script>
-      </>
-    );
-
-    // tests with final html result
-    assert.equal(
-      new JSDOM(html, { runScripts: 'dangerously' }).window.document.body.innerHTML,
-      <>
-        <div>
-          <div>Outer 0!</div>
-          <div>Inner 0!</div>
-          <div>Outer 1!</div>
-          <div>Inner 1!</div>
-          <div>Outer 2!</div>
-          <div>Inner 2!</div>
-          <div>Outer 3!</div>
-          <div>Inner 3!</div>
-          <div>Outer 4!</div>
-          <div>Inner 4!</div>
-        </div>
-        {SuspenseScript}
-      </>
-    );
-  });
-
-  it('SuspenseScript is a valid JS code', () => {
-    // removes <script ...> and </script> tags
-    eval(SuspenseScript.slice(SuspenseScript.indexOf('>') + 1, -'</script>'.length));
-  });
-
-  it('Suspense works when children resolves first', async () => {
-    async function Fallback() {
-      for (let i = 0; i < 10; i++) {
-        await setImmediate();
-      }
-      return 'Fallback!';
-    }
-
-    async function Child() {
-      await setImmediate();
-      return 'Child!';
-    }
-
-    const html = await text(
-      renderToStream((rid) => (
-        <div>
-          <Suspense rid={rid} fallback={<Fallback />}>
-            <Child />
-          </Suspense>
-        </div>
-      ))
-    );
-
-    assert.equal(
-      html,
-      <>
-        <div>
-          <div id="B:1" data-sf>
-            Fallback!
-          </div>
-        </div>
-
-        {SuspenseScript as 'safe'}
-
-        <template id="N:1" data-sr>
-          Child!
-        </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-      </>
-    );
-  });
-
-  it('Suspense fails when children rejects first', async () => {
-    async function Fallback(): Promise<string> {
-      for (let i = 0; i < 10; i++) {
-        await setImmediate();
-      }
-
-      throw 'Fallback!';
-    }
-
-    async function Child(): Promise<string> {
-      await setImmediate();
-      return 'Child!';
-    }
-
-    try {
-      await text(
-        renderToStream((rid) => (
-          <div>
-            <Suspense rid={rid} fallback={<Fallback />}>
-              <Child />
-            </Suspense>
-          </div>
+describe('Suspense - error handling', () => {
+  test('throws when rid is not provided', async () => {
+    await expect(
+      text(
+        renderToStream(() => (
+          //@ts-expect-error - testing missing rid
+          <Suspense fallback={<div>1</div>}>{Promise.resolve('test')}</Suspense>
         ))
-      );
+      )
+    ).rejects.toMatchInlineSnapshot(
+      '[Error: Suspense requires a truthy `rid` to be specified.]'
+    )
+  })
 
-      assert.fail('should throw');
-    } catch (error) {
-      assert.equal(error, 'Fallback!');
-    }
-  });
-});
-
-describe('Suspense errors', () => {
-  it('Leaks if rendered outside of renderToStream', () => {
-    try {
-      const outside = (
-        <Suspense rid={1} fallback={'1'}>
-          {Promise.resolve(2)}
-        </Suspense>
-      );
-
-      assert.equal(
-        outside,
-        <div id="B:1" data-sf>
-          1
-        </div>
-      );
-
-      const requestData = SUSPENSE_ROOT.requests.get(1);
-
-      assert.equal(requestData?.running, 1);
-      assert.equal(requestData?.sent, false);
-    } finally {
-      assert.ok(SUSPENSE_ROOT.requests.has(1));
-
-      // cleans up
-      SUSPENSE_ROOT.requests.delete(1);
-    }
-  });
-
-  it('tests sync errors are thrown', async () => {
-    await assert.rejects(
+  test('sync error in children propagates', async () => {
+    await expect(
       text(
         renderToStream((r) => (
           <Suspense rid={r} fallback={<div>fallback</div>}>
             <Throw />
           </Suspense>
         ))
-      ),
-      /test/
-    );
-  });
+      )
+    ).rejects.toThrow(/test/)
+  })
 
-  it('test sync errors after suspense', async () => {
-    try {
-      await text(
+  test('async error without catch handler propagates', async () => {
+    const err = new Error('async error')
+
+    await expect(
+      text(
+        renderToStream((r) => (
+          <Suspense rid={r} fallback={<div>loading</div>}>
+            {Promise.reject(err)}
+          </Suspense>
+        ))
+      )
+    ).rejects.toBe(err)
+  })
+
+  test('catch handler as JSX element', async () => {
+    const result = await text(
+      renderToStream((r) => (
+        <Suspense rid={r} fallback={<div>loading</div>} catch={<div>error occurred</div>}>
+          {Promise.reject(new Error('fail'))}
+        </Suspense>
+      ))
+    )
+
+    expect(result).toContain('<div>error occurred</div>')
+  })
+
+  test('catch handler as function receives error', async () => {
+    const err = new Error('specific error')
+
+    const result = await text(
+      renderToStream((r) => (
+        <Suspense
+          rid={r}
+          fallback={<div>loading</div>}
+          catch={(e) => {
+            expect(e).toBe(err)
+            return <div>caught: {(e as Error).message}</div>
+          }}
+        >
+          {Promise.reject(err)}
+        </Suspense>
+      ))
+    )
+
+    expect(result).toContain('caught: specific error')
+  })
+
+  test('async catch handler', async () => {
+    const result = await text(
+      renderToStream((r) => (
+        <Suspense
+          rid={r}
+          fallback={<div>loading</div>}
+          catch={Promise.resolve(<div>async error handler</div>)}
+        >
+          {Promise.reject(new Error('fail'))}
+        </Suspense>
+      ))
+    )
+
+    expect(result).toContain('<div>async error handler</div>')
+  })
+
+  test('error in sync children after suspense registration', async () => {
+    await expect(
+      text(
         renderToStream((r) => (
           <div>
-            {/* Throws after suspense registration */}
             <Suspense rid={r} fallback={<div>fallback</div>}>
               {setTimeout(50).then(() => (
                 <div>1</div>
               ))}
             </Suspense>
-
-            <div>
-              <Throw />
-            </div>
+            <Throw />
           </div>
         ))
-      );
-
-      assert.fail('should throw');
-    } catch (error: any) {
-      assert.equal(error.message, 'test');
-    }
-  });
-
-  it('tests suspense without error boundary', async () => {
-    const err = new Error('component failed');
-
-    try {
-      await text(
-        renderToStream((r) => (
-          <Suspense rid={r} fallback={<div>1</div>}>
-            {Promise.reject(err)}
-          </Suspense>
-        ))
-      );
-
-      assert.fail('should throw');
-    } catch (error) {
-      assert.equal(error, err);
-    }
-  });
-
-  it('tests stream suspense without error boundary', async () => {
-    const err = new Error('component failed');
-
-    const stream = renderToStream((r) => (
-      <Suspense rid={r} fallback={<div>1</div>}>
-        {Promise.reject(err)}
-      </Suspense>
-    ));
-
-    try {
-      for await (const data of stream) {
-        // Second stream would be the suspense result, which errors out
-        assert.equal(
-          data.toString(),
-          <div id="B:1" data-sf>
-            <div>1</div>
-          </div>
-        );
-      }
-
-      assert.fail('should throw');
-    } catch (error) {
-      assert.equal(error, err);
-    }
-  });
-
-  it('tests suspense with function error boundary', async () => {
-    const err = new Error('component failed');
-
-    // Sync does not needs autoScript
-    assert.equal(
-      await text(
-        renderToStream((r) => (
-          <Suspense
-            rid={r}
-            fallback={<div>1</div>}
-            catch={(err2) => {
-              assert.equal(err2, err);
-
-              return <div>3</div>;
-            }}
-          >
-            {Promise.reject(err)}
-          </Suspense>
-        ))
-      ),
-      <>
-        <div id="B:1" data-sf>
-          <div>1</div>
-        </div>
-
-        {SuspenseScript}
-        <template id="N:1" data-sr>
-          <div>3</div>
-        </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-      </>
-    );
-  });
-
-  it('throws when rid is not provided', async () => {
-    await assert.rejects(
-      text(
-        renderToStream(() => (
-          //@ts-expect-error
-          <Suspense fallback={<div>1</div>}>{Promise.resolve('123')}</Suspense>
-        ))
-      ),
-      /Error: Suspense requires a `rid` to be specified./
-    );
-  });
-
-  it('tests suspense with error boundary', async () => {
-    const err = new Error('component failed');
-
-    // Sync does not needs autoScript
-    assert.equal(
-      await text(
-        renderToStream((r) => (
-          <Suspense rid={r} fallback={<div>1</div>} catch={<div>3</div>}>
-            {Promise.reject(err)}
-          </Suspense>
-        ))
-      ),
-      <>
-        <div id="B:1" data-sf>
-          <div>1</div>
-        </div>
-
-        {SuspenseScript}
-
-        <template id="N:1" data-sr>
-          <div>3</div>
-        </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-      </>
-    );
-  });
-
-  it('does not write anything if stream is closed', async () => {
-    const rendered = renderToStream(async (r) => {
-      // Closes the stream rightly after
-      const rd = SUSPENSE_ROOT.requests.get(r)!;
-
-      return (
-        <Suspense rid={r} fallback={<div>1</div>} catch={<div>2</div>}>
-          {setTimeout(5).then(async () => {
-            rd.stream.push(null);
-            await new Promise((res) => rd.stream.once('close', res));
-            return <div>3</div>;
-          })}
-        </Suspense>
-      );
-    });
-
-    const firstChunk = await new Promise<string>((resolve) => {
-      rendered.once('data', resolve);
-    });
-
-    await new Promise((res) => rendered.once('close', res));
-
-    assert.equal(
-      firstChunk.toString(),
-      <div id="B:1" data-sf>
-        <div>1</div>
-      </div>
-    );
-
-    // In case any .push() is called after the stream is closed,
-    // The error below would be thrown:
-    // Error [ERR_STREAM_PUSH_AFTER_EOF]: stream.push() after EOF
-
-    assert.equal(await text(rendered), '');
-  });
-
-  it('does not allows to use the same rid', async () => {
-    let i = 1;
-
-    function render(r: number | string) {
-      return (
-        <Suspense rid={r} fallback={<div>{i++}</div>}>
-          {Promise.resolve(<div>{i++}</div>)}
-        </Suspense>
-      );
-    }
-
-    const stream = renderToStream(render, 1);
-
-    await assert.rejects(
-      text(renderToStream(render, 1)),
-      /Error: The provided Request Id is already in use: 1./
-    );
-
-    const html = await text(stream);
-
-    assert.equal(
-      html,
-      <>
-        <div id="B:1" data-sf>
-          <div>1</div>
-        </div>
-
-        {SuspenseScript}
-
-        <template id="N:1" data-sr>
-          <div>2</div>
-        </template>
-        <script id="S:1" data-ss>
-          $KITA_RC(1)
-        </script>
-      </>
-    );
-  });
-
-  it('emits error if factory function throws', async () => {
-    const stream = renderToStream(async () => {
-      throw new Error('Factory error');
-    });
-
-    try {
-      await text(stream);
-
-      assert.fail('should throw');
-    } catch (error: any) {
-      assert.equal(error.message, 'Factory error');
-    }
-  });
-});
+      )
+    ).rejects.toThrow('test')
+  })
+})

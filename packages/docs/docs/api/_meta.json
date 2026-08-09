@@ -1,0 +1,18 @@
+[
+  "index",
+  {
+    "type": "dir-section-header",
+    "name": "html",
+    "label": "@kitajs/html"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "fastify",
+    "label": "@kitajs/fastify-html-plugin"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "express",
+    "label": "@kitajs/express-html-plugin"
+  }
+]

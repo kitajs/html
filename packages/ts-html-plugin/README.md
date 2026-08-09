@@ -45,11 +45,12 @@
 - [Running as CLI](#running-as-cli)
 - [Handling Warnings](#handling-warnings)
 - [Vscode](#vscode)
+- [tsgo Compatibility](#tsgo-compatibility)
 - [Error codes](#error-codes)
-  - [K601](#k601)
-  - [K602](#k602)
-  - [K603](#k603)
-  - [K604](#k604)
+  - [TS88601](#ts88601)
+  - [TS88602](#ts88602)
+  - [TS88603](#ts88603)
+  - [TS88604](#ts88604)
 - [JSX](#jsx)
 - [Special cases](#special-cases)
 
@@ -80,9 +81,8 @@ manager, and put this inside your `tsconfig.json`.
 
 {
   "compilerOptions": {
-    "jsx": "react",
-    "jsxFactory": "Html.createElement",
-    "jsxFragmentFactory": "Html.Fragment",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@kitajs/html",
     "plugins": [{ "name": "@kitajs/ts-html-plugin" }]
   }
 }
@@ -94,7 +94,7 @@ manager, and put this inside your `tsconfig.json`.
 
 ## Running as CLI
 
-You can also run this project as a CLI tool. Which is a great way to ensue project-wide
+You can also run this project as a CLI tool. Which is a great way to ensure project-wide
 security. Also it's a great way to integrate with your CI/CD pipeline.
 
 ```sh
@@ -137,27 +137,27 @@ Sometimes, the plugin may not detect that a string or variable is safe for use a
 emit warnings, even when you are confident there are no security issues. Here are ways to
 address this:
 
-1. **Keep using use the `safe` Attribute:** Even if you are certain that the content is
-   free from XSS vulnerabilities, you can still use the `safe` attribute for added
-   assurance. After all, what's the problem of being safe twice?
+1. **Keep using the `safe` Attribute:** Even if you are certain that the content is free
+   from XSS vulnerabilities, you can still use the `safe` attribute for added assurance.
+   After all, what's the problem of being safe twice?
 
    ```tsx
-   const html = <div safe>{content}</div>;
+   const html = <div safe>{content}</div>
    ```
 
 2. **Prepend the Variable with `safe`:** Indicate to the plugin that you are confident the
    variable is safe to use by adding `safe` before it.
 
    ```tsx
-   const safeContent = '';
-   const html = <div>{safeContent}</div>;
+   const safeContent = ''
+   const html = <div>{safeContent}</div>
    ```
 
 3. **Cast to `'safe'`:** When using raw values or function calls without saving them into
    a variable, you can append `as 'safe'` to the expression to inform the plugin.
 
    ```tsx
-   const html = <div>{content as 'safe'}</div>;
+   const html = <div>{content as 'safe'}</div>
    ```
 
 <br />
@@ -171,16 +171,36 @@ current project's typescript version.
 // .vscode/settings.json
 
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true
 }
+```
+
+<br />
+
+## tsgo Compatibility
+
+[tsgo](https://github.com/microsoft/typescript-go) (the native TypeScript compiler
+preview) does not currently implement support for Language Service Plugins. This means
+that when using tsgo, your IDE will not show XSS warnings and errors from this plugin.
+
+However, the `xss-scan` CLI tool will continue to work normally, as it uses the standard
+TypeScript compiler APIs. You can still use `xss-scan` in your CI/CD pipeline to catch XSS
+vulnerabilities even when developing with tsgo.
+
+```sh
+# This works regardless of whether you use tsgo or tsc
+xss-scan
 ```
 
 <br />
 
 ## Error codes
 
-### K601
+### TS88601
+
+**Content may introduce an XSS vulnerability and must be marked with the `safe`
+attribute.**
 
 Usage of JSX expression without safe attribute. This could lead to XSS vulnerabilities.
 Please use the safe attribute on the JSX element or prepend your variable with `safe`.
@@ -188,22 +208,24 @@ Please use the safe attribute on the JSX element or prepend your variable with `
 ```tsx
 // ❌ Content variable may have a value of `<script>alert('xss')</script>`
 // which will lead to XSS vulnerabilities.
-const html = <div>{content}</div>;
+const html = <div>{content}</div>
 
 // ✅ Content variable may have a value of `<script>alert('xss')</script>`,
 // but it's safe to use because it will get escaped to =
 // `&lt;script&gt;alert('xss')&lt;/script&gt;`.
-const html = <div safe>{content}</div>;
+const html = <div safe>{content}</div>
 
 // ⚠️ Content variable may have a value of `<script>alert('xss')</script>`,
 // but variable starts with safe, so the error is suppressed.
-const safeContent = content;
-const html = <div>{safeContent}</div>;
+const safeContent = content
+const html = <div>{safeContent}</div>
 ```
 
 <br />
 
-### K602
+### TS88602
+
+**The `safe` attribute causes this content to be escaped more than once.**
 
 Usage of safe attribute on a JSX element whose children contains other JSX elements. It
 will lead to double escaping. If this is intended behavior, please extract the children
@@ -217,7 +239,7 @@ const html = (
   <a safe>
     <b>1</b>
   </a>
-);
+)
 
 // ✅ Safe attribute in the inner element will escape only the inner element.
 // In this case the <b> tag will be escaped, resulting into
@@ -226,37 +248,42 @@ const html = (
   <a>
     <b safe>1</b>
   </a>
-);
+)
 ```
 
 <br />
 
-### K603
+### TS88603
+
+**Content inside a Component must be escaped using escapeHtml().**
 
 You are using a xss-prone element as a children of a component. Please wrap it into a
 Html.escapeHtml() call or prepend it as a variable starting with `safe`.
 
-This error is similar to [K601](#k601), but instead of using `safe` native attribute, you
-need to use `Html.escapeHtml()` function because its a component and not a native JSX.
+This error is similar to [TS88601](#ts88601), but instead of using `safe` native
+attribute, you need to use `Html.escapeHtml()` function because its a component and not a
+native JSX.
 
 ```tsx
 // ❌ Content variable may have a value of `<script>alert('xss')</script>`
 // which will lead to XSS vulnerabilities.
-const html = <Component>{content}</Component>;
+const html = <Component>{content}</Component>
 
 // ✅ Content variable may have a value of `<script>alert('xss')</script>`,
 // but it's safe to use because you manually call the escape function.
-const html = <Component>{Html.escapeHtml(content)}</Component>;
+const html = <Component>{Html.escapeHtml(content)}</Component>
 
 // ⚠️ Content variable may have a value of `<script>alert('xss')</script>`,
 // but variable starts with safe, so the error is suppressed.
-const safeContent = content;
-const html = <Component>{safeContent}</Component>;
+const safeContent = content
+const html = <Component>{safeContent}</Component>
 ```
 
 <br />
 
-### K604
+### TS88604
+
+**The `safe` attribute is unused in this context.**
 
 You are using the safe attribute on expressions that does not contain any XSS
 vulnerabilities. Please remove the safe attribute or prepend your variable with `unsafe`.
@@ -264,16 +291,16 @@ vulnerabilities. Please remove the safe attribute or prepend your variable with 
 ```tsx
 // ⚠️ The variable will never have any harmful XSS content, so the safe attribute is
 // not needed and can be removed.
-const html = <div safe>{numberVariable}</div>;
+const html = <div safe>{numberVariable}</div>
 
 // ✅ This variable will never have any harmful XSS content, so we can use it
 // as is.
-const html = <div>{numberVariable}</div>;
+const html = <div>{numberVariable}</div>
 
 // ✅ You manually told this plugin that the variable is unsafe, so errors will
 // be thrown.
-const unsafeVariable = numberVariable;
-const html = <div safe>{unsafeVariable}</div>;
+const unsafeVariable = numberVariable
+const html = <div safe>{unsafeVariable}</div>
 ```
 
 <br />
@@ -291,14 +318,14 @@ information.
    execute the content anyways.
 
    ```tsx
-   const html = <script>{content}</script>;
+   const html = <script>{content}</script>
    ```
 
 2. Ternary and binary operations are evaluated in both sides separately and will throw
    errors if any of the sides is not safe, even their condition never gets hit at runtime.
 
    ```tsx
-   const html = <div>{true ? safeContent : content}</div>;
+   const html = <div>{true ? safeContent : content}</div>
    //                                      ~~~~~~~
    ```
 

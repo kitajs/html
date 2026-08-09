@@ -29,7 +29,7 @@
 <br />
 <br />
 
-<h1>🏛️ KitaJS Html</h1>
+<h1>🏛️ Kita Html</h1>
 
 <p align="center">
   <code>@kitajs/html</code> is a <a href="#performance">super fast</a> JSX runtime to generate HTML strings that works everywhere. 
@@ -68,8 +68,6 @@
 - [How it works](#how-it-works)
 - [Serialization table](#serialization-table)
 - [Format HTML output](#format-html-output)
-- [Deprecating global register](#deprecating-global-register)
-- [Deprecating importing type extensions](#deprecating-importing-type-extensions)
 - [Fork credits](#fork-credits)
 
 <br />
@@ -109,7 +107,7 @@ To use the `@kitajs/html` package, follow these steps:
    ```
 
 3. Append the
-   [`xss-scan`](https://github.com/kitajs/html/tree/master/packages/ts-html-plugin/tree/main#running-as-cli)
+   [`xss-scan`](https://github.com/kitajs/html/tree/master/packages/ts-html-plugin#running-as-cli)
    command into your test script. This CLI comes from @kitajs/ts-html-plugin, which
    catches XSS vulnerabilities that may be introduced into your codebase, automating the
    xss scanning process to run everytime you test your code, like inside your CI/CD
@@ -133,8 +131,8 @@ To use the `@kitajs/html` package, follow these steps:
    // .vscode/settings.json
 
    {
-     "typescript.tsdk": "node_modules/typescript/lib",
-     "typescript.enablePromptUseWorkspaceTsdk": true
+     "js/ts.tsdk.path": "node_modules/typescript/lib",
+     "js/ts.tsdk.promptToUseWorkspaceVersion": true
    }
    ```
 
@@ -144,13 +142,13 @@ To use the `@kitajs/html` package, follow these steps:
 
 > [!CAUTION]
 >
-> # Be sure your setup is working correclty!
+> # Be sure your setup is working correctly!
 >
 > Try writing `console.log(<div>{String.name}</div>);` in your editor. If it **THROWS** a
 > `XSS` error, then your setup is correct. Refer to the
 > [@kitajs/ts-html-plugin](https://github.com/kitajs/html/tree/master/packages/ts-html-plugin)
 > repository for more details on setting up editor intellisense. _(It should throw, as
-> `String.name` has a type of `string`, type which may or may not have special caracters)_
+> `String.name` has a type of `string`, which may or may not have special characters)_
 
 <br />
 <br />
@@ -165,9 +163,9 @@ should be able to use JSX to generate HTML inside your .tsx files.
 const html = (
   <div>
     <h1>Hello, world!</h1>
-    <p>Welcome to the KitaJS HTML package.</p>
+    <p>Welcome to the Kita Html package.</p>
   </div>
-);
+)
 ```
 
 Always use the `safe` attribute or manually call `Html.escapeHtml` to protect against XSS
@@ -214,27 +212,27 @@ Here's an example of how this is **DANGEROUS** for your application:
 user = {
   name: 'Bad guy',
   description: '</div><script>getStoredPasswordAndSentToBadGuysServer()</script>'
-};
+}
 
 // Executes malicious code:
-input = <div class="user-card">{user.description}</div>;
+input = <div class="user-card">{user.description}</div>
 output = (
   <div class="user-card">
     <script>getStoredPasswordAndSentToBadGuysServer()</script>
   </div>
-);
+)
 
 // Does not execute any malicious code:
 input = (
   <div class="user-card" safe>
     {user.description}
   </div>
-);
+)
 output = (
   <div class="user-card">
     &lt;/div&gt;&lt;script&gt;getStoredPasswordAndSentToBadGuysServer()&lt;/script&gt;
   </div>
-);
+)
 ```
 
 <br />
@@ -252,12 +250,12 @@ function UserCard({ name, description, date, about }) {
       <br />
       <p safe>{description}</p>
       <br />
-      // Controlled input, no need to sanitize
+      {/* Controlled input, no need to sanitize */}
       <time datetime={date.toISOString()}>{date.toDateString()}</time>
       <br />
       <p safe>{about}</p>
     </div>
-  );
+  )
 }
 ```
 
@@ -297,29 +295,29 @@ cast it into a string.
 
 ```tsx
 async function Async() {
-  await callApi();
-  return <div>Async!</div>;
+  await callApi()
+  return <div>Async!</div>
 }
 
 function Sync() {
-  return <div>Sync!</div>;
+  return <div>Sync!</div>
 }
 
 const async = (
   <div>
     <Async />
   </div>
-);
+)
 
-async instanceof Promise;
+async instanceof Promise
 
 const sync: string = (
   <div>
     <Sync />
   </div>
-);
+)
 
-typeof sync === 'string';
+typeof sync === 'string'
 ```
 
 A `JSX.Element` will always be a string. Once a children element is a async component, the
@@ -340,11 +338,11 @@ his children to be rendered. This is a perfect combo to use with
 [async components](#async-components).
 
 ```tsx
-import { Suspense, renderToStream } from '@kitajs/html/suspense';
+import { Suspense, renderToStream } from '@kitajs/html/suspense'
 
 async function MyAsyncComponent() {
-  const data = await database.query();
-  return <User name={data.username} />;
+  const data = await database.query()
+  return <User name={data.username} />
 }
 
 function renderUserPage(rid: number) {
@@ -356,19 +354,22 @@ function renderUserPage(rid: number) {
     >
       <MyAsyncComponent />
     </Suspense>
-  );
+  )
 }
 
 // Html is a string readable stream that can be piped to the client
-const html = renderToStream(renderUserPage);
+const html = renderToStream(renderUserPage)
 ```
 
 <br />
 
-> [!NOTE]  
-> The `renderToStream()` is returns a native node/bun stream, head over to our
-> [suspense-server](./examples/suspense-server.tsx) example to see how to use it with
-> node:http, Express or Fastify servers.
+> [!NOTE] The `renderToStream()` returns a native node/bun stream. Pipe it to your HTTP
+> response directly with `stream.pipe(res)`, or let the
+> [Express](https://html.kitajs.org/integrations/frameworks/express) and
+> [Fastify](https://html.kitajs.org/integrations/frameworks/fastify) integrations handle
+> the streaming response for you. See the
+> [Using Suspense](https://html.kitajs.org/guide/async/using-suspense) guide for the full
+> setup.
 
 <br />
 
@@ -396,12 +397,16 @@ function renderTemplate(rid: number) {
     >
       <MyAsyncComponent />
     </Suspense>
-  );
+  )
 }
 ```
 
 The above example would only return anything after `MyAsyncFallback` is resolved. To catch
 async fallback errors, you must wrap it into a [`ErrorBoundary`](#error-boundaries).
+
+> [!NOTE] HTTP chunked transfer encoding is handled automatically by Node.js (and other
+> runtimes) when streaming responses without a `Content-Length` header. You don't need to
+> configure anything for this to work.
 
 <br />
 
@@ -411,11 +416,11 @@ The same way as promises must be awaited to resolve its own html, errors must be
 Outside of suspense components, you can use the provided error boundaries to catch errors.
 
 ```tsx
-import { ErrorBoundary } from '@kitajs/html/error-boundary';
+import { ErrorBoundary } from '@kitajs/html/error-boundary'
 
 async function MyAsyncComponent() {
-  const data = await database.query(); // this promise may reject
-  return <User name={data.username} />;
+  const data = await database.query() // this promise may reject
+  return <User name={data.username} />
 }
 
 function renderTemplate() {
@@ -423,11 +428,11 @@ function renderTemplate() {
     <ErrorBoundary catch={(err) => <div>Error: {err.stack}</div>}>
       <MyAsyncComponent />
     </ErrorBoundary>
-  );
+  )
 }
 
 // If MyAsyncComponent throws an error, it will render <div>Error: ...</div>
-const html = await renderTemplate();
+const html = await renderTemplate()
 ```
 
 Error boundaries will only work for errors thrown inside async components, for sync
@@ -436,10 +441,10 @@ components you must use try/catch.
 ```tsx
 function MySyncComponent() {
   try {
-    const data = database.query(); // this may throw an error
-    return <User name={data.username} />;
+    const data = database.query() // this may throw an error
+    return <User name={data.username} />
   } catch (err) {
-    return <div>Error: {err.stack}</div>;
+    return <div>Error: {err.stack}</div>
   }
 }
 ```
@@ -460,10 +465,10 @@ function renderTemplate(rid: number) {
         <MyAsyncComponent />
       </Suspense>
     </ErrorBoundary>
-  );
+  )
 }
 
-const html = renderToStream(renderTemplate);
+const html = renderToStream(renderTemplate)
 ```
 
 The above example would render `<div>Children error</div>` if `MyAsyncComponent` throws an
@@ -491,14 +496,14 @@ handle both string and promise cases.
 
 ```tsx
 // It may or may not have inner async components.
-const html = <Layout />;
+const html = <Layout />
 
 if (html instanceof Promise) {
   // I'm a promise, I should be awaited
-  console.log(await html);
+  console.log(await html)
 } else {
   // I'm a string, I can be used as is
-  console.log(html);
+  console.log(html)
 }
 ```
 
@@ -541,10 +546,10 @@ app.get('/', (request, response) => (
       <YourSubMenu path={request.url} username={request.user?.name} />
     </YourLayout>
   </YourDoctype>
-));
+))
 ```
 
-</br>
+<br />
 
 ## Alternative way to configure your tsconfig
 
@@ -565,14 +570,14 @@ If you choose this approach keep in mind that you will need to manually import t
 namespace in every file you use JSX.
 
 ```tsx
-import { Html } from '@kitajs/html';
+import { Html } from '@kitajs/html'
 
-const Html = (
+const html = (
   <div>
     <h1>Hello, world!</h1>
-    <p>Welcome to the KitaJS HTML package.</p>
+    <p>Welcome to the Kita Html package.</p>
   </div>
-);
+)
 ```
 
 And also there is a light performance penalty when using this approach. It's minimal, but
@@ -624,17 +629,7 @@ const html = (
   <div hx-get="/api" hx-trigger="click" hx-target="#target">
     Click me!
   </div>
-);
-```
-
-Or you can use the type option in your tsconfig to import the types globally:
-
-```json
-{
-  "compilerOptions": {
-    "types": ["@kitajs/html/htmx.d.ts"]
-  }
-}
+)
 ```
 
 <br />
@@ -651,17 +646,7 @@ You just need to add this triple slash directive to the top of your file:
 const html = (
   // Type checking and intellisense for all HTMX attributes
   <div x-data="{ open: false }">...</div>
-);
-```
-
-Or you can use the type option in your tsconfig to import the types globally:
-
-```json
-{
-  "compilerOptions": {
-    "types": ["@kitajs/html/alpine.d.ts"]
-  }
-}
+)
 ```
 
 <br />
@@ -684,17 +669,7 @@ const html = (
 
     <form action="/messages">Show response from this form within this frame.</form>
   </turbo-frame>
-);
-```
-
-Or you can use the type option in your tsconfig to import the types globally:
-
-```json
-{
-  "compilerOptions": {
-    "types": ["@kitajs/html/hotwire-turbo.d.ts"]
-  }
-}
+)
 ```
 
 <br />
@@ -703,7 +678,7 @@ Or you can use the type option in your tsconfig to import the types globally:
 
 Often you will have a "template" html with doctype, things on the head, body and so on...
 Most users try to use them as a raw string and only use JSX for other components, but this
-is a not a good idea as
+is not a good idea as
 [you will have problems with it](https://github.com/nicojs/typed-html/issues/46).
 
 But you can always concatenate strings, like in this required use-case for `<doctype>`
@@ -723,7 +698,7 @@ export function Layout(props: Html.PropsWithChildren<{ head: string; title?: str
         <body>{props.children}</body>
       </html>
     </>
-  );
+  )
 }
 
 const html = (
@@ -737,7 +712,7 @@ const html = (
   >
     <div>Hello World</div>
   </Layout>
-);
+)
 ```
 
 <br />
@@ -753,7 +728,7 @@ const html = (
     <div>1</div>
     <div>2</div>
   </>
-);
+)
 ```
 
 [Learn more about JSX syntax here!](https://react.dev/learn/writing-markup-with-jsx)
@@ -826,15 +801,15 @@ declare global {
     interface IntrinsicElements {
       mathPower: HtmlTag & {
         // Changes properties to the math-power element
-        ['my-exponential']: number;
+        ['my-exponential']: number
         // this property becomes the <>{children}</> type
-        children: number;
-      };
+        children: number
+      }
     }
 
     // Adds hxBoost property to all elements native elements (those who extends HtmlTag)
     interface HtmlTag {
-      ['hx-boost']: boolean;
+      ['hx-boost']: boolean
       // TIP: We already provide HTMX types, check them out!
     }
   }
@@ -844,7 +819,7 @@ const element = (
   <mathPower my-exponential={2} hx-boost>
     {3}
   </mathPower>
-);
+)
 // Becomes <math-power my-exponential="2" hx-boost>3</math-power>
 ```
 
@@ -864,8 +839,8 @@ Just add this triple slash directive to the top of your file:
 ## Performance
 
 This package is just a string builder on steroids, as you can see
-[how this works](#how-it-works). This means that most way to isolate performance
-differences is to micro benchmark.
+[how this works](#how-it-works). This means that the best way to measure performance
+differences is through micro benchmarks.
 
 The below benchmark compares this package with other popular HTML builders, like React,
 Typed Html, Common Tags and GHtml.
@@ -947,18 +922,18 @@ you [tell tsc to transpile](#getting-started) JSX syntax to calls to our own JSX
 Gets transpiled by tsc to plain javascript:
 
 ```js
-const runtime = require('@kitajs/html/jsx-runtime');
+const runtime = require('@kitajs/html/jsx-runtime')
 
 runtime.jsx('ol', {
   start: 2,
   children: [1, 2].map((i) => jsx('li', { children: i }))
-});
+})
 ```
 
 Which, when called, returns this string:
 
 ```js
-'<ol start="2"><li>1</li><li>2</li></ol>';
+'<ol start="2"><li>1</li><li>2</li></ol>'
 ```
 
 <br />
@@ -994,19 +969,19 @@ an external JS library to do so, like
 [html-prettify](https://www.npmjs.com/package/html-prettify).
 
 ```tsx
-import prettify from 'html-prettify';
+import prettify from 'html-prettify'
 
 const html = (
   <div>
     <div>1</div>
     <div>2</div>
   </div>
-);
+)
 
-console.log(html);
+console.log(html)
 // <div><div>1</div><div>2</div></div>
 
-console.log(prettify(html));
+console.log(prettify(html))
 // <div>
 //   <div>1</div>
 //   <div>2</div>
@@ -1015,63 +990,6 @@ console.log(prettify(html));
 
 👉 There's an open PR to implement this feature natively, wanna work on it? Check
 [this PR](https://github.com/kitajs/html/pull/1).
-
-<br />
-
-## Deprecating global register
-
-The `@kitajs/html/register` in favour of the `react-jsx` target `@kitajs/html` supports,
-which automatically registers the JSX runtime globally.
-
-Please update your tsconfig to use the new `jsxImportSource` option and remove all
-references to `'@kitajs/html/register'` from your codebase.
-
-```diff
-{
-  "compilerOptions": {
-+   "jsx": "react-jsx",
-+   "jsxImportSource": "@kitajs/html",
--   "jsx": "react",
--   "jsxFactory": "Html.createElement",
--   "jsxFragmentFactory": "Html.Fragment",
-    "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
-  }
-}
-```
-
-You can also remove all references to `import { Html } from '@kitajs/html'` from your
-codebase.
-
-```diff
-- import { Html } from '@kitajs/html';
-```
-
-<br />
-
-## Deprecating importing type extensions
-
-Importing type extensions like `import '@kitajs/html/htmx'` and
-`import '@kitajs/html/alpine'` have been deprecated and will be removed in the next major
-version.
-
-Please change the way you import them to either use `/// <reference types="..." />`
-[triple slash directive](https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html)
-or the [`types`](https://www.typescriptlang.org/tsconfig/#types) option in your tsconfig.
-
-```diff
-- import '@kitajs/html/htmx';
-+ /// <reference types="@kitajs/html/htmx" />
-```
-
-**Or** add them in the `types` option present in your tsconfig:
-
-```diff
-{
-  "compilerOptions": {
-+   "types": ["@kitajs/html/htmx"]
-  }
-}
-```
 
 <br />
 
@@ -1085,6 +1003,6 @@ Initial credits to [nicojs](https://github.com/nicojs) and
 [contributors](https://github.com/nicojs/typed-html/graphs/contributors) for the amazing
 work.
 
-Licensed under the [Apache License, Version 2.0](LICENSE).
+Licensed under the [MIT](LICENSE).
 
 <br />

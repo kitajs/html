@@ -1,10 +1,9 @@
-import assert from 'node:assert';
-import { it } from 'node:test';
-import { Xss } from '../src/errors';
-import { TSLangServer } from './util/lang-server';
+import { expect, it } from 'vitest'
+import { Xss } from '../src/errors'
+import { TSLangServer } from './util/lang-server'
 
 it('Detect xss prone usage', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname)
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
@@ -28,9 +27,9 @@ it('Detect xss prone usage', async () => {
       </div>
       </>
     );
-`;
+`
 
-  assert.deepStrictEqual(diagnostics.body, [
+  expect(diagnostics.body).toEqual([
     {
       start: { line: 37, offset: 15 },
       end: { line: 37, offset: 19 },
@@ -80,5 +79,5 @@ it('Detect xss prone usage', async () => {
       code: Xss.code,
       category: 'error'
     }
-  ]);
-});
+  ])
+})

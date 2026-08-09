@@ -1,0 +1,30 @@
+[
+  {
+    "type": "section-header",
+    "label": "Getting Started"
+  },
+  "introduction",
+  "not-a-react-killer",
+  "getting-started",
+  "ai-support",
+  {
+    "type": "dir-section-header",
+    "name": "xss",
+    "label": "XSS Protection"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "async",
+    "label": "Async & Streaming"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "jsx",
+    "label": "JSX"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "reference",
+    "label": "Reference"
+  }
+]

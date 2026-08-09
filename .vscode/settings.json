@@ -1,5 +1,25 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "cSpell.words": ["KITA"]
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "js/ts.tsserver.maxMemory": 4096,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "biome.enabled": false,
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#bd695e",
+    "statusBar.foreground": "#15202b"
+  },
+  "cSpell.words": ["kita"],
+  "json.schemas": [
+    {
+      "fileMatch": ["**/_meta.json"],
+      "url": "https://unpkg.com/@rspress/core/meta-json-schema.json"
+    },
+    {
+      "fileMatch": ["**/_nav.json"],
+      "url": "https://unpkg.com/@rspress/core/nav-json-schema.json"
+    }
+  ]
 }

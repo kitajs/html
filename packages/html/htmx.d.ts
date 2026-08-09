@@ -8,9 +8,9 @@ declare namespace JSX {
 
 declare namespace Htmx {
   /** Either `true`, `false`, `"true"` or `"false"`. */
-  type BoolStr = boolean | 'true' | 'false';
+  type BoolStr = boolean | 'true' | 'false'
 
-  type AnyStr = string & {};
+  type AnyStr = string & {}
 
   type HxSwap =
     | 'innerHTML'
@@ -23,13 +23,13 @@ declare namespace Htmx {
     | 'none'
     | 'morph'
     | 'morphdom'
-    | AnyStr;
+    | AnyStr
 
   /**
    * Either `this` which refers to the element itself, or a modifier followed by a CSS
    * selector, e.g. `closest form`.
    */
-  type HxTarget = 'this' | 'closest ' | 'find ' | 'next ' | 'previous ' | AnyStr;
+  type HxTarget = 'this' | 'closest ' | 'find ' | 'next ' | 'previous ' | AnyStr
 
   /** A CSS selector, followed by one of these sync strategies, e.g. `form:abort`. */
   type HxSync =
@@ -40,10 +40,10 @@ declare namespace Htmx {
     | ':queue first'
     | ':queue last'
     | ':queue all'
-    | AnyStr;
+    | AnyStr
 
   /** Evaluate the values given, you can prefix the values with javascript: or js:. */
-  type HxHeaders = AnyStr | 'javascript:' | 'js:';
+  type HxHeaders = AnyStr | 'javascript:' | 'js:'
 
   /** An event followed by one of these modifiers, e.g. `click once`. */
   type HxTriggerModifier =
@@ -58,7 +58,7 @@ declare namespace Htmx {
     | ' queue:last'
     | ' queue:all'
     | ' queue:none'
-    | AnyStr;
+    | AnyStr
 
   /**
    * An extensible directory of htmx extensions.
@@ -92,7 +92,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/ajax-header/
      */
-    ajaxHeaders: 'ajax-headers';
+    ajaxHeaders: 'ajax-headers'
 
     /**
      * Server-Sent Events.
@@ -101,7 +101,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/server-sent-events/
      */
-    serverSentEvents: 'sse';
+    serverSentEvents: 'sse'
 
     /**
      * WebSockets support.
@@ -110,7 +110,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/web-sockets/
      */
-    ws: 'ws';
+    ws: 'ws'
 
     /**
      * Class utilities.
@@ -119,7 +119,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/class-tools/
      */
-    classTools: 'class-tools';
+    classTools: 'class-tools'
 
     /**
      * Tool for debugging htmx requests.
@@ -128,7 +128,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/debug/
      */
-    debug: 'debug';
+    debug: 'debug'
 
     /**
      * Disable elements during requests.
@@ -137,7 +137,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/disable-element/
      */
-    disableElement: 'disable-element';
+    disableElement: 'disable-element'
 
     /**
      * Includes a JSON serialized version of the triggering event, if any.
@@ -146,7 +146,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/event-header/
      */
-    eventHeader: 'event-header';
+    eventHeader: 'event-header'
 
     /**
      * Support for adding tags to `<head>`.
@@ -155,7 +155,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/head-support/
      */
-    headSupport: 'head-support';
+    headSupport: 'head-support'
 
     /**
      * Support for [Idiomorph](https://github.com/bigskysoftware/idiomorph), an
@@ -165,7 +165,7 @@ declare namespace Htmx {
      *
      * @see https://github.com/bigskysoftware/idiomorph#htmx
      */
-    idiomorph: 'morph';
+    idiomorph: 'morph'
 
     /**
      * Use JSON encoding in the body of requests, rather than the default
@@ -175,7 +175,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/json-enc/
      */
-    jsonEncode: 'json-enc';
+    jsonEncode: 'json-enc'
 
     /**
      * Support for inflight loading states.
@@ -184,7 +184,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/loading-states/
      */
-    loadingStates: 'loading-states';
+    loadingStates: 'loading-states'
 
     /**
      * Support for [morphdom](https://github.com/patrick-steele-idem/morphdom), an
@@ -194,7 +194,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/morphdom-swap/
      */
-    morphdom: 'morphdom';
+    morphdom: 'morphdom'
 
     /**
      * Support for the [preload](https://htmx.org/extensions/preload/) extension.
@@ -203,7 +203,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/preload/
      */
-    preload: 'preload';
+    preload: 'preload'
   }
 
   /** Definitions for htmx attributes up to 1.9.3. */
@@ -213,35 +213,35 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/attributes/hx-get/
      */
-    'hx-get'?: string;
+    'hx-get'?: string
 
     /**
      * Issues a `POST` to the specified URL.
      *
      * @see https://htmx.org/attributes/hx-post/
      */
-    'hx-post'?: string;
+    'hx-post'?: string
 
     /**
      * Issues a `PUT` to the specified URL.
      *
      * @see https://htmx.org/attributes/hx-put/
      */
-    'hx-put'?: string;
+    'hx-put'?: string
 
     /**
      * Issues a `DELETE` to the specified URL.
      *
      * @see https://htmx.org/attributes/hx-delete/
      */
-    'hx-delete'?: string;
+    'hx-delete'?: string
 
     /**
      * Issues a `PATCH` to the specified URL.
      *
      * @see https://htmx.org/attributes/hx-patch/
      */
-    'hx-patch'?: string;
+    'hx-patch'?: string
 
     /**
      * Add or remove [progressive enhancement] for links and forms.
@@ -250,7 +250,7 @@ declare namespace Htmx {
      *
      * [progressive enhancement]: https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement
      */
-    'hx-boost'?: BoolStr;
+    'hx-boost'?: BoolStr
 
     /**
      * Handle any event with a script inline.
@@ -260,12 +260,12 @@ declare namespace Htmx {
      * attribute, and are otherwise not supported in vanilla JSX.
      *
      * ```jsx
-     * <div {...{ 'hx-on::before-request': '...' }} />;
+     * ;<div {...{ 'hx-on::before-request': '...' }} />
      * ```
      * @since 1.9.3
      * @see https://htmx.org/attributes/hx-on/
      */
-    'hx-on:'?: string;
+    'hx-on:'?: string
 
     /**
      * Handle any event with a script inline. Each listener is specified on a separate
@@ -276,21 +276,21 @@ declare namespace Htmx {
      * @since 1.9.0
      * @see https://htmx.org/attributes/hx-on/
      */
-    'hx-on'?: string;
+    'hx-on'?: string
 
     /**
      * Pushes the URL into the browser location bar, creating a new history entry.
      *
      * @see https://htmx.org/attributes/hx-push-url/
      */
-    'hx-push-url'?: BoolStr | AnyStr;
+    'hx-push-url'?: BoolStr | AnyStr
 
     /**
      * Select content to swap in from a response.
      *
      * @see https://htmx.org/attributes/hx-select/
      */
-    'hx-select'?: string;
+    'hx-select'?: string
 
     /**
      * Select content to swap in from a response, out of band (somewhere other than the
@@ -298,7 +298,7 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/attributes/hx-select-oob/
      */
-    'hx-select-oob'?: string;
+    'hx-select-oob'?: string
 
     /**
      * Controls how content is swapped in (`outerHTML`, `beforeend`, `afterend`, …).
@@ -310,7 +310,7 @@ declare namespace Htmx {
      * @see https://htmx.org/attributes/hx-swap/
      * @see {@linkcode InsertPosition} which is used in [{@linkcode Element.insertAdjacentHTML}](https://developer.mozilla.org/docs/Web/API/Element/insertAdjacentHTML)
      */
-    'hx-swap'?: HxSwap | AnyStr;
+    'hx-swap'?: HxSwap | AnyStr
 
     /**
      * Marks content in a response to be out of band (should swap in somewhere other than
@@ -318,56 +318,56 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/attributes/hx-swap-oob/
      */
-    'hx-swap-oob'?: 'true' | HxSwap | AnyStr;
+    'hx-swap-oob'?: 'true' | HxSwap | AnyStr
 
     /**
      * Specifies the target element to be swapped.
      *
      * @see https://htmx.org/attributes/hx-target/
      */
-    'hx-target'?: HxTarget | AnyStr;
+    'hx-target'?: HxTarget | AnyStr
 
     /**
      * Specifies the event that triggers the request.
      *
      * @see https://htmx.org/attributes/hx-trigger/
      */
-    'hx-trigger'?: 'every ' | HxTriggerModifier | AnyStr;
+    'hx-trigger'?: 'every ' | HxTriggerModifier | AnyStr
 
     /**
      * Adds values to the parameters to submit with the request (JSON-formatted).
      *
      * @see https://htmx.org/attributes/hx-vals/
      */
-    'hx-vals'?: HxHeaders;
+    'hx-vals'?: HxHeaders
 
     /**
      * Shows a `confirm()` dialog before issuing a request.
      *
      * @see https://htmx.org/attributes/hx-confirm/
      */
-    'hx-confirm'?: string;
+    'hx-confirm'?: string
 
     /**
      * Disables htmx processing for the given node and any children nodes.
      *
      * @see https://htmx.org/attributes/hx-disable/
      */
-    'hx-disable'?: boolean;
+    'hx-disable'?: boolean
 
     /**
      * Control and disable automatic attribute inheritance for child nodes.
      *
      * @see https://htmx.org/attributes/hx-disinherit/
      */
-    'hx-disinherit'?: '*' | AnyStr;
+    'hx-disinherit'?: '*' | AnyStr
 
     /**
      * Changes the request encoding type.
      *
      * @see https://htmx.org/attributes/hx-encoding/
      */
-    'hx-encoding'?: 'multipart/form-data';
+    'hx-encoding'?: 'multipart/form-data'
 
     /**
      * Extensions to use for this element.
@@ -375,49 +375,49 @@ declare namespace Htmx {
      * @see https://htmx.org/attributes/hx-ext/
      * @see {@linkcode Extensions} for how to declare extensions in JSX.
      */
-    'hx-ext'?: Htmx.Extensions[keyof Htmx.Extensions] | 'ignore:' | AnyStr;
+    'hx-ext'?: Htmx.Extensions[keyof Htmx.Extensions] | 'ignore:' | AnyStr
 
     /**
      * Adds to the headers that will be submitted with the request.
      *
      * @see https://htmx.org/attributes/hx-headers/
      */
-    'hx-headers'?: HxHeaders | AnyStr;
+    'hx-headers'?: HxHeaders | AnyStr
 
     /**
      * Prevent sensitive data being saved to the history cache.
      *
      * @see https://htmx.org/attributes/hx-history/
      */
-    'hx-history'?: 'false';
+    'hx-history'?: 'false'
 
     /**
      * The element to snapshot and restore during history navigation.
      *
      * @see https://htmx.org/attributes/hx-history-elt/
      */
-    'hx-history-elt'?: boolean;
+    'hx-history-elt'?: boolean
 
     /**
      * Include additional data in requests.
      *
      * @see https://htmx.org/attributes/hx-include/
      */
-    'hx-include'?: string;
+    'hx-include'?: string
 
     /**
      * The element to put the `htmx-request` class on during the request.
      *
      * @see https://htmx.org/attributes/hx-indicator/
      */
-    'hx-indicator'?: string;
+    'hx-indicator'?: string
 
     /**
      * Filters the parameters that will be submitted with a request.
      *
      * @see https://htmx.org/attributes/hx-params/
      */
-    'hx-params'?: '*' | 'none' | 'not ' | AnyStr;
+    'hx-params'?: '*' | 'none' | 'not ' | AnyStr
 
     /**
      * Specifies elements to keep unchanged between requests.
@@ -427,70 +427,70 @@ declare namespace Htmx {
      * element from being removed from the `<head>`.
      * @see https://htmx.org/attributes/hx-preserve/
      */
-    'hx-preserve'?: boolean | 'true';
+    'hx-preserve'?: boolean | 'true'
 
     /**
      * Shows a `prompt()` before submitting a request.
      *
      * @see https://htmx.org/attributes/hx-prompt/
      */
-    'hx-prompt'?: string;
+    'hx-prompt'?: string
 
     /**
      * Replace the URL in the browser location bar.
      *
      * @see https://htmx.org/attributes/hx-replace-url/
      */
-    'hx-replace-url'?: BoolStr | AnyStr;
+    'hx-replace-url'?: BoolStr | AnyStr
 
     /**
      * Configures various aspects of the request.
      *
      * @see https://htmx.org/attributes/hx-request/
      */
-    'hx-request'?: `"timeout": ` | `"credentials": ` | `"noHeaders": ` | HxHeaders;
+    'hx-request'?: `"timeout": ` | `"credentials": ` | `"noHeaders": ` | HxHeaders
 
     /**
      * Control how requests made by different elements are synchronized.
      *
      * @see https://htmx.org/attributes/hx-sync/
      */
-    'hx-sync'?: HxSync;
+    'hx-sync'?: HxSync
 
     /**
      * Force elements to validate themselves before a request.
      *
      * @see https://htmx.org/attributes/hx-validate/
      */
-    'hx-validate'?: boolean;
+    'hx-validate'?: boolean
 
     /**
      * Adds values dynamically to the parameters to submit with the request.
      *
      * @deprecated Superseded by `hx-vals`
      */
-    'hx-vars'?: AnyStr;
+    'hx-vars'?: AnyStr
 
     /**
      * The URL of the SSE server.
      *
      * @see https://htmx.org/extensions/server-sent-events/
      */
-    'sse-connect'?: string;
+    'sse-connect'?: string
 
     /**
      * The name of the message to swap into the DOM.
      *
      * @see https://htmx.org/extensions/server-sent-events/
      */
-    'sse-swap'?: string;
+    'sse-swap'?: string
 
     /**
      * A URL to establish a WebSocket connection against.
      *
      * @see https://htmx.org/extensions/web-sockets/
      */
-    'ws-connect'?: string;
+    'ws-connect'?: string
 
     /**
      * Sends a message to the nearest websocket based on the trigger value for the
@@ -498,14 +498,14 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/web-sockets/
      */
-    'ws-send'?: boolean;
+    'ws-send'?: boolean
 
     /**
      * Apply class transitions on this element.
      *
      * @see https://htmx.org/extensions/class-tools/
      */
-    classes?: `add ` | `remove ` | `toggle ` | AnyStr;
+    classes?: `add ` | `remove ` | `toggle ` | AnyStr
 
     /**
      * The element or elements to disable during requests. Accepts CSS selectors. This
@@ -514,41 +514,41 @@ declare namespace Htmx {
      *
      * @see https://htmx.org/extensions/disable-element/
      */
-    'hx-disable-element'?: 'self' | AnyStr;
+    'hx-disable-element'?: 'self' | AnyStr
 
     /**
      * The element or elements to disable during requests. Accepts CSS selectors.
      *
      * @see https://htmx.org/attributes/hx-disabled-elt/
      */
-    'hx-disabled-elt'?: 'this' | AnyStr;
+    'hx-disabled-elt'?: 'this' | AnyStr
 
     /**
      * The strategy for merging new head content.
      *
      * @see https://htmx.org/extensions/head-support/
      */
-    'hx-head'?: 'merge' | 'append' | 're-eval';
+    'hx-head'?: 'merge' | 'append' | 're-eval'
 
     /**
      * Configures strategy of preloading the given resource.
      *
      * @see https://htmx.org/extensions/preload/
      */
-    preload?: boolean | 'mousedown' | 'mouseover' | 'preload:init' | AnyStr;
+    preload?: boolean | 'mousedown' | 'mouseover' | 'preload:init' | AnyStr
 
     /**
      * Enables preloading linked image resources.
      *
      * @see https://htmx.org/extensions/preload/
      */
-    'preload-images'?: boolean;
+    'preload-images'?: boolean
 
     /**
      * Hyperscript expression
      *
      * @see https://hyperscript.org/
      */
-    _?: string;
+    _?: string
   }
 }

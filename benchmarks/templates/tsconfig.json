@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "strict": false,
     "outDir": "dist",
-    "module": "Node16",
+    "sourceMap": true,
+    "importHelpers": true,
+    "module": "nodenext",
     "target": "ESNext",
-    "jsx": "react-jsx",
-    "jsxImportSource": "@kitajs/html",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true
+    "moduleResolution": "nodenext",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true
   },
-  "include": ["index.tsx"],
+  "include": ["*.ts"],
   "exclude": ["dist"]
 }

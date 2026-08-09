@@ -1,0 +1,18 @@
+[
+  "overview",
+  {
+    "type": "dir-section-header",
+    "name": "frameworks",
+    "label": "Frameworks"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "type-extensions",
+    "label": "Type Extensions"
+  },
+  {
+    "type": "section-header",
+    "label": "Templates"
+  },
+  "base-templates"
+]

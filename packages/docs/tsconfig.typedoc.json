@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "..",
+    "paths": {
+      "@kitajs/html": ["../html/src/index.ts"],
+      "@kitajs/html/*": ["../html/src/*"]
+    }
+  },
+  "include": [
+    "../html/src/**/*",
+    "../fastify-html-plugin/src/**/*",
+    "../express-html-plugin/src/**/*"
+  ]
+}

@@ -4,14 +4,15 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsgo"
   },
   "dependencies": {
+    "@typescript/native-preview": "catalog:",
     "jsxte": "^3.3.1",
-    "tslib": "^2.8.1",
-    "typescript": "^5.9.2"
+    "tslib": "catalog:",
+    "typescript": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "^22.13.13"
+    "@types/node": "catalog:"
   }
 }

@@ -1,0 +1,62 @@
+---
+description:
+  Follow how TypeScript compiles JSX expressions and how Kita Html renders the resulting
+  function calls into HTML strings.
+---
+
+# Compilation and Rendering
+
+Kita Html turns JSX source into an HTML string in two stages: TypeScript compilation and
+runtime rendering. Compilation removes the JSX syntax. Rendering serializes the resulting
+function calls into the final HTML string.
+
+## Compilation
+
+When `tsconfig.json` specifies `jsx: "react-jsx"` and `jsxImportSource: "@kitajs/html"`,
+TypeScript rewrites every JSX expression into a function call. Elements with a single
+child call `jsx()`. Elements with multiple children call `jsxs()`. Attributes and children
+are passed as a single props object.
+
+```tsx title="Source TSX" twoslash kita
+const html = (
+  <ol start={2}>
+    {[1, 2].map((i) => (
+      <li>{i}</li>
+    ))}
+  </ol>
+)
+```
+
+TypeScript compiles the expression to function calls:
+
+```tsx title="Compiled output" twoslash kita
+// @showEmit
+const html = (
+  <ol start={2}>
+    {[1, 2].map((i) => (
+      <li>{i}</li>
+    ))}
+  </ol>
+)
+```
+
+After compilation, no JSX syntax remains. The runtime never parses JSX.
+
+## Rendering
+
+The `jsx()` and `jsxs()` functions receive the tag name and the props object produced by
+compilation. They render HTML by serializing attributes, serializing children, and
+concatenating the opening tag, content, and closing tag.
+
+If any child is a `Promise`, the concatenation returns a `Promise<string>` instead of a
+`string`. This propagation is automatic: a single async component anywhere in the tree
+makes every ancestor async up to the root.
+
+Void elements like `<br />`, `<img />`, and `<meta />` skip the closing tag entirely. The
+runtime checks the tag name against a list ordered by frequency so the most common void
+elements resolve in a single comparison.
+
+Attributes are always escaped. The `class` attribute accepts arrays for conditional
+composition. The `style` attribute accepts both strings and objects, with automatic
+camelCase-to-kebab-case conversion for object keys. Boolean attributes like `disabled`
+render as valueless attributes when `true` and are omitted when `false`.

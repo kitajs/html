@@ -1,5 +1,55 @@
 # @kitajs/html
 
+## 5.0.0-next.1
+
+### Major Changes
+
+- [`26a6c2f`](https://github.com/kitajs/html/commit/26a6c2f52052f54d5ece9d2f8dd5c7e363a6a1ba)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Migrate to typescript@6
+
+- [`e5da2a0`](https://github.com/kitajs/html/commit/e5da2a04455e3ff1ef70da3246c0a27c508ef8a2)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Remove the global
+  `SUSPENSE_ROOT` in favor of the exported `SuspenseRoot` state object from
+  `@kitajs/html/suspense`.
+
+  If you were reading or mutating `globalThis.SUSPENSE_ROOT` directly, update that code to
+  import and use `SuspenseRoot` instead.
+
+### Patch Changes
+
+- [`2652e1b`](https://github.com/kitajs/html/commit/2652e1b2b956bc72749863e8b0a7a924a4e1c66d)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Scope streamed Suspense
+  marker ids by request id to avoid collisions across multiple streamed roots in the same
+  document.
+
+  If you consume `SuspenseScript` output directly, note that fallback, template, and
+  script ids now include the request id prefix, and the client helper requires modern
+  browser support for `<template>.content` and `Element.remove()`.
+
+## 5.0.0-next.0
+
+### Major Changes
+
+- [`cc33bc3`](https://github.com/kitajs/html/commit/cc33bc3798b1f4b6912ace3381406e155dc0b059)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Major overhaul: Rework
+  the entire codebase to improve performance, reliability, and maintainability. This
+  includes porting all code to TypeScript, improving the test suite, and removing
+  deprecated APIs.
+
+- [`2b37245`](https://github.com/kitajs/html/commit/2b3724528f178050975c73628e7226c2fd2341f8)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Removed deprecated
+  @kitajs/html/register
+
+### Patch Changes
+
+- [`4d6fa0e`](https://github.com/kitajs/html/commit/4d6fa0e9d257fdfc7e49c45a419cb6cdb068cc69)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Add safe attribute to
+  Fragment component
+
+- [`2a32081`](https://github.com/kitajs/html/commit/2a32081f0b283d102c8346a1fbce47642c24ab1a)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Broather and more
+  reliable test suite
+
 ## 4.2.13
 
 ### Patch Changes

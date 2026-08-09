@@ -1,0 +1,23 @@
+[
+  {
+    "type": "dir",
+    "collapsible": true,
+    "collapsed": true,
+    "label": "Functions",
+    "name": "functions"
+  },
+  {
+    "type": "dir",
+    "collapsible": true,
+    "collapsed": true,
+    "label": "Interfaces",
+    "name": "interfaces"
+  },
+  {
+    "type": "dir",
+    "collapsible": true,
+    "collapsed": true,
+    "label": "Variables",
+    "name": "variables"
+  }
+]

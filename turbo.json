@@ -1,0 +1,32 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  // Set in CI so we can distinguish cache for each OS
+  "globalEnv": ["TURBO_OS_ENV", "TURBO_NODE_ENV"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputLogs": "errors-only",
+      "outputs": ["dist"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputLogs": "errors-only"
+    },
+    "test-types": {
+      "dependsOn": ["^build"],
+      "outputLogs": "errors-only"
+    },
+    "benchmark": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputLogs": "full"
+    },
+    "start": {
+      "cache": false,
+      "dependsOn": ["^build"],
+      "outputLogs": "errors-only",
+      "persistent": true
+    }
+  },
+  "ui": "tui"
+}
