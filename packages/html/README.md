@@ -363,9 +363,13 @@ const html = renderToStream(renderUserPage)
 
 <br />
 
-> [!NOTE] The `renderToStream()` returns a native node/bun stream, head over to our
-> [suspense-server](./examples/suspense-server.tsx) example to see how to use it with
-> node:http, Express or Fastify servers.
+> [!NOTE] The `renderToStream()` returns a native node/bun stream. Pipe it to your HTTP
+> response directly with `stream.pipe(res)`, or let the
+> [Express](https://html.kitajs.org/integrations/frameworks/express) and
+> [Fastify](https://html.kitajs.org/integrations/frameworks/fastify) integrations handle
+> the streaming response for you. See the
+> [Using Suspense](https://html.kitajs.org/guide/async/using-suspense) guide for the full
+> setup.
 
 <br />
 
