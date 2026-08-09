@@ -363,9 +363,10 @@ const html = renderToStream(renderUserPage)
 
 <br />
 
-> [!NOTE] The `renderToStream()` returns a native node/bun stream, head over to our
-> [suspense-server](./examples/suspense-server.tsx) example to see how to use it with
-> node:http, Express or Fastify servers.
+> [!NOTE] The `renderToStream()` returns a native node/bun stream. See our
+> [node:http example](../../examples/http-server/src/server.ts), the
+> [Express integration](../express-html-plugin/README.md), or the
+> [Fastify integration](../fastify-html-plugin/README.md) for server usage.
 
 <br />
 
