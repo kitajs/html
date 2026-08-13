@@ -117,6 +117,16 @@ export default defineConfig({
       outDir: 'api/express',
       setup: configureTypeDoc('/api/express/')
     }),
+    namedTypeDoc('typedoc-h3', {
+      entryPoints: [path.join(__dirname, '../h3-html-plugin/src/index.ts')],
+      outDir: 'api/h3',
+      setup: configureTypeDoc('/api/h3/')
+    }),
+    namedTypeDoc('typedoc-nitro', {
+      entryPoints: [path.join(__dirname, '../nitro-html-plugin/src/index.ts')],
+      outDir: 'api/nitro',
+      setup: configureTypeDoc('/api/nitro/')
+    }),
     pluginClientRedirects({
       redirects: [
         {
@@ -146,6 +156,14 @@ export default defineConfig({
         {
           from: /^\/packages\/fastify-html-plugin$/i.source,
           to: '/integrations/frameworks/fastify'
+        },
+        {
+          from: /^\/packages\/h3-html-plugin$/i.source,
+          to: '/integrations/frameworks/h3'
+        },
+        {
+          from: /^\/packages\/nitro-html-plugin$/i.source,
+          to: '/integrations/frameworks/nitro'
         }
       ]
     })
