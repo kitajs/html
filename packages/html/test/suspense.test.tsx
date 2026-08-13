@@ -209,6 +209,20 @@ describe('renderToStream', () => {
 })
 
 describe('AutoSuspense', () => {
+  test('accepts request id zero', async () => {
+    expect(
+      await text(
+        renderToStream(
+          () =>
+            runWithAutoSuspense(0, () => (
+              <AutoSuspense fallback="loading">{Promise.resolve('loaded')}</AutoSuspense>
+            )),
+          0
+        )
+      )
+    ).toContain('id="B:0:1"')
+  })
+
   test('requires a request id when entering a scope', () => {
     expect(() => runWithAutoSuspense(undefined as never, () => null)).toThrow(
       /Automatic Suspense requires a request ID/

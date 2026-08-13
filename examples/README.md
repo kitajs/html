@@ -21,6 +21,12 @@ pnpm dev
 
 Check each example's directory for specific details and implementation patterns.
 
+Featured examples:
+
+- `h3-signal-room` streams independent environmental readings through H3.
+- `nitro-night-atlas` demonstrates convention pages, dynamic routes, route groups, and a
+  catch-all Nitro renderer.
+
 ## Documentation
 
 Learn more about the packages used in these examples:
@@ -31,6 +37,10 @@ Learn more about the packages used in these examples:
   prevention
 - **[@kitajs/fastify-html-plugin](../packages/fastify-html-plugin/README.md)** - Fastify
   integration
+- **[@kitajs/h3-html-plugin](../packages/h3-html-plugin/README.md)** - H3 responses and
+  factory-safe Suspense
+- **[@kitajs/nitro-html-plugin](../packages/nitro-html-plugin/README.md)** - Nitro v3 page
+  conventions and renderer integration
 
 ## Getting Help
 
