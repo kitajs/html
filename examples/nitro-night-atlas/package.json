@@ -1,0 +1,22 @@
+{
+  "name": "@kitajs/example-nitro-night-atlas",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nitro build",
+    "start": "nitro dev",
+    "test": "xss-scan",
+    "test-types": "tsgo --noEmit"
+  },
+  "dependencies": {
+    "@kitajs/html": "workspace:*",
+    "@kitajs/nitro-html-plugin": "workspace:*",
+    "@kitajs/ts-html-plugin": "workspace:*",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "nitro": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:"
+  }
+}

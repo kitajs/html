@@ -1,0 +1,22 @@
+{
+  "name": "@kitajs/example-h3-signal-room",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx --watch src/server.tsx",
+    "test": "xss-scan",
+    "test-types": "tsgo --noEmit"
+  },
+  "dependencies": {
+    "@kitajs/h3-html-plugin": "workspace:*",
+    "@kitajs/html": "workspace:*",
+    "@kitajs/ts-html-plugin": "workspace:*",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "h3": "catalog:",
+    "tslib": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  }
+}

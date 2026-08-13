@@ -1,0 +1,8 @@
+[
+  "variables/h3KitaHtml",
+  "functions/defineKitaHandler",
+  "interfaces/H3KitaHtmlOptions",
+  "interfaces/H3KitaHtmlContext",
+  "types/KitaRender",
+  "variables/kAutoDoctype"
+]

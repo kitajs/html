@@ -1,0 +1,99 @@
+---
+description:
+  Render Kita JSX in H3 v2 with event.html(), factory-safe handlers, request IDs,
+  automatic doctypes, and Suspense streams.
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme'
+
+# H3
+
+`@kitajs/h3-html-plugin` adds Kita HTML responses to H3 v2. Use `event.html()` for normal
+handlers or `defineKitaHandler()` when an asynchronous root may create its first Suspense
+boundary after an `await`.
+
+## Setup
+
+:::danger XSS Protection Required
+
+Configure `@kitajs/ts-html-plugin` before rendering user-controlled values. See
+[Getting Started](/guide/getting-started) for the required TypeScript and XSS scanner
+setup.
+
+:::
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm i @kitajs/h3-html-plugin h3',
+    yarn: 'yarn add @kitajs/h3-html-plugin h3',
+    pnpm: 'pnpm add @kitajs/h3-html-plugin h3',
+    bun: 'bun add @kitajs/h3-html-plugin h3'
+  }}
+/>
+
+Register the plugin before defining routes:
+
+```tsx title="server.tsx"
+import { H3 } from 'h3'
+import { h3KitaHtml } from '@kitajs/h3-html-plugin'
+
+const app = new H3().register(h3KitaHtml())
+
+app.get('/', (event) =>
+  event.html(
+    <html>
+      <body>Hello</body>
+    </html>
+  )
+)
+```
+
+`event.html()` sets `text/html; charset=utf-8`, adds a byte-accurate content length for
+buffered responses, and switches to streaming when the JSX tree registered Suspense state.
+HTML document roots receive `<!doctype html>` by default.
+
+## Automatic Suspense
+
+Enable `autoSuspense` when route handlers use `AutoSuspense`:
+
+```tsx title="server.tsx"
+import { AutoSuspense } from '@kitajs/html/suspense'
+
+const app = new H3().register(h3KitaHtml({ autoSuspense: true }))
+
+app.get('/dashboard', (event) =>
+  event.html(
+    <AutoSuspense fallback={<p>Loading...</p>}>
+      <AsyncDashboard />
+    </AutoSuspense>
+  )
+)
+```
+
+JSX arguments are evaluated before `event.html()` runs. Use `defineKitaHandler()` when an
+asynchronous page can create its first boundary after yielding:
+
+```tsx title="dashboard.tsx"
+import { AutoSuspense } from '@kitajs/html/suspense'
+import { defineKitaHandler } from '@kitajs/h3-html-plugin'
+
+export default defineKitaHandler(async (event) => {
+  const user = await loadUser(event)
+
+  return (
+    <AutoSuspense fallback={<p>Loading...</p>}>
+      <Dashboard user={user} />
+    </AutoSuspense>
+  )
+})
+```
+
+`defineKitaHandler()` always streams its response so it can reserve request state before
+the render callback resumes. It generates an isolated request ID and exposes it as
+`event.context.kitaHtml.requestId`.
+
+## Runtime Support
+
+Suspense currently requires Node streams and `AsyncLocalStorage`. Use a Node-compatible H3
+runtime. Handle asynchronous failures with `Suspense`'s `catch` prop because a response
+cannot be replaced after streamed bytes are committed.
