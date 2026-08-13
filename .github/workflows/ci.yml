@@ -105,7 +105,7 @@ jobs:
         run: pnpm turbo build -F @kitajs/docs-html
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: packages/docs/dist
 
