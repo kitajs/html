@@ -1,5 +1,23 @@
 # @kitajs/html
 
+## 5.0.0-next.2
+
+### Minor Changes
+
+- [#515](https://github.com/kitajs/html/pull/515)
+  [`a7b48fd`](https://github.com/kitajs/html/commit/a7b48fdc1738ec6492d9a9d5691b710da772b505)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Add opt-in automatic
+  request-ID propagation for Suspense boundaries
+
+### Patch Changes
+
+- [`50becad`](https://github.com/kitajs/html/commit/50becad88dd03990c7bb9c0b05d755ae8ddf4ecd)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Stream Suspense
+  boundaries created after an async render factory yields
+
+- [`4c4223e`](https://github.com/kitajs/html/commit/4c4223eff3afcf72e9a3d8b8326abf38e9debcfa)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Allow literal 0 as `rid`
+
 ## 5.0.0-next.1
 
 ### Major Changes

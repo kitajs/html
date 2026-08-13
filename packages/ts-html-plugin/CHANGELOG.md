@@ -1,5 +1,25 @@
 # @kitajs/ts-html-plugin
 
+## 5.0.0-next.3
+
+### Major Changes
+
+- [`299af57`](https://github.com/kitajs/html/commit/299af57d3bba4f8de30cdefa40afefe5c3937c73)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Require Node.js 20.12 or
+  newer
+
+### Patch Changes
+
+- [`299af57`](https://github.com/kitajs/html/commit/299af57d3bba4f8de30cdefa40afefe5c3937c73)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Replace Chalk and Yargs
+  with Node.js native CLI utilities
+
+- Updated dependencies
+  [[`a7b48fd`](https://github.com/kitajs/html/commit/a7b48fdc1738ec6492d9a9d5691b710da772b505),
+  [`50becad`](https://github.com/kitajs/html/commit/50becad88dd03990c7bb9c0b05d755ae8ddf4ecd),
+  [`4c4223e`](https://github.com/kitajs/html/commit/4c4223eff3afcf72e9a3d8b8326abf38e9debcfa)]:
+  - @kitajs/html@5.0.0-next.2
+
 ## 5.0.0-next.2
 
 ### Patch Changes

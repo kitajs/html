@@ -22,8 +22,10 @@
   },
   "changesets": [
     "add-express-html-plugin",
+    "automatic-suspense-request-ids",
     "calm-bears-remain",
     "eighty-taxes-jam",
+    "fix-delayed-suspense-boundary",
     "fix-double-escape-self-closing",
     "fix-tsconfig-absolute-path",
     "hip-trams-roll",
@@ -31,10 +33,13 @@
     "metal-hairs-juggle",
     "remove-identity-value",
     "remove-suspense-root-global",
+    "require-node-20-ts-plugin",
     "sharp-wombats-stay",
     "slimy-wolves-buy",
     "stale-shrimps-spend",
     "tender-regions-cough",
-    "update-suspense-script-protocol"
+    "update-suspense-script-protocol",
+    "use-native-cli-utils",
+    "wet-weeks-grow"
   ]
 }
