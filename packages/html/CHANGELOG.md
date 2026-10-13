@@ -1,5 +1,32 @@
 # @kitajs/html
 
+## 5.0.0-next.2
+
+### Minor Changes
+
+- [#515](https://github.com/kitajs/html/pull/515)
+  [`a7b48fd`](https://github.com/kitajs/html/commit/a7b48fdc1738ec6492d9a9d5691b710da772b505)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Add opt-in automatic
+  request-ID propagation for Suspense boundaries
+
+### Patch Changes
+
+- [`50becad`](https://github.com/kitajs/html/commit/50becad88dd03990c7bb9c0b05d755ae8ddf4ecd)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Preserve Suspense
+  replacements across async roots and release state after client aborts
+
+- [`a962eda`](https://github.com/kitajs/html/commit/a962eda7090fbad3febd05cc8f3df576bf0c8773)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Keep Suspense boundary
+  marker IDs unique after out-of-order settlement
+
+- [#525](https://github.com/kitajs/html/pull/525)
+  [`97b89a9`](https://github.com/kitajs/html/commit/97b89a9fd3cb2a8ee5b87858b60472ba229548cc)
+  Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Fix the
+  Suspense README server links so they point to live examples and integration docs.
+
+- [`4c4223e`](https://github.com/kitajs/html/commit/4c4223eff3afcf72e9a3d8b8326abf38e9debcfa)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Allow literal 0 as `rid`
+
 ## 5.0.0-next.1
 
 ### Major Changes

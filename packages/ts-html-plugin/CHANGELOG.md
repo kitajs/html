@@ -1,5 +1,53 @@
 # @kitajs/ts-html-plugin
 
+## 5.0.0-next.3
+
+### Major Changes
+
+- [`299af57`](https://github.com/kitajs/html/commit/299af57d3bba4f8de30cdefa40afefe5c3937c73)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Require Node.js 20.12 or
+  newer
+
+### Patch Changes
+
+- [`fc47819`](https://github.com/kitajs/html/commit/fc478196cf014ea0b666ecab0d2f122e48970066)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Fix XSS detection misses
+  for string-like types, `children` names, reassigned JSX variables and lookalike
+  suppression names
+
+  The scanner previously stayed silent on several patterns that render raw HTML at
+  runtime:
+  - Identifiers named `children` and `.children` property accesses were always treated as
+    `PropsWithChildren`, even when typed as `string` or `any`. They are now only trusted
+    when the type is not user content (raw strings, unions/tuples/arrays of raw strings,
+    or thenables resolving to raw strings like `children?: string` or
+    `children: Promise<string>`).
+  - Generic type parameters (`T extends string`), template literal types
+    (`` `<b>${string}</b>` ``), intrinsic string mappings (`Uppercase<string>`),
+    unresolved conditional/indexed access types and `unknown` were treated as non-string
+    primitives. They are now resolved through their constraint/inner types, and `unknown`
+    is never safe, matching `any`.
+  - Variables initialized with JSX were trusted forever. They are now only safe while
+    their use-site type stays JSX-ish and they were not reassigned to user content in the
+    same scope (writes inside nested functions are ignored since deferred callbacks run
+    after rendering).
+  - Suppression names were over-matched: `safetyRating`, `escaped` and functions like
+    `escapeRoom()` no longer suppress diagnostics. `safe`-prefixed names now require a
+    camelCase boundary, only `escapeHtml()`/`escape()` calls and the ` e`
+    ``template tag count as escapers, and`as 'safe'` is the only accepted literal cast.
+
+- [`299af57`](https://github.com/kitajs/html/commit/299af57d3bba4f8de30cdefa40afefe5c3937c73)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Replace Chalk and Yargs
+  with Node.js native CLI utilities
+
+- Updated dependencies
+  [[`a7b48fd`](https://github.com/kitajs/html/commit/a7b48fdc1738ec6492d9a9d5691b710da772b505),
+  [`50becad`](https://github.com/kitajs/html/commit/50becad88dd03990c7bb9c0b05d755ae8ddf4ecd),
+  [`a962eda`](https://github.com/kitajs/html/commit/a962eda7090fbad3febd05cc8f3df576bf0c8773),
+  [`97b89a9`](https://github.com/kitajs/html/commit/97b89a9fd3cb2a8ee5b87858b60472ba229548cc),
+  [`4c4223e`](https://github.com/kitajs/html/commit/4c4223eff3afcf72e9a3d8b8326abf38e9debcfa)]:
+  - @kitajs/html@5.0.0-next.2
+
 ## 5.0.0-next.2
 
 ### Patch Changes
