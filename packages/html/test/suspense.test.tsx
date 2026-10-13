@@ -168,9 +168,15 @@ describe('renderToStream', () => {
     }
 
     expect(fn).toHaveBeenCalledOnce()
-    expect(chunks.length).toBe(2)
+
+    // Node versions differ on whether back-to-back pushes (script + template) are
+    // coalesced into a single read, so only the ordering is asserted.
+    expect(chunks.length).toBeGreaterThanOrEqual(2)
     expect(chunks[0]).toContain('data-sf')
-    expect(chunks[1]).toContain('data-sr')
+    expect(chunks[0]).not.toContain('data-sr')
+
+    const html = chunks.join('')
+    expect(html.indexOf('data-sf')).toBeLessThan(html.indexOf('data-sr'))
   })
 
   test('rejects duplicate rid', async () => {
