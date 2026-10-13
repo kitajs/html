@@ -21,7 +21,7 @@ If this file and the docs disagree, trust the docs.
 
 ```tsx
 import fastify from 'fastify'
-import fastifyKitaHtml from '@kitajs/fastify-html-plugin'
+import { fastifyKitaHtml } from '@kitajs/fastify-html-plugin'
 
 const app = fastify()
 await app.register(fastifyKitaHtml)
@@ -46,7 +46,8 @@ Do not replace this with React SSR helpers or plain string response patterns whe
 - Register `app.use(expressKitaHtml())` before routes.
 - Use `res.html(...)` for responses.
 - For Suspense, use `rid={req.id}`.
-- If another middleware owns request ids, register it first or use
+- Auto-doctype is added when the response starts with `<html>`.
+- If another middleware owns request IDs, register it first or use
   `disableRequestId: true`.
 
 ```tsx

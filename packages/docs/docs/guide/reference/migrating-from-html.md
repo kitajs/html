@@ -11,7 +11,8 @@ Converting existing HTML templates to JSX requires a few mechanical transformati
 ## Automated conversion
 
 Use [Html To Jsx](https://magic.reactjs.net/htmltojsx.htm) for bulk conversion. Paste HTML
-and receive JSX output.
+and receive JSX output. Its output uses React conventions, so revert `className` and
+`htmlFor` as described below.
 
 ## Manual conversion rules
 

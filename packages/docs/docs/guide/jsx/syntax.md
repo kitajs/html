@@ -6,9 +6,9 @@ description:
 
 # Syntax
 
-Kita Html uses standard JSX syntax. All HTML elements and attributes defined in the
-[HTML specification](https://html.spec.whatwg.org/multipage#toc-semantics) are supported
-with full TypeScript type checking.
+Kita Html uses standard JSX syntax. HTML elements and attributes from the
+[HTML specification](https://html.spec.whatwg.org/multipage#toc-semantics) are
+type-checked.
 
 ## Fragments
 
@@ -68,15 +68,15 @@ const size = 'lg'
 const html = <div class={['base', isActive && 'active', size]} />
 ```
 
-## The tag tag
+## The `tag` element
 
 The `<tag of="name">` element renders a tag whose name is determined at runtime. Use this
-when the tag name is dynamic or when you need kebab-case tag names that JSX syntax does
-not support.
+when the tag name is dynamic or would otherwise be read as a component, such as a
+capitalized name.
 
 ```tsx twoslash kita
 const html = (
-  <tag of="My-custom-element" id="el">
+  <tag of="my-custom-element" id="el">
     content
   </tag>
 )
@@ -88,25 +88,24 @@ For tags known at compile time, prefer extending the JSX type system instead.
 
 Different JavaScript types serialize differently when used as children.
 
-| Expression     | Output  |
-| -------------- | ------- |
-| `{"abc"}`      | `abc`   |
-| `{42}`         | `42`    |
-| `{true}`       | `true`  |
-| `{false}`      | `false` |
-| `{null}`       | `''`    |
-| `{undefined}`  | `''`    |
-| `{[1, 2, 3]}`  | `123`   |
-| `{BigInt(42)}` | `42`    |
+| Expression     | Output |
+| -------------- | ------ |
+| `{"abc"}`      | `abc`  |
+| `{42}`         | `42`   |
+| `{true}`       | `''`   |
+| `{false}`      | `''`   |
+| `{null}`       | `''`   |
+| `{undefined}`  | `''`   |
+| `{[1, 2, 3]}`  | `123`  |
+| `{BigInt(42)}` | `42`   |
 
-Arrays are concatenated with no separator. `null` and `undefined` produce no output.
-Booleans render as their string representation, unlike React which suppresses `true` and
-`false`.
+Arrays are concatenated with no separator. Booleans, `null`, and `undefined` produce no
+output, matching React. `bigint` renders its digits, while React renders nothing.
 
 ## Void elements
 
-Self-closing elements like `<br />`, `<img />`, `<input />`, and `<meta />` do not produce
-a closing tag. The runtime detects void elements by tag name.
+Void elements like `<br />`, `<img />`, `<input />`, and `<meta />` do not produce a
+closing tag. The runtime detects void elements by tag name.
 
 ## Missing elements or attributes
 

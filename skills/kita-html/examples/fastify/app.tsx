@@ -1,4 +1,4 @@
-import fastifyKitaHtml from '@kitajs/fastify-html-plugin'
+import { fastifyKitaHtml } from '@kitajs/fastify-html-plugin'
 import { Suspense } from '@kitajs/html/suspense'
 import fastify from 'fastify'
 

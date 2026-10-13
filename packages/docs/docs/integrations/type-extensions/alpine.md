@@ -16,7 +16,7 @@ Create a `src/kita.d.ts` file in your project and add the triple-slash directive
 already have this file for another type extension, append the new directive to it.
 
 ```ts title="src/kita.d.ts"
-/// <reference types="@kitajs/html/alpine.d.ts" />
+/// <reference types="@kitajs/html/alpine" />
 ```
 
 ## Usage
@@ -33,6 +33,6 @@ already have this file for another type extension, append the new directive to i
 Add multiple directives to the same `src/kita.d.ts` file:
 
 ```ts title="src/kita.d.ts"
-/// <reference types="@kitajs/html/htmx.d.ts" />
-/// <reference types="@kitajs/html/alpine.d.ts" />
+/// <reference types="@kitajs/html/htmx" />
+/// <reference types="@kitajs/html/alpine" />
 ```

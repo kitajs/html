@@ -6,7 +6,7 @@ description:
 
 import { PackageManagerTabs } from '@rspress/core/theme'
 
-# Getting Started
+# Getting started
 
 Install `@kitajs/html` and `@kitajs/ts-html-plugin` together. The first is the JSX
 runtime; the second provides editor diagnostics and the `xss-scan` CLI for catching XSS at
@@ -37,9 +37,8 @@ XSS detection plugin in your editor.
 }
 ```
 
-If your editor uses a globally installed TypeScript version instead of the project's local
-copy, the plugin will not load. In VS Code, configure the workspace to use the local
-TypeScript:
+If your editor uses its bundled TypeScript instead of the project's local copy, the plugin
+will not load. In VS Code, configure the workspace to use the local TypeScript:
 
 ```json title=".vscode/settings.json"
 {

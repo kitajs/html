@@ -4,7 +4,7 @@ description:
   must be awaited.
 ---
 
-# Async Components
+# Async components
 
 A Kita Html component can be an `async` function. When it is, the JSX expression evaluates
 to a `Promise<string>` instead of a `string`.
@@ -56,9 +56,9 @@ up to the root becomes a `Promise<string>`.
 
 ## JSX.Element type
 
-The type `JSX.Element` is defined as `string | Promise<string>`. This reflects the reality
-that any component tree may or may not contain async components. When you are certain that
-a tree is fully synchronous, you can cast the result to `string`.
+The type `JSX.Element` is defined as `string | Promise<string>`. Any component tree may
+contain async components, so the type covers both cases. When you are certain that a tree
+is fully synchronous, you can cast the result to `string`.
 
 ```tsx twoslash kita
 function StaticPage() {
@@ -69,12 +69,10 @@ function StaticPage() {
 const html = (<StaticPage />) as string
 ```
 
-TypeScript cannot infer whether a component tree is synchronous or asynchronous at the
-type level, because the presence of async children is a runtime property of the tree
-structure. This is a known TypeScript limitation
-([microsoft/TypeScript#14729](https://github.com/microsoft/TypeScript/issues/14729)).
+See [design decisions](../jsx/design-decisions.md#jsxelement-includes-promise) for why
+TypeScript cannot narrow this type.
 
-## When to await
+## Awaiting the result
 
 If you need the resolved HTML string, await the result. If you are passing it to a stream
 or to a [framework integration](/integrations/overview) that handles promises, you can
@@ -85,6 +83,6 @@ pass the promise directly without awaiting.
 const html = await (<Page />)
 response.end(html)
 
-// Pass directly when the consumer handles promises, e.g our fastify or express plugins
+// Pass directly when the consumer handles promises, such as the Fastify or Express plugins
 reply.html(<Page />)
 ```

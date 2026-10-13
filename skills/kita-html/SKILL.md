@@ -16,12 +16,12 @@ Prefer the official docs when you need guidance beyond this skill:
 - Getting started: `https://html.kitajs.org/guide/getting-started.md`
 - Introduction: `https://html.kitajs.org/guide/introduction.md`
 - Any page as raw markdown: append `.md` to its URL, for example
-  `https://html.kitajs.org/guide/introduction.md`
+  `https://html.kitajs.org/guide/xss/safe-attribute.md`
 
 ## First rule
 
-Kita Html is not React. Its JSX is a server-side string templating runtime. `JSX.Element`
-is `string | Promise<string>`. Do not assume React components, virtual DOM nodes, client
+Kita Html is a server-side string templating runtime for JSX, not React. `JSX.Element` is
+`string | Promise<string>`. Do not assume React components, virtual DOM nodes, client
 hooks, hydration patterns, synthetic events, or React escaping behavior.
 
 If the user asks for `.tsx` or `.jsx` in a Kita project, write Kita code.
@@ -47,9 +47,8 @@ If the user asks for `.tsx` or `.jsx` in a Kita project, write Kita code.
 1. Treat JSX as HTML string generation.
 2. Remember that children are not escaped by default.
 3. Put `safe` on the nearest native element wrapping untrusted text.
-4. For component children, use `escapeHtml(...)`, `Html.escapeHtml(...)`,
-   `e\`...\``, or `<Fragment safe>...</Fragment>` instead of assuming a parent component
-   can escape for you.
+4. For component children, use `escapeHtml(...)` or `<Fragment safe>...</Fragment>`
+   instead of assuming a parent component can escape for you.
 5. Prefer `class`, not React-only conventions. `className` is accepted, but `class`
    matches the project style.
 6. Use arrays for conditional classes. Do not emit React-style object maps for `class`.
@@ -106,7 +105,7 @@ immediately:
 4. Replace generic Express/Fastify HTML sending with `res.html(...)` or `reply.html(...)`.
 5. Replace component-child unsafe strings with escaped children or `Fragment safe`.
 
-## When to explain gotchas
+## Gotchas to call out
 
 Explicitly call out these gotchas whenever they matter to the task:
 

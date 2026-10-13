@@ -4,16 +4,13 @@ description:
   streaming.
 ---
 
-# Streaming Internals
-
-This page describes how Suspense streaming works at the protocol level, from the initial
-HTML response to the client-side DOM replacement.
+# Streaming internals
 
 ## Initial response
 
 When `renderToStream` produces the initial HTML, each Suspense boundary renders its
 fallback content wrapped in a `<div>` with a `data-sf` attribute and a unique ID derived
-from the request id and the boundary's run number.
+from the request ID and the boundary's run number.
 
 ```html
 <div id="B:req-1:1" data-sf>Loading...</div>
@@ -27,14 +24,12 @@ immediately.
 When an async child resolves, the runtime pushes two elements to the stream: a
 `<template>` containing the resolved HTML and a `<script>` that triggers the replacement.
 
+<!-- prettier-ignore -->
 ```html
-<template id="N:req-1:1" data-sr><div>Actual content</div></template>
-<script id="S:req-1:1" data-ss>
-  $KITA_RC('req-1:1')
-</script>
+<template id="N:req-1:1" data-sr><div>Actual content</div></template><script id="S:req-1:1" data-ss>$KITA_RC("req-1:1")</script>
 ```
 
-The `<template>` is inert, the browser does not render its content. The `<script>`
+The `<template>` is inert, so the browser does not render its content. The `<script>`
 executes immediately when the browser receives it, calling the replacement function.
 
 ## Client-side replacement
@@ -65,4 +60,4 @@ disconnects. User promises continue independently, but later settlements cannot 
 the closed stream or delete state belonging to another request.
 
 Runtimes like Node.js and Bun handle chunked encoding automatically when data is written
-to the response without a content-length header.
+to the response without a `Content-Length` header.

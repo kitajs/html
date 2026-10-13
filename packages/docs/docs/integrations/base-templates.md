@@ -4,7 +4,7 @@ description:
   framework auto-doctype support.
 ---
 
-# Base Templates
+# Base templates
 
 Most applications use a shared layout with a doctype, `<head>`, and `<body>`. In Kita
 Html, layouts are regular components that accept children and slot props.
@@ -22,7 +22,7 @@ function Layout({ title, children }: PropsWithChildren<{ title?: string }>) {
         <head>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>{title || 'My App'}</title>
+          <title safe>{title || 'My App'}</title>
         </head>
         <body>{children}</body>
       </html>
@@ -52,7 +52,7 @@ function Layout(
       <html lang="en">
         <head>
           <meta charset="UTF-8" />
-          <title>{props.title || 'My App'}</title>
+          <title safe>{props.title || 'My App'}</title>
           {props.head}
         </head>
         <body>
@@ -84,5 +84,4 @@ const page = (
 
 When using `@kitajs/fastify-html-plugin` or `@kitajs/express-html-plugin`, the plugin
 automatically prepends `<!doctype html>` to responses that start with an `<html>` tag.
-This means you can omit the manual `{'<!doctype html>'}` string in your layout when using
-either integration.
+With either plugin, you can omit the manual `{'<!doctype html>'}` string from your layout.

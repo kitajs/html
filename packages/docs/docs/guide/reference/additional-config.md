@@ -4,7 +4,7 @@ description:
   react-jsx is not used.
 ---
 
-# Additional Configuration
+# Additional configuration
 
 ## Formatting HTML output
 

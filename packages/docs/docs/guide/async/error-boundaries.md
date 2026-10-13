@@ -4,7 +4,7 @@ description:
   combine boundaries with Suspense.
 ---
 
-# Error Boundaries
+# Error boundaries
 
 Error boundaries catch errors thrown by async components and render a fallback instead of
 crashing the entire tree.
@@ -65,9 +65,30 @@ const html = <SyncComponent />
 // ---cut-end---
 ```
 
+## Timeouts
+
+The `timeout` prop, in milliseconds, renders the `catch` fallback when the children take
+longer than the limit. The error passed to `catch` is an `HtmlTimeout` instance. Pass a
+custom class with a static `reject()` method through the `error` prop to throw a different
+error.
+
+```tsx twoslash
+import { ErrorBoundary } from '@kitajs/html/error-boundary'
+
+async function SlowWidget() {
+  return <div>Loaded</div>
+}
+// ---cut---
+const html = (
+  <ErrorBoundary timeout={1000} catch={<div>Took too long</div>}>
+    <SlowWidget />
+  </ErrorBoundary>
+)
+```
+
 ## Combining with Suspense
 
-Error boundaries and Suspense serve different purposes and are used together. Suspense's
+Error boundaries and Suspense serve different purposes and can be combined. Suspense's
 `catch` prop handles errors from its async children. An `ErrorBoundary` wrapping the
 Suspense handles errors from the fallback itself.
 
@@ -95,4 +116,4 @@ const html = (
 ```
 
 If `AsyncContent` throws, Suspense renders "Children failed". If `AsyncFallback` throws,
-the ErrorBoundary renders "Fallback failed". These are independent error paths.
+the ErrorBoundary renders "Fallback failed".

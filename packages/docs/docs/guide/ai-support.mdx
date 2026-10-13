@@ -6,10 +6,10 @@ description:
 
 import { PackageManagerTabs } from '@rspress/core/theme'
 
-# AI Support
+# AI support
 
-Kita Html exposes multiple AI-friendly entry points so coding agents can understand the
-runtime without falling back to React assumptions. Use the installable skill when you want
+Kita Html provides several entry points so coding agents can understand the runtime
+without falling back to React assumptions. Use the installable skill when you want
 behavior guidance inside an agent, then use the published docs formats to provide focused
 or broad reference material.
 
@@ -39,19 +39,14 @@ Convert this React-style server component into Kita Html.
 
 ## Documentation formats
 
-Kita Html publishes the docs in three useful formats.
-
-- [`llms.txt`](https://html.kitajs.org/llms.txt) is the lightweight index. Use it when AI
-  should pick the right page first.
+- [`llms.txt`](https://html.kitajs.org/llms.txt) is the lightweight index. Use it when the
+  agent should pick the right page first.
 - [`llms-full.txt`](https://html.kitajs.org/llms-full.txt) is the full concatenated
-  documentation dump. Use it when AI needs broad Kita Html context in a single fetch.
+  documentation dump. Use it when the agent needs broad Kita Html context in a single
+  fetch.
 - Every page also has a raw Markdown version, such as
-  [Getting Started.md](https://html.kitajs.org/guide/getting-started.md) or
-  [Safe Attribute.md](https://html.kitajs.org/guide/xss/safe-attribute.md).
-
-Choose the smallest format that matches the task. `llms.txt` is usually best for
-discovery. Raw Markdown is usually best for one topic. `llms-full.txt` is best when the
-agent needs a full view of the framework.
+  [getting-started.md](https://html.kitajs.org/guide/getting-started.md) or
+  [safe-attribute.md](https://html.kitajs.org/guide/xss/safe-attribute.md).
 
 ## Project instructions
 
@@ -79,20 +74,18 @@ This project uses Kita Html, not React.
 ```
 
 If your tool also supports a file like `CLAUDE.md`, reference the same instructions there.
-The important part is that the agent sees Kita-specific rules before it starts generating
-TSX.
+The agent needs to see Kita-specific rules before it starts generating TSX.
 
-## What To Share With AI
+## Sharing docs with AI
 
 Share the narrowest document that answers the task.
 
 - For setup issues, share
-  [Getting Started.md](https://html.kitajs.org/guide/getting-started.md).
+  [getting-started.md](https://html.kitajs.org/guide/getting-started.md).
 - For escaping questions, share
-  [Safe Attribute.md](https://html.kitajs.org/guide/xss/safe-attribute.md) or
-  [Using the Safe Attribute](https://html.kitajs.org/guide/xss/safe-attribute.md).
+  [safe-attribute.md](https://html.kitajs.org/guide/xss/safe-attribute.md).
 - For streaming and async behavior, share
-  [Using Suspense.md](https://html.kitajs.org/guide/async/using-suspense.md).
+  [using-suspense.md](https://html.kitajs.org/guide/async/using-suspense.md).
 - For framework integration, share the matching Fastify, Express, or Elysia guide.
 - For broader assistance, start with [`llms.txt`](https://html.kitajs.org/llms.txt) and
   move to [`llms-full.txt`](https://html.kitajs.org/llms-full.txt) only when the task

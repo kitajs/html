@@ -6,29 +6,26 @@ description:
 
 import { Tab, Tabs } from '@rspress/core/theme'
 
-# What is Kita Html
+# Introduction
 
 Kita Html is a JSX runtime where every element evaluates to a string. Where React's
 `<div />` produces a virtual DOM node that must be reconciled and serialized, Kita Html's
-`<div />` returns `'<div></div>'` directly. There is no intermediate representation, no
-diffing step, and no serialization pass. The JSX you write compiles to function calls that
-concatenate strings.
+`<div />` returns `'<div></div>'` directly. The JSX you write compiles to function calls
+that concatenate strings.
 
-This architecture makes Kita Html significantly faster than virtual DOM-based renderers
-for any scenario where the output is an HTML string: server-side rendering, static site
-generation, email templates, HTMX applications, or any HTTP handler that sends HTML over
-the wire.
+This makes Kita Html faster than virtual DOM-based renderers whenever the output is an
+HTML string: server-side rendering, static site generation, email templates, HTMX
+applications, or any HTTP handler that sends HTML over the wire.
 
 [Go to getting started](./getting-started.md)
 
 ## Performance through simplicity
 
-A virtual DOM renderer performs three operations per render cycle: it constructs an object
-tree, diffs it against the previous tree, and serializes the result to a string. Kita Html
-skips all three. The TypeScript compiler rewrites JSX expressions into `jsx()` and
-`jsxs()` function calls at build time. At runtime, those functions concatenate attribute
-strings and child strings into a single result. The output is the final HTML with no
-post-processing.
+On each render, a virtual DOM renderer constructs an object tree, diffs it against the
+previous tree, and serializes the result to a string. Kita Html does none of this. The
+TypeScript compiler rewrites JSX expressions into `jsx()` and `jsxs()` function calls at
+build time. At runtime, those functions concatenate attribute strings and child strings
+into a single result. The output is the final HTML with no post-processing.
 
 ```tsx twoslash kita
 import { jsx as __jsx } from '@kitajs/html/jsx-runtime'
@@ -55,19 +52,19 @@ html = __jsx('div', {
 // Click on the <> icon in the top right to see the compiled output
 ```
 
-This directness is why Kita Html benchmarks 7-40x faster than React's `renderToString`
-across real-world component trees. The runtime has zero dependencies beyond TypeScript
-itself.
+In the [RealWorldPage benchmark](./reference/benchmarks.md), Kita Html renders about 2-3x
+faster than React, Preact, and HonoJsx. The only dependency is `csstype`, which provides
+types for the `style` attribute.
 
 [Read more about compilation and rendering](./jsx/compilation-and-rendering.mdx)
 
 ## XSS protection
 
-Because `JSX.Element` is a `string`, the runtime cannot distinguish between HTML produced
-by a component and raw user input injected as a child. Children are not escaped by
-default. This is a deliberate trade-off for performance and composability, and it is fully
-addressed by three layers of protection that work together to make accidental XSS
-practically impossible.
+Because `JSX.Element` is a plain string (or a promise of one), the runtime cannot
+distinguish between HTML produced by a component and raw user input injected as a child.
+Children are not escaped by default. This is a deliberate trade-off for performance and
+composability. The `safe` attribute, the TypeScript plugin, and the `xss-scan` CLI close
+that gap.
 
 The `safe` attribute escapes children at render time. Adding it to any native element
 causes the runtime to pass all children through HTML entity escaping before concatenation.
@@ -83,10 +80,8 @@ const html = <div safe>{userInput}</div>
 A TypeScript language service plugin analyzes every JSX expression in your editor and
 flags any child whose type could carry unescaped HTML. The same analysis runs as a CLI
 tool [`xss-scan`](./xss/cli-scanner.md) in CI/CD pipelines, failing the build on any
-finding. Between the editor diagnostics and the CI gate, unsafe expressions are caught
-before they reach production.
-
-**The only way to ship XSS-vulnerable code is to explicitly suppress the warnings.**
+finding. Values that bypass the type system, such as `as 'safe'` casts or `safe`-prefixed
+names, are not checked.
 
 [Read more about the XSS protection system](./xss/safe-attribute.md)
 
@@ -108,8 +103,8 @@ async function UserCard({ id }: { id: string }) {
   return <div safe>{user.name}</div>
 }
 
-// The result is a Promise<string> because UserCard is async,
-// Type still is JSX.Element so it can be used in JSX
+// The result is a Promise<string> because UserCard is async.
+// Its type is still JSX.Element, so it can be used in JSX.
 const html = <UserCard id="123" />
 ```
 
@@ -137,20 +132,21 @@ Each Suspense boundary operates independently, so fast components appear instant
 slow ones show their fallback. The `rid` parameter ties each Suspense instance to a
 specific request for safe concurrent rendering.
 
-- [Read more about Suspense streaming](./async/async-components.md)
+[Read more about Suspense streaming](./async/suspense.md)
 
 ## Packages
 
-As of now, Kita Html is composed of two main packages:
+The main packages are:
 
-- `@kitajs/html` is the core runtime that compiles JSX to strings and provides Suspense
+- `@kitajs/html` is the core runtime that renders JSX to strings and provides Suspense
   streaming.
 - `@kitajs/ts-html-plugin` is the TypeScript plugin and CLI scanner for XSS detection.
 
-Official [framework integrations](/integrations/overview) are available for Fastify,
-Elysia, and others. The core runtime works with any framework that accepts strings.
+Official [framework integrations](/integrations/overview) are available for Fastify and
+Express, and Elysia provides its own. The core runtime works with any framework that
+accepts strings.
 
-- [Read more about the packages and integrations](../integrations/overview.md)
+[Read more about the packages and integrations](../integrations/overview.md)
 
 Built something interesting with Kita Html?
 [Show us where you're using it](https://github.com/kitajs/html/discussions/496).

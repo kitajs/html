@@ -33,8 +33,8 @@ Do not assume:
 - Arrays are concatenated with no separator.
 - `class` accepts arrays such as `['card', isActive && 'active', size]`.
 - `style` accepts a string or an object. Object keys become kebab-case CSS.
-- Use `<tag of="my-element">` when the tag name is dynamic or kebab-case custom-element
-  syntax is needed.
+- Use `<tag of="my-element">` when the tag name is dynamic or would be read as a
+  component, such as a capitalized name.
 - `bigint` renders as text.
 - Plain objects as children are invalid.
 

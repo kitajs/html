@@ -4,7 +4,7 @@ description:
   suppression conventions.
 ---
 
-# Using the Safe Attribute
+# Using the safe attribute
 
 Every child expression in Kita Html renders without escaping by default. To escape user
 input, apply the `safe` attribute to the nearest native element wrapping the expression.
@@ -26,8 +26,8 @@ Without `safe`, malicious input executes. Consider a user profile where the desc
 field contains
 `</div><script>fetch('/steal', {method: 'POST', body: document.cookie})</script>`.
 Rendering this without escaping closes the container early, injects a script tag, and runs
-arbitrary code. The `safe` attribute converts the angle brackets to `&lt;` and `&gt;`,
-rendering the payload as harmless text.
+arbitrary code. The `safe` attribute converts `<` to `&lt;` (along with `&`, `"`, and
+`'`), so the payload renders as text.
 
 Place `safe` on the innermost element that holds the untrusted value. Do not add it to a
 parent wrapper, as that would escape the HTML of child components too.
@@ -47,9 +47,9 @@ const html = <UserCard name="Name" bio="Bio" />
 
 ## Component children
 
-The `safe` attribute only applies to native elements. If you pass an unsafe value as a
-child to a component, you must either escape it manually or wrap it in a Fragment with the
-`safe` attribute to tell the plugin it's already escaped. This prevents components from
+The `safe` attribute only applies to native elements and `Fragment`. If you pass an unsafe
+value as a child to a component, you must either escape it manually or wrap it in a
+Fragment with the `safe` attribute, which escapes it. This prevents components from
 accidentally rendering unescaped HTML when they receive dynamic content as children.
 
 ```tsx twoslash kita
@@ -66,7 +66,7 @@ html = (
   </MyComponent>
 )
 
-// Or escape explicitly when the component doesn't support safe
+// Or escape explicitly
 html = <MyComponent>{escapeHtml(userInput)}</MyComponent>
 ```
 
@@ -75,13 +75,13 @@ html = <MyComponent>{escapeHtml(userInput)}</MyComponent>
 The XSS tooling classifies JSX child expressions by TypeScript type. These types are safe
 without escaping:
 
-| Type or expression                                      | Why it is safe                       |
-| ------------------------------------------------------- | ------------------------------------ |
-| `number`, `boolean`, `bigint`, `null`, `undefined`      | Cannot contain HTML markup.          |
-| String literals, such as `'hello'`                      | Known at compile time.               |
-| `JSX.Element` and `Html.Children`                       | Already rendered by Kita Html.       |
-| `Html.escapeHtml()`, `Html.escape()`, and `e` templates | Escaped explicitly.                  |
-| Variables starting with `safe`                          | Treated as a deliberate suppression. |
+| Type or expression                                 | Why it is safe                       |
+| -------------------------------------------------- | ------------------------------------ |
+| `number`, `boolean`, `bigint`, `null`, `undefined` | Cannot contain HTML markup.          |
+| String literals, such as `'hello'`                 | Known at compile time.               |
+| `JSX.Element` and `Children`                       | Already rendered by Kita Html.       |
+| `escapeHtml()`, `escape()`, and `e` templates      | Escaped explicitly.                  |
+| Variables starting with `safe`                     | Treated as a deliberate suppression. |
 
 These types need `safe`, explicit escaping, or a justified suppression:
 
@@ -107,9 +107,8 @@ const unsafeString = 'user input'
 
 ## Template literal helper
 
-The `e` tagged template is an alias to `escapeHtml()` that you can use as interpolated
-content in template literals. It provides a convenient way to escape dynamic values
-outside of JSX.
+`e` is a tagged template alias of `escape()`. It escapes the entire resulting string,
+including the literal parts, so use it for plain text outside of JSX.
 
 ```tsx twoslash kita
 const userName = '<script>untrusted()</script>' as const
@@ -132,8 +131,9 @@ use these techniques when you have a guarantee of safety.
 
 :::
 
-Prefix the variable name with `safe`. The plugin treats any identifier starting with
-`safe` as pre-escaped.
+Prefix the variable name with `safe`. The plugin treats identifiers named `safe`, or
+starting with `safe` followed by a non-lowercase character (such as `safeContent` or
+`safe_html`), as pre-escaped. Names like `safety` are still checked.
 
 ```tsx twoslash kita
 const rawInput = "<script>alert('XSS')</script>" as const
@@ -149,7 +149,7 @@ const html = <div>{safeContent}</div>
 ```
 
 Following the same logic, prefixing a variable with `unsafe` explicitly marks it as
-unescaped and triggers a warning if used in JSX.
+unescaped and triggers error TS88601 if used in JSX.
 
 ```tsx twoslash kita
 // @errors: 88601
@@ -172,14 +172,4 @@ specific usage and not warn about possible XSS vulnerabilities.
 const content: string = '<script>untrusted()</script>'
 // ---cut---
 const html = <div>{content as 'safe'}</div>
-```
-
-Call `Html.escapeHtml()` directly. The plugin recognizes the return value as escaped.
-
-```tsx twoslash kita
-const content: string = '<script>untrusted()</script>'
-// ---cut---
-import { Html } from '@kitajs/html'
-
-const html = <div>{Html.escapeHtml(content)}</div>
 ```

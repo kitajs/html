@@ -16,7 +16,7 @@ Create a `src/kita.d.ts` file in your project and add the triple-slash directive
 already have this file for another type extension, append the new directive to it.
 
 ```ts title="src/kita.d.ts"
-/// <reference types="@kitajs/html/hotwire-turbo.d.ts" />
+/// <reference types="@kitajs/html/hotwire-turbo" />
 ```
 
 ## Usage

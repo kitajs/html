@@ -1,7 +1,7 @@
 [
   {
     "type": "section-header",
-    "label": "Getting Started"
+    "label": "Getting started"
   },
   "introduction",
   "not-a-react-killer",
@@ -10,12 +10,12 @@
   {
     "type": "dir-section-header",
     "name": "xss",
-    "label": "XSS Protection"
+    "label": "XSS protection"
   },
   {
     "type": "dir-section-header",
     "name": "async",
-    "label": "Async & Streaming"
+    "label": "Async & streaming"
   },
   {
     "type": "dir-section-header",

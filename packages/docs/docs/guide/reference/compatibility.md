@@ -19,8 +19,8 @@ definitions.
 
 The native TypeScript compiler `tsgo` works for building projects that use Kita Html. The
 language service plugin (`@kitajs/ts-html-plugin`) requires the standard TypeScript
-language server and will not work with `tsgo` while
-[`tsgo` doesn't publish its own support for plugins](https://github.com/microsoft/typescript-go#what-works-so-far).
+language server and does not work with `tsgo` until
+[`tsgo` supports language service plugins](https://github.com/microsoft/typescript-go#what-works-so-far).
 
 ## Module system
 
@@ -29,10 +29,10 @@ in `tsconfig.json`.
 
 ## Frameworks
 
-Official [framework integrations](/integrations/overview) exist for Fastify (4.x and 5.x),
-Express (4.x and 5.x), and Elysia. Kita Html also works with any framework that accepts
-strings: Hono, Bun's built-in server, AdonisJS, and others. Send the string or stream
-directly in the response body.
+Official [framework integrations](/integrations/overview) exist for Fastify (4.x and 5.x)
+and Express (4.x and 5.x). Elysia supports Kita Html through `@elysiajs/html`. Kita Html
+also works with any framework that accepts strings: Hono, Bun's built-in server, AdonisJS,
+and others. Send the string or stream directly in the response body.
 
 ## Browsers
 

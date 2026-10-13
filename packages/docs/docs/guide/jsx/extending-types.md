@@ -4,7 +4,7 @@ description:
   or unrestricted tags.
 ---
 
-# Extending Types
+# Extending types
 
 Kita Html's type system can be extended to support custom elements, custom attributes, or
 both.
@@ -33,7 +33,7 @@ const html = <user-card user-id={42}>Arthur</user-card>
 
 JSX interprets capitalized tags as components. Use lowercase custom element names for
 intrinsic elements. When the tag name cannot be written directly in JSX, use
-[`<tag of="...">`](/guide/jsx/syntax#the-tag-tag) instead.
+[`<tag of="...">`](/guide/jsx/syntax#the-tag-element) instead.
 
 ```tsx twoslash
 // @errors: 2304

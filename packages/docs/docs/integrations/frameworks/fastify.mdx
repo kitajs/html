@@ -13,20 +13,20 @@ type headers, Suspense streaming, and automatic doctype injection.
 
 ## Setup
 
-:::danger XSS Protection Required
+:::danger XSS protection required
 
 You must install and configure `@kitajs/ts-html-plugin` before using this plugin to avoid
-XSS vulnerabilities. See the [Getting Started](/guide/getting-started) guide for complete
+XSS vulnerabilities. See the [Getting started](/guide/getting-started) guide for complete
 setup instructions including TypeScript configuration and XSS detection.
 
 :::
 
 <PackageManagerTabs
   command={{
-    npm: 'npm i @kitajs/fastify-html-plugin',
-    yarn: 'yarn add @kitajs/fastify-html-plugin',
-    pnpm: 'pnpm add @kitajs/fastify-html-plugin',
-    bun: 'bun add @kitajs/fastify-html-plugin'
+    npm: 'npm i @kitajs/fastify-html-plugin@next',
+    yarn: 'yarn add @kitajs/fastify-html-plugin@next',
+    pnpm: 'pnpm add @kitajs/fastify-html-plugin@next',
+    bun: 'bun add @kitajs/fastify-html-plugin@next'
   }}
 />
 
@@ -34,7 +34,7 @@ Register the plugin on your Fastify instance:
 
 ```tsx
 import fastify from 'fastify'
-import fastifyKitaHtml from '@kitajs/fastify-html-plugin'
+import { fastifyKitaHtml } from '@kitajs/fastify-html-plugin'
 
 const app = fastify()
 await app.register(fastifyKitaHtml)
@@ -104,15 +104,13 @@ app.get('/dashboard', (req, reply) => {
 Rendering `AutoSuspense` directly in a route without `autoSuspense: true` throws an error.
 Keep using regular `Suspense` when you prefer an explicit `rid`.
 
-The plugin establishes the automatic request-ID scope in Fastify's `onRequest` hook. This
-is intentionally earlier than `preHandler`, so parsing, validation, later user hooks, and
-the route handler inherit the same async-local request ID. A scope created in `preHandler`
-would not cover asynchronous work started by earlier hooks.
+The plugin establishes the request-ID scope in Fastify's `onRequest` hook, so parsing,
+validation, later hooks, and the route handler share it.
 
 ## Error handling
 
 The plugin supports `ErrorBoundary` components for catching async errors. Wrap async
-content in an `ErrorBoundary` to handle failures gracefully.
+content in an `ErrorBoundary` to handle failures.
 
 ```tsx
 import { ErrorBoundary } from '@kitajs/html/error-boundary'
@@ -120,7 +118,7 @@ import { Suspense } from '@kitajs/html/suspense'
 
 app.get('/dashboard', (req, reply) => {
   reply.html(
-    <ErrorBoundary catch={(error) => <div>Error: {String(error)}</div>}>
+    <ErrorBoundary catch={(error) => <div safe>Error: {String(error)}</div>}>
       <Suspense rid={req.id} fallback={<div>Loading...</div>}>
         <AsyncDashboard />
       </Suspense>
@@ -129,7 +127,7 @@ app.get('/dashboard', (req, reply) => {
 })
 ```
 
-See the [Error Boundaries](/guide/async/error-boundaries) guide for details on error
+See the [Error boundaries](/guide/async/error-boundaries) guide for details on error
 handling patterns.
 
 ## Auto-doctype
@@ -148,7 +146,7 @@ import { kAutoDoctype } from '@kitajs/fastify-html-plugin'
 
 app.get('/fragment', (req, reply) => {
   reply[kAutoDoctype] = false
-  reply.html(<div>Just a fragment</div>)
+  reply.html(<html lang="en" />)
 })
 ```
 

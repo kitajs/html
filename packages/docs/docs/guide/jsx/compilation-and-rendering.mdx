@@ -4,11 +4,11 @@ description:
   function calls into HTML strings.
 ---
 
-# Compilation and Rendering
+# Compilation and rendering
 
 Kita Html turns JSX source into an HTML string in two stages: TypeScript compilation and
-runtime rendering. Compilation removes the JSX syntax. Rendering serializes the resulting
-function calls into the final HTML string.
+runtime rendering. Compilation removes the JSX syntax. Rendering concatenates the output
+of the resulting function calls into the final HTML string.
 
 ## Compilation
 
@@ -40,23 +40,20 @@ const html = (
 )
 ```
 
-After compilation, no JSX syntax remains. The runtime never parses JSX.
-
 ## Rendering
 
 The `jsx()` and `jsxs()` functions receive the tag name and the props object produced by
-compilation. They render HTML by serializing attributes, serializing children, and
+compilation. They render HTML by converting attributes and children to strings and
 concatenating the opening tag, content, and closing tag.
 
 If any child is a `Promise`, the concatenation returns a `Promise<string>` instead of a
-`string`. This propagation is automatic: a single async component anywhere in the tree
-makes every ancestor async up to the root.
+`string`. See [promise propagation](../async/async-components.md#promise-propagation).
 
 Void elements like `<br />`, `<img />`, and `<meta />` skip the closing tag entirely. The
 runtime checks the tag name against a list ordered by frequency so the most common void
-elements resolve in a single comparison.
+elements resolve in the fewest comparisons.
 
-Attributes are always escaped. The `class` attribute accepts arrays for conditional
-composition. The `style` attribute accepts both strings and objects, with automatic
-camelCase-to-kebab-case conversion for object keys. Boolean attributes like `disabled`
-render as valueless attributes when `true` and are omitted when `false`.
+Attribute values always have double quotes escaped. The `class` attribute accepts arrays
+for conditional composition. The `style` attribute accepts both strings and objects, with
+automatic camelCase-to-kebab-case conversion for object keys. Boolean attributes like
+`disabled` render as valueless attributes when `true` and are omitted when `false`.

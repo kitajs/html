@@ -4,11 +4,11 @@ description:
   exit codes, and integrate the CLI scanner into CI.
 ---
 
-# CLI Scanner
+# CLI scanner
 
-Kita Html catches unsafe JSX before production through two tools from
-`@kitajs/ts-html-plugin`: a TypeScript editor plugin for real-time diagnostics and the
-`xss-scan` CLI for project-wide checks in CI.
+Kita Html catches unsafe JSX before production through `@kitajs/ts-html-plugin`: a
+TypeScript editor plugin for real-time diagnostics and the `xss-scan` CLI for project-wide
+checks in CI.
 
 Both tools report the same TS88601 through TS88604 diagnostics. The editor plugin catches
 issues while you type. The CLI catches changes from developers without the plugin enabled,
@@ -44,7 +44,8 @@ xss-scan [options] [files...]
 The command can also be invoked as `ts-html-plugin`, which is an alias for the same CLI.
 
 When called without file arguments, it scans all files included by the project's
-`tsconfig.json`. When file paths are provided, only those files are analyzed.
+`tsconfig.json`. When file paths are provided, the scan starts from those files and
+includes any TSX/JSX files they import. Arguments that are not TSX/JSX files are skipped.
 
 ```bash title="Scan the project"
 xss-scan
@@ -56,20 +57,21 @@ xss-scan src/pages/login.tsx src/pages/profile.tsx
 
 Options:
 
-| Flag                   | Description                                                                    |
-| ---------------------- | ------------------------------------------------------------------------------ |
-| `--cwd <path>`         | Working directory. Defaults to current directory.                              |
-| `-p, --project <path>` | Path to `tsconfig.json`. Defaults to `tsconfig.json` in the working directory. |
-| `-s, --simplified`     | Compact single-line diagnostic output.                                         |
-| `--version`            | Print version and exit.                                                        |
+| Flag                   | Description                                                                             |
+| ---------------------- | --------------------------------------------------------------------------------------- |
+| `--cwd <path>`         | Base directory for file paths in the summary output. Defaults to the current directory. |
+| `-p, --project <path>` | Path to `tsconfig.json`. Defaults to `tsconfig.json` in the current directory.          |
+| `-s, --simplified`     | Compact single-line diagnostic output.                                                  |
+| `--version`            | Print version and exit.                                                                 |
+| `-h, --help`           | Print help and exit.                                                                    |
 
 Exit codes:
 
-| Code | Meaning                                   |
-| ---- | ----------------------------------------- |
-| 0    | No issues found.                          |
-| 1    | Errors found (TS88601, TS88602, TS88603). |
-| 2    | Warnings only (TS88604).                  |
+| Code | Meaning                                                                                  |
+| ---- | ---------------------------------------------------------------------------------------- |
+| 0    | No issues found.                                                                         |
+| 1    | Errors found (TS88601, TS88602, TS88603), or invalid configuration, arguments, or files. |
+| 2    | Warnings only (TS88604).                                                                 |
 
 ## CI integration
 

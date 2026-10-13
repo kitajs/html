@@ -170,7 +170,7 @@ closes automatically when the last boundary resolves.
 ## Async fallbacks
 
 The `fallback` prop can be an async component, but this blocks the entire stream until the
-fallback resolves. The server will not send any HTML until the async fallback is ready.
+fallback resolves.
 
 ```tsx twoslash kita=stream
 import { Suspense, renderToStream } from '@kitajs/html/suspense'
