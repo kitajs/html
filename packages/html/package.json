@@ -30,10 +30,12 @@
     "dist",
     "src",
     "*.d.ts",
+    "skills/**/*",
     "!dist/*.tsbuildinfo"
   ],
   "scripts": {
     "build": "tsgo -p tsconfig.build.json",
+    "prepack": "node ./scripts/copy-skills.mjs",
     "test": "vitest --coverage --typecheck --run",
     "test-types": "tsgo --noEmit"
   },

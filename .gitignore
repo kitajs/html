@@ -7,6 +7,7 @@
 coverage
 dist
 node_modules
+packages/html/skills
 .playwright-mcp
 # pnpm publish -r --report-summary
 pnpm-publish-summary.json
