@@ -4,16 +4,12 @@ Use this when the user asks for framework-specific Kita code.
 
 Latest docs:
 
-- Doc link, Fastify raw markdown:
-  `https://html.kitajs.org/integrations/frameworks/fastify.md`
-- Doc link, Express raw markdown:
-  `https://html.kitajs.org/integrations/frameworks/express.md`
-- Doc link, Elysia raw markdown:
-  `https://html.kitajs.org/integrations/frameworks/elysia.md`
-- Doc link, using Suspense raw markdown:
-  `https://html.kitajs.org/guide/async/using-suspense.md`
+- Fastify: `https://html.kitajs.org/integrations/frameworks/fastify.md`
+- Express: `https://html.kitajs.org/integrations/frameworks/express.md`
+- Elysia: `https://html.kitajs.org/integrations/frameworks/elysia.md`
+- Using Suspense: `https://html.kitajs.org/guide/async/using-suspense.md`
 
-These doc links are the most up-to-date reference if this file and the docs ever diverge.
+If this file and the docs disagree, trust the docs.
 
 ## Fastify
 
