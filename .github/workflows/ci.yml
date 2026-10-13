@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node: [lts/-1, lts/*]
+        node: [24, 26]
 
     # Set an environment variable to distinguish cache for each OS/Node
     # and distinguish between CI matrix runs in turbo.json
@@ -34,21 +34,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup node and restore cached dependencies
-        uses: actions/setup-node@v4
+      - name: Setup pnpm, node and install packages
+        uses: pnpm/setup@v3
         with:
-          node-version: ${{ matrix.node }}
-          cache: 'pnpm'
+          runtime: node@${{ matrix.node }}
+          cache: true
+          require-lockfile: true
 
       - run: echo "Using Node $(node --version) on ${{ matrix.os }}"
 
-      - name: Install packages
-        run: pnpm install --frozen-lockfile
+      - name: Check versions
+        run: pnpm change check
 
       - name: Build
         run: pnpm build-all
@@ -60,7 +58,7 @@ jobs:
         run: pnpm test
 
       - name: Publish to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         if: ${{ matrix.os != 'windows-latest' }}
         with:
           # Codecov backend may be unstable
@@ -79,22 +77,17 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup node and restore cached dependencies
-        uses: actions/setup-node@v4
+      - name: Setup pnpm, node and install packages
+        uses: pnpm/setup@v3
         with:
-          node-version-file: '.nvmrc'
-          cache: 'pnpm'
-
-      - name: Install packages
-        run: pnpm install --frozen-lockfile
+          node-version-file: .nvmrc
+          cache: true
+          require-lockfile: true
 
       - name: Cache turbo build setup
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
@@ -105,7 +98,7 @@ jobs:
         run: pnpm turbo build -F @kitajs/docs-html
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: packages/docs/dist
 

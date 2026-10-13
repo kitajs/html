@@ -2,8 +2,8 @@
 name: kita-dev-workflow
 description:
   Development workflow for the Kita Html monorepo. Use when making code changes, adding
-  features, fixing bugs, or refactoring. Covers formatting, testing, building, changesets,
-  and pre-push validation.
+  features, fixing bugs, or refactoring. Covers formatting, testing, building, change
+  intents, and pre-push validation.
 user-invocable: false
 ---
 
@@ -17,7 +17,7 @@ changes.
 1. **Test frequently** — Run tests and builds on the specific package after each logical
    group of changes, not just at the end
 2. **Format before commit** — Always run `pnpm format` before pushing code
-3. **Changeset required** — Every PR must include a changeset entry
+3. **Change intent required** — Every PR must include a change intent
 4. **Documentation updates** — Any API, type, or behavior change requires documentation
    updates
 5. **Full validation before finish** — Run root-level `pnpm build`, `pnpm test-types`, and
@@ -101,12 +101,19 @@ pnpm test
 
 Runs Vitest with coverage and type checking across all packages. Must exit with code 0.
 
-### 5. Create Changeset
+### 5. Record Change Intent
 
-**Important**: Do not run `pnpm changeset` as it requires interactive input which is not
-supported. Instead, create the changeset file manually.
+**Important**: Do not run bare `pnpm change` as it requires interactive input which is not
+supported. Pass the packages, bump level and summary so it runs non-interactively:
 
-#### Manual Changeset Creation
+```bash
+pnpm change --bump patch --summary "Fix X" @kitajs/ts-html-plugin
+```
+
+Use one invocation per bump level, or create the file manually when packages need
+different levels in a single entry.
+
+#### Manual Change Intent Creation
 
 1. Create a new file in `.changeset/` with a descriptive kebab-case name:
 
@@ -116,17 +123,17 @@ supported. Instead, create the changeset file manually.
    .changeset/remove-deprecated-api.md
    ```
 
-2. Use the format shown below (see Changeset Format section for details)
+2. Use the format shown below (see Change Intent Format section for details)
 
-3. Commit the changeset file with your changes
+3. Commit the change intent file with your changes
 
 The file name doesn't matter (it's just for human readability), but should be descriptive
 of the change. The content format is what matters for changelog generation.
 
-## Changeset Format
+## Change Intent Format
 
-Changesets use frontmatter with package names and semver levels, followed by a brief
-description.
+Change intents (changesets-compatible files consumed by `pnpm version -r`) use frontmatter
+with package names and semver levels, followed by a brief description.
 
 ### Examples
 
@@ -285,8 +292,8 @@ debugging.
 2. `pnpm build`
 3. `pnpm test-types`
 4. `pnpm test`
-5. `pnpm changeset`
-6. Commit changeset file
+5. `pnpm change --bump <level> --summary "<text>" <pkg>...`
+6. Commit change intent file
 
 **For documentation changes**:
 
@@ -306,8 +313,8 @@ debugging.
    each logical change group.
 2. **Skipping format** — Husky hooks will reject commits without formatting, but run
    manually to avoid surprises.
-3. **No changeset** — PRs without changesets will be rejected. Run `pnpm changeset` before
-   submitting.
+3. **No change intent** — PRs without change intents will be rejected. Run `pnpm change`
+   before submitting.
 4. **Outdated documentation** — Any API change requires documentation updates in the same
    commit.
 5. **Only testing locally** — Always run root-level `pnpm build`, `pnpm test-types`, and
@@ -345,4 +352,4 @@ Typical flow:
 3. Complete pre-push checklist
 4. Push and open PR
 
-Every PR must include a changeset entry.
+Every PR must include a change intent.

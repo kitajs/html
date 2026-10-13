@@ -11,6 +11,39 @@ trustPolicyIgnoreAfter: 10080
 minimumReleaseAge: 1440
 # no git/tarball dependencies, only from trusted registry
 blockExoticSubdeps: true
+# Cross-platform package.json scripts (CI runs on Windows)
+shellEmulator: true
+
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: true
+  core-js: false
+  sharp: false
+
+versioning:
+  changelog:
+    storage: repository
+  # Exact names only, globs are not supported here
+  ignore:
+    - '@kitajs/bench-html-honojsx'
+    - '@kitajs/bench-html-jsxte'
+    - '@kitajs/bench-html-kitajs'
+    - '@kitajs/bench-html-preact'
+    - '@kitajs/bench-html-react'
+    - '@kitajs/bench-html-reactjsx'
+    - '@kitajs/bench-html-runner'
+    - '@kitajs/bench-html-templates'
+    - '@kitajs/bench-html-typed-html'
+    - '@kitajs/bench-html-vhtml'
+    - '@kitajs/docs-html'
+    - '@kitajs/example-fastify-htmx'
+    - '@kitajs/example-http-server'
+  # Prerelease line for v5, graduate with `pnpm lane main --filter <pkg>`
+  lanes:
+    '@kitajs/express-html-plugin': next
+    '@kitajs/fastify-html-plugin': next
+    '@kitajs/html': next
+    '@kitajs/ts-html-plugin': next
 
 catalog:
   '@types/express': ^5.0.6

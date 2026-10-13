@@ -43,17 +43,11 @@ pnpm test-types
 pnpm test
 ```
 
-### Step 6: Create changeset
+### Step 6: Record change intent
 
 ```bash
-pnpm changeset
+pnpm change --bump minor --summary "Add escapeAttribute function for safer attribute rendering" @kitajs/html
 ```
-
-Select:
-
-- Package: `@kitajs/html`
-- Bump: `minor` (new feature)
-- Summary: `Add escapeAttribute function for safer attribute rendering`
 
 ### Step 7: Commit and push
 
@@ -107,17 +101,11 @@ pnpm test-types
 pnpm test
 ```
 
-### Step 6: Create changeset
+### Step 6: Record change intent
 
 ```bash
-pnpm changeset
+pnpm change --bump patch --summary "Fix false positive XSS warning for string literals" @kitajs/ts-html-plugin
 ```
-
-Select:
-
-- Package: `@kitajs/ts-html-plugin`
-- Bump: `patch` (bug fix)
-- Summary: `Fix false positive XSS warning for string literals`
 
 ### Step 7: Commit and push
 
@@ -146,19 +134,9 @@ pnpm -F @kitajs/docs-html build
 
 Build must succeed.
 
-### Step 3: Create changeset
+No change intent is needed: `@kitajs/docs-html` is listed under `versioning.ignore`.
 
-```bash
-pnpm changeset
-```
-
-Select:
-
-- Package: `@kitajs/docs-html`
-- Bump: `patch` (documentation improvement)
-- Summary: `Improve XSS protection guide clarity`
-
-### Step 4: Commit and push
+### Step 3: Commit and push
 
 ```bash
 git add .
@@ -218,18 +196,19 @@ pnpm test-types
 pnpm test
 ```
 
-### Step 6: Create changeset
+### Step 6: Record change intent
 
-```bash
-pnpm changeset
+The packages need different bump levels, so write
+`.changeset/remove-contents-to-string.md` manually:
+
+```markdown
+---
+'@kitajs/html': major
+'@kitajs/fastify-html-plugin': patch
+---
+
+Remove deprecated Html.contentsToString function
 ```
-
-Select:
-
-- Packages: `@kitajs/html`, `@kitajs/fastify-html-plugin`
-- Bump for `@kitajs/html`: `major` (breaking change)
-- Bump for `@kitajs/fastify-html-plugin`: `patch` (internal update)
-- Summary: `Remove deprecated Html.contentsToString function`
 
 ### Step 7: Commit and push
 
@@ -288,15 +267,11 @@ git push
    pnpm test-types
    pnpm test
    ```
-3. Create changeset:
+3. Record change intent:
 
    ```bash
-   pnpm changeset
+   pnpm change --bump minor --summary "Add escapeJson, escapeStyle, and escapeScript helpers" @kitajs/html
    ```
-
-   - Package: `@kitajs/html`
-   - Bump: `minor`
-   - Summary: `Add escapeJson, escapeStyle, and escapeScript helpers`
 
 4. Commit and push
 
@@ -346,16 +321,16 @@ pnpm test
 # ✓ All tests pass
 ```
 
-### Step 6: Update changeset
+### Step 6: Update change intent
 
-```bash
-pnpm changeset
+Edit the intent file so it names both packages:
+
+```markdown
+---
+'@kitajs/html': minor
+'@kitajs/fastify-html-plugin': patch
+---
 ```
-
-Now select both packages:
-
-- `@kitajs/html`: `minor` (new feature)
-- `@kitajs/fastify-html-plugin`: `patch` (compatibility fix)
 
 **Lesson**: Always run root-level validation before pushing. Package-level tests catch
 most issues, but cross-package integration problems only appear in full builds.

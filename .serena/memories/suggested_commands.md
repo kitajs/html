@@ -55,14 +55,14 @@ pnpm bench
 ### Versioning & Publishing
 
 ```bash
-# Create a changeset (for version bumps)
-pnpm changeset
+# Record a change intent (for version bumps)
+pnpm change --bump <patch|minor|major> --summary "<text>" <pkg>...
 
-# Version packages (CI command)
-pnpm ci-version
+# Show the pending release plan
+pnpm change status
 
-# Publish packages (CI command)
-pnpm ci-publish
+# Version and publish run in .github/workflows/release.yml
+# (pnpm version -r, then pnpm publish -r)
 ```
 
 ### Git Hooks

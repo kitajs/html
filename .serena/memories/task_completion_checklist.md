@@ -51,8 +51,8 @@ When completing a coding task in this project, follow these steps:
 
 ## 8. Version Management (if releasing)
 
-- [ ] Create changeset if making user-facing changes
-  - Run: `pnpm changeset`
+- [ ] Record a change intent if making user-facing changes
+  - Run: `pnpm change --bump <level> --summary "<text>" <pkg>...`
 - [ ] Follow semantic versioning
 
 ## 9. Git

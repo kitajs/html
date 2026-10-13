@@ -31,7 +31,7 @@ This is a pnpm monorepo with the following structure:
 - **examples/** - Example code demonstrating usage
 - **.husky/** - Git hooks configuration
 - **.github/** - GitHub workflows and CI/CD
-- **.changeset/** - Changesets for version management
+- **.changeset/** - pnpm change intents and release ledger
 
 ## Tech Stack
 
@@ -44,7 +44,7 @@ This is a pnpm monorepo with the following structure:
 - **Testing**: Vitest with @vitest/coverage-v8
 - **Formatting**: Prettier with @arthurfiorette/prettier-config
 - **Git Hooks**: Husky
-- **Versioning**: Changesets with GitHub changelog integration
+- **Versioning**: pnpm built-in release management (`pnpm change`, `pnpm version -r`)
 
 ## Key Dependencies
 

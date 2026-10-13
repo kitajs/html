@@ -22,7 +22,7 @@ Key architectural points:
 ### Monorepo Structure
 
 - **Workspace-based**: Uses pnpm workspaces with shared catalog for dependencies
-- **Independent versioning**: Each package has its own version via changesets
+- **Independent versioning**: Each package has its own version via pnpm change intents
 - **Shared configuration**: Root-level TypeScript and Prettier configs
 
 ## Key Design Patterns

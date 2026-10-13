@@ -163,7 +163,7 @@ methodology.
 | **c8/v8**           | Code coverage                        |
 | **Prettier**        | Code formatting                      |
 | **Husky**           | Git hooks                            |
-| **Changesets**      | Version management                   |
+| **pnpm versioning** | Version management (`pnpm change`)   |
 
 ## Configuration
 

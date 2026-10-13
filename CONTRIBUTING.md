@@ -153,21 +153,21 @@ Debug mode provides:
 overwrite the `tss.log` file. Run tests individually or use separate test files when
 debugging.
 
-## Changesets
+## Change intents
 
-This project uses [Changesets](https://github.com/changesets/changesets) for version
-management. After making user-facing changes to a published package, create a changeset:
+This project uses pnpm's built-in [release management](https://pnpm.io/versioning). After
+making user-facing changes to a published package, record a change intent:
 
 ```bash
-pnpm changeset
+pnpm change
 ```
 
 Select the affected packages, choose the semver bump level, and write a short description.
-The changeset file is committed with your PR.
+The generated `.changeset/*.md` file is committed with your PR.
 
 Documentation-only changes in `@kitajs/docs-html` and changes limited to examples or
-benchmarks do not need a changeset. Those packages are ignored in
-`.changeset/config.json`.
+benchmarks do not need a change intent. Those packages are listed under
+`versioning.ignore` in `pnpm-workspace.yaml`.
 
 ## Pre-Push Checklist
 
@@ -177,14 +177,14 @@ Before pushing code or submitting a PR, complete these steps in order:
 2. **Build all packages**: `pnpm build` (must exit with code 0)
 3. **Type-check all packages**: `pnpm test-types` (must exit with code 0)
 4. **Run all tests**: `pnpm test` (must exit with code 0)
-5. **Create changeset**: `pnpm changeset` for published-package changes (see Changesets
-   section)
+5. **Record change intent**: `pnpm change` for published-package changes (see Change
+   intents section)
 
-If required, the changeset file must be committed with your changes.
+If required, the change intent file must be committed with your changes.
 
 ## Pull Requests
 
-PRs that change a published package must include a changeset entry.
+PRs that change a published package must include a change intent.
 
 1. Fork and clone the repository
 2. Create a branch for your changes
