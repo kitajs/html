@@ -118,7 +118,7 @@ children.
 ```tsx twoslash kita
 //@errors: 88603
 let userName: string = 'Arthur'
-function Card({ children }: { children: string }) {
+function Card({ children }: { children: JSX.Element }) {
   return <div>{children}</div>
 }
 // ---cut---
@@ -137,7 +137,7 @@ Escape manually using `Html.escapeHtml()`
 import Html from '@kitajs/html'
 
 let userName: string = 'Arthur'
-function Card({ children }: { children: string }) {
+function Card({ children }: { children: JSX.Element }) {
   return <div>{children}</div>
 }
 // ---cut---
