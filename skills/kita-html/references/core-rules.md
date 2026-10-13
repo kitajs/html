@@ -1,17 +1,15 @@
-# Core Rules
+# Core rules
 
 Use this when you need the runtime model, JSX behavior, and non-React gotchas.
 
 Latest docs:
 
-- Doc link, introduction raw markdown: `https://html.kitajs.org/guide/introduction.md`
-- Doc link, JSX syntax raw markdown: `https://html.kitajs.org/guide/jsx/syntax.md`
-- Doc link, async components raw markdown:
-  `https://html.kitajs.org/guide/async/async-components.md`
-- Doc link, design decisions raw markdown:
-  `https://html.kitajs.org/guide/jsx/design-decisions.md`
+- Introduction: `https://html.kitajs.org/guide/introduction.md`
+- JSX syntax: `https://html.kitajs.org/guide/jsx/syntax.md`
+- Async components: `https://html.kitajs.org/guide/async/async-components.md`
+- Design decisions: `https://html.kitajs.org/guide/jsx/design-decisions.md`
 
-These doc links are the most up-to-date reference if this file and the docs ever diverge.
+If this file and the docs disagree, trust the docs.
 
 ## Mental model
 

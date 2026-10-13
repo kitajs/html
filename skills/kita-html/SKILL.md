@@ -9,29 +9,24 @@ license: MIT
 
 # Kita Html TSX
 
-Latest docs:
+Prefer the official docs when you need guidance beyond this skill:
 
-- Doc link, current page set: `https://html.kitajs.org/llms.txt`
-- Doc link, full docs dump: `https://html.kitajs.org/llms-full.txt`
-- Doc link, getting started raw markdown:
-  `https://html.kitajs.org/guide/getting-started.md`
-- Doc link, introduction raw markdown: `https://html.kitajs.org/guide/introduction.md`
-
-Prefer these doc links when you need the latest maintained guidance beyond this bundled
-skill.
+- Page index: `https://html.kitajs.org/llms.txt`
+- Full docs dump: `https://html.kitajs.org/llms-full.txt`
+- Getting started: `https://html.kitajs.org/guide/getting-started.md`
+- Introduction: `https://html.kitajs.org/guide/introduction.md`
+- Any page as raw markdown: append `.md` to its URL, for example
+  `https://html.kitajs.org/guide/introduction.md`
 
 ## First rule
 
-This is not React.
-
-Kita Html JSX is a server-side string templating runtime. `JSX.Element` is
-`string | Promise<string>`. Do not assume React components, virtual DOM nodes, client
+Kita Html is not React. Its JSX is a server-side string templating runtime. `JSX.Element`
+is `string | Promise<string>`. Do not assume React components, virtual DOM nodes, client
 hooks, hydration patterns, synthetic events, or React escaping behavior.
 
-If the user asks for `.tsx` or `.jsx` in a Kita project, write Kita code, not React-shaped
-code.
+If the user asks for `.tsx` or `.jsx` in a Kita project, write Kita code.
 
-## What to do first
+## Before writing code
 
 1. Check whether the project is using Kita. Strong signals:
    - `jsxImportSource: "@kitajs/html"`
@@ -80,7 +75,7 @@ When you write Kita code:
    - `jsxImportSource: "@kitajs/html"`
    - `plugins: [{ "name": "@kitajs/ts-html-plugin" }]`
 5. If you touch `package.json` scripts or CI guidance, prefer
-   `"test": "xss-scan && vitest"` or equivalent so XSS scanning actually runs.
+   `"test": "xss-scan && vitest"` or equivalent so XSS scanning runs.
 6. After a batch of Kita TSX changes, run `pnpm xss-scan` when available so you do not
    leave behind invalid XSS diagnostics.
 
@@ -111,15 +106,6 @@ immediately:
 4. Replace generic Express/Fastify HTML sending with `res.html(...)` or `reply.html(...)`.
 5. Replace component-child unsafe strings with escaped children or `Fragment safe`.
 
-## Documentation pointers
-
-Use official docs when you need deeper context:
-
-1. Site pages: `https://html.kitajs.org/...`
-2. LLM index: `https://html.kitajs.org/llms.txt`
-3. Full docs dump: `https://html.kitajs.org/llms-full.txt`
-4. Raw markdown pages, for example `https://html.kitajs.org/guide/introduction.md`
-
 ## When to explain gotchas
 
 Explicitly call out these gotchas whenever they matter to the task:
@@ -130,7 +116,7 @@ Explicitly call out these gotchas whenever they matter to the task:
 4. Suspense is streaming HTML replacement, not React client Suspense.
 5. `ErrorBoundary` catches async failures, not normal sync render errors.
 
-## Minimal review checklist
+## Review checklist
 
 Before finishing, quickly check:
 

@@ -1,9 +1,7 @@
 # Docs
 
-Official docs live on the website.
-
-These doc links are the current maintained source of truth and are safer to trust than any
-bundled summary if behavior changes.
+The official docs at `https://html.kitajs.org` are the source of truth. Trust them over
+any bundled summary when the two disagree.
 
 ## URL patterns
 

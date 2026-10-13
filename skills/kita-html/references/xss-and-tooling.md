@@ -1,25 +1,20 @@
-# XSS And Tooling
+# XSS and tooling
 
 Use this before writing or reviewing any Kita JSX that includes dynamic strings.
 
 Latest docs:
 
-- Doc link, safe attribute raw markdown:
-  `https://html.kitajs.org/guide/xss/safe-attribute.md`
-- Doc link, safe attribute and safety rules raw markdown:
-  `https://html.kitajs.org/guide/xss/safe-attribute.md`
-- Doc link, CLI scanner raw markdown: `https://html.kitajs.org/guide/xss/cli-scanner.md`
-- Doc link, error codes raw markdown: `https://html.kitajs.org/guide/xss/error-codes.md`
+- Safe attribute: `https://html.kitajs.org/guide/xss/safe-attribute.md`
+- CLI scanner: `https://html.kitajs.org/guide/xss/cli-scanner.md`
+- Error codes: `https://html.kitajs.org/guide/xss/error-codes.md`
 
-These doc links are the most up-to-date reference if this file and the docs ever diverge.
+If this file and the docs disagree, trust the docs.
 
 ## Main warning
 
-Dynamic strings are unsafe by default.
-
-Kita does not auto-escape JSX children because JSX output is already just strings. Safety
-comes from the `safe` attribute, explicit escaping helpers, the TypeScript plugin, and
-`xss-scan` in CI.
+Dynamic strings are unsafe by default. Kita does not auto-escape JSX children because JSX
+output is already plain strings. Safety comes from the `safe` attribute, explicit escaping
+helpers, the TypeScript plugin, and `xss-scan` in CI.
 
 ## Correct escaping patterns
 
@@ -59,8 +54,7 @@ import { Fragment, escapeHtml } from '@kitajs/html'
 1. Do not wrap a large parent in `safe` if it also contains nested JSX or component
    output. That causes double escaping.
 2. Do not pass raw `string` children into components that render them later.
-3. Do not use naming suppressions like `safeContent` unless safety is genuinely
-   guaranteed.
+3. Do not use naming suppressions like `safeContent` unless the value is known to be safe.
 
 ## Setup snippets
 
