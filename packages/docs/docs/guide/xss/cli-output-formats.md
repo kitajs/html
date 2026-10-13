@@ -11,22 +11,23 @@ warnings about skipped files, go to stderr. Select a format with `--format` (`-f
 
 | Format   | Output                                                                                                                                                             |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `pretty` | Default. Code frames, documentation links, and a summary line. Colored when stdout is a terminal.                                                                  |
+| `pretty` | Default. Code frames, documentation links, and a summary line. Inside GitHub Actions without `--format`, annotations are printed first.                            |
 | `tsc`    | One `file(line,col): error TS88601: message` line per finding, identical to `tsc` output. Prints nothing when clean.                                               |
 | `json`   | One JSON document, also printed when clean. Follows the schema shipped at `@kitajs/html-cli/schema/check-report.v1.json`.                                          |
 | `github` | One GitHub Actions `::error` or `::warning` annotation per finding, followed by one `file:line:col: error TS88601: message` line per finding and the summary line. |
 
 `--color` and `--no-color` force colors on or off for `pretty`. Without them, `NO_COLOR`
-disables colors and `FORCE_COLOR` enables them. Other formats never print colors.
+disables colors and `FORCE_COLOR` enables them. Otherwise colors are on in GitHub Actions
+and when stdout is a terminal. Other formats never print colors.
 
 ## Flags
 
-| Flag                   | Description                                                                        |
-| ---------------------- | ---------------------------------------------------------------------------------- |
-| `-p, --project <path>` | `tsconfig.json` file or directory. Repeatable. Defaults to the current directory.  |
-| `-f, --format <name>`  | `pretty`, `tsc`, `json`, or `github`. Defaults to `pretty`.                        |
-| `--[no-]color`         | Forces colors on or off for `pretty`.                                              |
-| `[files...]`           | Restricts the report to these TSX or JSX files. Types still come from the project. |
+| Flag                   | Description                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------------ |
+| `-p, --project <path>` | `tsconfig.json` file or directory. Repeatable. Defaults to the current directory.                |
+| `-f, --format <name>`  | `pretty`, `tsc`, `json`, or `github`. Defaults to `pretty` (plus annotations in GitHub Actions). |
+| `--[no-]color`         | Forces colors on or off for `pretty`.                                                            |
+| `[files...]`           | Restricts the report to these TSX or JSX files. Types still come from the project.               |
 
 ## JSON report
 

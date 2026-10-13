@@ -28,7 +28,7 @@ export function diagnoseJsxElement(
       return
     }
 
-    const safeAttribute = getSafeAttribute(node.openingElement)
+    const safeAttribute = getSafeAttribute(ts, node.openingElement)
 
     // Safe mode warnings
     if (safeAttribute && node.children) {
@@ -42,6 +42,10 @@ export function diagnoseJsxElement(
         return
       }
 
+      let hasExpression = false
+      let needsSafe = false
+      let doubleEscaped = false
+
       for (const exp of node.children) {
         if (
           // JSX Element inside safe (includes self-closing elements like <Component />)
@@ -52,33 +56,43 @@ export function diagnoseJsxElement(
             ESCAPE_HTML_REGEX.test(exp.expression.getText(sourceFile)))
         ) {
           report(ctx, safeAttribute, Errors.DoubleEscape, 'error')
+          doubleEscaped = true
           continue
         }
 
-        // Warn on unnecessary safe attributes
         if (
           ts.is.isJsxExpression(exp) &&
           // has inner expression
           exp.expression
         ) {
+          hasExpression = true
+
           // gets this expression or array of sub expressions
           const expressions = getNodeExpressions(ts, exp.expression) || [exp.expression]
 
           // at least one jsx inside another jsx with safe (includes self-closing elements)
           if (expressions.some((inner) => isJsx(ts, inner))) {
             report(ctx, safeAttribute, Errors.DoubleEscape, 'error')
+            doubleEscaped = true
             continue
           }
 
-          // all of them must be safe
+          // Once one child needs escaping, the rest cannot make `safe` unused
           if (
-            expressions.every((inner) =>
+            !needsSafe &&
+            !expressions.every((inner) =>
               isSafeAttribute(ctx, checker.getTypeAtLocation(inner), inner)
             )
           ) {
-            report(ctx, safeAttribute, Errors.UnusedSafe, 'warning')
+            needsSafe = true
           }
         }
+      }
+
+      // `safe` is only unused when no child needs it, so `<p safe>{text}{1}</p>` is fine.
+      // A double escape already reports on the same attribute.
+      if (hasExpression && !needsSafe && !doubleEscaped) {
+        report(ctx, safeAttribute, Errors.UnusedSafe, 'warning')
       }
 
       return

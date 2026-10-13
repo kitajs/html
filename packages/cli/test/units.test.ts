@@ -77,6 +77,11 @@ describe('resolveColor', () => {
     expect(resolveColor(undefined, { NO_COLOR: '1', FORCE_COLOR: '1' }, true)).toBe(false)
     expect(resolveColor(undefined, { FORCE_COLOR: '1' }, false)).toBe(true)
     expect(resolveColor(undefined, { FORCE_COLOR: '0' }, false)).toBe(false)
+    expect(resolveColor(undefined, { GITHUB_ACTIONS: 'true' }, false)).toBe(true)
+    expect(
+      resolveColor(undefined, { GITHUB_ACTIONS: 'true', NO_COLOR: '1' }, false)
+    ).toBe(false)
+    expect(resolveColor(false, { GITHUB_ACTIONS: 'true' }, false)).toBe(false)
     expect(resolveColor(undefined, {}, true)).toBe(true)
     expect(resolveColor(undefined, {}, false)).toBe(false)
   })

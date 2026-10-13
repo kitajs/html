@@ -160,9 +160,11 @@ const html = (
 
 <br />
 
-The `safe` attribute is applied to an element whose children are already safe types
+The `safe` attribute is applied to an element whose children are all already safe types
 (numbers, booleans, bigints, string literals, or `JSX.Element`). These types cannot
-introduce XSS, so the escaping is redundant.
+introduce XSS, so the escaping is redundant. When at least one child needs escaping, as in
+`<p safe>{name}{count}</p>`, the attribute is in use and `kita-html check` reports
+nothing.
 
 ```tsx twoslash kita
 //@errors: 88604

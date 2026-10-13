@@ -22,6 +22,10 @@ const html = <div safe>{userInput}</div>
 //                        ^?
 ```
 
+`safe={true}` is equivalent to `safe`. `kita-html check` only trusts these two forms;
+`safe={false}` and dynamic values such as `safe={escape}` are checked as if the attribute
+were missing, because the check cannot prove they are true at runtime.
+
 Without `safe`, malicious input executes. Consider a user profile where the description
 field contains
 `</div><script>fetch('/steal', {method: 'POST', body: document.cookie})</script>`.

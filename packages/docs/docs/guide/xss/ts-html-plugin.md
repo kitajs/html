@@ -65,5 +65,5 @@ starts from those files and includes any TSX/JSX files they import. On TypeScrip
 Upgrade `typescript` to 7.1 or later, install `@kitajs/html-cli`, and replace `xss-scan`
 with `kita-html check` in scripts and CI. The exit codes are the same. Remove the
 `plugins` entry from `tsconfig.json` and the `js/ts.tsdk` settings, which TypeScript 7
-does not use. `--simplified` maps to `--format tsc`, and `--format github` adds pull
-request annotations.
+does not use. `--simplified` maps to `--format tsc`. Inside GitHub Actions,
+`kita-html check` also annotates pull requests.

@@ -8,7 +8,12 @@ import {
 } from '../src/diagnostic.js'
 import { docsUrl, DoubleEscape, UnusedSafe, Xss } from '../src/errors.js'
 import { normalizePath } from '../src/paths.js'
-import { escapeData, escapeProperty, github } from '../src/reporters/github.js'
+import {
+  annotations,
+  escapeData,
+  escapeProperty,
+  github
+} from '../src/reporters/github.js'
 import { json, type JsonReport } from '../src/reporters/json.js'
 import { pretty } from '../src/reporters/pretty.js'
 import type { ReportContext } from '../src/reporters/shared.js'
@@ -142,6 +147,27 @@ describe('pretty', () => {
     expect(pretty({ ...CLEAN, filesChecked: 4 }, ctx)).toBe(
       'No XSS issues found in 4 files.\n'
     )
+  })
+
+  it('writes headers the tsc problem matcher ignores when asked to', () => {
+    const matcher =
+      /^([^\s].*)[(:](\d+)[,:](\d+)(?:\):\s+|\s+-\s+)(error|warning|info)\s+TS(\d+)\s*:\s*(.*)$/
+
+    for (const color of [false, true]) {
+      const output = pretty(RESULT, { ...ctx, color, avoidTscMatcher: true })
+      const lines = output.split('\n').map((line) => line.replace(/\x1b\[\d+m/g, ''))
+
+      expect(lines).toContain(
+        'src/pages/login.tsx:3:6: error TS88601: Content may introduce an XSS vulnerability and must be marked with the `safe` attribute.'
+      )
+      expect(lines).toContain(
+        'src/pages/login.tsx:4:11: warning TS88604: The `safe` attribute is unused in this context.'
+      )
+
+      for (const line of lines) {
+        expect(line).not.toMatch(matcher)
+      }
+    }
   })
 
   it('pluralizes the summary', () => {
@@ -281,5 +307,13 @@ describe('github', () => {
 
   it('prints only the summary when there are no diagnostics', () => {
     expect(github(CLEAN, ctx)).toBe('No XSS issues found in 1 file.\n')
+  })
+
+  it('exposes the annotations alone for the GitHub Actions default output', () => {
+    const output = annotations(RESULT, ctx)
+
+    expect(output.trimEnd().split('\n')).toHaveLength(RESULT.diagnostics.length)
+    expect(output.split('\n').every((line) => !line || line.startsWith('::'))).toBe(true)
+    expect(annotations(CLEAN, ctx)).toBe('')
   })
 })

@@ -60,6 +60,7 @@
   },
   "devDependencies": {
     "@kitajs/html": "workspace:^",
+    "@oclif/test": "^5.0.3",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
     "@vitest/coverage-v8": "catalog:",

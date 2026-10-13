@@ -1,7 +1,7 @@
 import { Args, Command, Errors, Flags, type Interfaces } from '@oclif/core'
 import { check, CheckError, loadProjectTypeScript } from '../../check.js'
 import { exitCodeFor } from '../../diagnostic.js'
-import { github } from '../../reporters/github.js'
+import { annotations, github } from '../../reporters/github.js'
 import { json } from '../../reporters/json.js'
 import { pretty } from '../../reporters/pretty.js'
 import type { Reporter } from '../../reporters/shared.js'
@@ -18,6 +18,8 @@ export default class Check extends Command {
 
 A solution-style tsconfig (only "references", no files) is expanded to every referenced project, like "tsc -b". Positional files narrow the report to those files; the program is still built from the tsconfig.
 
+Without --format, the output is pretty. Inside GitHub Actions (GITHUB_ACTIONS=true) it is pretty plus GitHub annotations, so findings show up on the pull request without extra configuration.
+
 Exit codes: 0 when no issues are found, 1 when errors are found or the configuration is invalid, 2 when only warnings are found.`
 
   static override examples = [
@@ -30,7 +32,8 @@ Exit codes: 0 when no issues are found, 1 when errors are found or the configura
       command: '<%= config.bin %> <%= command.id %> -p tsconfig.json'
     },
     {
-      description: 'Annotate a GitHub pull request',
+      description:
+        'Print only GitHub annotations and plain lines (inside GitHub Actions, omitting --format already adds annotations to the pretty output)',
       command: '<%= config.bin %> <%= command.id %> --format github'
     },
     {
@@ -64,8 +67,8 @@ Exit codes: 0 when no issues are found, 1 when errors are found or the configura
     format: Flags.option({
       char: 'f',
       options: ['pretty', 'tsc', 'json', 'github'] as const,
-      default: 'pretty' as const,
-      description: 'Output format.'
+      description:
+        'Output format. Defaults to pretty, plus GitHub annotations inside GitHub Actions.'
     })(),
     color: Flags.boolean({
       allowNo: true,
@@ -105,13 +108,23 @@ Exit codes: 0 when no issues are found, 1 when errors are found or the configura
         onNotice: (message) => this.warn(message)
       })
 
-      const output = reporters[flags.format](result, {
+      // An explicit --format always wins, so `--format pretty` turns the annotations off
+      const annotate = !flags.format && process.env.GITHUB_ACTIONS === 'true'
+
+      const context = {
         ts,
         cwd,
         color: resolveColor(flags.color, process.env, !!process.stdout.isTTY),
         workspace: process.env.GITHUB_WORKSPACE,
-        toolVersion: this.config.version
-      })
+        toolVersion: this.config.version,
+        avoidTscMatcher: annotate
+      }
+
+      let output = reporters[flags.format ?? 'pretty'](result, context)
+
+      if (annotate) {
+        output = annotations(result, context) + output
+      }
 
       if (output) {
         process.stdout.write(output)

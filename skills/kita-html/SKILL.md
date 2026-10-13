@@ -77,7 +77,7 @@ When you write Kita code:
    - `@kitajs/html-cli` and `typescript` 7.1 or later as dev dependencies
 5. If you touch `package.json` scripts or CI guidance, prefer
    `"test": "kita-html check && vitest"` or equivalent so XSS scanning runs. In GitHub
-   Actions, `kita-html check --format github` annotates pull requests.
+   Actions, `kita-html check` annotates pull requests without extra flags.
 6. After a batch of Kita TSX changes, run `pnpm kita-html check` (or `pnpm xss-scan` on
    TypeScript 6 projects) so you do not leave behind XSS diagnostics.
 

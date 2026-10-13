@@ -254,7 +254,8 @@ The codebase uses several optimization patterns:
 
 1. **Compile-Time**: `kita-html check` (`@kitajs/html-cli`, TS 7.1+) catches unsafe usage;
    `@kitajs/ts-html-plugin` covers TS 6 (deprecated)
-2. **CI/CD**: `kita-html check --format github` fails builds and annotates pull requests
+2. **CI/CD**: `kita-html check` fails builds and, inside GitHub Actions, annotates pull
+   requests automatically
 3. **Runtime**: `safe` attribute escapes content
 
 ### Safe Content Types

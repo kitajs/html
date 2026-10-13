@@ -1,6 +1,7 @@
 /**
  * Resolves whether the pretty format uses ANSI colors. An explicit `--color` or
- * `--no-color` wins, then `NO_COLOR` and `FORCE_COLOR`, then whether stdout is a TTY.
+ * `--no-color` wins, then `NO_COLOR` and `FORCE_COLOR`, then GitHub Actions (whose logs
+ * render ANSI colors although stdout is not a TTY), then whether stdout is a TTY.
  */
 export function resolveColor(
   flag: boolean | undefined,
@@ -16,6 +17,10 @@ export function resolveColor(
   }
 
   if (env.FORCE_COLOR && env.FORCE_COLOR !== '0') {
+    return true
+  }
+
+  if (env.GITHUB_ACTIONS === 'true') {
     return true
   }
 

@@ -14,6 +14,12 @@ export interface ReportContext {
   workspace?: string | undefined
   /** Version of this CLI, reported by the json format. */
   toolVersion: string
+  /**
+   * Prints pretty headers as `file:line:col: error` instead of `file:line:col - error`,
+   * so the `tsc` problem matcher of `actions/setup-node` does not annotate findings that
+   * are already annotated by GitHub workflow commands.
+   */
+  avoidTscMatcher?: boolean | undefined
 }
 
 export type Reporter = (result: CheckResult, ctx: ReportContext) => string

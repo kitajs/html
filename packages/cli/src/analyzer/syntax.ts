@@ -26,11 +26,27 @@ export function isJsx(
   )
 }
 
+/**
+ * The `safe` attribute when it always escapes: bare `safe` or `safe={true}`. The runtime
+ * escapes on any truthy value, but other values cannot be proven truthy, so they are
+ * treated like a missing attribute and the children are checked.
+ */
 export function getSafeAttribute(
+  ts: TypeScript,
   element: JsxOpeningElement
 ): JsxAttributeLike | undefined {
   for (const attribute of element.attributes.properties) {
-    if (attribute.getText() === 'safe') {
+    if (!ts.is.isJsxAttribute(attribute) || attribute.name.getText() !== 'safe') {
+      continue
+    }
+
+    const value = attribute.initializer
+
+    if (
+      !value ||
+      (ts.is.isJsxExpression(value) &&
+        value.expression?.kind === ts.ast.SyntaxKind.TrueKeyword)
+    ) {
       return attribute
     }
   }

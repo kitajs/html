@@ -28,7 +28,8 @@ test/
   util/project.ts        In-memory projects served through the API filesystem callbacks
   check.test.ts          Projects, solution expansion, positional files
   reporters.test.ts      Golden output per format, schema validation
-  cli.test.ts            Spawns bin/kita-html.js on real projects (needs `pnpm build`)
+  cli.test.ts            Runs the command in-process with @oclif/test (needs `pnpm build`),
+                         plus a few spawned smoke tests for real exit codes and pipes
 ```
 
 ## Key rules
@@ -47,6 +48,12 @@ test/
   by a CLI test).
 - oclif exits 2 on parse errors. `Check.catch` maps those to 1, because 2 means "only
   warnings".
+- Without `--format`, inside GitHub Actions (`GITHUB_ACTIONS=true`), the command prints
+  annotations plus pretty output with `avoidTscMatcher`, so the setup-node `tsc` problem
+  matcher does not annotate findings twice. An explicit `--format` disables this.
+- Prefer in-process CLI tests (`check()` helper in `test/cli.test.ts`). Each spawned oclif
+  process takes many seconds on Windows CI runners; keep spawning for behavior that needs
+  a real process, with `NODE_ENV=production` and a long timeout.
 - Report output goes to stdout. Notices and errors go to stderr (`this.warn`,
   `this.error`).
 
