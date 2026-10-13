@@ -8,7 +8,8 @@ import { ESCAPE_HTML_REGEX, isJsx, SAFE_PREFIX_REGEX } from './syntax.js'
 export function isSafeAttribute(
   ctx: AnalyzerContext,
   type: Type | undefined,
-  node: Node
+  node: Node,
+  visited: Set<number> = new Set()
 ): boolean {
   const { ts, checker } = ctx
   const { TypeFlags } = ts.sync
@@ -17,6 +18,14 @@ export function isSafeAttribute(
   if (!type) {
     return true
   }
+
+  // Recursive types (e.g. `type Tree = number | Tree[]`) would recurse forever. Any
+  // unsafe member already returns false up the whole chain, so a revisited type is safe.
+  if (visited.has(type.id)) {
+    return true
+  }
+
+  visited.add(type.id)
 
   // PropsWithChildren `children` names are only trusted when the type is not raw
   // string content (checked right below)
@@ -47,8 +56,9 @@ export function isSafeAttribute(
           !!(innerType.flags & (TypeFlags.Any | TypeFlags.Unknown))
       )
 
+      // Members can still hold raw strings, like `children?: string[]`
       if (!hasUserContent) {
-        return true
+        return types.every((innerType) => isSafeAttribute(ctx, innerType, node, visited))
       }
 
       return types.some(
@@ -61,19 +71,19 @@ export function isSafeAttribute(
 
     // Arrays and tuples are checked by their element types
     if (checker.isArrayType(type)) {
-      return isSafeAttribute(ctx, getTypeArguments(ctx, type)[0], node)
+      return isSafeAttribute(ctx, getTypeArguments(ctx, type)[0], node, visited)
     }
 
     if (checker.isTupleType(type)) {
       return getTypeArguments(ctx, type).every((innerType) =>
-        isSafeAttribute(ctx, innerType, node)
+        isSafeAttribute(ctx, innerType, node, visited)
       )
     }
 
     // Thenables are checked by their resolved type: `children: Promise<string>`
     // resolves to raw strings, while Promise<Children> stays safe
     if (isPromiseLike(type)) {
-      return isSafeAttribute(ctx, getTypeArguments(ctx, type)[0], node)
+      return isSafeAttribute(ctx, getTypeArguments(ctx, type)[0], node, visited)
     }
 
     // Generic children are trusted unless constrained to a raw string
@@ -138,12 +148,14 @@ export function isSafeAttribute(
 
   // Union types should be checked recursively
   if (type.isUnionType() || type.isIntersectionType()) {
-    return type.getTypes().every((innerType) => isSafeAttribute(ctx, innerType, node))
+    return type
+      .getTypes()
+      .every((innerType) => isSafeAttribute(ctx, innerType, node, visited))
   }
 
   // For Array or Promise, we check the type of the first generic
   if (checker.isArrayType(type) || isPromise(type)) {
-    return isSafeAttribute(ctx, getTypeArguments(ctx, type)[0], node)
+    return isSafeAttribute(ctx, getTypeArguments(ctx, type)[0], node, visited)
   }
 
   const text = node.getText(ctx.sourceFile)
@@ -163,18 +175,20 @@ export function isSafeAttribute(
       return false
     }
 
-    return isSafeAttribute(ctx, constraint, node)
+    return isSafeAttribute(ctx, constraint, node, visited)
   }
 
   // Template literal types (e.g. `<b>${string}</b>`) are runtime strings whose safety
   // depends on each placeholder type
   if (type.isTemplateLiteralType()) {
-    return type.getTypes().every((innerType) => isSafeAttribute(ctx, innerType, node))
+    return type
+      .getTypes()
+      .every((innerType) => isSafeAttribute(ctx, innerType, node, visited))
   }
 
   // Intrinsic string mappings (e.g. Uppercase<string>) are runtime strings
   if (type.isStringMappingType()) {
-    return isSafeAttribute(ctx, type.getTarget(), node)
+    return isSafeAttribute(ctx, type.getTarget(), node, visited)
   }
 
   // Unresolved conditional and indexed access types (e.g. `T extends x ? y : z`,
@@ -186,7 +200,7 @@ export function isSafeAttribute(
       return false
     }
 
-    return isSafeAttribute(ctx, constraint, node)
+    return isSafeAttribute(ctx, constraint, node, visited)
   }
 
   // `as 'safe'` is the documented escape hatch. Casts to any other string literal

@@ -64,7 +64,7 @@ catalog:
   react-dom: ^19.2.8
   tslib: ^2.8.1
   tsx: ^4.23.1
-  typescript: ^6 # ts-html-plugin needs the TS 5/6 compiler API. TS 7.1+ is used by html-cli through the ts7 catalog
+  typescript: ^6 # ts-html-plugin needs the TS 6 compiler API. TS 7.1+ is used by html-cli through the ts7 catalog
   vitest: ^4.1.10
 
 catalogs:

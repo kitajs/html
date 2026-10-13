@@ -5,7 +5,7 @@
 `@kitajs/html-cli` ships the `kita-html` command. Its `check` command finds XSS
 vulnerabilities in Kita Html JSX on TypeScript 7.1+, through the IPC API in
 `typescript/sync`. It replaces the deprecated `@kitajs/ts-html-plugin`, which needs the
-TypeScript 5/6 compiler API and language service plugins that TypeScript 7 removed.
+TypeScript 6 compiler API and language service plugins that TypeScript 7 removed.
 
 ## File structure
 

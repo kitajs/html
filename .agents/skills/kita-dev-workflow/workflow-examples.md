@@ -59,27 +59,38 @@ git push
 
 ---
 
-## Example 2: Fixing a Bug in @kitajs/ts-html-plugin
+## Example 2: Fixing an XSS Detection Bug
 
 **Scenario**: Fix false positive XSS warning for string literals.
 
+Detection rules live in two packages: `@kitajs/html-cli` (`packages/cli/src/analyzer/`,
+TypeScript 7.1+) and the deprecated `@kitajs/ts-html-plugin`
+(`packages/ts-html-plugin/src/util.ts`, TypeScript 6). Fix the CLI first and mirror the
+fix in the plugin.
+
 ### Step 1: Reproduce the bug
 
-Create a test case in `packages/ts-html-plugin/test/` that demonstrates the bug.
+Create a test case in `packages/cli/test/analyzer/` and the same case in
+`packages/ts-html-plugin/test/`.
 
 ```bash
+pnpm -F @kitajs/html-cli test
 pnpm -F @kitajs/ts-html-plugin test
 ```
 
-Confirm the test fails.
+Confirm the tests fail.
 
 ### Step 2: Fix the bug
 
-Edit `packages/ts-html-plugin/src/util.ts` to fix the detection logic.
+Edit `packages/cli/src/analyzer/` to fix the detection logic, then apply the same change
+to `packages/ts-html-plugin/src/util.ts`.
 
 ### Step 3: Verify the fix
 
 ```bash
+pnpm -F @kitajs/html-cli build
+pnpm -F @kitajs/html-cli test-types
+pnpm -F @kitajs/html-cli test
 pnpm -F @kitajs/ts-html-plugin build
 pnpm -F @kitajs/ts-html-plugin test-types
 pnpm -F @kitajs/ts-html-plugin test
@@ -104,7 +115,7 @@ pnpm test
 ### Step 6: Record change intent
 
 ```bash
-pnpm change --bump patch --summary "Fix false positive XSS warning for string literals" @kitajs/ts-html-plugin
+pnpm change --bump patch --summary "Fix false positive XSS warning for string literals" @kitajs/html-cli @kitajs/ts-html-plugin
 ```
 
 ### Step 7: Commit and push

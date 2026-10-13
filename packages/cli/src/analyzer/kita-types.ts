@@ -1,11 +1,11 @@
 import type { Type } from 'typescript/sync'
-import { normalizePath } from '../paths.js'
+import { comparablePath } from '../paths.js'
 import type { AnalyzerContext, KitaAlias } from './context.js'
 
 const JSX_ELEMENT_NAME = /(^|\.)JSX\.Element$/
 const HTML_NAMESPACE_CHILDREN_NAME = /(^|\.)Html\.Children$/
 const MODULE_CHILDREN_NAME = /^"(.+)"\.Children$/
-const KITA_PACKAGE_PATH = /\/@kitajs\/html\//
+const KITA_PACKAGE_PATH = /\/@kitajs\/html\//i
 
 /**
  * Resolves whether a type was declared through `JSX.Element` or `Html.Children`. Uses the
@@ -46,7 +46,7 @@ function resolveKitaAlias(ctx: AnalyzerContext, type: Type): KitaAlias {
     return undefined
   }
 
-  const normalized = normalizePath(modulePath)
+  const normalized = comparablePath(modulePath)
 
   if (ctx.kitaRoot && normalized.startsWith(`${ctx.kitaRoot}/`)) {
     return 'children'

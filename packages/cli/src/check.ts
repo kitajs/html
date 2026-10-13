@@ -10,7 +10,7 @@ import {
   type CheckResult,
   type KitaDiagnostic
 } from './diagnostic.js'
-import { normalizePath } from './paths.js'
+import { comparablePath, normalizePath } from './paths.js'
 import { loadTypeScript, type TypeScript } from './typescript.js'
 
 /** A usage or configuration failure. The CLI prints the message and exits 1. */
@@ -99,6 +99,7 @@ function run(
   const diagnostics: KitaDiagnostic[] = []
   const sources = new Map<string, string>()
   let hasJsxFiles = false
+  let warnedKitaRoot = false
 
   for (const { configPath, parsed } of projects) {
     const targets = parsed.fileNames.filter((fileName) => {
@@ -134,7 +135,9 @@ function run(
       const project = program.getProject()
       const kitaRoot = resolveKitaRoot(path.dirname(configPath))
 
-      if (!kitaRoot) {
+      // Once per run: solutions usually share one install, so every project would repeat it
+      if (!kitaRoot && !warnedKitaRoot) {
+        warnedKitaRoot = true
         notice(
           `Could not resolve @kitajs/html from ${path.dirname(configPath)}. ` +
             'Install it so Html.Children and JSX.Element types are recognized.'
@@ -221,7 +224,10 @@ function expandProjects(
       continue
     }
 
+    // Cycle detection is per entry, so projects already added by a previous entry still
+    // count as found and the same solution can be passed twice
     const queue: ResolvedProject[] = [{ configPath: entry, parsed }]
+    const seen = new Set([key(entry)])
     let found = 0
 
     while (queue.length) {
@@ -229,18 +235,23 @@ function expandProjects(
 
       for (const reference of current.parsed.projectReferences ?? []) {
         const configPath = resolveReferencePath(reference.path, current.configPath, host)
+        const referenceKey = key(configPath)
 
-        if (visited.has(key(configPath))) {
+        if (seen.has(referenceKey)) {
           continue
         }
 
-        visited.add(key(configPath))
+        seen.add(referenceKey)
 
         const referenced = { configPath, parsed: parseConfig(ts, api, configPath) }
 
         if (referenced.parsed.fileNames.length) {
-          projects.push(referenced)
           found++
+
+          if (!visited.has(referenceKey)) {
+            visited.add(referenceKey)
+            projects.push(referenced)
+          }
         }
 
         queue.push(referenced)
@@ -320,7 +331,7 @@ function resolveKitaRoot(fromDirectory: string): string | undefined {
   try {
     const require = createRequire(path.join(fromDirectory, 'noop.js'))
     const packageJson = require.resolve('@kitajs/html/package.json')
-    return normalizePath(fs.realpathSync(path.dirname(packageJson)))
+    return comparablePath(fs.realpathSync(path.dirname(packageJson)))
   } catch {
     return undefined
   }

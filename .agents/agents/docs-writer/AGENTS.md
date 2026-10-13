@@ -68,11 +68,11 @@ concepts to understand:
 - `JSX.Element` is `string | Promise<string>`, not an object
 - Children are NOT escaped by default (the XSS trade-off)
 - XSS protection layers: `safe` attribute and `kita-html check` (TypeScript 7.1+). The TS
-  plugin and `xss-scan` are deprecated and only documented for TypeScript 5/6
+  plugin and `xss-scan` are deprecated and only documented for TypeScript 6
 - Async components propagate promises up the tree automatically
 - Suspense streams fallbacks immediately and replaces them when async content resolves
 - Packages: `@kitajs/html` (core), `@kitajs/html-cli` (`kita-html check`),
-  `@kitajs/ts-html-plugin` (deprecated XSS detection for TypeScript 5/6),
+  `@kitajs/ts-html-plugin` (deprecated XSS detection for TypeScript 6),
   `@kitajs/fastify-html-plugin` (Fastify integration)
 - `@elysiajs/html` is an external Elysia integration maintained by the same author
 

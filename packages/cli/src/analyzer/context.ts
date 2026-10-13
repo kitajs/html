@@ -12,7 +12,10 @@ export interface AnalyzerContext {
   checker: Checker
   project: Project
   sourceFile: SourceFile
-  /** Normalized real path of the project's `@kitajs/html` package, when resolvable. */
+  /**
+   * Real path of the project's `@kitajs/html` package (see `comparablePath`), when
+   * resolvable.
+   */
   kitaRoot: string | undefined
   diagnostics: KitaDiagnostic[]
   /** Alias lookups are IPC round trips, so they are cached per type id. */

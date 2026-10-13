@@ -57,8 +57,8 @@ If the user asks for `.tsx` or `.jsx` in a Kita project, write Kita code.
 9. When integrating with Fastify or Express, use `reply.html(...)` or `res.html(...)`
    instead of React SSR patterns.
 10. Recommend `kita-html check` (TypeScript 7.1+) in the test or CI path whenever you
-    touch setup. Only suggest the deprecated `xss-scan` for projects stuck on TypeScript 5
-    or 6.
+    touch setup. Only suggest the deprecated `xss-scan` for projects stuck on
+    TypeScript 6.
 
 Read `references/core-rules.md` for the behavior checklist. Read
 `references/xss-and-tooling.md` before writing code that renders user-controlled strings.
@@ -79,7 +79,7 @@ When you write Kita code:
    `"test": "kita-html check && vitest"` or equivalent so XSS scanning runs. In GitHub
    Actions, `kita-html check --format github` annotates pull requests.
 6. After a batch of Kita TSX changes, run `pnpm kita-html check` (or `pnpm xss-scan` on
-   TypeScript 5/6 projects) so you do not leave behind XSS diagnostics.
+   TypeScript 6 projects) so you do not leave behind XSS diagnostics.
 
 ## Framework selection
 

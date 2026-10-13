@@ -70,14 +70,16 @@ When you need information about specific topics, read these documentation files:
 
 - **Explicit escaping by design**: `packages/docs/docs/guide/xss/explicit-escaping.md`
   - Performance rationale
-  - Three-layer protection model
+  - Escaping at the entry point plus compile-time checks
 
 - **kita-html check**: `packages/docs/docs/guide/xss/cli-scanner.mdx`
   - Install with TypeScript 7.1+
   - CI/CD integration, GitHub annotations, VS Code `$tsc` task
+
 - **Output formats**: `packages/docs/docs/guide/xss/cli-output-formats.md`
   - pretty, tsc, json and github formats, JSON report fields, exit codes
-- **Deprecated plugin and xss-scan (TS 5/6)**:
+
+- **Deprecated plugin and xss-scan (TS 6)**:
   `packages/docs/docs/guide/xss/ts-html-plugin.md`
   - Language Service Plugin setup, xss-scan usage, migration
 
@@ -166,7 +168,11 @@ For deep implementation details beyond user-facing documentation:
   - Void element detection
 
 - **XSS check internals (TS 7.1+)**: `packages/cli/AGENTS.md`
-- **XSS plugin internals (deprecated, TS 5/6)**: `packages/ts-html-plugin/AGENTS.md`
+  - oclif command, project loading and solution expansion
+  - Analyzer port on the `typescript/sync` API
+  - Reporters and exit codes
+
+- **XSS plugin internals (deprecated, TS 6)**: `packages/ts-html-plugin/AGENTS.md`
   - Plugin architecture
   - Detection algorithm implementation
   - AST traversal patterns
@@ -221,7 +227,7 @@ formatting, changesets
 packages/
   html/                  @kitajs/html - Core JSX runtime
   cli/                   @kitajs/html-cli - kita-html check (TS 7.1+)
-  ts-html-plugin/        @kitajs/ts-html-plugin - Deprecated XSS detection (TS 5/6)
+  ts-html-plugin/        @kitajs/ts-html-plugin - Deprecated XSS detection (TS 6)
   fastify-html-plugin/   @kitajs/fastify-html-plugin - Fastify integration
   docs/                  @kitajs/docs-html - Documentation site (Rspress)
 benchmarks/              Performance benchmarks

@@ -15,7 +15,7 @@ pnpm install
 packages/
   html/                  @kitajs/html            Core JSX runtime
   cli/                   @kitajs/html-cli        kita-html check, XSS detection for TS 7.1+
-  ts-html-plugin/        @kitajs/ts-html-plugin  Deprecated XSS detection for TS 5/6
+  ts-html-plugin/        @kitajs/ts-html-plugin  Deprecated XSS detection for TS 6
   fastify-html-plugin/   @kitajs/fastify-html-plugin  Fastify integration
   express-html-plugin/   @kitajs/express-html-plugin  Express integration
   docs/                  @kitajs/docs-html       Documentation site

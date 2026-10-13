@@ -1,7 +1,7 @@
 import path from 'node:path'
 import type { FormatDiagnosticsHost, Diagnostic as TsDiagnostic } from 'typescript/sync'
 import { countBySeverity, type CheckResult, type KitaDiagnostic } from '../diagnostic.js'
-import { normalizePath } from '../paths.js'
+import { caseInsensitiveFileSystem, normalizePath } from '../paths.js'
 import type { TypeScript } from '../typescript.js'
 
 export interface ReportContext {
@@ -25,8 +25,6 @@ export function relativePath(from: string, fileName: string): string {
   return path.relative(from, fileName).split(path.sep).join('/').replace(/\\/g, '/')
 }
 
-const caseInsensitive = process.platform === 'win32' || process.platform === 'darwin'
-
 /**
  * The API reports forward-slash paths, while `process.cwd()` uses backslashes on Windows.
  * Both are normalized so TypeScript's formatters can relativize them.
@@ -35,7 +33,7 @@ export function formatHost(cwd: string): FormatDiagnosticsHost {
   return {
     getCurrentDirectory: () => normalizePath(cwd),
     getCanonicalFileName: (fileName) =>
-      caseInsensitive ? fileName.toLowerCase() : fileName,
+      caseInsensitiveFileSystem ? fileName.toLowerCase() : fileName,
     getNewLine: () => NEW_LINE
   }
 }

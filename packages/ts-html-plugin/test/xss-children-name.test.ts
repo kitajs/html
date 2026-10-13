@@ -151,3 +151,49 @@ it('`children` prop typed as a tuple containing a string is flagged', async () =
     }
   ])
 })
+
+it('optional `children` prop typed as a string array is flagged', async () => {
+  await using server = new TSLangServer(__dirname)
+
+  // `string[] | undefined` has no raw string member, but its array member renders raw
+  const diagnostics = await server.openWithDiagnostics /* tsx */ `
+    export function Test(props: { children?: string[] }) {
+      return <div>{props.children}</div>;
+    }
+  `
+
+  expect(diagnostics.body).toEqual([
+    {
+      start: { line: 35, offset: 20 },
+      end: { line: 35, offset: 34 },
+      text: Xss.message,
+      code: Xss.code,
+      category: 'error'
+    }
+  ])
+})
+
+it('recursive types are checked without recursing forever', async () => {
+  await using server = new TSLangServer(__dirname)
+
+  const diagnostics = await server.openWithDiagnostics /* tsx */ `
+    type Tree = number | Tree[];
+    type Unsafe = boolean | Unsafe[] | string[];
+    declare const tree: Tree;
+    declare const unsafe: Unsafe;
+
+    export function Test(props: { children: Tree }) {
+      return <div>{tree}{props.children}{unsafe}</div>;
+    }
+  `
+
+  expect(diagnostics.body).toEqual([
+    {
+      start: { line: 40, offset: 42 },
+      end: { line: 40, offset: 48 },
+      text: Xss.message,
+      code: Xss.code,
+      category: 'error'
+    }
+  ])
+})

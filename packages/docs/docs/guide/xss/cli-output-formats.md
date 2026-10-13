@@ -9,12 +9,12 @@ description:
 `kita-html check` writes its report to stdout. Usage and configuration errors, and
 warnings about skipped files, go to stderr. Select a format with `--format` (`-f`).
 
-| Format   | Output                                                                                                                    |
-| -------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `pretty` | Default. Code frames, documentation links, and a summary line. Colored when stdout is a terminal.                         |
-| `tsc`    | One `file(line,col): error TS88601: message` line per finding, identical to `tsc` output. Prints nothing when clean.      |
-| `json`   | One JSON document, also printed when clean. Follows the schema shipped at `@kitajs/html-cli/schema/check-report.v1.json`. |
-| `github` | One GitHub Actions `::error` or `::warning` annotation per finding, followed by the `tsc` lines and the summary line.     |
+| Format   | Output                                                                                                                                                             |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pretty` | Default. Code frames, documentation links, and a summary line. Colored when stdout is a terminal.                                                                  |
+| `tsc`    | One `file(line,col): error TS88601: message` line per finding, identical to `tsc` output. Prints nothing when clean.                                               |
+| `json`   | One JSON document, also printed when clean. Follows the schema shipped at `@kitajs/html-cli/schema/check-report.v1.json`.                                          |
+| `github` | One GitHub Actions `::error` or `::warning` annotation per finding, followed by one `file:line:col: error TS88601: message` line per finding and the summary line. |
 
 `--color` and `--no-color` force colors on or off for `pretty`. Without them, `NO_COLOR`
 disables colors and `FORCE_COLOR` enables them. Other formats never print colors.

@@ -45,7 +45,7 @@ changes are complete means gathering all broken feedback at once, making debuggi
 
 - `@kitajs/html` — Core JSX runtime
 - `@kitajs/html-cli` — `kita-html check`, XSS detection for TypeScript 7.1+
-- `@kitajs/ts-html-plugin` — Deprecated XSS detection plugin for TypeScript 5/6
+- `@kitajs/ts-html-plugin` — Deprecated XSS detection plugin for TypeScript 6
 - `@kitajs/fastify-html-plugin` — Fastify integration
 - `@kitajs/docs-html` — Documentation site
 
@@ -233,6 +233,8 @@ pnpm bench          # Run benchmarks
 pnpm -F @kitajs/html build
 pnpm -F @kitajs/html test
 pnpm -F @kitajs/html test-types
+pnpm -F @kitajs/html-cli build
+pnpm -F @kitajs/html-cli test     # cli.test.ts needs a build first
 pnpm -F @kitajs/ts-html-plugin build
 pnpm -F @kitajs/ts-html-plugin test
 pnpm -F @kitajs/fastify-html-plugin build
@@ -306,7 +308,7 @@ debugging.
 
 - **pnpm** is the only supported package manager (enforced by preinstall script)
 - **Node.js 20.13+** required
-- **TypeScript 5.9+** for development
+- **TypeScript 6** for development (7.1 in `packages/cli`)
 
 ## Common Pitfalls
 
@@ -327,7 +329,7 @@ debugging.
 packages/
   html/                  @kitajs/html            Core JSX runtime
   cli/                   @kitajs/html-cli        kita-html check (TS 7.1+)
-  ts-html-plugin/        @kitajs/ts-html-plugin  Deprecated XSS detection (TS 5/6)
+  ts-html-plugin/        @kitajs/ts-html-plugin  Deprecated XSS detection (TS 6)
   fastify-html-plugin/   @kitajs/fastify-html-plugin  Fastify integration
   docs/                  @kitajs/docs-html       Documentation site
 benchmarks/              Performance benchmarks

@@ -5,7 +5,7 @@ import {
   normalizeDiagnostics,
   type KitaDiagnostic
 } from '../src/diagnostic.js'
-import { normalizePath } from '../src/paths.js'
+import { caseInsensitiveFileSystem, comparablePath, normalizePath } from '../src/paths.js'
 import { supportsSyncApi } from '../src/typescript.js'
 
 function diagnostic(
@@ -86,5 +86,11 @@ describe('normalizePath', () => {
   it('uses forward slashes and a lowercase drive letter', () => {
     expect(normalizePath('C:\\repo\\src\\a.tsx')).toBe('c:/repo/src/a.tsx')
     expect(normalizePath('/repo/src/a.tsx')).toBe('/repo/src/a.tsx')
+  })
+
+  it('compares case-insensitively where the file system does', () => {
+    expect(comparablePath('C:\\Repo\\A.tsx')).toBe(
+      caseInsensitiveFileSystem ? 'c:/repo/a.tsx' : 'c:/Repo/A.tsx'
+    )
   })
 })

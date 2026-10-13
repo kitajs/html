@@ -229,19 +229,29 @@ describe('json', () => {
 })
 
 describe('github', () => {
-  it('prints annotations, tsc lines and a summary', () => {
+  it('prints annotations, log lines and a summary', () => {
     expect(github(RESULT, ctx)).toMatchInlineSnapshot(`
       "::error file=src/my pages/home.tsx,line=1,col=1,endLine=1,endColumn=5,title=TS88601::Content may introduce an XSS vulnerability and must be marked with the \`safe\` attribute. See https://html.kitajs.org/TS88601
       ::error file=src/pages/login.tsx,line=3,col=6,endLine=3,endColumn=15,title=TS88601::Content may introduce an XSS vulnerability and must be marked with the \`safe\` attribute. See https://html.kitajs.org/TS88601
       ::warning file=src/pages/login.tsx,line=4,col=11,endLine=4,endColumn=15,title=TS88604::The \`safe\` attribute is unused in this context. See https://html.kitajs.org/TS88604
       ::error file=src/pages/login.tsx,line=5,col=5,endLine=10,endColumn=9,title=TS88602::The \`safe\` attribute causes this content to be escaped more than once. See https://html.kitajs.org/TS88602
-      src/my pages/home.tsx(1,1): error TS88601: Content may introduce an XSS vulnerability and must be marked with the \`safe\` attribute.
-      src/pages/login.tsx(3,6): error TS88601: Content may introduce an XSS vulnerability and must be marked with the \`safe\` attribute.
-      src/pages/login.tsx(4,11): warning TS88604: The \`safe\` attribute is unused in this context.
-      src/pages/login.tsx(5,5): error TS88602: The \`safe\` attribute causes this content to be escaped more than once.
+      src/my pages/home.tsx:1:1: error TS88601: Content may introduce an XSS vulnerability and must be marked with the \`safe\` attribute.
+      src/pages/login.tsx:3:6: error TS88601: Content may introduce an XSS vulnerability and must be marked with the \`safe\` attribute.
+      src/pages/login.tsx:4:11: warning TS88604: The \`safe\` attribute is unused in this context.
+      src/pages/login.tsx:5:5: error TS88602: The \`safe\` attribute causes this content to be escaped more than once.
       Found 3 errors and 1 warning in 2 files.
       "
     `)
+  })
+
+  it('prints log lines that the setup-node tsc problem matcher ignores', () => {
+    // Pattern of the tsc problem matcher registered by actions/setup-node
+    const matcher =
+      /^([^\s].*)[(:](\d+)[,:](\d+)(?:\):\s+|\s+-\s+)(error|warning|info)\s+TS(\d+)\s*:\s*(.*)$/
+
+    for (const line of github(RESULT, ctx).trimEnd().split('\n')) {
+      expect(line).not.toMatch(matcher)
+    }
   })
 
   it('makes annotation paths relative to GITHUB_WORKSPACE', () => {

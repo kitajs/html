@@ -2,7 +2,7 @@
 
 ## Overview
 
-> **Deprecated.** This package requires TypeScript 5 or 6. TypeScript 7.1+ users use
+> **Deprecated.** This package requires TypeScript 6. TypeScript 7.1+ users use
 > `kita-html check` from `@kitajs/html-cli` (`packages/cli`), which ports the same
 > detection logic to the TypeScript 7.1 API. Only security fixes land here. When a rule
 > changes, mirror it in `packages/cli/src/analyzer/` (and the reverse).

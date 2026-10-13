@@ -2,7 +2,7 @@
   "name": "@kitajs/html-cli",
   "version": "5.0.0-next.0",
   "description": "Command line tools for @kitajs/html, including XSS checks for TypeScript 7.1+",
-  "homepage": "https://html.kitajs.org",
+  "homepage": "https://html.kitajs.org/guide/xss/cli-scanner",
   "bugs": "https://github.com/kitajs/html/issues",
   "repository": {
     "type": "git",

@@ -40,8 +40,8 @@
 - Formats: `pretty`, `tsc` (VS Code `$tsc` problem matcher), `json` and `github` (pull
   request annotations)
 - Exits with `0` when clean, `1` on errors and `2` on warnings only
-- Requires TypeScript 7.1 or later and Node.js 22 or later. TypeScript 5 and 6 projects
-  use the deprecated `@kitajs/ts-html-plugin`
+- Requires TypeScript 7.1 or later and Node.js 22 or later. TypeScript 6 projects use the
+  deprecated `@kitajs/ts-html-plugin`
 
 ```bash
 npx kita-html check

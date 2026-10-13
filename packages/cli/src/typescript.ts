@@ -61,7 +61,7 @@ export async function loadTypeScript(fromDirectory: string): Promise<TypeScript>
   if (!supportsSyncApi(version)) {
     throw new TypeScriptVersionError(
       `kita-html check requires typescript >=7.1 (found ${version} at ${path.dirname(packageJsonPath)}).\n` +
-        'For TypeScript 5 or 6, use xss-scan from @kitajs/ts-html-plugin.'
+        'For TypeScript 6, use xss-scan from @kitajs/ts-html-plugin.'
     )
   }
 

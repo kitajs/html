@@ -18,11 +18,11 @@ TypeScript 6.0 or later is required for full compatibility with the latest type
 definitions. TypeScript 7.1 or later is recommended, because XSS detection on TypeScript 7
 uses the API that ships with 7.1.
 
-| TypeScript  | XSS tooling                                                                                        |
-| ----------- | -------------------------------------------------------------------------------------------------- |
-| 7.1 and up  | [`kita-html check`](/guide/xss/cli-scanner) from `@kitajs/html-cli`                                |
-| 7.0         | None. Version 7.0 ships no compiler API                                                            |
-| 5.x and 6.x | Deprecated [editor plugin and `xss-scan`](/guide/xss/ts-html-plugin) from `@kitajs/ts-html-plugin` |
+| TypeScript | XSS tooling                                                                                        |
+| ---------- | -------------------------------------------------------------------------------------------------- |
+| 7.1 and up | [`kita-html check`](/guide/xss/cli-scanner) from `@kitajs/html-cli`                                |
+| 7.0        | None. Version 7.0 ships no compiler API                                                            |
+| 6.x        | Deprecated [editor plugin and `xss-scan`](/guide/xss/ts-html-plugin) from `@kitajs/ts-html-plugin` |
 
 `@kitajs/html-cli` requires Node.js 22 or later.
 
@@ -51,5 +51,5 @@ late 2015. IE11 is not supported.
 
 TypeScript 7 does not load language service plugins, so `kita-html check` runs as a
 command. Its `tsc` output format feeds any editor that parses `tsc` output, such as VS
-Code through the `$tsc` problem matcher. The deprecated TypeScript 5 and 6 plugin works in
+Code through the `$tsc` problem matcher. The deprecated TypeScript 6 plugin works in
 editors that support language service plugins, with the workspace TypeScript selected.

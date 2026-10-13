@@ -1,15 +1,15 @@
 ---
 description:
-  Deprecated TypeScript 5 and 6 XSS tooling. Configure the @kitajs/ts-html-plugin editor
-  plugin, run xss-scan, and migrate to kita-html check.
+  Deprecated TypeScript 6 XSS tooling. Configure the @kitajs/ts-html-plugin editor plugin,
+  run xss-scan, and migrate to kita-html check.
 ---
 
 # Editor plugin and xss-scan
 
 :::warning Deprecated
 
-`@kitajs/ts-html-plugin` only works with TypeScript 5 and 6. TypeScript 7 removed the
-compiler API and language service plugins it depends on. Upgrade to TypeScript 7.1 and use
+`@kitajs/ts-html-plugin` only works with TypeScript 6. TypeScript 7 removed the compiler
+API and language service plugins it depends on. Upgrade to TypeScript 7.1 and use
 [`kita-html check`](./cli-scanner.mdx) instead. This package only receives security fixes.
 
 :::
@@ -30,7 +30,7 @@ Add the TypeScript plugin to `tsconfig.json`:
 }
 ```
 
-Your editor must use the project's local TypeScript 5 or 6 installation. In VS Code, set
+Your editor must use the project's local TypeScript 6 installation. In VS Code, set
 `js/ts.tsdk.path` to `node_modules/typescript/lib` and enable
 `js/ts.tsdk.promptToUseWorkspaceVersion`.
 

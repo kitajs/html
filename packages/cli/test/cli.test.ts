@@ -185,7 +185,7 @@ describe('formats', () => {
     expect(stdout).toContain(
       `::error file=${path.basename(dir)}/src/a.tsx,line=2,col=24,endLine=2,endColumn=29,title=TS88601::`
     )
-    expect(stdout).toContain('src/a.tsx(2,24): error TS88601')
+    expect(stdout).toContain('src/a.tsx:2:24: error TS88601')
   })
 
   it('pretty is colorless when piped and honors --color and FORCE_COLOR', () => {

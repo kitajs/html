@@ -144,3 +144,31 @@ it('reports findings at the same position in different files', () => {
     fs.rmSync(tmpDir, { recursive: true, force: true })
   }
 })
+
+it('checks arrays inside recursive aliases by their element types', () => {
+  // Deferred type references are not resolved before the scan, unlike in tsserver
+  const tmpDir = path.join(__dirname, '.tmp-recursive')
+
+  createProject(
+    tmpDir,
+    {
+      compilerOptions: { jsx: 'react-jsx', jsxImportSource: '@kitajs/html', strict: true }
+    },
+    {
+      'src/index.tsx':
+        'type Nested = number | Array<Nested | string>\ndeclare const nested: Nested\nexport default <div>{nested}</div>;\n'
+    }
+  )
+
+  try {
+    const result = spawnSync('node', [CLI, '--simplified'], {
+      cwd: tmpDir,
+      encoding: 'utf-8'
+    })
+
+    expect(result.status).toBe(1)
+    expect(result.stderr).toContain('index.tsx(3,22): error TS88601')
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true })
+  }
+})

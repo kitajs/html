@@ -13,8 +13,8 @@ same TS88601 to TS88604 [diagnostics](./error-codes.mdx) as the editor plugin it
 and it is the recommended XSS check for Kita Html projects.
 
 TypeScript 7 does not load language service plugins, so the check runs as a command
-instead of inside the editor. Projects that still use TypeScript 5 or 6 can keep the
-deprecated [editor plugin and `xss-scan`](./ts-html-plugin.md) until they upgrade.
+instead of inside the editor. Projects that still use TypeScript 6 can keep the deprecated
+[editor plugin and `xss-scan`](./ts-html-plugin.md) until they upgrade.
 
 ## Install
 
@@ -27,9 +27,9 @@ deprecated [editor plugin and `xss-scan`](./ts-html-plugin.md) until they upgrad
   }}
 />
 
-The CLI requires Node.js 22 and TypeScript 7.1 or later. Until TypeScript 7.1 is stable,
-it is published under the `next` tag. The check loads the `typescript` package installed
-in your project, so its results follow your compiler version.
+The CLI requires Node.js 22 and TypeScript 7.1 or later. TypeScript 7.1 is published under
+the `next` tag until its stable release. The check loads the `typescript` package
+installed in your project, so its results follow your compiler version.
 
 ## Run the check
 
@@ -70,7 +70,9 @@ keeps annotations attached when the check runs from a package directory of a mon
 ```
 
 GitHub displays a limited number of annotations per step. The format also prints every
-finding as a plain line, so the full list stays in the job log.
+finding as a plain line, so the full list stays in the job log. Those lines do not match
+the `tsc` problem matcher that `actions/setup-node` registers, so findings are not
+annotated twice.
 
 ## Show findings in VS Code
 

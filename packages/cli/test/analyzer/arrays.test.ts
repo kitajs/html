@@ -51,3 +51,22 @@ it('spread children holding raw strings are flagged', async () => {
     }
   ])
 })
+
+it('arrays inside recursive aliases are checked by their element types', async () => {
+  const diagnostics = await openWithDiagnostics /* tsx */ `
+    type Nested = number | Array<Nested | string>;
+    declare const nested: Nested;
+
+    export default <div>{nested}</div>;
+  `
+
+  expect(diagnostics.body).toEqual([
+    {
+      start: { line: 37, offset: 26 },
+      end: { line: 37, offset: 32 },
+      text: Xss.message,
+      code: Xss.code,
+      category: 'error'
+    }
+  ])
+})

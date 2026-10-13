@@ -199,6 +199,21 @@ describe('solution-style tsconfig', () => {
     expect(codes(result)).toEqual(['packages/app/src/a.tsx:88601'])
   })
 
+  it('accepts a solution after its own referenced project or twice', async () => {
+    const afterReference = await checkFiles(solution, {
+      projects: ['packages/lib', '.']
+    })
+    const twice = await checkFiles(solution, { projects: ['.', 'tsconfig.json'] })
+
+    for (const result of [afterReference, twice]) {
+      expect(codes(result)).toEqual([
+        'packages/app/src/a.tsx:88601',
+        'packages/lib/src/index.tsx:88601'
+      ])
+      expect(result.projects).toHaveLength(2)
+    }
+  })
+
   it('fails when references lead to no files', async () => {
     await expect(
       checkFiles({

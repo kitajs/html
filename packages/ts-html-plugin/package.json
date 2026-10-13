@@ -1,8 +1,8 @@
 {
   "name": "@kitajs/ts-html-plugin",
   "version": "5.0.0-next.2",
-  "description": "Deprecated TypeScript 5/6 language service plugin and xss-scan CLI for Kita Html. Use kita-html check from @kitajs/html-cli on TypeScript 7.1+",
-  "homepage": "https://github.com/kitajs/html/tree/master/packages/ts-html-plugin#readme",
+  "description": "Deprecated TypeScript 6 language service plugin and xss-scan CLI for Kita Html. Use kita-html check from @kitajs/html-cli on TypeScript 7.1+",
+  "homepage": "https://html.kitajs.org/guide/xss/ts-html-plugin",
   "bugs": "https://github.com/kitajs/html/issues",
   "repository": {
     "type": "git",
@@ -50,5 +50,5 @@
   "engines": {
     "node": ">=20.12"
   },
-  "deprecated": "Requires TypeScript 5 or 6. Use TypeScript 7.1+ with kita-html check from @kitajs/html-cli instead. See https://html.kitajs.org/guide/xss/cli-scanner"
+  "deprecated": "Requires TypeScript 6. Use TypeScript 7.1+ with kita-html check from @kitajs/html-cli instead. See https://html.kitajs.org/guide/xss/cli-scanner"
 }

@@ -7,7 +7,7 @@ Latest docs:
 - Safe attribute: `https://html.kitajs.org/guide/xss/safe-attribute.md`
 - kita-html check: `https://html.kitajs.org/guide/xss/cli-scanner.md`
 - Output formats: `https://html.kitajs.org/guide/xss/cli-output-formats.md`
-- Deprecated TypeScript 5/6 plugin: `https://html.kitajs.org/guide/xss/ts-html-plugin.md`
+- Deprecated TypeScript 6 plugin: `https://html.kitajs.org/guide/xss/ts-html-plugin.md`
 - Error codes: `https://html.kitajs.org/guide/xss/error-codes.md`
 
 If this file and the docs disagree, trust the docs.
@@ -73,7 +73,7 @@ import { Fragment, escapeHtml } from '@kitajs/html'
 
 Install `@kitajs/html-cli` and `typescript` 7.1 or later as dev dependencies. TypeScript 7
 does not load editor plugins, so do not add a `plugins` entry. Projects stuck on
-TypeScript 5 or 6 use the deprecated `@kitajs/ts-html-plugin` and `xss-scan` instead.
+TypeScript 6 use the deprecated `@kitajs/ts-html-plugin` and `xss-scan` instead.
 
 ### `package.json` scripts
 
