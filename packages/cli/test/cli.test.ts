@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { format, stripVTControlCharacters } from 'node:util'
 import { afterAll, afterEach, describe, expect, it, vi } from 'vitest'
+import { skipWindowsShellDetection } from '../src/cli/environment.js'
 import { TEST_DIR } from './util/project.js'
 
 const ROOT = path.join(TEST_DIR, '..')
@@ -59,6 +60,9 @@ function baseEnv(env: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
   delete base.GITHUB_ACTIONS
   delete base.GITHUB_WORKSPACE
 
+  // Same as the bin does before oclif loads
+  skipWindowsShellDetection(['check'], base)
+
   // Keeps runs offline and deterministic
   return { ...base, KITA_HTML_SKIP_NEW_VERSION_CHECK: 'true', ...env }
 }
@@ -113,7 +117,10 @@ function spawn(cwd: string, args: string[]) {
   return { code: result.status, stdout: result.stdout, stderr: result.stderr }
 }
 
-// oclif startup is slow on shared Windows runners
+// Each case starts a TypeScript process, which is slow on shared Windows runners
+vi.setConfig({ testTimeout: 120_000 })
+
+// Spawned cases also pay for Node and oclif startup
 const SPAWN_TIMEOUT = 180_000
 
 const CLEAN = { 'src/a.tsx': 'export const a = <div>{1}</div>\n' }

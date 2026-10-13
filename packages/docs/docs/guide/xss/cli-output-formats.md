@@ -16,9 +16,10 @@ warnings about skipped files, go to stderr. Select a format with `--format` (`-f
 | `json`   | One JSON document, also printed when clean. Follows the schema shipped at `@kitajs/html-cli/schema/check-report.v1.json`.                                          |
 | `github` | One GitHub Actions `::error` or `::warning` annotation per finding, followed by one `file:line:col: error TS88601: message` line per finding and the summary line. |
 
-`--color` and `--no-color` force colors on or off for `pretty`. Without them, `NO_COLOR`
-disables colors and `FORCE_COLOR` enables them. Otherwise colors are on in GitHub Actions
-and when stdout is a terminal. Other formats never print colors.
+`--color` and `--no-color` force colors on or off for `pretty`. Without them, a non-empty
+`NO_COLOR` disables colors, and `FORCE_COLOR` enables them unless it is `0` or `false`.
+Otherwise colors are on in GitHub Actions and when stdout is a terminal. Other formats
+never print colors.
 
 ## Flags
 

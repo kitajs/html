@@ -31,7 +31,7 @@
 
 <h1>🏛️ KitaJS TypeScript Html Plugin</h1>
 
-> [!WARNING] **Deprecated.** This package only works with TypeScript 6, which still ship
+> [!WARNING] **Deprecated.** This package only works with TypeScript 6, which still ships
 > the compiler API and language service plugins. Use TypeScript 7.1 or later with
 > [`@kitajs/html-cli`](https://html.kitajs.org/guide/xss/cli-scanner) and run
 > `kita-html check` instead. This package only receives security fixes.

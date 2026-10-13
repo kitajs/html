@@ -10,12 +10,13 @@ TypeScript 6 compiler API and language service plugins that TypeScript 7 removed
 ## File structure
 
 ```
-bin/kita-html.js         oclif entry
+bin/kita-html.js         oclif entry; skips oclif's slow Windows shell detection
 schema/                  JSON Schema of the json report, exported as a package subpath
 src/
   cli/                   Everything oclif-specific
     commands/check.ts    `kita-html check` (flags, exit codes, error mapping)
-    color.ts             --color / NO_COLOR / FORCE_COLOR / TTY resolution
+    color.ts             --color / NO_COLOR / FORCE_COLOR / GitHub Actions / TTY resolution
+    environment.ts       Sets SHELL on Windows so oclif does not spawn PowerShell per run
   check.ts               check(options): opens projects, expands references, runs the analyzer
   typescript.ts          Loads typescript/sync, ast and ast/is from the project. Version gate
   analyzer/              Port of ts-html-plugin's util.ts to the TypeScript 7.1 API

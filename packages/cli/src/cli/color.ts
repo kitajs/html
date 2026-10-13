@@ -12,12 +12,15 @@ export function resolveColor(
     return flag
   }
 
+  // https://no-color.org: only a non-empty NO_COLOR disables colors
   if (env.NO_COLOR) {
     return false
   }
 
-  if (env.FORCE_COLOR && env.FORCE_COLOR !== '0') {
-    return true
+  // Same meaning as in Node.js: any value forces colors, including an empty one, except 0
+  // and false, which turn them off
+  if (env.FORCE_COLOR !== undefined) {
+    return env.FORCE_COLOR !== '0' && env.FORCE_COLOR !== 'false'
   }
 
   if (env.GITHUB_ACTIONS === 'true') {

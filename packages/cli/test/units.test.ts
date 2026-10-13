@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { resolveColor } from '../src/cli/color.js'
+import { skipWindowsShellDetection } from '../src/cli/environment.js'
 import {
   exitCodeFor,
   normalizeDiagnostics,
@@ -76,7 +77,10 @@ describe('resolveColor', () => {
     expect(resolveColor(false, { FORCE_COLOR: '1' }, true)).toBe(false)
     expect(resolveColor(undefined, { NO_COLOR: '1', FORCE_COLOR: '1' }, true)).toBe(false)
     expect(resolveColor(undefined, { FORCE_COLOR: '1' }, false)).toBe(true)
-    expect(resolveColor(undefined, { FORCE_COLOR: '0' }, false)).toBe(false)
+    expect(resolveColor(undefined, { FORCE_COLOR: '0' }, true)).toBe(false)
+    expect(resolveColor(undefined, { FORCE_COLOR: 'false' }, true)).toBe(false)
+    expect(resolveColor(undefined, { FORCE_COLOR: '' }, false)).toBe(true)
+    expect(resolveColor(undefined, { NO_COLOR: '' }, true)).toBe(true)
     expect(resolveColor(undefined, { GITHUB_ACTIONS: 'true' }, false)).toBe(true)
     expect(
       resolveColor(undefined, { GITHUB_ACTIONS: 'true', NO_COLOR: '1' }, false)
@@ -84,6 +88,20 @@ describe('resolveColor', () => {
     expect(resolveColor(false, { GITHUB_ACTIONS: 'true' }, false)).toBe(false)
     expect(resolveColor(undefined, {}, true)).toBe(true)
     expect(resolveColor(undefined, {}, false)).toBe(false)
+  })
+})
+
+describe('skipWindowsShellDetection', () => {
+  it('sets SHELL on Windows unless it is set or the command is autocomplete', () => {
+    const run = (argv: string[], env: NodeJS.ProcessEnv, platform: NodeJS.Platform) => {
+      skipWindowsShellDetection(argv, env, platform)
+      return env.SHELL
+    }
+
+    expect(run(['check'], {}, 'win32')).toBe('cmd.exe')
+    expect(run(['check'], { SHELL: 'bash' }, 'win32')).toBe('bash')
+    expect(run(['autocomplete'], {}, 'win32')).toBeUndefined()
+    expect(run(['check'], {}, 'linux')).toBeUndefined()
   })
 })
 
