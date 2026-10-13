@@ -5,7 +5,9 @@ Use this before writing or reviewing any Kita JSX that includes dynamic strings.
 Latest docs:
 
 - Safe attribute: `https://html.kitajs.org/guide/xss/safe-attribute.md`
-- CLI scanner: `https://html.kitajs.org/guide/xss/cli-scanner.md`
+- kita-html check: `https://html.kitajs.org/guide/xss/cli-scanner.md`
+- Output formats: `https://html.kitajs.org/guide/xss/cli-output-formats.md`
+- Deprecated TypeScript 5/6 plugin: `https://html.kitajs.org/guide/xss/ts-html-plugin.md`
 - Error codes: `https://html.kitajs.org/guide/xss/error-codes.md`
 
 If this file and the docs disagree, trust the docs.
@@ -14,7 +16,7 @@ If this file and the docs disagree, trust the docs.
 
 Dynamic strings are unsafe by default. Kita does not auto-escape JSX children because JSX
 output is already plain strings. Safety comes from the `safe` attribute, explicit escaping
-helpers, the TypeScript plugin, and `xss-scan` in CI.
+helpers, and `kita-html check` in CI (TypeScript 7.1+).
 
 ## Correct escaping patterns
 
@@ -64,27 +66,21 @@ import { Fragment, escapeHtml } from '@kitajs/html'
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "@kitajs/html",
-    "plugins": [{ "name": "@kitajs/ts-html-plugin" }]
+    "jsxImportSource": "@kitajs/html"
   }
 }
 ```
 
-### VS Code workspace settings
-
-```json
-{
-  "js/ts.tsdk.path": "node_modules/typescript/lib",
-  "js/ts.tsdk.promptToUseWorkspaceVersion": true
-}
-```
+Install `@kitajs/html-cli` and `typescript` 7.1 or later as dev dependencies. TypeScript 7
+does not load editor plugins, so do not add a `plugins` entry. Projects stuck on
+TypeScript 5 or 6 use the deprecated `@kitajs/ts-html-plugin` and `xss-scan` instead.
 
 ### `package.json` scripts
 
 ```json
 {
   "scripts": {
-    "test": "xss-scan && vitest"
+    "test": "kita-html check && vitest"
   }
 }
 ```
@@ -99,5 +95,5 @@ import { Fragment, escapeHtml } from '@kitajs/html'
 If you are generating a fix, choose the narrowest change that preserves intended HTML
 output.
 
-After a batch of changes, prefer running `pnpm xss-scan` directly when the project has the
-dependency installed.
+After a batch of changes, prefer running `pnpm kita-html check` directly when the project
+has the dependency installed. Use `--format tsc` for one line per finding.

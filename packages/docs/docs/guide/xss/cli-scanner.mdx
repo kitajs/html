@@ -1,0 +1,97 @@
+---
+description:
+  Install @kitajs/html-cli, run kita-html check on TypeScript 7.1 projects, and report XSS
+  findings in GitHub pull requests or the VS Code Problems panel.
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme'
+
+# kita-html check
+
+`kita-html check` finds unsafe JSX with the TypeScript 7.1 type checker. It reports the
+same TS88601 to TS88604 [diagnostics](./error-codes.mdx) as the editor plugin it replaces,
+and it is the recommended XSS check for Kita Html projects.
+
+TypeScript 7 does not load language service plugins, so the check runs as a command
+instead of inside the editor. Projects that still use TypeScript 5 or 6 can keep the
+deprecated [editor plugin and `xss-scan`](./ts-html-plugin.md) until they upgrade.
+
+## Install
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm i -D @kitajs/html-cli@next typescript@next',
+    yarn: 'yarn add -D @kitajs/html-cli@next typescript@next',
+    pnpm: 'pnpm add -D @kitajs/html-cli@next typescript@next',
+    bun: 'bun add -d @kitajs/html-cli@next typescript@next'
+  }}
+/>
+
+The CLI requires Node.js 22 and TypeScript 7.1 or later. Until TypeScript 7.1 is stable,
+it is published under the `next` tag. The check loads the `typescript` package installed
+in your project, so its results follow your compiler version.
+
+## Run the check
+
+```bash
+npx kita-html check
+```
+
+Without arguments, the command checks every TSX and JSX file of `./tsconfig.json`. Pass
+`-p` to choose another config, and repeat it to check several projects in one run. A
+solution-style `tsconfig.json` that only lists `references` is expanded to every
+referenced project, like `tsc -b`.
+
+```json title="package.json"
+{
+  "scripts": {
+    "test": "kita-html check && vitest"
+  }
+}
+```
+
+The command exits with `0` when nothing is found, `1` on errors or invalid configuration,
+and `2` when only TS88604 warnings remain. [Output formats](./cli-output-formats.md)
+describes every format and exit code.
+
+To report on some files only, such as staged files in a pre-commit hook, pass them as
+arguments. Types still come from the full project. Files outside the project, or files
+that are not TSX or JSX, are skipped with a warning.
+
+## Report in GitHub pull requests
+
+`--format github` prints each finding as a GitHub Actions annotation, so it appears on the
+changed line of the pull request. Paths are resolved against `GITHUB_WORKSPACE`, which
+keeps annotations attached when the check runs from a package directory of a monorepo.
+
+```yaml title=".github/workflows/ci.yml"
+- name: XSS check
+  run: npx kita-html check --format github
+```
+
+GitHub displays a limited number of annotations per step. The format also prints every
+finding as a plain line, so the full list stays in the job log.
+
+## Show findings in VS Code
+
+`--format tsc` prints findings in the same format as `tsc`. The built-in `$tsc` problem
+matcher of VS Code parses it and lists each finding in the Problems panel, linked to its
+source line.
+
+```json title=".vscode/tasks.json"
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "kita-html check",
+      "type": "shell",
+      "command": "npx kita-html check --format tsc",
+      "problemMatcher": "$tsc",
+      "group": "test"
+    }
+  ]
+}
+```
+
+Run the task from **Terminal > Run Task**. Other editors and CI tools that parse `tsc`
+output accept the same format.

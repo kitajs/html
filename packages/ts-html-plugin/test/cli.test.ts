@@ -1,4 +1,4 @@
-import { execFileSync } from 'node:child_process'
+import { execFileSync, spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { expect, it } from 'vitest'
@@ -65,6 +65,81 @@ it('exits non-zero when tsconfig is missing', () => {
         stdio: 'pipe'
       })
     ).toThrow()
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true })
+  }
+})
+
+it('prints a deprecation notice pointing to kita-html check', () => {
+  const tmpDir = path.join(__dirname, '.tmp-deprecation')
+
+  createProject(
+    tmpDir,
+    { compilerOptions: { jsx: 'react-jsx', jsxImportSource: '@kitajs/html' } },
+    { 'src/index.tsx': 'export default <div>Hello</div>;\n' }
+  )
+
+  try {
+    const result = spawnSync('node', [CLI], { cwd: tmpDir, encoding: 'utf-8' })
+
+    expect(result.status).toBe(0)
+    expect(result.stderr).toContain('xss-scan is deprecated')
+    expect(result.stderr).toContain('kita-html check')
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true })
+  }
+})
+
+it('does not truncate large reports written to a pipe', () => {
+  const tmpDir = path.join(__dirname, '.tmp-large')
+  const count = 3000
+  const body = Array.from({ length: count }, () => '    {input}').join('\n')
+
+  createProject(
+    tmpDir,
+    {
+      compilerOptions: { jsx: 'react-jsx', jsxImportSource: '@kitajs/html', strict: true }
+    },
+    {
+      'src/index.tsx': `declare const input: string\nexport default (\n  <div>\n${body}\n  </div>\n);\n`
+    }
+  )
+
+  try {
+    const result = spawnSync('node', [CLI, '--simplified'], {
+      cwd: tmpDir,
+      encoding: 'utf-8',
+      maxBuffer: 64 * 1024 * 1024
+    })
+
+    expect(result.status).toBe(1)
+    expect(result.stderr.match(/error TS88601/g)).toHaveLength(count)
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true })
+  }
+})
+
+it('reports findings at the same position in different files', () => {
+  const tmpDir = path.join(__dirname, '.tmp-same-position')
+  const source = 'declare const input: string\nexport default <div>{input}</div>;\n'
+
+  createProject(
+    tmpDir,
+    {
+      compilerOptions: { jsx: 'react-jsx', jsxImportSource: '@kitajs/html', strict: true }
+    },
+    { 'src/a.tsx': source, 'src/b.tsx': source }
+  )
+
+  try {
+    const result = spawnSync('node', [CLI, '--simplified'], {
+      cwd: tmpDir,
+      encoding: 'utf-8'
+    })
+
+    expect(result.status).toBe(1)
+    expect(result.stderr).toContain('a.tsx(2,22): error TS88601')
+    expect(result.stderr).toContain('b.tsx(2,22): error TS88601')
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true })
   }

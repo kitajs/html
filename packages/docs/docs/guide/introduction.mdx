@@ -63,8 +63,7 @@ types for the `style` attribute.
 Because `JSX.Element` is a plain string (or a promise of one), the runtime cannot
 distinguish between HTML produced by a component and raw user input injected as a child.
 Children are not escaped by default. This is a deliberate trade-off for performance and
-composability. The `safe` attribute, the TypeScript plugin, and the `xss-scan` CLI close
-that gap.
+composability. The `safe` attribute and the `kita-html check` CLI close that gap.
 
 The `safe` attribute escapes children at render time. Adding it to any native element
 causes the runtime to pass all children through HTML entity escaping before concatenation.
@@ -77,11 +76,11 @@ const html = <div safe>{userInput}</div>
 //                        ^?
 ```
 
-A TypeScript language service plugin analyzes every JSX expression in your editor and
-flags any child whose type could carry unescaped HTML. The same analysis runs as a CLI
-tool [`xss-scan`](./xss/cli-scanner.md) in CI/CD pipelines, failing the build on any
-finding. Values that bypass the type system, such as `as 'safe'` casts or `safe`-prefixed
-names, are not checked.
+[`kita-html check`](./xss/cli-scanner.mdx) uses the TypeScript 7.1 type checker to analyze
+every JSX expression and flags any child whose type could carry unescaped HTML. It runs in
+CI/CD pipelines, failing the build on any finding, and can feed editor problem panels.
+Values that bypass the type system, such as `as 'safe'` casts or `safe`-prefixed names,
+are not checked.
 
 [Read more about the XSS protection system](./xss/safe-attribute.md)
 
@@ -140,7 +139,10 @@ The main packages are:
 
 - `@kitajs/html` is the core runtime that renders JSX to strings and provides Suspense
   streaming.
-- `@kitajs/ts-html-plugin` is the TypeScript plugin and CLI scanner for XSS detection.
+- `@kitajs/html-cli` provides `kita-html check`, the XSS scanner for TypeScript 7.1 and
+  later.
+- `@kitajs/ts-html-plugin` is the deprecated editor plugin and `xss-scan` CLI for
+  TypeScript 5 and 6.
 
 Official [framework integrations](/integrations/overview) are available for Fastify and
 Express, and Elysia provides its own. The core runtime works with any framework that

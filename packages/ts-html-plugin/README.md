@@ -31,6 +31,11 @@
 
 <h1>🏛️ KitaJS TypeScript Html Plugin</h1>
 
+> [!WARNING] **Deprecated.** This package only works with TypeScript 5 and 6, which still
+> ship the compiler API and language service plugins. Use TypeScript 7.1 or later with
+> [`@kitajs/html-cli`](https://html.kitajs.org/guide/xss/cli-scanner) and run
+> `kita-html check` instead. This package only receives security fixes.
+
 <p align="center">
   <code>@kitajs/ts-html-plugin</code> is a TypeScript language service plugin and CLI that finds XSS vulnerabilities in Kita Html JSX.
   <br />
@@ -44,12 +49,14 @@
 - Reports unsafe JSX in your editor as you type, through diagnostics TS88601 to TS88604
 - Ships the `xss-scan` CLI, which runs the same checks across a project in CI
 - `xss-scan` exits with `0` when clean, `1` on errors and `2` on warnings only
-- Does not load in editors that use `tsgo`, but `xss-scan` still works
+- Requires TypeScript 5 or 6. Neither the editor plugin nor `xss-scan` runs on TypeScript
+  7
 
 Documentation for this package is available at
-[html.kitajs.org](https://html.kitajs.org/guide/getting-started). See also the
-[CLI scanner](https://html.kitajs.org/guide/xss/cli-scanner) and
-[error codes](https://html.kitajs.org/guide/xss/error-codes) pages.
+[html.kitajs.org](https://html.kitajs.org/guide/getting-started). See the
+[editor plugin and xss-scan](https://html.kitajs.org/guide/xss/ts-html-plugin) page for
+this package, and [kita-html check](https://html.kitajs.org/guide/xss/cli-scanner) for its
+replacement.
 
 <br />
 

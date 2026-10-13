@@ -42,6 +42,7 @@ versioning:
   lanes:
     '@kitajs/express-html-plugin': next
     '@kitajs/fastify-html-plugin': next
+    '@kitajs/html-cli': next
     '@kitajs/html': next
     '@kitajs/ts-html-plugin': next
 
@@ -63,5 +64,10 @@ catalog:
   react-dom: ^19.2.8
   tslib: ^2.8.1
   tsx: ^4.23.1
-  typescript: ^6 # Cannot upgrade while TS7 doesn't ship LSP Plugins & Compiler API
+  typescript: ^6 # ts-html-plugin needs the TS 5/6 compiler API. TS 7.1+ is used by html-cli through the ts7 catalog
   vitest: ^4.1.10
+
+catalogs:
+  ts7:
+    # Pinned nightly until TypeScript 7.1 stable ships the typescript/sync API
+    typescript: 7.1.0-dev.20261012.1

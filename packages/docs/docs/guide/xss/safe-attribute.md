@@ -120,9 +120,9 @@ const html = e`Hello, ${userName}!`
 
 ## Suppression conventions
 
-When the XSS detection plugin flags a value that you know is safe, you can suppress the
-warning without adding `safe` to the element, which would escape all children and
-potentially break components.
+When `kita-html check` flags a value that you know is safe, you can suppress the warning
+without adding `safe` to the element, which would escape all children and potentially
+break components.
 
 ::: danger
 
@@ -131,7 +131,7 @@ use these techniques when you have a guarantee of safety.
 
 :::
 
-Prefix the variable name with `safe`. The plugin treats identifiers named `safe`, or
+Prefix the variable name with `safe`. The check treats identifiers named `safe`, or
 starting with `safe` followed by a non-lowercase character (such as `safeContent` or
 `safe_html`), as pre-escaped. Names like `safety` are still checked.
 
@@ -165,8 +165,8 @@ the rationale for any exceptions.
 
 :::
 
-Cast the expression to `'safe'` inline. This tells the plugin to skip the check for that
-specific usage and not warn about possible XSS vulnerabilities.
+Cast the expression to `'safe'` inline. `kita-html check` then skips that specific usage
+and does not warn about possible XSS vulnerabilities.
 
 ```tsx twoslash kita
 const content: string = '<script>untrusted()</script>'

@@ -11,3 +11,4 @@ packages/html/skills
 .playwright-mcp
 # pnpm publish -r --report-summary
 pnpm-publish-summary.json
+.agents/plans

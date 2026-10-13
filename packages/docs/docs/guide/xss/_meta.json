@@ -1,1 +1,8 @@
-["safe-attribute", "cli-scanner", "error-codes", "explicit-escaping"]
+[
+  "safe-attribute",
+  "cli-scanner",
+  "cli-output-formats",
+  "ts-html-plugin",
+  "error-codes",
+  "explicit-escaping"
+]

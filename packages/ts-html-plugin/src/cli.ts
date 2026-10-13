@@ -6,9 +6,14 @@ import { recursiveDiagnoseJsxElements } from './util'
 
 const { version } = require('../package.json')
 
+const deprecation =
+  'xss-scan is deprecated. Upgrade to TypeScript 7.1+ and use "kita-html check" from @kitajs/html-cli: https://html.kitajs.org/guide/xss/cli-scanner'
+
 const help = `
 
 @kitajs/ts-html-plugin v${version} - A CLI tool & TypeScript LSP for finding XSS vulnerabilities in your TypeScript code.
+
+Deprecated: ${deprecation}
 
 Usage: xss-scan         [options] <file> <file>...
        ts-html-plugin   [options] <file> <file>...
@@ -94,6 +99,14 @@ function prettyPrintErrorCount(diagnostics: ts.Diagnostic[], root: string) {
   }
 }
 
+function simplifiedOrStyled(
+  simplified: boolean,
+  format: Parameters<typeof styleText>[0],
+  text: string
+) {
+  return simplified || !process.stderr.isTTY ? text : styleText(format, text)
+}
+
 function fileExists(p: string) {
   try {
     fs.statSync(p)
@@ -122,6 +135,14 @@ function parseCliArgs() {
 }
 
 export async function main() {
+  // TypeScript 7 ships no JS compiler API, so `ts` only has `version` there
+  if (typeof ts.createProgram !== 'function') {
+    console.error(
+      `TypeScript ${ts.version} has no compiler API, which xss-scan requires. Use "kita-html check" from @kitajs/html-cli with TypeScript 7.1+ instead.`
+    )
+    return process.exit(1)
+  }
+
   const args = parseCliArgs()
 
   if (args.values.help) {
@@ -133,6 +154,8 @@ export async function main() {
     console.log(version)
     return process.exit(0)
   }
+
+  console.warn(simplifiedOrStyled(!!args.values.simplified, 'yellow', deprecation))
 
   const root = args.values.cwd ?? process.cwd()
 
@@ -219,9 +242,15 @@ export async function main() {
       continue
     }
 
+    // Deduplication compares positions only, so each file needs its own array or a
+    // finding at the same offset in another file would be dropped
+    const fileDiagnostics: ts.Diagnostic[] = []
+
     ts.forEachChild(source, function loopSourceNodes(node) {
-      recursiveDiagnoseJsxElements(ts, node, typeChecker, diagnostics)
+      recursiveDiagnoseJsxElements(ts, node, typeChecker, fileDiagnostics)
     })
+
+    diagnostics.push(...fileDiagnostics)
   }
 
   if (diagnostics.length) {
@@ -235,11 +264,13 @@ export async function main() {
       prettyPrintErrorCount(diagnostics, root)
     }
 
-    process.exit(hasError ? 1 : 2)
+    // process.exit() would drop buffered output when stderr is a pipe
+    process.exitCode = hasError ? 1 : 2
+    return
   }
 
   console.log(
     styleText('green', `No XSS vulnerabilities found in ${files.length} files!`)
   )
-  process.exit(0)
+  process.exitCode = 0
 }

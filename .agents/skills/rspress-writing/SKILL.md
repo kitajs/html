@@ -137,10 +137,10 @@ Then use the component:
 
 ```
 <PackageManagerTabs command={{
-  npm: 'npm i @kitajs/html @kitajs/ts-html-plugin',
-  yarn: 'yarn add @kitajs/html @kitajs/ts-html-plugin',
-  pnpm: 'pnpm add @kitajs/html @kitajs/ts-html-plugin',
-  bun: 'bun add @kitajs/html @kitajs/ts-html-plugin',
+  npm: 'npm i @kitajs/html @kitajs/html-cli',
+  yarn: 'yarn add @kitajs/html @kitajs/html-cli',
+  pnpm: 'pnpm add @kitajs/html @kitajs/html-cli',
+  bun: 'bun add @kitajs/html @kitajs/html-cli',
 }} />
 ```
 
@@ -293,8 +293,10 @@ For the `// @errors` syntax and other twoslash directives, see the `twoslash` sk
 **XSS section**: Solution-first ordering. Safe attribute and detection tooling before the
 "why not auto-escape" explanation.
 
-**XSS section**: XSS tooling is documented in the guide. Keep editor diagnostics and the
-`xss-scan` CLI together on `docs/guide/xss/cli-scanner.md`.
+**XSS section**: XSS tooling is documented in the guide. `kita-html check` (TypeScript
+7.1+) lives on `docs/guide/xss/cli-scanner.mdx` with its formats on
+`cli-output-formats.md`. The deprecated TypeScript 5/6 editor plugin and `xss-scan` stay
+together on `docs/guide/xss/ts-html-plugin.md`. New pages recommend `kita-html check`.
 
 **Integrations section**: Split into Frameworks (with official plugins) and Type
 Extensions (HTMX, Alpine, Turbo). When mentioning specific frameworks, link to the

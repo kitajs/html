@@ -27,8 +27,8 @@ Learn more about the packages used in these examples:
 
 - **[@kitajs/html](../packages/html/README.md)** - Core JSX runtime, async components,
   Suspense
-- **[@kitajs/ts-html-plugin](../packages/ts-html-plugin/README.md)** - XSS detection and
-  prevention
+- **[@kitajs/html-cli](../packages/cli/README.md)** - `kita-html check`, XSS detection for
+  TypeScript 7.1+
 - **[@kitajs/fastify-html-plugin](../packages/fastify-html-plugin/README.md)** - Fastify
   integration
 

@@ -72,8 +72,8 @@ app.get('/', (req, res) => {
 
 - Use `@elysiajs/html`.
 - Elysia handles HTML responses and doctype behavior.
-- Recommend `@kitajs/ts-html-plugin` separately so the project still gets editor
-  diagnostics and `xss-scan`.
+- Recommend `@kitajs/html-cli` separately so the project still runs `kita-html check` in
+  CI.
 
 ```tsx
 import { Elysia } from 'elysia'

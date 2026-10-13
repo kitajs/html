@@ -47,7 +47,7 @@ flags any child whose type could carry unescaped HTML.
 ```markdown
 # Getting Started
 
-Install `@kitajs/html` and `@kitajs/ts-html-plugin` together.
+Install `@kitajs/html` and `@kitajs/html-cli` together.
 
 ## TypeScript configuration
 

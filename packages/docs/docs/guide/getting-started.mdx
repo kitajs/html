@@ -1,64 +1,60 @@
 ---
 description:
-  Install Kita Html, configure TypeScript, enable the XSS plugin, and verify the scanner
-  catches unsafe JSX.
+  Install Kita Html, configure TypeScript, add the kita-html check XSS scanner, and verify
+  it catches unsafe JSX.
 ---
 
 import { PackageManagerTabs } from '@rspress/core/theme'
 
 # Getting started
 
-Install `@kitajs/html` and `@kitajs/ts-html-plugin` together. The first is the JSX
-runtime; the second provides editor diagnostics and the `xss-scan` CLI for catching XSS at
+Install `@kitajs/html` and `@kitajs/html-cli` together, with TypeScript 7.1 or later. The
+first is the JSX runtime; the second provides `kita-html check`, which catches XSS at
 compile time.
 
 <PackageManagerTabs
   command={{
-    npm: 'npm i @kitajs/html@next @kitajs/ts-html-plugin@next',
-    yarn: 'yarn add @kitajs/html@next @kitajs/ts-html-plugin@next',
-    pnpm: 'pnpm add @kitajs/html@next @kitajs/ts-html-plugin@next',
-    bun: 'bun add @kitajs/html@next @kitajs/ts-html-plugin@next'
+    npm: 'npm i @kitajs/html@next && npm i -D @kitajs/html-cli@next typescript@next',
+    yarn: 'yarn add @kitajs/html@next && yarn add -D @kitajs/html-cli@next typescript@next',
+    pnpm: 'pnpm add @kitajs/html@next && pnpm add -D @kitajs/html-cli@next typescript@next',
+    bun: 'bun add @kitajs/html@next && bun add -d @kitajs/html-cli@next typescript@next'
   }}
 />
+
+TypeScript 7.1 is published under the `next` tag until its stable release. Projects that
+cannot leave TypeScript 5 or 6 yet can use the deprecated
+[editor plugin and `xss-scan`](./xss/ts-html-plugin.md) instead of `@kitajs/html-cli`.
 
 ## TypeScript configuration
 
 Add the following to your `tsconfig.json`. The `jsx` and `jsxImportSource` fields tell
-TypeScript to compile JSX using the Kita Html runtime. The `plugins` entry activates the
-XSS detection plugin in your editor.
+TypeScript to compile JSX using the Kita Html runtime.
 
 ```json title="tsconfig.json"
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "@kitajs/html",
-    "plugins": [{ "name": "@kitajs/ts-html-plugin" }]
+    "jsxImportSource": "@kitajs/html"
   }
-}
-```
-
-If your editor uses its bundled TypeScript instead of the project's local copy, the plugin
-will not load. In VS Code, configure the workspace to use the local TypeScript:
-
-```json title=".vscode/settings.json"
-{
-  "js/ts.tsdk.path": "node_modules/typescript/lib",
-  "js/ts.tsdk.promptToUseWorkspaceVersion": true
 }
 ```
 
 ## XSS scanner
 
-Add `xss-scan` to your test script so it runs in CI alongside your tests. The CLI performs
-the same XSS analysis as the editor plugin, but against your entire codebase.
+Add `kita-html check` to your test script so it runs in CI alongside your tests. It type
+checks every TSX file of the project and fails on any unsafe JSX.
 
 ```json title="package.json"
 {
   "scripts": {
-    "test": "xss-scan && vitest"
+    "test": "kita-html check && vitest"
   }
 }
 ```
+
+TypeScript 7 does not load editor plugins, so findings appear in the terminal and CI.
+[`kita-html check`](./xss/cli-scanner.mdx) shows how to annotate GitHub pull requests and
+list findings in the VS Code Problems panel.
 
 ## Verification
 
@@ -69,9 +65,6 @@ Write the following in a `.tsx` file:
 const html = <div>{String.name}</div>
 ```
 
-Your editor should show an XSS error on `String.name`, because its type is `string` and it
-is not escaped. If you see the error, the plugin is working. Run `xss-scan` from the
-terminal to confirm the CLI catches the same issue.
-
-If no error appears, verify that your editor is using the workspace TypeScript version and
-that the `plugins` array is present in the `tsconfig.json` that covers the file.
+Run `npx kita-html check`. It reports TS88601 on `String.name`, because its type is
+`string` and it is not escaped. If no error appears, verify that the file is included by
+the `tsconfig.json` in the current directory, or pass the right config with `-p`.

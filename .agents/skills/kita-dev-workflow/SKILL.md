@@ -44,7 +44,8 @@ changes are complete means gathering all broken feedback at once, making debuggi
 ### Package Names
 
 - `@kitajs/html` — Core JSX runtime
-- `@kitajs/ts-html-plugin` — XSS detection TypeScript plugin
+- `@kitajs/html-cli` — `kita-html check`, XSS detection for TypeScript 7.1+
+- `@kitajs/ts-html-plugin` — Deprecated XSS detection plugin for TypeScript 5/6
 - `@kitajs/fastify-html-plugin` — Fastify integration
 - `@kitajs/docs-html` — Documentation site
 
@@ -325,7 +326,8 @@ debugging.
 ```
 packages/
   html/                  @kitajs/html            Core JSX runtime
-  ts-html-plugin/        @kitajs/ts-html-plugin  XSS detection
+  cli/                   @kitajs/html-cli        kita-html check (TS 7.1+)
+  ts-html-plugin/        @kitajs/ts-html-plugin  Deprecated XSS detection (TS 5/6)
   fastify-html-plugin/   @kitajs/fastify-html-plugin  Fastify integration
   docs/                  @kitajs/docs-html       Documentation site
 benchmarks/              Performance benchmarks

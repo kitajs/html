@@ -1,7 +1,7 @@
 ---
 name: kita-html
 description: |
-  Write and edit `.tsx` or `.jsx` for Kita Html instead of React. Use this whenever the user mentions Kita, KitaJS, `@kitajs/html`, `safe` attributes, `xss-scan`, `reply.html()`, `res.html()`, Suspense `rid`, async components that return HTML strings, or asks for JSX in a server-rendered templating context where JSX compiles to strings rather than a virtual DOM. Also use it when the project contains Kita config such as `jsxImportSource: "@kitajs/html"` or `@kitajs/ts-html-plugin`, even if the user only says "TSX" or "JSX".
+  Write and edit `.tsx` or `.jsx` for Kita Html instead of React. Use this whenever the user mentions Kita, KitaJS, `@kitajs/html`, `safe` attributes, `kita-html check`, `xss-scan`, `reply.html()`, `res.html()`, Suspense `rid`, async components that return HTML strings, or asks for JSX in a server-rendered templating context where JSX compiles to strings rather than a virtual DOM. Also use it when the project contains Kita config such as `jsxImportSource: "@kitajs/html"`, `@kitajs/html-cli` or `@kitajs/ts-html-plugin`, even if the user only says "TSX" or "JSX".
 compatibility:
   Works best when the agent can read local project files and bundled examples/references.
 license: MIT
@@ -31,7 +31,7 @@ If the user asks for `.tsx` or `.jsx` in a Kita project, write Kita code.
 1. Check whether the project is using Kita. Strong signals:
    - `jsxImportSource: "@kitajs/html"`
    - `@kitajs/html`
-   - `@kitajs/ts-html-plugin`
+   - `@kitajs/html-cli` or the deprecated `@kitajs/ts-html-plugin`
    - `reply.html()` or `res.html()`
    - `safe` attributes in JSX
 2. If those signals exist, stop thinking in React terms.
@@ -56,7 +56,9 @@ If the user asks for `.tsx` or `.jsx` in a Kita project, write Kita code.
 8. When using Suspense, provide a stable `rid` tied to the request.
 9. When integrating with Fastify or Express, use `reply.html(...)` or `res.html(...)`
    instead of React SSR patterns.
-10. Recommend `xss-scan` in the test or CI path whenever you touch setup.
+10. Recommend `kita-html check` (TypeScript 7.1+) in the test or CI path whenever you
+    touch setup. Only suggest the deprecated `xss-scan` for projects stuck on TypeScript 5
+    or 6.
 
 Read `references/core-rules.md` for the behavior checklist. Read
 `references/xss-and-tooling.md` before writing code that renders user-controlled strings.
@@ -72,11 +74,12 @@ When you write Kita code:
 4. If you add or update setup, include:
    - `jsx: "react-jsx"`
    - `jsxImportSource: "@kitajs/html"`
-   - `plugins: [{ "name": "@kitajs/ts-html-plugin" }]`
+   - `@kitajs/html-cli` and `typescript` 7.1 or later as dev dependencies
 5. If you touch `package.json` scripts or CI guidance, prefer
-   `"test": "xss-scan && vitest"` or equivalent so XSS scanning runs.
-6. After a batch of Kita TSX changes, run `pnpm xss-scan` when available so you do not
-   leave behind invalid XSS diagnostics.
+   `"test": "kita-html check && vitest"` or equivalent so XSS scanning runs. In GitHub
+   Actions, `kita-html check --format github` annotates pull requests.
+6. After a batch of Kita TSX changes, run `pnpm kita-html check` (or `pnpm xss-scan` on
+   TypeScript 5/6 projects) so you do not leave behind XSS diagnostics.
 
 ## Framework selection
 
@@ -86,8 +89,8 @@ When you write Kita code:
    use `req.id` for Suspense.
 3. Express: register `expressKitaHtml()`, respond with `res.html(...)`, and use `req.id`
    for Suspense.
-4. Elysia: use `@elysiajs/html`; still recommend `@kitajs/ts-html-plugin` for editor and
-   CI XSS checks.
+4. Elysia: use `@elysiajs/html`; still recommend `kita-html check` from `@kitajs/html-cli`
+   for CI XSS checks.
 
 Read `examples/base/`, `examples/fastify/`, `examples/express/`, `examples/elysia/`, and
 `examples/streaming/` before producing code when the user asks for a concrete
@@ -123,6 +126,6 @@ Before finishing, quickly check:
 2. Did I handle untrusted strings with `safe` or explicit escaping?
 3. If Suspense is present, is `rid` wired to the request?
 4. If setup changed, did I choose the right framework adapter and include
-   `@kitajs/ts-html-plugin` plus `xss-scan` guidance?
-5. After the latest batch of changes, did I run `pnpm xss-scan` or the project's
+   `@kitajs/html-cli` plus `kita-html check` guidance?
+5. After the latest batch of changes, did I run `pnpm kita-html check` or the project's
    equivalent validation path?

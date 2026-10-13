@@ -30,9 +30,9 @@ features:
 
   - title: Compile-time XSS detection
     details:
-      The TypeScript plugin flags unsafe string interpolations in your editor. The
-      xss-scan CLI enforces the same checks in CI. The checks run at compile time and add
-      no runtime cost.
+      kita-html check uses the TypeScript 7.1 type checker to flag unsafe string
+      interpolations in CI and editor problem panels. The checks run at compile time and
+      add no runtime cost.
     icon: 🛡️
 
   - title: Async components and streaming

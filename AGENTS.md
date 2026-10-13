@@ -26,7 +26,8 @@ applications.
 kitajs/html/
 ├── packages/
 │   ├── html/               # Core JSX runtime (@kitajs/html)
-│   ├── ts-html-plugin/     # XSS detection TypeScript plugin (@kitajs/ts-html-plugin)
+│   ├── cli/                # kita-html check, XSS detection for TS 7.1+ (@kitajs/html-cli)
+│   ├── ts-html-plugin/     # Deprecated XSS plugin + xss-scan for TS 5/6 (@kitajs/ts-html-plugin)
 │   ├── fastify-html-plugin/# Fastify integration (@kitajs/fastify-html-plugin)
 │   ├── express-html-plugin/# Express integration (@kitajs/express-html-plugin)
 │   └── docs/               # Documentation site (@kitajs/docs-html)
@@ -39,7 +40,9 @@ kitajs/html/
 ```
 @kitajs/html (core)
     ↑
-    ├── @kitajs/ts-html-plugin (peer dependency)
+    ├── @kitajs/html-cli (peer dependency)
+    │
+    ├── @kitajs/ts-html-plugin (peer dependency, deprecated)
     │
     ├── @kitajs/fastify-html-plugin (peer dependency)
     │
@@ -114,10 +117,10 @@ HTML String (or Promise<string> for async)
 User writes JSX
       │
       ▼
-ts-html-plugin (LSP) ─────► Warnings/Errors in Editor
+kita-html check (TS 7.1+) ─► CI/CD Pipeline Check, editor problems via --format tsc
       │
       ▼
-xss-scan (CLI) ────────────► CI/CD Pipeline Check
+(deprecated, TS 5/6) ts-html-plugin LSP + xss-scan
       │
       ▼
 Runtime (safe attribute) ──► Escapes at render time
@@ -136,9 +139,22 @@ The core JSX runtime. Key files:
 
 **See:** [`packages/html/AGENTS.md`](packages/html/AGENTS.md)
 
+### @kitajs/html-cli
+
+`kita-html check`, the XSS scanner for TypeScript 7.1+, built with oclif on the
+`typescript/sync` API. Key files:
+
+- `src/cli/commands/check.ts`: oclif command (flags, exit codes)
+- `src/check.ts`: Project loading, solution expansion, positional files
+- `src/analyzer/`: Detection rules ported from `ts-html-plugin/src/util.ts`
+- `src/reporters/`: `pretty`, `tsc`, `json` and `github` formats
+
+**See:** [`packages/cli/AGENTS.md`](packages/cli/AGENTS.md)
+
 ### @kitajs/ts-html-plugin
 
-TypeScript plugin for XSS detection. Key files:
+Deprecated TypeScript 5/6 plugin for XSS detection. Only security fixes land here; mirror
+rule changes in `packages/cli/src/analyzer/`. Key files:
 
 - `src/index.ts`: Language Service Plugin entry
 - `src/cli.ts`: `xss-scan` CLI tool
@@ -232,8 +248,9 @@ The codebase uses several optimization patterns:
 
 ### XSS Prevention Layers
 
-1. **Compile-Time**: `@kitajs/ts-html-plugin` catches unsafe usage
-2. **CI/CD**: `xss-scan` CLI fails builds on XSS issues
+1. **Compile-Time**: `kita-html check` (`@kitajs/html-cli`, TS 7.1+) catches unsafe usage;
+   `@kitajs/ts-html-plugin` covers TS 5/6 (deprecated)
+2. **CI/CD**: `kita-html check --format github` fails builds and annotates pull requests
 3. **Runtime**: `safe` attribute escapes content
 
 ### Safe Content Types

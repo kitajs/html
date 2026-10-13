@@ -47,8 +47,9 @@
   extensions
 - Works with Fastify, Express, Elysia, Hono, Bun, or any code that handles strings
 
-> [!CAUTION] Children are not escaped by default. Install `@kitajs/ts-html-plugin` and use
-> the `safe` attribute for user input, otherwise your application is vulnerable to XSS.
+> [!CAUTION] Children are not escaped by default. Run `kita-html check` from
+> `@kitajs/html-cli` and use the `safe` attribute for user input, otherwise your
+> application is vulnerable to XSS.
 
 Documentation for this package is available at
 [html.kitajs.org](https://html.kitajs.org/guide/getting-started).
