@@ -409,7 +409,7 @@ export function Suspense(props: SuspenseProps): JSX.Element {
 export function AutoSuspense(props: AutoSuspenseProps): JSX.Element {
   const rid = SuspenseRoot.requestIdStorage.getStore()
 
-  if (!rid) {
+  if (rid === undefined) {
     throw new Error(
       'AutoSuspense requires automatic Suspense support. Enable `autoSuspense` in your framework integration or use `Suspense` with an explicit `rid`.'
     )
@@ -589,12 +589,24 @@ export function resolveHtmlStream(
 
   const prepended = new PassThrough()
   requestData.responseStream = prepended
+  // Node's pipe() does not forward source errors. Relay boundary failures to the response
+  // stream so framework integrations terminate the request instead of leaving an
+  // unhandled error on the internal replacement stream.
+  requestData.stream.once('error', forwardStreamError)
   prepended.once('close', function clearResponseStream() {
+    requestData.stream.removeListener('error', forwardStreamError)
+
     // Do not clear a newer wrapper if a library resolved the same request data twice.
     if (requestData.responseStream === prepended) {
       requestData.responseStream = undefined
     }
   })
+
+  function forwardStreamError(error: unknown) {
+    if (!prepended.destroyed) {
+      prepended.destroy(error instanceof Error ? error : new Error(String(error)))
+    }
+  }
 
   void template
     .then(

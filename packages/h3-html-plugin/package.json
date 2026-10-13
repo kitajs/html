@@ -1,0 +1,55 @@
+{
+  "name": "@kitajs/h3-html-plugin",
+  "version": "1.0.0-next.0",
+  "description": "An H3 plugin to add support for @kitajs/html",
+  "homepage": "https://github.com/kitajs/html/tree/master/packages/h3-html-plugin#readme",
+  "bugs": "https://github.com/kitajs/html/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kitajs/html.git",
+    "directory": "packages/h3-html-plugin"
+  },
+  "funding": "https://github.com/kitajs/html?sponsor=1",
+  "license": "MIT",
+  "author": "Arthur Fiorette <kita@arthur.place>",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!dist/*.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsgo -p tsconfig.build.json",
+    "test": "vitest --coverage --typecheck --run",
+    "test-types": "tsgo --noEmit"
+  },
+  "devDependencies": {
+    "@kitajs/html": "workspace:^",
+    "@types/jsdom": "catalog:",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "h3": "catalog:",
+    "jsdom": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@kitajs/html": "workspace:^",
+    "@kitajs/ts-html-plugin": "workspace:^",
+    "h3": "^2.0.1-rc.22"
+  },
+  "peerDependenciesMeta": {
+    "@kitajs/ts-html-plugin": {
+      "optional": true
+    }
+  }
+}

@@ -10,7 +10,9 @@
     "preview": "rspress preview"
   },
   "devDependencies": {
+    "@kitajs/h3-html-plugin": "workspace:^",
     "@kitajs/html": "workspace:^",
+    "@kitajs/nitro-html-plugin": "workspace:^",
     "@kitajs/ts-html-plugin": "workspace:^",
     "@rsbuild/plugin-sass": "^2.0.1",
     "@rspress/core": "^2.0.18",

@@ -1,0 +1,110 @@
+---
+description:
+  Build lazy Kita JSX pages and a catch-all renderer in Nitro v3 using server/pages file
+  conventions, dynamic routes, and Suspense.
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme'
+
+# Nitro
+
+`@kitajs/nitro-html-plugin` scans `server/pages` and registers each Kita JSX page as a
+lazy Nitro v3 route. A root catch-all page becomes Nitro's lowest-priority renderer.
+
+## Setup
+
+:::danger XSS Protection Required
+
+Configure `@kitajs/ts-html-plugin` before rendering user-controlled values. See
+[Getting Started](/guide/getting-started) for the required TypeScript and XSS scanner
+setup.
+
+:::
+
+<PackageManagerTabs
+  command={{
+    npm: 'npm i @kitajs/nitro-html-plugin nitro',
+    yarn: 'yarn add @kitajs/nitro-html-plugin nitro',
+    pnpm: 'pnpm add @kitajs/nitro-html-plugin nitro',
+    bun: 'bun add @kitajs/nitro-html-plugin nitro'
+  }}
+/>
+
+Register the build-time module:
+
+```ts title="nitro.config.ts"
+import { defineConfig } from 'nitro'
+import { nitroKitaHtml } from '@kitajs/nitro-html-plugin'
+
+export default defineConfig({
+  serverDir: './server',
+  modules: [nitroKitaHtml()]
+})
+```
+
+Create a default page:
+
+```tsx title="server/pages/index.tsx"
+export default function Home() {
+  return (
+    <html>
+      <body>
+        <h1>Home</h1>
+      </body>
+    </html>
+  )
+}
+```
+
+Pages default-export `(event: H3Event) => JSX.Element`. The event provides URL data, route
+parameters, middleware context, and prepared response status and headers.
+
+## Page Routes
+
+The scanner supports `.tsx` and `.jsx` pages:
+
+| File                  | Route            |
+| --------------------- | ---------------- |
+| `index.tsx`           | `/`              |
+| `about.tsx`           | `/about`         |
+| `blog/[slug].tsx`     | `/blog/:slug`    |
+| `(admin)/users.tsx`   | `/users`         |
+| `files/[...path].tsx` | `/files/**:path` |
+
+Files and directories beginning with `_`, test files, and declaration files are ignored.
+Equivalent routes are rejected at build time, including routes that differ only by a
+dynamic parameter name or route group.
+
+Each page receives its own virtual lazy handler. Nitro route rules, middleware, and
+prerendering continue to apply. Explicit API and route handlers have priority over the
+renderer.
+
+Restart `nitro dev` after adding or deleting page files. Existing page files continue to
+rebuild normally when edited.
+
+## Catch-All Renderer
+
+Add one root `[...].tsx` or `[...name].tsx` page to handle unmatched routes:
+
+```tsx title="server/pages/[...].tsx"
+import { escapeHtml } from '@kitajs/html'
+import type { H3Event } from 'nitro'
+
+export default function App(event: H3Event) {
+  return (
+    <html>
+      <body>
+        <h1>{escapeHtml(event.url.pathname)}</h1>
+      </body>
+    </html>
+  )
+}
+```
+
+The renderer accepts GET and HEAD and preserves status 200 unless the page changes it.
+Other methods receive 405. A named root catch-all does not create a stable route
+parameter; read the unmatched path from `event.url.pathname`.
+
+Convention pages use the factory-safe H3 adapter and always stream. `AutoSuspense` works
+without additional options, including boundaries created after an asynchronous page
+yields. Suspense currently requires a Node-compatible Nitro preset.

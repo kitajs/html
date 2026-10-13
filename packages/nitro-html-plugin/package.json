@@ -1,0 +1,61 @@
+{
+  "name": "@kitajs/nitro-html-plugin",
+  "version": "1.0.0-next.0",
+  "description": "A Nitro module to add convention-based @kitajs/html pages",
+  "homepage": "https://github.com/kitajs/html/tree/master/packages/nitro-html-plugin#readme",
+  "bugs": "https://github.com/kitajs/html/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kitajs/html.git",
+    "directory": "packages/nitro-html-plugin"
+  },
+  "funding": "https://github.com/kitajs/html?sponsor=1",
+  "license": "MIT",
+  "author": "Arthur Fiorette <kita@arthur.place>",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./runtime": {
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!dist/*.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsgo -p tsconfig.build.json",
+    "test": "vitest --coverage --typecheck --run",
+    "test-types": "tsgo --noEmit"
+  },
+  "dependencies": {
+    "@kitajs/h3-html-plugin": "workspace:^",
+    "tinyglobby": "catalog:"
+  },
+  "devDependencies": {
+    "@kitajs/html": "workspace:^",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "nitro": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@kitajs/html": "workspace:^",
+    "@kitajs/ts-html-plugin": "workspace:^",
+    "nitro": "3.0.260610-beta"
+  },
+  "peerDependenciesMeta": {
+    "@kitajs/ts-html-plugin": {
+      "optional": true
+    }
+  }
+}
