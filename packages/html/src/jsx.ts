@@ -103,7 +103,7 @@ declare global {
        *
        * @default false
        *
-       * @see https://github.com/kitajs/html/tree/master/packages/html#sanitization
+       * @see https://html.kitajs.org/guide/xss/safe-attribute
        */
       safe?: undefined | boolean
 

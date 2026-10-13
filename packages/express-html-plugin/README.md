@@ -32,7 +32,7 @@
 <h1>🖨️ Express Kita Html Plugin</h1>
 
 <p align="center">
-  <code>@kitajs/express-html-plugin</code> is an Express middleware to seamlessly integrate the Kita Html JSX engine into your Express application.
+  <code>@kitajs/express-html-plugin</code> is an Express middleware that adds <code>res.html()</code> for rendering Kita Html JSX.
   <br />
   <br />
 </p>
@@ -41,10 +41,18 @@
 - Sets `Content-Type: text/html; charset=utf-8`
 - Prepends `<!doctype html>` for `<html>` responses by default
 - Streams `Suspense` output by matching `req.id` with `Suspense rid={req.id}`
-- Preserves an existing `req.id`, otherwise generates ids like `req-1`
+- Keeps an existing `req.id`, otherwise generates ids like `req-1`
+- Supports Express 4.x and 5.x
 
 Use `expressKitaHtml({ disableRequestId: true })` if another middleware already owns
 request ids and you want this plugin to leave `req.id` untouched.
 
+> [!CAUTION] Set up `@kitajs/ts-html-plugin` before using this package, otherwise
+> unescaped user input leads to XSS.
+
 Documentation for this package is available at
 [html.kitajs.org](https://html.kitajs.org/integrations/frameworks/express).
+
+<br />
+
+Licensed under the [MIT](LICENSE).
