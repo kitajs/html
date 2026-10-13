@@ -152,28 +152,28 @@ When you need information about specific topics, read these documentation files:
   - tsconfig.json setup
   - Editor configuration
 
-## Implementation Details (CLAUDE.md files)
+## Implementation Details (AGENTS.md files)
 
 For deep implementation details beyond user-facing documentation:
 
-- **Core runtime internals**: `packages/html/CLAUDE.md`
+- **Core runtime internals**: `packages/html/AGENTS.md`
   - Key files and functions
   - Escaping algorithms
   - Performance optimization patterns
   - Void element detection
 
-- **XSS plugin internals**: `packages/ts-html-plugin/CLAUDE.md`
+- **XSS plugin internals**: `packages/ts-html-plugin/AGENTS.md`
   - Plugin architecture
   - Detection algorithm implementation
   - AST traversal patterns
   - Test debugging (TSLangServer)
 
-- **Fastify plugin internals**: `packages/fastify-html-plugin/CLAUDE.md`
+- **Fastify plugin internals**: `packages/fastify-html-plugin/AGENTS.md`
   - Plugin registration
   - reply.html() implementation
   - Suspense stream detection
 
-- **Documentation site internals**: `packages/docs/CLAUDE.md`
+- **Documentation site internals**: `packages/docs/AGENTS.md`
   - Rspress configuration
   - Information Mapping methodology
   - Writing style guidelines
@@ -204,11 +204,11 @@ For deep implementation details beyond user-facing documentation:
 context and fixes
 
 **Performance work**: Read `packages/docs/docs/guide/design-decisions.md` and
-`packages/html/CLAUDE.md`
+`packages/html/AGENTS.md`
 
-**Documentation changes**: Follow `packages/docs/CLAUDE.md` for writing conventions
+**Documentation changes**: Follow `packages/docs/AGENTS.md` for writing conventions
 
-**Development workflow**: Follow `.claude/skills/kita-dev-workflow/SKILL.md` for testing,
+**Development workflow**: Follow `.agents/skills/kita-dev-workflow/SKILL.md` for testing,
 formatting, changesets
 
 ## Monorepo Structure

@@ -35,7 +35,7 @@ Read both skill files before starting any work.
 
 When asked to write a new documentation page:
 
-1. Read `packages/docs/CLAUDE.md` to understand the site architecture
+1. Read `packages/docs/AGENTS.md` to understand the site architecture
 2. Determine which information type the page should be
 3. Decide where in the file tree it belongs
 4. Write the page following all style and methodology rules

@@ -97,7 +97,7 @@ easier than gathering all feedback at the end.
 The documentation site lives at `packages/docs/`. All docs are markdown files under
 `packages/docs/docs/`. The site uses Rspress and follows the Information Mapping
 methodology. API reference pages are also generated for the core runtime and current
-adapter packages. See `packages/docs/CLAUDE.md` for the full conventions.
+adapter packages. See `packages/docs/AGENTS.md` for the full conventions.
 
 After editing any documentation file:
 
