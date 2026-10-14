@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "test": "kita-html check && vitest"
+  }
+}

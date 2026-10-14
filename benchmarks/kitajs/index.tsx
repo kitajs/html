@@ -7,28 +7,26 @@ function Purchase({ name, price, quantity }) {
       <div class="purchase-price">{price}</div>
       <div class="purchase-quantity">{quantity}</div>
     </div>
-  );
+  )
 }
 
 function Layout({ children, head }) {
   return (
     <html lang="en">
-      <head>{head}</head>
+      {head}
       <body>{children}</body>
     </html>
-  );
+  )
 }
 
 function Head({ title }) {
   return (
-    <div>
-      <title safe>{title}</title>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>{title}</title>
       <meta name="description" content="A description" />
       <meta name="keywords" content="some, keywords" />
       <meta name="author" content="Some Author" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="stylesheet" href="styles.css" />
-      <script src="script.js"></script>
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:site" content="@site" />
       <meta name="twitter:title" content="Title" />
@@ -37,10 +35,12 @@ function Head({ title }) {
       <meta name="twitter:image" content="image.jpg" />
       <meta content="Title" />
       <meta content="website" />
+      <link rel="stylesheet" href="styles.css" />
+      <script src="script.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dev/index.bundle.js" />
-      <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dist/index.bundle.js"></script>
-    </div>
-  );
+      <script src="https://cdn.jsdelivr.net/npm/axios-cache-interceptor@1/dist/index.bundle.js" />
+    </head>
+  )
 }
 
 function Header({ name }) {
@@ -60,7 +60,7 @@ function Header({ name }) {
         </ul>
       </nav>
     </header>
-  );
+  )
 }
 
 function Footer({ name }) {
@@ -75,7 +75,7 @@ function Footer({ name }) {
         <a href="/privacy">Privacy</a>
       </p>
     </footer>
-  );
+  )
 }
 
 function Main({ children, name }) {
@@ -85,7 +85,7 @@ function Main({ children, name }) {
       <main class="main-content">{children}</main>
       <Footer name={name} />
     </div>
-  );
+  )
 }
 
 function UserProfile({ name }) {
@@ -99,7 +99,7 @@ function UserProfile({ name }) {
       <p class="user-profile info">Address: 123 Main St, City, Country</p>
       <p class="user-profile info">Phone: 123-456-7890</p>
     </section>
-  );
+  )
 }
 
 function Sidebar({ purchases }) {
@@ -114,7 +114,7 @@ function Sidebar({ purchases }) {
         ))}
       </ul>
     </aside>
-  );
+  )
 }
 
 function PageContent() {
@@ -133,7 +133,7 @@ function PageContent() {
         sollicitudin.
       </p>
     </div>
-  );
+  )
 }
 
 export function RealWorldPage(name: string, purchases: any[]) {
@@ -157,5 +157,5 @@ export function RealWorldPage(name: string, purchases: any[]) {
         <PageContent />
       </Main>
     </Layout>
-  );
+  )
 }

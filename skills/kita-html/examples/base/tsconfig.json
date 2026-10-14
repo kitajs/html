@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "@kitajs/html",
+    "strict": true
+  }
+}

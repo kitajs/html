@@ -1,0 +1,31 @@
+'@kitajs/express-html-plugin@5.0.0-next.0':
+  dir: packages/express-html-plugin
+  intents:
+    - add-express-html-plugin
+'@kitajs/fastify-html-plugin@5.0.0-next.2':
+  dir: packages/fastify-html-plugin
+  intents:
+    - eighty-taxes-jam
+    - remove-identity-value
+    - sharp-wombats-stay
+'@kitajs/html@5.0.0-next.1':
+  dir: packages/html
+  intents:
+    - calm-bears-remain
+    - eighty-taxes-jam
+    - remove-suspense-root-global
+    - sharp-wombats-stay
+    - slimy-wolves-buy
+    - stale-shrimps-spend
+    - update-suspense-script-protocol
+'@kitajs/ts-html-plugin@5.0.0-next.2':
+  dir: packages/ts-html-plugin
+  intents:
+    - eighty-taxes-jam
+    - fix-double-escape-self-closing
+    - fix-tsconfig-absolute-path
+    - hip-trams-roll
+    - metal-corners-type
+    - metal-hairs-juggle
+    - sharp-wombats-stay
+    - tender-regions-cough

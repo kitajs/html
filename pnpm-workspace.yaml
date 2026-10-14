@@ -1,3 +1,75 @@
 packages:
-  - 'packages/*'
-  - 'benchmarks/*'
+  - packages/*
+  - benchmarks/*
+  - examples/*
+
+# Fails if trusted package stops being trusted
+trustPolicy: no-downgrade
+# Ignores trust policies for packages older than a week
+trustPolicyIgnoreAfter: 10080
+# Minimum of 1 day before released packages can be installed
+minimumReleaseAge: 1440
+# no git/tarball dependencies, only from trusted registry
+blockExoticSubdeps: true
+# Cross-platform package.json scripts (CI runs on Windows)
+shellEmulator: true
+
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: true
+  core-js: false
+  sharp: false
+
+versioning:
+  changelog:
+    storage: repository
+  # Exact names only, globs are not supported here
+  ignore:
+    - '@kitajs/bench-html-honojsx'
+    - '@kitajs/bench-html-jsxte'
+    - '@kitajs/bench-html-kitajs'
+    - '@kitajs/bench-html-preact'
+    - '@kitajs/bench-html-react'
+    - '@kitajs/bench-html-reactjsx'
+    - '@kitajs/bench-html-runner'
+    - '@kitajs/bench-html-templates'
+    - '@kitajs/bench-html-typed-html'
+    - '@kitajs/bench-html-vhtml'
+    - '@kitajs/docs-html'
+    - '@kitajs/example-fastify-htmx'
+    - '@kitajs/example-http-server'
+  # Prerelease line for v5, graduate with `pnpm lane main --filter <pkg>`
+  lanes:
+    '@kitajs/express-html-plugin': next
+    '@kitajs/fastify-html-plugin': next
+    '@kitajs/html-cli': next
+    '@kitajs/html': next
+    '@kitajs/ts-html-plugin': next
+
+catalog:
+  '@types/express': ^5.0.6
+  '@fastify/formbody': ^8.0.2
+  '@types/jsdom': ^28.0.3
+  '@types/node': ^24
+  '@types/react': ^19.2.17
+  '@types/react-dom': ^19.2.3
+  '@typescript/native-preview': 7.0.0-dev.20260411.1
+  '@vitest/coverage-v8': ^4.1.10
+  c8: ^12.0.0
+  express: ^5.2.1
+  fastify: ^5.10.0
+  fastify-plugin: ^6.0.0
+  jsdom: ^30.0.0
+  react: ^19.2.8
+  react-dom: ^19.2.8
+  tslib: ^2.8.1
+  tsx: ^4.23.1
+  # Latest `next` nightly allowed by minimumReleaseAge, until TypeScript 7.1 is stable
+  typescript: 7.1.0-dev.20261012.1
+  vitest: ^4.1.10
+
+catalogs:
+  # Only for code that needs the TypeScript 6 JavaScript API, which TypeScript 7 removed:
+  # ts-html-plugin, the docs site (twoslash, typedoc) and the root (prettier organize imports)
+  ts6:
+    typescript: ^6

@@ -1,23 +1,23 @@
-import { deferred, type Deferred } from 'fast-defer';
-import { fork, type ChildProcess } from 'node:child_process';
-import { EventEmitter } from 'node:events';
-import { statSync } from 'node:fs';
-import path from 'node:path';
-import ts from 'typescript/lib/tsserverlibrary';
+import { deferred, type Deferred } from 'fast-defer'
+import { fork, type ChildProcess } from 'node:child_process'
+import { EventEmitter } from 'node:events'
+import { statSync } from 'node:fs'
+import path from 'node:path'
+import ts from 'typescript/lib/tsserverlibrary'
 
 /** All requests used in tests */
 export type Requests =
   | ts.server.protocol.OpenRequest
-  | ts.server.protocol.SemanticDiagnosticsSyncRequest;
+  | ts.server.protocol.SemanticDiagnosticsSyncRequest
 
 try {
-  statSync(require.resolve('self'));
+  statSync(require.resolve('self-ts-plugin'))
 } catch (error) {
-  throw new Error('You must run pnpm build before running tests');
+  throw new Error('You must run pnpm build before running tests')
 }
 
-const TEST_FILE = path.join(__dirname, 'index.tsx');
-const ROOT = path.join(__dirname, '..');
+const TEST_FILE = path.join(__dirname, 'index.tsx')
+const ROOT = path.join(__dirname, '..')
 
 export const TEST_HELPERS = /* tsx */ `
   import Html, { type PropsWithChildren, e } from '@kitajs/html';
@@ -53,23 +53,22 @@ export const TEST_HELPERS = /* tsx */ `
       Component
     });
   }
-`.trim();
+`.trim()
 
 export class TSLangServer {
-  responseEventEmitter = new EventEmitter();
-  responseCommandEmitter = new EventEmitter();
-  errorEmitter = new EventEmitter();
+  responseEventEmitter = new EventEmitter()
+  responseCommandEmitter = new EventEmitter()
+  errorEmitter = new EventEmitter()
 
-  exitPromise: Deferred<void>;
-  isClosed = false;
-  server: ChildProcess;
-  sequence = 0;
-  buffer = ''; // Add buffer for incomplete messages
+  exitPromise: Deferred<void>
+  isClosed = false
+  server: ChildProcess
+  sequence = 0
+  buffer = '' // Add buffer for incomplete messages
+  debug: boolean
 
-  constructor(
-    projectPath: string,
-    private readonly debug = false
-  ) {
+  constructor(projectPath: string, debug = false) {
+    this.debug = debug
     this.server = fork(require.resolve('typescript/lib/tsserver'), {
       cwd: projectPath,
       stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
@@ -77,74 +76,78 @@ export class TSLangServer {
         TSS_LOG: debug ? `-level verbose -file ${projectPath}/tss.log` : undefined,
         KITA_TS_HTML_PLUGIN_TESTING: 'true'
       }
-    });
+    })
 
-    this.exitPromise = deferred();
-    this.server.on('exit', this.exitPromise.resolve);
-    this.server.on('error', this.exitPromise.reject);
+    this.exitPromise = deferred()
+    this.server.on('exit', this.exitPromise.resolve)
+    this.server.on('error', this.exitPromise.reject)
 
-    this.server.stdout?.setEncoding('utf-8');
+    this.server.stderr?.setEncoding('utf-8')
+    this.server.stderr?.on('data', (data) => {
+      console.error(data)
+    })
 
+    this.server.stdout?.setEncoding('utf-8')
     this.server.stdout?.on('data', (data) => {
       try {
-        this.buffer += data;
-        this.#processMessages();
+        this.buffer += data
+        this.#processMessages()
       } catch (error) {
-        console.error(this.buffer);
-        this.exitPromise.reject(error);
+        console.error(this.buffer)
+        this.exitPromise.reject(error)
       }
-    });
+    })
   }
 
   #processMessages() {
     // Process all complete messages in the buffer
-    let headerMatch = this.buffer.match(/Content-Length: (\d+)\r?\n\r?\n/);
+    let headerMatch = this.buffer.match(/Content-Length: (\d+)\r?\n\r?\n/)
 
     while (headerMatch && headerMatch.index !== undefined) {
       // TSServer protocol: Content-Length: N\r\n\r\n{JSON}\r\n
-      const contentLength = parseInt(headerMatch[1], 10);
-      const headerEnd = headerMatch.index + headerMatch[0].length;
-      const messageEnd = headerEnd + contentLength;
+      const contentLength = parseInt(headerMatch[1]!, 10)
+      const headerEnd = headerMatch.index + headerMatch[0].length
+      const messageEnd = headerEnd + contentLength
 
       // Check if we have the complete message
-      if (this.buffer.length < messageEnd) break;
+      if (this.buffer.length < messageEnd) break
 
       // Extract and parse the message
-      const jsonStr = this.buffer.substring(headerEnd, messageEnd);
-      const obj = JSON.parse(jsonStr);
+      const jsonStr = this.buffer.substring(headerEnd, messageEnd)
+      const obj = JSON.parse(jsonStr)
 
       // Remove the processed message from buffer
-      this.buffer = this.buffer.substring(messageEnd);
+      this.buffer = this.buffer.substring(messageEnd)
 
       if (this.debug) {
-        console.dir(obj, { depth: 10 });
+        console.dir(obj, { depth: 10 })
       }
 
       if (obj.success === false) {
-        this.errorEmitter.emit(obj.type === 'event' ? obj.event : obj.command, obj);
+        this.errorEmitter.emit(obj.type === 'event' ? obj.event : obj.command, obj)
 
         // Error is fatal, close the server
         if (!this.isClosed) {
-          this.isClosed = true;
-          this.server.stdin?.end();
+          this.isClosed = true
+          this.server.stdin?.end()
         }
       } else if (obj.type === 'event') {
-        this.responseEventEmitter.emit(obj.event, obj);
+        this.responseEventEmitter.emit(obj.event, obj)
       } else if (obj.type === 'response') {
-        this.responseCommandEmitter.emit(obj.command, obj);
+        this.responseCommandEmitter.emit(obj.command, obj)
       }
 
       // Check for next message
-      headerMatch = this.buffer.match(/Content-Length: (\d+)\r?\n\r?\n/);
+      headerMatch = this.buffer.match(/Content-Length: (\d+)\r?\n\r?\n/)
     }
   }
 
   /** Opens the project, sends diagnostics request and returns the response */
   async openWithDiagnostics(content: TemplateStringsArray, ...args: any[]) {
-    const fileContent = `${TEST_HELPERS}\n${String.raw(content, ...args).trim()}`;
+    const fileContent = `${TEST_HELPERS}\n${String.raw(content, ...args).trim()}`
 
     if (this.debug) {
-      console.log(this.#strWithLineNumbers(fileContent));
+      console.log(this.#strWithLineNumbers(fileContent))
     }
 
     await this.send({
@@ -155,13 +158,13 @@ export class TSLangServer {
         scriptKindName: 'TSX',
         projectRootPath: ROOT
       }
-    });
+    })
 
     // One of these events will be emitted after opening the project
     await Promise.race([
       this.waitResponse('open'),
       this.waitEvent('projectLoadingFinish')
-    ]);
+    ])
 
     await this.send({
       command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
@@ -171,10 +174,10 @@ export class TSLangServer {
         scriptKindName: 'TSX',
         projectRootPath: ROOT
       }
-    });
+    })
 
     const response: ts.server.protocol.SemanticDiagnosticsSyncResponse =
-      await this.waitResponse('semanticDiagnosticsSync');
+      await this.waitResponse('semanticDiagnosticsSync')
 
     // Filter out TS errors from our template tests that aren't useful
     // for this unit tests.
@@ -186,79 +189,79 @@ export class TSLangServer {
           case 2873:
           // This kind of expression is always truthy.
           case 2872:
-            return false;
+            return false
         }
 
-        return true;
-      });
+        return true
+      })
     }
 
-    return response;
+    return response
   }
 
   send(command: Omit<Requests, 'seq' | 'type'>) {
-    const response = deferred<void>();
+    const response = deferred<void>()
 
     this.server.stdin?.write(this.#formatCommand(command), (err) =>
       err ? response.reject(err) : response.resolve()
-    );
+    )
 
-    return response;
+    return response
   }
 
   waitEvent(eventName: string) {
     return new Promise<any>((resolve, reject) => {
       const success = (data: any) => {
-        this.errorEmitter.removeListener(eventName, success);
-        resolve(data);
-      };
+        this.errorEmitter.removeListener(eventName, success)
+        resolve(data)
+      }
 
       const error = (err: any) => {
-        this.responseEventEmitter.removeListener(eventName, success);
-        reject(err);
-      };
+        this.responseEventEmitter.removeListener(eventName, success)
+        reject(err)
+      }
 
-      this.responseEventEmitter.once(eventName, success);
-      this.errorEmitter.once(eventName, error);
-    });
+      this.responseEventEmitter.once(eventName, success)
+      this.errorEmitter.once(eventName, error)
+    })
   }
 
   waitResponse(commandName: `${ts.server.protocol.CommandTypes}`) {
     return new Promise<any>((resolve, reject) => {
       const success = (data: any) => {
-        this.errorEmitter.removeListener(commandName, success);
-        resolve(data);
-      };
+        this.errorEmitter.removeListener(commandName, success)
+        resolve(data)
+      }
 
       const error = (err: any) => {
-        this.responseCommandEmitter.removeListener(commandName, success);
-        reject(err);
-      };
+        this.responseCommandEmitter.removeListener(commandName, success)
+        reject(err)
+      }
 
-      this.responseCommandEmitter.once(commandName, success);
-      this.errorEmitter.once(commandName, error);
-    });
+      this.responseCommandEmitter.once(commandName, success)
+      this.errorEmitter.once(commandName, error)
+    })
   }
 
   [Symbol.asyncDispose]() {
     if (!this.isClosed) {
-      this.isClosed = true;
-      this.server.stdin?.end();
+      this.isClosed = true
+      this.server.stdin?.end()
     }
 
-    return this.exitPromise;
+    return this.exitPromise
   }
 
   #formatCommand(command: Omit<Requests, 'seq' | 'type'>) {
     return `${JSON.stringify(
       Object.assign({ seq: ++this.sequence, type: 'request' }, command)
-    )}\n`;
+    )}\n`
   }
 
   #strWithLineNumbers(str: string) {
     return str
       .split('\n')
       .map((line, index) => `${index + 1 < 10 ? `0${index + 1}` : index + 1} | ${line}`)
-      .join('\n');
+      .join('\n')
   }
 }

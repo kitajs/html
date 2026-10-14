@@ -1,0 +1,17 @@
+[
+  {
+    "text": "Guide",
+    "link": "/guide/introduction",
+    "activeMatch": "/guide/"
+  },
+  {
+    "text": "Integrations",
+    "link": "/integrations/overview",
+    "activeMatch": "/integrations/"
+  },
+  {
+    "text": "API",
+    "link": "/api/",
+    "activeMatch": "/api/"
+  }
+]

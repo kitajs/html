@@ -1,5 +1,78 @@
 # @kitajs/ts-html-plugin
 
+## 5.0.0-next.2
+
+### Patch Changes
+
+- [#510](https://github.com/kitajs/html/pull/510)
+  [`bc04db5`](https://github.com/kitajs/html/commit/bc04db563c9f51df007652c5f0c1645aaf4c63e2)
+  Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Resolve
+  tsconfig path to absolute in `xss-scan` CLI to avoid TypeScript 6 crash with
+  `rootDirs`/`outDir`.
+
+## 5.0.0-next.1
+
+### Major Changes
+
+- [`26a6c2f`](https://github.com/kitajs/html/commit/26a6c2f52052f54d5ece9d2f8dd5c7e363a6a1ba)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Migrate to typescript@6
+
+### Patch Changes
+
+- Updated dependencies
+  [[`26a6c2f`](https://github.com/kitajs/html/commit/26a6c2f52052f54d5ece9d2f8dd5c7e363a6a1ba),
+  [`e5da2a0`](https://github.com/kitajs/html/commit/e5da2a04455e3ff1ef70da3246c0a27c508ef8a2),
+  [`2652e1b`](https://github.com/kitajs/html/commit/2652e1b2b956bc72749863e8b0a7a924a4e1c66d)]:
+  - @kitajs/html@5.0.0-next.1
+
+## 5.0.0-next.0
+
+### Major Changes
+
+- [`cc33bc3`](https://github.com/kitajs/html/commit/cc33bc3798b1f4b6912ace3381406e155dc0b059)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Major overhaul: Rework
+  the entire codebase to improve performance, reliability, and maintainability. This
+  includes porting all code to TypeScript, improving the test suite, and removing
+  deprecated APIs.
+
+### Minor Changes
+
+- [`cc33bc3`](https://github.com/kitajs/html/commit/cc33bc3798b1f4b6912ace3381406e155dc0b059)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Rework all error codes
+
+### Patch Changes
+
+- [`bf6d266`](https://github.com/kitajs/html/commit/bf6d266146af7b8ef8693f9351fc10b9412cebe0)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Fix double escape
+  detection for self-closing components and JSX in expressions
+
+  The TS88602 DoubleEscape error was not being triggered for self-closing components like
+  `<UserBadge />` when used as direct children of elements with the `safe` attribute, or
+  when used within expressions (ternary operators, binary operators).
+
+  This fix ensures that all JSX types (elements with opening/closing tags, self-closing
+  elements, and fragments) are properly detected in both direct children and expression
+  contexts, preventing double-escaped HTML output that would corrupt markup.
+
+- [`3a287d5`](https://github.com/kitajs/html/commit/3a287d568ba140d336bd7f32f92113d950011674)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Skip xss check for
+  `str &&` cases
+
+- [`86301e4`](https://github.com/kitajs/html/commit/86301e4b282b424c7f832d4ec0c925103c910e5d)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Support for multiline
+  TSServer messages and improvements to XSS Children detection
+
+- [`ee567f8`](https://github.com/kitajs/html/commit/ee567f8a3acfabc19a49f229deea7d1d029f7cbc)
+  Thanks [@arthurfiorette](https://github.com/arthurfiorette)! - Fixed CLI inconsistencies
+  with a dedicated bin js file
+
+- Updated dependencies
+  [[`4d6fa0e`](https://github.com/kitajs/html/commit/4d6fa0e9d257fdfc7e49c45a419cb6cdb068cc69),
+  [`cc33bc3`](https://github.com/kitajs/html/commit/cc33bc3798b1f4b6912ace3381406e155dc0b059),
+  [`2a32081`](https://github.com/kitajs/html/commit/2a32081f0b283d102c8346a1fbce47642c24ab1a),
+  [`2b37245`](https://github.com/kitajs/html/commit/2b3724528f178050975c73628e7226c2fd2341f8)]:
+  - @kitajs/html@5.0.0-next.0
+
 ## 4.1.4
 
 ### Patch Changes

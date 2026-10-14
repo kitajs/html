@@ -1,0 +1,8 @@
+[
+  "safe-attribute",
+  "cli-scanner",
+  "cli-output-formats",
+  "ts-html-plugin",
+  "error-codes",
+  "explicit-escaping"
+]
