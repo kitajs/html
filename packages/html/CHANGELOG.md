@@ -1,5 +1,24 @@
 # @kitajs/html
 
+## 5.0.0-next.2
+
+### Minor Changes
+
+- Add opt-in automatic request-ID propagation for Suspense boundaries
+
+- Ship pnpm agent skill with published package
+
+### Patch Changes
+
+- Preserve Suspense replacements across async roots and release state after client aborts
+
+- Keep Suspense boundary marker IDs unique after out-of-order settlement
+
+- Fix the Suspense README server links so they point to live examples and integration
+  docs.
+
+- Allow literal 0 as `rid`
+
 ## 5.0.0-next.1
 
 ### Major Changes
