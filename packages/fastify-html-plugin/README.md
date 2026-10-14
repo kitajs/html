@@ -50,8 +50,8 @@
 Pass `{ autoDoctype: false }` when registering the plugin, or set
 `reply[kAutoDoctype] = false` on a single reply, to skip the doctype.
 
-> [!CAUTION] Set up `@kitajs/ts-html-plugin` before using this package, otherwise
-> unescaped user input leads to XSS.
+> [!CAUTION] Set up `kita-html check` from `@kitajs/html-cli` before using this package,
+> otherwise unescaped user input leads to XSS.
 
 Documentation for this package is available at
 [html.kitajs.org](https://html.kitajs.org/integrations/frameworks/fastify).

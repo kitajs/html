@@ -20,10 +20,10 @@ function HomeLayout() {
         >
           <PackageManagerTabs
             command={{
-              npm: 'npm i @kitajs/html@next @kitajs/ts-html-plugin@next',
-              yarn: 'yarn add @kitajs/html@next @kitajs/ts-html-plugin@next',
-              pnpm: 'pnpm add @kitajs/html@next @kitajs/ts-html-plugin@next',
-              bun: 'bun add @kitajs/html@next @kitajs/ts-html-plugin@next'
+              npm: 'npm i @kitajs/html@next && npm i -D @kitajs/html-cli@next typescript@next',
+              yarn: 'yarn add @kitajs/html@next && yarn add -D @kitajs/html-cli@next typescript@next',
+              pnpm: 'pnpm add @kitajs/html@next && pnpm add -D @kitajs/html-cli@next typescript@next',
+              bun: 'bun add @kitajs/html@next && bun add -d @kitajs/html-cli@next typescript@next'
             }}
           />
         </div>

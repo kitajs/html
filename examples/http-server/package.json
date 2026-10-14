@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "start": "tsx --watch src/server.ts",
-    "test": "xss-scan",
+    "test": "kita-html check",
     "test-types": "tsgo --noEmit"
   },
   "dependencies": {
     "@kitajs/html": "workspace:*",
-    "@kitajs/ts-html-plugin": "workspace:*",
+    "@kitajs/html-cli": "workspace:*",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
     "tslib": "catalog:",

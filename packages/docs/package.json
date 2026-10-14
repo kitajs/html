@@ -33,7 +33,7 @@
     "rspress-plugin-og": "^0.0.5",
     "rspress-plugin-reading-time": "^1.0.0",
     "shiki": "^4.3.1",
-    "typescript": "catalog:",
+    "typescript": "catalog:ts6",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.1.0"
   }

@@ -33,8 +33,7 @@ docs/
   integrations/               Framework and library integrations
     frameworks/               Fastify, Elysia
     type-extensions/          HTMX, Alpine.js, Hotwire Turbo
-  api/                        Handwritten XSS tooling docs
-    generated/                Auto-generated from source via TypeDoc
+  api/                        API reference, auto-generated from source via TypeDoc
 theme/
   index.tsx                   Custom layout
   index.css                   Brand styling
@@ -74,9 +73,9 @@ within a page.
 - **XSS section**: Solution-first. The safe attribute and detection tooling come before
   the "why not auto-escape" explanation. Readers who only skim the first page walk away
   knowing how to write safe code.
-- **API section**: XSS tooling is documented by capability (analysis engine, editor
-  plugin, CLI scanner) rather than by package name. This anticipates the upcoming split of
-  `@kitajs/ts-html-plugin` into three packages.
+- **XSS tooling**: Documented in the guide under `docs/guide/xss/`, not in the API
+  section. `kita-html check` (`@kitajs/html-cli`, TypeScript 7.1+) is the recommended
+  path; `@kitajs/ts-html-plugin` is deprecated and only documented for TypeScript 6.
 
 ## Writing Style
 
@@ -130,8 +129,10 @@ Each generated directory has a `_meta.json` that controls sidebar ordering. Type
 generates this file once (if missing), so edits persist. Remove the `"index"` entry from
 these files to hide the module-list landing pages from the sidebar.
 
-XSS tooling is documented in the guide under `docs/guide/xss/`. Update those pages when
-`@kitajs/ts-html-plugin` changes.
+XSS tooling is documented in the guide under `docs/guide/xss/`. `cli-scanner.mdx` and
+`cli-output-formats.md` cover `@kitajs/html-cli` (TypeScript 7.1+); `ts-html-plugin.md`
+covers the deprecated `@kitajs/ts-html-plugin` (TypeScript 6). Update them when either
+package changes. Prefer `kita-html check` in new pages.
 
 ## Sidebar Structure
 

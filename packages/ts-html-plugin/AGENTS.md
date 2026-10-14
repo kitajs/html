@@ -2,6 +2,11 @@
 
 ## Overview
 
+> **Deprecated.** This package requires TypeScript 6. TypeScript 7.1+ users use
+> `kita-html check` from `@kitajs/html-cli` (`packages/cli`), which ports the same
+> detection logic to the TypeScript 7.1 API. Only security fixes land here. When a rule
+> changes, mirror it in `packages/cli/src/analyzer/` (and the reverse).
+
 `@kitajs/ts-html-plugin` is a TypeScript Language Service Plugin and CLI tool that detects
 XSS vulnerabilities in JSX code at compile time. It integrates with your editor's
 TypeScript service to show real-time warnings and errors for potentially unsafe HTML

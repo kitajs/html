@@ -34,10 +34,10 @@ through components.
 
 ## Compile-time checks
 
-Kita Html shifts most of the safety work to compile-time analysis. The TypeScript plugin
-and CLI scanner inspect the type of every JSX child expression. If the type is `string` or
-`any`, the tools emit an error. If the type is `number`, `boolean`, `JSX.Element`, or
-another safe type, the expression passes without a diagnostic.
+Kita Html shifts most of the safety work to compile-time analysis. `kita-html check`
+inspects the type of every JSX child expression. If the type is `string` or `any`, it
+reports an error. If the type is `number`, `boolean`, `JSX.Element`, or another safe type,
+the expression passes without a diagnostic.
 
 This is a trade-off. Type-driven checks in a structurally typed language are not as strong
 as runtime checks on real values, especially when code uses `any`, type assertions,

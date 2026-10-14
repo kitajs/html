@@ -1,0 +1,78 @@
+{
+  "name": "@kitajs/html-cli",
+  "version": "5.0.0-next.0",
+  "description": "Command line tools for @kitajs/html, including XSS checks for TypeScript 7.1+",
+  "homepage": "https://html.kitajs.org/guide/xss/cli-scanner",
+  "bugs": "https://github.com/kitajs/html/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kitajs/html.git",
+    "directory": "packages/cli"
+  },
+  "funding": "https://github.com/kitajs/html?sponsor=1",
+  "license": "MIT",
+  "author": "Arthur Fiorette <kita@arthur.place>",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    "./check-report.schema.json": "./dist/check-report.schema.json"
+  },
+  "bin": {
+    "kita-html": "bin/kita-html.js"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "!dist/*.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "tsgo -p tsconfig.build.json && pnpm build-schema",
+    "build-schema": "ts-json-schema-generator --path src/reporters/json-report.ts --type JsonReport --tsconfig tsconfig.build.json --no-type-check --out dist/check-report.schema.json",
+    "test": "vitest --coverage --run",
+    "test-types": "tsgo --noEmit"
+  },
+  "oclif": {
+    "bin": "kita-html",
+    "commands": "./dist/cli/commands",
+    "dirname": "kita-html",
+    "plugins": [
+      "@oclif/plugin-help",
+      "@oclif/plugin-not-found",
+      "@oclif/plugin-warn-if-update-available",
+      "@oclif/plugin-version",
+      "@oclif/plugin-autocomplete"
+    ],
+    "topicSeparator": " ",
+    "warn-if-update-available": {
+      "frequency": 1,
+      "frequencyUnit": "days",
+      "timeoutInDays": 7
+    }
+  },
+  "dependencies": {
+    "@oclif/core": "^5.1.7",
+    "@oclif/plugin-autocomplete": "^4.0.4",
+    "@oclif/plugin-help": "^7.0.4",
+    "@oclif/plugin-not-found": "^4.0.4",
+    "@oclif/plugin-version": "^3.0.5",
+    "@oclif/plugin-warn-if-update-available": "^4.0.3"
+  },
+  "devDependencies": {
+    "@kitajs/html": "workspace:^",
+    "@oclif/test": "^5.0.3",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "ts-json-schema-generator": "^2.9.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@kitajs/html": "workspace:^",
+    "typescript": "^7.1.0-0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -30,7 +30,7 @@ Build this Fastify page with Kita Html and stream async sections.
 ```
 
 ```text
-Fix this Kita TSX so user bios render safely and xss-scan passes.
+Fix this Kita TSX so user bios render safely and kita-html check passes.
 ```
 
 ```text
@@ -70,7 +70,7 @@ This project uses Kita Html, not React.
 - `JSX.Element` is `string | Promise<string>`.
 - Children are not escaped by default.
 - Use `safe` on native elements that render untrusted text.
-- Run `xss-scan` during validation.
+- Run `kita-html check` during validation.
 ```
 
 If your tool also supports a file like `AGENTS.md`, reference the same instructions there.

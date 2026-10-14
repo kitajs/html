@@ -14,7 +14,8 @@ pnpm install
 ```
 packages/
   html/                  @kitajs/html            Core JSX runtime
-  ts-html-plugin/        @kitajs/ts-html-plugin  XSS detection (TS plugin + CLI)
+  cli/                   @kitajs/html-cli        kita-html check, XSS detection for TS 7.1+
+  ts-html-plugin/        @kitajs/ts-html-plugin  Deprecated XSS detection for TS 6
   fastify-html-plugin/   @kitajs/fastify-html-plugin  Fastify integration
   express-html-plugin/   @kitajs/express-html-plugin  Express integration
   docs/                  @kitajs/docs-html       Documentation site
@@ -43,6 +44,9 @@ Use `-F` (short for `--filter`) to target a specific package.
 pnpm -F @kitajs/html build
 pnpm -F @kitajs/html test
 pnpm -F @kitajs/html test-types
+pnpm -F @kitajs/html-cli build
+pnpm -F @kitajs/html-cli test
+pnpm -F @kitajs/html-cli test-types
 pnpm -F @kitajs/ts-html-plugin build
 pnpm -F @kitajs/ts-html-plugin test
 pnpm -F @kitajs/ts-html-plugin test-types
@@ -57,9 +61,13 @@ pnpm -F @kitajs/docs-html dev        # Dev server on port 1229
 pnpm -F @kitajs/docs-html preview
 ```
 
-The library packages (`html`, `ts-html-plugin`, `fastify-html-plugin`, and
+The library packages (`html`, `cli`, `ts-html-plugin`, `fastify-html-plugin`, and
 `express-html-plugin`) use `tsgo -p tsconfig.build.json` for building and
-`vitest --coverage --typecheck --run` for testing. The docs package uses Rspress.
+`vitest --coverage --run` for testing (with `--typecheck` everywhere except `cli`). The
+docs package uses Rspress. TypeScript 7.1 (the `next` nightly pinned in the default
+catalog) is the workspace default. Only code that needs the TypeScript 6 JavaScript API
+uses the `ts6` catalog: `ts-html-plugin`, the docs site (twoslash, TypeDoc) and the root
+(`prettier-plugin-organize-imports`).
 
 ### Formatting
 

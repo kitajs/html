@@ -39,9 +39,9 @@ and produce larger output for the same logical content.
 The RealWorldPage benchmark is the most meaningful because it renders a full component
 tree. Template engines such as Ghtml and HonoHtml are faster because they concatenate
 template strings without a function call per element. In exchange, element and attribute
-names are not type-checked, and the `@kitajs/ts-html-plugin` XSS diagnostics do not apply
-to them. Every JSX library pays one function call per element, so the JSX rows compare
-like with like.
+names are not type-checked, and the `kita-html check` XSS diagnostics do not apply to
+them. Every JSX library pays one function call per element, so the JSX rows compare like
+with like.
 
 ## Implementation details
 

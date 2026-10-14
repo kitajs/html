@@ -26,7 +26,8 @@ applications.
 kitajs/html/
 ├── packages/
 │   ├── html/               # Core JSX runtime (@kitajs/html)
-│   ├── ts-html-plugin/     # XSS detection TypeScript plugin (@kitajs/ts-html-plugin)
+│   ├── cli/                # kita-html check, XSS detection for TS 7.1+ (@kitajs/html-cli)
+│   ├── ts-html-plugin/     # Deprecated XSS plugin + xss-scan for TS 6 (@kitajs/ts-html-plugin)
 │   ├── fastify-html-plugin/# Fastify integration (@kitajs/fastify-html-plugin)
 │   ├── express-html-plugin/# Express integration (@kitajs/express-html-plugin)
 │   └── docs/               # Documentation site (@kitajs/docs-html)
@@ -39,7 +40,9 @@ kitajs/html/
 ```
 @kitajs/html (core)
     ↑
-    ├── @kitajs/ts-html-plugin (peer dependency)
+    ├── @kitajs/html-cli (peer dependency)
+    │
+    ├── @kitajs/ts-html-plugin (peer dependency, deprecated)
     │
     ├── @kitajs/fastify-html-plugin (peer dependency)
     │
@@ -88,7 +91,7 @@ jsx('div', { class: 'hello', children: name })
 2. **Type as String**: `JSX.Element = string | Promise<string>`
 3. **Async Propagation**: Promise children make parent promises
 4. **XSS by Default**: Children are NOT escaped unless `safe` attribute is used
-5. **Compile-Time Safety**: TypeScript plugin catches XSS at development time
+5. **Compile-Time Safety**: `kita-html check` catches XSS before code ships
 
 ### Data Flow
 
@@ -114,10 +117,10 @@ HTML String (or Promise<string> for async)
 User writes JSX
       │
       ▼
-ts-html-plugin (LSP) ─────► Warnings/Errors in Editor
+kita-html check (TS 7.1+) ─► CI/CD Pipeline Check, editor problems via --format tsc
       │
       ▼
-xss-scan (CLI) ────────────► CI/CD Pipeline Check
+(deprecated, TS 6) ts-html-plugin LSP + xss-scan
       │
       ▼
 Runtime (safe attribute) ──► Escapes at render time
@@ -136,9 +139,22 @@ The core JSX runtime. Key files:
 
 **See:** [`packages/html/AGENTS.md`](packages/html/AGENTS.md)
 
+### @kitajs/html-cli
+
+`kita-html check`, the XSS scanner for TypeScript 7.1+, built with oclif on the
+`typescript/sync` API. Key files:
+
+- `src/cli/commands/check.ts`: oclif command (flags, exit codes)
+- `src/check.ts`: Project loading, solution expansion, positional files
+- `src/analyzer/`: Detection rules ported from `ts-html-plugin/src/util.ts`
+- `src/reporters/`: `pretty`, `tsc`, `json` and `github` formats
+
+**See:** [`packages/cli/AGENTS.md`](packages/cli/AGENTS.md)
+
 ### @kitajs/ts-html-plugin
 
-TypeScript plugin for XSS detection. Key files:
+Deprecated TypeScript 6 plugin for XSS detection. Only security fixes land here; mirror
+rule changes in `packages/cli/src/analyzer/`. Key files:
 
 - `src/index.ts`: Language Service Plugin entry
 - `src/cli.ts`: `xss-scan` CLI tool
@@ -170,7 +186,7 @@ methodology.
 | Tool                | Purpose                              |
 | ------------------- | ------------------------------------ |
 | **pnpm**            | Package manager (required)           |
-| **TypeScript 5.9+** | Language                             |
+| **TypeScript 7.1**  | Language (6 via the `ts6` catalog)   |
 | **tsgo**            | TypeScript compiler (native preview) |
 | **Vitest**          | Test runner                          |
 | **c8/v8**           | Code coverage                        |
@@ -179,6 +195,13 @@ methodology.
 | **pnpm versioning** | Version management (`pnpm change`)   |
 
 ## Configuration
+
+TypeScript 7.1 (the `next` nightly pinned in the default catalog) is the workspace
+default. Only code that needs the TypeScript 6 JavaScript API uses the `ts6` catalog:
+`ts-html-plugin`, the docs site (twoslash, TypeDoc) and the root
+(`prettier-plugin-organize-imports`). The `plugins` entry and VS Code settings below only
+load the deprecated plugin in packages that still use TypeScript 6; user projects on
+TypeScript 7.1+ omit them and run `kita-html check`.
 
 ### TypeScript (tsconfig.json)
 
@@ -232,8 +255,10 @@ The codebase uses several optimization patterns:
 
 ### XSS Prevention Layers
 
-1. **Compile-Time**: `@kitajs/ts-html-plugin` catches unsafe usage
-2. **CI/CD**: `xss-scan` CLI fails builds on XSS issues
+1. **Compile-Time**: `kita-html check` (`@kitajs/html-cli`, TS 7.1+) catches unsafe usage;
+   `@kitajs/ts-html-plugin` covers TS 6 (deprecated)
+2. **CI/CD**: `kita-html check` fails builds and, inside GitHub Actions, annotates pull
+   requests automatically
 3. **Runtime**: `safe` attribute escapes content
 
 ### Safe Content Types
