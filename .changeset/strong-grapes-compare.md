@@ -2,6 +2,6 @@
 '@kitajs/html-cli': minor
 ---
 
-Inside GitHub Actions, `kita-html check` without `--format` now prints pull request
-annotations together with the colored pretty output. An explicit `--format` keeps the
-previous behavior
+`--format` accepts several formats, comma separated or repeated (`-f pretty,github`), and
+defaults to `pretty,github` inside GitHub Actions, so findings are annotated on pull
+requests without extra configuration. The `github` format now prints only the annotations

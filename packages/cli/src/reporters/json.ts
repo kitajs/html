@@ -1,41 +1,11 @@
-import { countBySeverity, type KitaDiagnostic } from '../diagnostic.js'
+import { countBySeverity } from '../diagnostic.js'
+import type { JsonReport } from './json-report.js'
 import { NEW_LINE, relativePath, type Reporter } from './shared.js'
 
-/** Schema version of the json report. Bump on breaking changes to its shape. */
-export const JSON_REPORT_VERSION = 1
-
-export interface JsonLocation {
-  /** 1-based line. */
-  line: number
-  /** 1-based column in UTF-16 code units. */
-  column: number
-  /** 0-based UTF-16 offset in the file. */
-  offset: number
-}
-
-export interface JsonDiagnostic {
-  file: string
-  code: number
-  id: string
-  severity: KitaDiagnostic['severity']
-  message: string
-  url: string
-  start: JsonLocation
-  end: JsonLocation
-}
-
-export interface JsonReport {
-  version: typeof JSON_REPORT_VERSION
-  tool: { name: string; version: string }
-  typescript: string
-  projects: string[]
-  summary: { filesChecked: number; errors: number; warnings: number }
-  diagnostics: JsonDiagnostic[]
-}
+export type * from './json-report.js'
 
 export const json: Reporter = (result, ctx) => {
   const report: JsonReport = {
-    version: JSON_REPORT_VERSION,
     tool: { name: '@kitajs/html-cli', version: ctx.toolVersion },
     typescript: result.typescriptVersion,
     projects: result.projects.map((project) => relativePath(ctx.cwd, project)),

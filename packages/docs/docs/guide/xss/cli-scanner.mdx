@@ -60,20 +60,21 @@ that are not TSX or JSX, are skipped with a warning.
 
 ## Report in GitHub pull requests
 
-Inside GitHub Actions, `kita-html check` without `--format` prints the usual colored
-output and also a GitHub Actions annotation per finding, so each finding appears on the
-changed line of the pull request. No extra configuration is needed. Paths are resolved
-against `GITHUB_WORKSPACE`, which keeps annotations attached when the check runs from a
-package directory of a monorepo.
+`--format github` prints a GitHub Actions annotation per finding, so each finding appears
+on the changed line of the pull request. Inside GitHub Actions, `--format` defaults to
+`pretty,github`, which adds those annotations to the usual colored output with no extra
+configuration. Paths are resolved against `GITHUB_WORKSPACE`, which keeps annotations
+attached when the check runs from a package directory of a monorepo.
 
 ```yaml title=".github/workflows/ci.yml"
 - name: XSS check
   run: npx kita-html check
 ```
 
-An explicit `--format` turns this off. `--format github` prints only the annotations and
-one plain line per finding. In both cases the printed lines do not match the `tsc` problem
-matcher that `actions/setup-node` registers, so findings are not annotated twice.
+GitHub displays a limited number of annotations per step, so keep `pretty` or `tsc` next
+to `github` to have the full list in the job log. With `github` selected, the `pretty`
+headers do not match the `tsc` problem matcher that `actions/setup-node` registers, so
+findings are not annotated twice.
 
 ## Show findings in VS Code
 

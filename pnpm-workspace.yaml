@@ -64,10 +64,12 @@ catalog:
   react-dom: ^19.2.8
   tslib: ^2.8.1
   tsx: ^4.23.1
-  typescript: ^6 # ts-html-plugin needs the TS 6 compiler API. TS 7.1+ is used by html-cli through the ts7 catalog
+  # Latest `next` nightly allowed by minimumReleaseAge, until TypeScript 7.1 is stable
+  typescript: 7.1.0-dev.20261012.1
   vitest: ^4.1.10
 
 catalogs:
-  ts7:
-    # Pinned nightly until TypeScript 7.1 stable ships the typescript/sync API
-    typescript: 7.1.0-dev.20261012.1
+  # Only for code that needs the TypeScript 6 JavaScript API, which TypeScript 7 removed:
+  # ts-html-plugin, the docs site (twoslash, typedoc) and the root (prettier organize imports)
+  ts6:
+    typescript: ^6

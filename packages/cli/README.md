@@ -38,8 +38,8 @@
 
 - Reports diagnostics TS88601 to TS88604 for every TSX/JSX file of a project
 - Formats: `pretty`, `tsc` (VS Code `$tsc` problem matcher), `json` and `github` (pull
-  request annotations). Inside GitHub Actions, the default output also annotates pull
-  requests
+  request annotations). Several can be combined; inside GitHub Actions the default is
+  `pretty,github`
 - Exits with `0` when clean, `1` on errors and `2` on warnings only
 - Requires TypeScript 7.1 or later and Node.js 22 or later. TypeScript 6 projects use the
   deprecated `@kitajs/ts-html-plugin`

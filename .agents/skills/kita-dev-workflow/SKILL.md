@@ -308,7 +308,8 @@ debugging.
 
 - **pnpm** is the only supported package manager (enforced by preinstall script)
 - **Node.js 20.13+** required
-- **TypeScript 6** for development (7.1 in `packages/cli`)
+- **TypeScript 7.1** for development (6 via the `ts6` catalog for `ts-html-plugin`, docs
+  and the root)
 
 ## Common Pitfalls
 

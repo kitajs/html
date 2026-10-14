@@ -11,7 +11,6 @@ TypeScript 6 compiler API and language service plugins that TypeScript 7 removed
 
 ```
 bin/kita-html.js         oclif entry; skips oclif's slow Windows shell detection
-schema/                  JSON Schema of the json report, exported as a package subpath
 src/
   cli/                   Everything oclif-specific
     commands/check.ts    `kita-html check` (flags, exit codes, error mapping)
@@ -21,6 +20,8 @@ src/
   typescript.ts          Loads typescript/sync, ast and ast/is from the project. Version gate
   analyzer/              Port of ts-html-plugin's util.ts to the TypeScript 7.1 API
   reporters/             pretty, tsc, json and github formatters
+    json-report.ts       Types of the json report; `pnpm build` generates
+                         dist/check-report.schema.json from them (ts-json-schema-generator)
   diagnostic.ts          KitaDiagnostic, sorting, dedupe, exit codes
   errors.ts              TS88601 to TS88604 (message and docs URL kept apart)
   paths.ts               Windows-safe path normalization
@@ -49,9 +50,11 @@ test/
   by a CLI test).
 - oclif exits 2 on parse errors. `Check.catch` maps those to 1, because 2 means "only
   warnings".
-- Without `--format`, inside GitHub Actions (`GITHUB_ACTIONS=true`), the command prints
-  annotations plus pretty output with `avoidTscMatcher`, so the setup-node `tsc` problem
-  matcher does not annotate findings twice. An explicit `--format` disables this.
+- `--format` takes several formats; each reporter prints only its own output and the
+  command joins them in order. The default is computed by the flag (`pretty`, or
+  `pretty,github` when `GITHUB_ACTIONS=true`). When `github` is selected, `pretty` gets
+  `avoidTscMatcher` so the setup-node `tsc` problem matcher does not annotate findings
+  twice. `json` must be used alone.
 - Prefer in-process CLI tests (`check()` helper in `test/cli.test.ts`). Each spawned oclif
   process takes many seconds on Windows CI runners; keep spawning for behavior that needs
   a real process, with `NODE_ENV=production` and a long timeout.
@@ -66,8 +69,14 @@ pnpm test         # vitest; cli.test.ts requires a build first
 pnpm test-types   # tsgo --noEmit
 ```
 
-The package uses TypeScript 7.1 from the `ts7` pnpm catalog, pinned to a nightly until 7.1
-is stable. The rest of the workspace stays on TypeScript 6 through the default catalog.
+The package uses TypeScript 7.1 from the default pnpm catalog, pinned to a nightly until
+7.1 is stable. Only `ts-html-plugin`, the docs site and the root use TypeScript 6 (`ts6`
+catalog).
+
+The JSON Schema exported as `@kitajs/html-cli/check-report.schema.json` is generated at
+build time from `src/reporters/json-report.ts`. Change the types and their JSDoc tags
+(`@asType`, `@minimum`, `@pattern`), never a schema file. Breaking report changes ship
+with a major release of the package.
 
 Rule tests use `openWithDiagnostics` from `test/util/project.ts`. It prepends the same
 `TEST_HELPERS` prelude as the old plugin's tests, so line numbers and offsets match.

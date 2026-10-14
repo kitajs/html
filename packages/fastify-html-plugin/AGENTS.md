@@ -163,7 +163,7 @@ pnpm test  # Runs vitest with coverage and type checking
 ### Dependencies
 
 - **`fastify-plugin`**: Enables proper plugin encapsulation
-- **Peer deps**: `@kitajs/html`, optionally `@kitajs/ts-html-plugin`
+- **Peer deps**: `@kitajs/html`, optionally `@kitajs/html-cli` (`kita-html check`)
 
 ## Usage Patterns
 

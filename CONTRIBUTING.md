@@ -64,8 +64,10 @@ pnpm -F @kitajs/docs-html preview
 The library packages (`html`, `cli`, `ts-html-plugin`, `fastify-html-plugin`, and
 `express-html-plugin`) use `tsgo -p tsconfig.build.json` for building and
 `vitest --coverage --run` for testing (with `--typecheck` everywhere except `cli`). The
-docs package uses Rspress. `cli` (`@kitajs/html-cli`) depends on TypeScript 7.1 through
-the `ts7` catalog; every other package uses TypeScript 6.
+docs package uses Rspress. TypeScript 7.1 (the `next` nightly pinned in the default
+catalog) is the workspace default. Only code that needs the TypeScript 6 JavaScript API
+uses the `ts6` catalog: `ts-html-plugin`, the docs site (twoslash, TypeDoc) and the root
+(`prettier-plugin-organize-imports`).
 
 ### Formatting
 

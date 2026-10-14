@@ -186,7 +186,7 @@ methodology.
 | Tool                | Purpose                              |
 | ------------------- | ------------------------------------ |
 | **pnpm**            | Package manager (required)           |
-| **TypeScript 6**    | Language (7.1 in `packages/cli`)     |
+| **TypeScript 7.1**  | Language (6 via the `ts6` catalog)   |
 | **tsgo**            | TypeScript compiler (native preview) |
 | **Vitest**          | Test runner                          |
 | **c8/v8**           | Code coverage                        |
@@ -196,9 +196,12 @@ methodology.
 
 ## Configuration
 
-Workspace packages type-check with TypeScript 6 and the deprecated plugin, as shown below.
-User projects on TypeScript 7.1+ omit the `plugins` entry and the VS Code settings, and
-run `kita-html check` instead.
+TypeScript 7.1 (the `next` nightly pinned in the default catalog) is the workspace
+default. Only code that needs the TypeScript 6 JavaScript API uses the `ts6` catalog:
+`ts-html-plugin`, the docs site (twoslash, TypeDoc) and the root
+(`prettier-plugin-organize-imports`). The `plugins` entry and VS Code settings below only
+load the deprecated plugin in packages that still use TypeScript 6; user projects on
+TypeScript 7.1+ omit them and run `kita-html check`.
 
 ### TypeScript (tsconfig.json)
 

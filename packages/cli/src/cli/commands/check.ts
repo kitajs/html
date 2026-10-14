@@ -1,7 +1,7 @@
 import { Args, Command, Errors, Flags, type Interfaces } from '@oclif/core'
 import { check, CheckError, loadProjectTypeScript } from '../../check.js'
 import { exitCodeFor } from '../../diagnostic.js'
-import { annotations, github } from '../../reporters/github.js'
+import { github } from '../../reporters/github.js'
 import { json } from '../../reporters/json.js'
 import { pretty } from '../../reporters/pretty.js'
 import type { Reporter } from '../../reporters/shared.js'
@@ -18,7 +18,7 @@ export default class Check extends Command {
 
 A solution-style tsconfig (only "references", no files) is expanded to every referenced project, like "tsc -b". Positional files narrow the report to those files; the program is still built from the tsconfig.
 
-Without --format, the output is pretty. Inside GitHub Actions (GITHUB_ACTIONS=true) it is pretty plus GitHub annotations, so findings show up on the pull request without extra configuration.
+--format accepts several formats, comma separated or repeated, and prints them in order. It defaults to pretty, or to pretty,github inside GitHub Actions (GITHUB_ACTIONS=true), so findings show up on the pull request without extra configuration. json cannot be combined with other formats.
 
 Exit codes: 0 when no issues are found, 1 when errors are found or the configuration is invalid, 2 when only warnings are found.`
 
@@ -33,8 +33,8 @@ Exit codes: 0 when no issues are found, 1 when errors are found or the configura
     },
     {
       description:
-        'Print only GitHub annotations and plain lines (inside GitHub Actions, omitting --format already adds annotations to the pretty output)',
-      command: '<%= config.bin %> <%= command.id %> --format github'
+        'Pretty output plus GitHub annotations (already the default inside GitHub Actions)',
+      command: '<%= config.bin %> <%= command.id %> --format pretty,github'
     },
     {
       description: 'Feed the VS Code $tsc problem matcher',
@@ -61,14 +61,22 @@ Exit codes: 0 when no issues are found, 1 when errors are found or the configura
     project: Flags.string({
       char: 'p',
       multiple: true,
+      // One value per occurrence, so positional files after the flag stay files
+      multipleNonGreedy: true,
       helpValue: '<path>',
       description: 'tsconfig.json file or directory to check. Repeatable. Defaults to "."'
     }),
     format: Flags.option({
       char: 'f',
       options: ['pretty', 'tsc', 'json', 'github'] as const,
+      multiple: true,
+      multipleNonGreedy: true,
+      delimiter: ',',
       description:
-        'Output format. Defaults to pretty, plus GitHub annotations inside GitHub Actions.'
+        'Output formats, comma separated or repeated. json must be used alone.',
+      default: async () =>
+        process.env.GITHUB_ACTIONS === 'true' ? ['pretty', 'github'] : ['pretty'],
+      defaultHelp: async () => 'pretty (pretty,github in GitHub Actions)'
     })(),
     color: Flags.boolean({
       allowNo: true,
@@ -94,6 +102,13 @@ Exit codes: 0 when no issues are found, 1 when errors are found or the configura
 
   public async run(): Promise<void> {
     const { argv, flags } = await this.parse(Check)
+    const formats = [...new Set(flags.format)]
+
+    // Anything else on stdout would make the JSON unparseable
+    if (formats.includes('json') && formats.length > 1) {
+      this.error('The json format cannot be combined with other formats.', { exit: 1 })
+    }
+
     const cwd = process.cwd()
     const projects = { cwd, projects: flags.project }
 
@@ -108,23 +123,16 @@ Exit codes: 0 when no issues are found, 1 when errors are found or the configura
         onNotice: (message) => this.warn(message)
       })
 
-      // An explicit --format always wins, so `--format pretty` turns the annotations off
-      const annotate = !flags.format && process.env.GITHUB_ACTIONS === 'true'
-
       const context = {
         ts,
         cwd,
         color: resolveColor(flags.color, process.env, !!process.stdout.isTTY),
         workspace: process.env.GITHUB_WORKSPACE,
         toolVersion: this.config.version,
-        avoidTscMatcher: annotate
+        avoidTscMatcher: formats.includes('github')
       }
 
-      let output = reporters[flags.format ?? 'pretty'](result, context)
-
-      if (annotate) {
-        output = annotations(result, context) + output
-      }
+      const output = formats.map((format) => reporters[format](result, context)).join('')
 
       if (output) {
         process.stdout.write(output)

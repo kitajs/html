@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "start": "tsx --watch src/index.ts | pino-pretty",
-    "test": "xss-scan",
+    "test": "kita-html check",
     "test-types": "tsc --noEmit"
   },
   "dependencies": {
     "@fastify/formbody": "catalog:",
     "@kitajs/fastify-html-plugin": "workspace:*",
     "@kitajs/html": "workspace:*",
-    "@kitajs/ts-html-plugin": "workspace:*",
+    "@kitajs/html-cli": "workspace:*",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
     "fastify": "catalog:",

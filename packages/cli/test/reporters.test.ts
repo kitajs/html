@@ -8,12 +8,7 @@ import {
 } from '../src/diagnostic.js'
 import { docsUrl, DoubleEscape, UnusedSafe, Xss } from '../src/errors.js'
 import { normalizePath } from '../src/paths.js'
-import {
-  annotations,
-  escapeData,
-  escapeProperty,
-  github
-} from '../src/reporters/github.js'
+import { escapeData, escapeProperty, github } from '../src/reporters/github.js'
 import { json, type JsonReport } from '../src/reporters/json.js'
 import { pretty } from '../src/reporters/pretty.js'
 import type { ReportContext } from '../src/reporters/shared.js'
@@ -209,10 +204,11 @@ describe('tsc', () => {
 
 describe('json', () => {
   const schema = JSON.parse(
-    fs.readFileSync(path.join(TEST_DIR, '../schema/check-report.v1.json'), 'utf8')
+    // Generated from src/reporters/json-report.ts by `pnpm build`
+    fs.readFileSync(path.join(TEST_DIR, '../dist/check-report.schema.json'), 'utf8')
   )
 
-  it('matches the published schema', () => {
+  it('matches the schema generated from its types', () => {
     expect(validate(schema, JSON.parse(json(RESULT, ctx)))).toEqual([])
     expect(validate(schema, JSON.parse(json(CLEAN, ctx)))).toEqual([])
   })
@@ -244,33 +240,34 @@ describe('json', () => {
 
   it('validator rejects reports that break the schema', () => {
     const report = JSON.parse(json(RESULT, ctx))
+    report.version = 1
     report.diagnostics[0].severity = 'info'
+    report.diagnostics[0].id = '88601'
     delete report.summary.errors
 
-    expect(validate(schema, report)).toEqual([
-      '$.summary.errors: required',
-      '$.diagnostics[0].severity: expected one of error, warning'
-    ])
+    expect(validate(schema, report).sort()).toEqual(
+      [
+        '$.version: not allowed',
+        '$.summary.errors: required',
+        '$.diagnostics[0].id: does not match ^TS\\d+$',
+        '$.diagnostics[0].severity: expected one of error, warning'
+      ].sort()
+    )
   })
 })
 
 describe('github', () => {
-  it('prints annotations, log lines and a summary', () => {
+  it('prints one workflow command per finding', () => {
     expect(github(RESULT, ctx)).toMatchInlineSnapshot(`
       "::error file=src/my pages/home.tsx,line=1,col=1,endLine=1,endColumn=5,title=TS88601::Content may introduce an XSS vulnerability and must be marked with the \`safe\` attribute. See https://html.kitajs.org/TS88601
       ::error file=src/pages/login.tsx,line=3,col=6,endLine=3,endColumn=15,title=TS88601::Content may introduce an XSS vulnerability and must be marked with the \`safe\` attribute. See https://html.kitajs.org/TS88601
       ::warning file=src/pages/login.tsx,line=4,col=11,endLine=4,endColumn=15,title=TS88604::The \`safe\` attribute is unused in this context. See https://html.kitajs.org/TS88604
       ::error file=src/pages/login.tsx,line=5,col=5,endLine=10,endColumn=9,title=TS88602::The \`safe\` attribute causes this content to be escaped more than once. See https://html.kitajs.org/TS88602
-      src/my pages/home.tsx:1:1: error TS88601: Content may introduce an XSS vulnerability and must be marked with the \`safe\` attribute.
-      src/pages/login.tsx:3:6: error TS88601: Content may introduce an XSS vulnerability and must be marked with the \`safe\` attribute.
-      src/pages/login.tsx:4:11: warning TS88604: The \`safe\` attribute is unused in this context.
-      src/pages/login.tsx:5:5: error TS88602: The \`safe\` attribute causes this content to be escaped more than once.
-      Found 3 errors and 1 warning in 2 files.
       "
     `)
   })
 
-  it('prints log lines that the setup-node tsc problem matcher ignores', () => {
+  it('prints nothing the setup-node tsc problem matcher would annotate again', () => {
     // Pattern of the tsc problem matcher registered by actions/setup-node
     const matcher =
       /^([^\s].*)[(:](\d+)[,:](\d+)(?:\):\s+|\s+-\s+)(error|warning|info)\s+TS(\d+)\s*:\s*(.*)$/
@@ -305,15 +302,7 @@ describe('github', () => {
     expect(output).toContain('file=src/a%2Cb%3Ac.tsx,')
   })
 
-  it('prints only the summary when there are no diagnostics', () => {
-    expect(github(CLEAN, ctx)).toBe('No XSS issues found in 1 file.\n')
-  })
-
-  it('exposes the annotations alone for the GitHub Actions default output', () => {
-    const output = annotations(RESULT, ctx)
-
-    expect(output.trimEnd().split('\n')).toHaveLength(RESULT.diagnostics.length)
-    expect(output.split('\n').every((line) => !line || line.startsWith('::'))).toBe(true)
-    expect(annotations(CLEAN, ctx)).toBe('')
+  it('prints nothing when there are no diagnostics', () => {
+    expect(github(CLEAN, ctx)).toBe('')
   })
 })

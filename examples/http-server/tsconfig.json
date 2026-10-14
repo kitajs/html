@@ -4,8 +4,7 @@
     "types": ["node"],
     "outDir": "dist",
     "jsx": "react-jsx",
-    "jsxImportSource": "@kitajs/html",
-    "plugins": [{ "name": "@kitajs/ts-html-plugin" }]
+    "jsxImportSource": "@kitajs/html"
   },
   "include": ["src"]
 }

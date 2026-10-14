@@ -7,14 +7,16 @@ description:
 # Output formats
 
 `kita-html check` writes its report to stdout. Usage and configuration errors, and
-warnings about skipped files, go to stderr. Select a format with `--format` (`-f`).
+warnings about skipped files, go to stderr. Select formats with `--format` (`-f`), comma
+separated or repeated, such as `-f pretty,github`. Each format is printed once, in the
+given order. `json` cannot be combined with other formats.
 
-| Format   | Output                                                                                                                                                             |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `pretty` | Default. Code frames, documentation links, and a summary line. Inside GitHub Actions without `--format`, annotations are printed first.                            |
-| `tsc`    | One `file(line,col): error TS88601: message` line per finding, identical to `tsc` output. Prints nothing when clean.                                               |
-| `json`   | One JSON document, also printed when clean. Follows the schema shipped at `@kitajs/html-cli/schema/check-report.v1.json`.                                          |
-| `github` | One GitHub Actions `::error` or `::warning` annotation per finding, followed by one `file:line:col: error TS88601: message` line per finding and the summary line. |
+| Format   | Output                                                                                                                      |
+| -------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `pretty` | Default. Code frames, documentation links, and a summary line.                                                              |
+| `tsc`    | One `file(line,col): error TS88601: message` line per finding, identical to `tsc` output. Prints nothing when clean.        |
+| `json`   | One JSON document, also printed when clean. Follows the JSON Schema shipped at `@kitajs/html-cli/check-report.schema.json`. |
+| `github` | One GitHub Actions `::error` or `::warning` annotation per finding. Added to `pretty` by default inside GitHub Actions.     |
 
 `--color` and `--no-color` force colors on or off for `pretty`. Without them, a non-empty
 `NO_COLOR` disables colors, and `FORCE_COLOR` enables them unless it is `0` or `false`.
@@ -23,18 +25,17 @@ never print colors.
 
 ## Flags
 
-| Flag                   | Description                                                                                      |
-| ---------------------- | ------------------------------------------------------------------------------------------------ |
-| `-p, --project <path>` | `tsconfig.json` file or directory. Repeatable. Defaults to the current directory.                |
-| `-f, --format <name>`  | `pretty`, `tsc`, `json`, or `github`. Defaults to `pretty` (plus annotations in GitHub Actions). |
-| `--[no-]color`         | Forces colors on or off for `pretty`.                                                            |
-| `[files...]`           | Restricts the report to these TSX or JSX files. Types still come from the project.               |
+| Flag                   | Description                                                                                                                        |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --project <path>` | `tsconfig.json` file or directory. Repeatable. Defaults to the current directory.                                                  |
+| `-f, --format <name>`  | `pretty`, `tsc`, `json`, or `github`. Comma separated or repeated. Defaults to `pretty`, or `pretty,github` inside GitHub Actions. |
+| `--[no-]color`         | Forces colors on or off for `pretty`.                                                                                              |
+| `[files...]`           | Restricts the report to these TSX or JSX files. Types still come from the project.                                                 |
 
 ## JSON report
 
 | Field                        | Type                                 | Description                                                       |
 | ---------------------------- | ------------------------------------ | ----------------------------------------------------------------- |
-| `version`                    | `1`                                  | Schema version. Changes only on breaking changes.                 |
 | `tool`                       | `{ name, version }`                  | `@kitajs/html-cli` and its version.                               |
 | `typescript`                 | `string`                             | Version of the TypeScript package that ran the check.             |
 | `projects`                   | `string[]`                           | Checked `tsconfig.json` files, relative to the working directory. |

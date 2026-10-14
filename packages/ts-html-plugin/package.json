@@ -40,12 +40,12 @@
     "@vitest/coverage-v8": "catalog:",
     "fast-defer": "^1.1.9",
     "self-ts-plugin": "link:",
-    "typescript": "catalog:",
+    "typescript": "catalog:ts6",
     "vitest": "catalog:"
   },
   "peerDependencies": {
     "@kitajs/html": "workspace:^",
-    "typescript": "catalog:"
+    "typescript": "catalog:ts6"
   },
   "engines": {
     "node": ">=20.12"

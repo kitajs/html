@@ -1,4 +1,4 @@
-// Minimal JSON Schema validator covering the keywords used by schema/check-report.v1.json,
+// Minimal JSON Schema validator covering the keywords used by dist/check-report.schema.json,
 // so the published schema is tested without adding a validator dependency.
 
 type Schema = Record<string, any>
@@ -27,8 +27,15 @@ export function validate(
   }
 
   switch (schema.type) {
-    case 'string':
-      return typeof value === 'string' ? [] : [`${at}: expected string`]
+    case 'string': {
+      if (typeof value !== 'string') {
+        return [`${at}: expected string`]
+      }
+
+      return schema.pattern && !new RegExp(schema.pattern).test(value)
+        ? [`${at}: does not match ${schema.pattern}`]
+        : []
+    }
 
     case 'integer': {
       if (!Number.isInteger(value)) {

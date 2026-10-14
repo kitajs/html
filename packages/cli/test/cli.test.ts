@@ -235,7 +235,38 @@ describe('formats', () => {
     expect(stdout).toContain(
       `::error file=${path.basename(dir)}/src/a.tsx,line=2,col=24,endLine=2,endColumn=29,title=TS88601::`
     )
-    expect(stdout).toContain('src/a.tsx:2:24: error TS88601')
+    // Only workflow commands, so it can be combined with other formats
+    expect(
+      stdout
+        .trimEnd()
+        .split('\n')
+        .every((line) => line.startsWith('::'))
+    ).toBe(true)
+  })
+
+  it('combines comma separated and repeated formats in order', async () => {
+    const dir = project(ERRORS)
+    const combined = await check(dir, ['-f', 'pretty,github'])
+    const repeated = await check(dir, ['-f', 'tsc', '-f', 'github', '-f', 'tsc'])
+
+    expect(combined.code).toBe(1)
+    expect(combined.stdout).toContain('src/a.tsx:2:24: error TS88601')
+    expect(combined.stdout.indexOf('Found 1 error')).toBeLessThan(
+      combined.stdout.indexOf('::error ')
+    )
+    // Each format is printed once
+    expect(repeated.stdout.trimEnd().split('\n')).toEqual([
+      'src/a.tsx(2,24): error TS88601: Content may introduce an XSS vulnerability and must be marked with the `safe` attribute.',
+      expect.stringMatching(/^::error file=src\/a\.tsx,line=2,col=24,/)
+    ])
+  })
+
+  it('does not combine json with other formats', async () => {
+    const { code, stdout, stderr } = await check(project(ERRORS), ['-f', 'json,github'])
+
+    expect(code).toBe(1)
+    expect(stdout).toBe('')
+    expect(stderr).toContain('The json format cannot be combined with other formats.')
   })
 
   it('pretty is colorless when piped and honors --color and FORCE_COLOR', async () => {
@@ -253,7 +284,7 @@ describe('formats', () => {
 describe('inside GitHub Actions', () => {
   const actions = { GITHUB_ACTIONS: 'true' }
 
-  it('adds annotations to the pretty output when --format is omitted', async () => {
+  it('defaults to pretty,github when --format is omitted', async () => {
     const dir = project(ERRORS)
     const { code, stdout } = await check(dir, [], {
       ...actions,
@@ -263,7 +294,7 @@ describe('inside GitHub Actions', () => {
 
     expect(code).toBe(1)
     expect(plain).toMatch(
-      new RegExp(`^::error file=${path.basename(dir)}/src/a\\.tsx,line=2,col=24,`)
+      new RegExp(`^::error file=${path.basename(dir)}/src/a\\.tsx,line=2,col=24,`, 'm')
     )
     expect(plain).toContain('src/a.tsx:2:24: error TS88601')
     expect(plain).toContain('See https://html.kitajs.org/TS88601')
@@ -382,6 +413,17 @@ describe('projects and files', () => {
     expect(stdout).toContain('src/b.tsx(2,24)')
     expect(stdout).not.toContain('src/a.tsx')
     expect(stderr).toContain(`Skipping 'src/c.ts': not a TSX/JSX file.`)
+  })
+
+  it('keeps positional files after -p and -f as files', async () => {
+    const dir = project({ ...ERRORS, 'src/b.tsx': ERRORS['src/a.tsx'] })
+
+    const { code, stdout } = await check(dir, ['-p', '.', '-f', 'tsc', 'src/b.tsx'])
+
+    expect(code).toBe(1)
+    expect(stdout.trimEnd().split('\n')).toEqual([
+      expect.stringContaining('src/b.tsx(2,24)')
+    ])
   })
 
   it('exits 0 when every positional file was skipped', async () => {

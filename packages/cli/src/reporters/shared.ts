@@ -17,7 +17,7 @@ export interface ReportContext {
   /**
    * Prints pretty headers as `file:line:col: error` instead of `file:line:col - error`,
    * so the `tsc` problem matcher of `actions/setup-node` does not annotate findings that
-   * are already annotated by GitHub workflow commands.
+   * the `github` format already annotates. Set when `github` is one of the formats.
    */
   avoidTscMatcher?: boolean | undefined
 }

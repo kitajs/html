@@ -32,7 +32,7 @@
     "prettier-plugin-packagejson": "^3.0.2",
     "self-ts-plugin": "link:packages/ts-html-plugin",
     "turbo": "^2.9.6",
-    "typescript": "catalog:"
+    "typescript": "catalog:ts6"
   },
   "packageManager": "pnpm@12.11.2",
   "engines": {

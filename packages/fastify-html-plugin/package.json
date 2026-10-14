@@ -43,10 +43,10 @@
   },
   "peerDependencies": {
     "@kitajs/html": "workspace:^",
-    "@kitajs/ts-html-plugin": "workspace:^"
+    "@kitajs/html-cli": "workspace:^"
   },
   "peerDependenciesMeta": {
-    "@kitajs/ts-html-plugin": {
+    "@kitajs/html-cli": {
       "optional": true
     }
   }

@@ -16,7 +16,7 @@
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
-    "./schema/check-report.v1.json": "./schema/check-report.v1.json"
+    "./check-report.schema.json": "./dist/check-report.schema.json"
   },
   "bin": {
     "kita-html": "bin/kita-html.js"
@@ -24,11 +24,11 @@
   "files": [
     "bin",
     "dist",
-    "schema",
     "!dist/*.tsbuildinfo"
   ],
   "scripts": {
-    "build": "tsgo -p tsconfig.build.json",
+    "build": "tsgo -p tsconfig.build.json && pnpm build-schema",
+    "build-schema": "ts-json-schema-generator --path src/reporters/json-report.ts --type JsonReport --tsconfig tsconfig.build.json --no-type-check --out dist/check-report.schema.json",
     "test": "vitest --coverage --run",
     "test-types": "tsgo --noEmit"
   },
@@ -64,7 +64,8 @@
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "typescript": "catalog:ts7",
+    "ts-json-schema-generator": "^2.9.0",
+    "typescript": "catalog:",
     "vitest": "catalog:"
   },
   "peerDependencies": {
