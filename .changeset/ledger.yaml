@@ -2,12 +2,30 @@
   dir: packages/express-html-plugin
   intents:
     - add-express-html-plugin
+'@kitajs/express-html-plugin@5.0.0-next.1':
+  dir: packages/express-html-plugin
+  intents:
+    - automatic-suspense-request-ids
+    - fix-delayed-suspense-boundary
+    - vast-elephants-doubt
 '@kitajs/fastify-html-plugin@5.0.0-next.2':
   dir: packages/fastify-html-plugin
   intents:
     - eighty-taxes-jam
     - remove-identity-value
     - sharp-wombats-stay
+'@kitajs/fastify-html-plugin@5.0.0-next.3':
+  dir: packages/fastify-html-plugin
+  intents:
+    - automatic-suspense-request-ids
+    - fix-delayed-suspense-boundary
+    - vast-elephants-doubt
+'@kitajs/html-cli@5.0.0-next.0':
+  dir: packages/cli
+  intents:
+    - curly-teeth-happen
+    - dry-planes-sort
+    - strong-grapes-compare
 '@kitajs/html@5.0.0-next.1':
   dir: packages/html
   intents:
@@ -18,6 +36,15 @@
     - slimy-wolves-buy
     - stale-shrimps-spend
     - update-suspense-script-protocol
+'@kitajs/html@5.0.0-next.2':
+  dir: packages/html
+  intents:
+    - automatic-suspense-request-ids
+    - fix-delayed-suspense-boundary
+    - fix-suspense-boundary-ids
+    - shiny-horses-argue
+    - sunny-mugs-design
+    - wet-weeks-grow
 '@kitajs/ts-html-plugin@5.0.0-next.2':
   dir: packages/ts-html-plugin
   intents:
@@ -29,3 +56,10 @@
     - metal-hairs-juggle
     - sharp-wombats-stay
     - tender-regions-cough
+'@kitajs/ts-html-plugin@5.0.0-next.3':
+  dir: packages/ts-html-plugin
+  intents:
+    - eager-stars-pull
+    - fix-xss-detection-misses
+    - require-node-20-ts-plugin
+    - use-native-cli-utils

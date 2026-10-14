@@ -1,5 +1,50 @@
 # @kitajs/ts-html-plugin
 
+## 5.0.0-next.3
+
+### Major Changes
+
+- Require Node.js 20.12 or newer
+
+### Patch Changes
+
+- Deprecate the package in favor of `kita-html check` from `@kitajs/html-cli`, which runs
+  on TypeScript 7.1+. The package.json `deprecated` field and a warning printed by
+  `xss-scan` point to it. On TypeScript 7, `xss-scan` now exits with that pointer instead
+  of crashing.
+
+  Detection fixes: `children` unions without a direct string member, such as
+  `children?: string[]`, are now checked member by member; arrays inside recursive type
+  aliases are checked by their element types; and recursive types no longer recurse
+  forever. `xss-scan` also no longer drops findings that share a position with a finding
+  in another file, and no longer truncates large reports when its output is piped
+
+- Fix XSS detection misses for string-like types, `children` names, reassigned JSX
+  variables and lookalike suppression names
+
+  The scanner previously stayed silent on several patterns that render raw HTML at
+  runtime:
+  - Identifiers named `children` and `.children` property accesses were always treated as
+    `PropsWithChildren`, even when typed as `string` or `any`. They are now only trusted
+    when the type is not user content (raw strings, unions/tuples/arrays of raw strings,
+    or thenables resolving to raw strings like `children?: string` or
+    `children: Promise<string>`).
+  - Generic type parameters (`T extends string`), template literal types
+    (`` `<b>${string}</b>` ``), intrinsic string mappings (`Uppercase<string>`),
+    unresolved conditional/indexed access types and `unknown` were treated as non-string
+    primitives. They are now resolved through their constraint/inner types, and `unknown`
+    is never safe, matching `any`.
+  - Variables initialized with JSX were trusted forever. They are now only safe while
+    their use-site type stays JSX-ish and they were not reassigned to user content in the
+    same scope (writes inside nested functions are ignored since deferred callbacks run
+    after rendering).
+  - Suppression names were over-matched: `safetyRating`, `escaped` and functions like
+    `escapeRoom()` no longer suppress diagnostics. `safe`-prefixed names now require a
+    camelCase boundary, only `escapeHtml()`/`escape()` calls and the ` e`
+    ``template tag count as escapers, and`as 'safe'` is the only accepted literal cast.
+
+- Replace Chalk and Yargs with Node.js native CLI utilities
+
 ## 5.0.0-next.2
 
 ### Patch Changes

@@ -1,5 +1,20 @@
 # @kitajs/express-html-plugin
 
+## 5.0.0-next.1
+
+### Major Changes
+
+- Replace the optional `@kitajs/ts-html-plugin` peer dependency with `@kitajs/html-cli`,
+  whose `kita-html check` replaces the deprecated plugin on TypeScript 7.1+
+
+### Minor Changes
+
+- Add opt-in automatic request-ID propagation for Suspense boundaries
+
+### Patch Changes
+
+- Preserve Suspense replacements across async roots and release state after client aborts
+
 ## 5.0.0-next.0
 
 ### Major Changes
