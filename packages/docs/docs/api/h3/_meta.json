@@ -4,5 +4,6 @@
   "interfaces/H3KitaHtmlOptions",
   "interfaces/H3KitaHtmlContext",
   "types/KitaRender",
+  "types/H3HtmlResult",
   "variables/kAutoDoctype"
 ]

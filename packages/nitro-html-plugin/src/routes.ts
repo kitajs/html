@@ -26,8 +26,6 @@ function sanitizeParameter(value: string) {
 export function pagePathToRoute(relativePath: string): Omit<ScannedPage, 'file'> {
   relativePath = relativePath.replaceAll('\\', '/').replace(/\.(?:tsx|jsx)$/, '')
   const sourceSegments = relativePath.split('/')
-  const renderer =
-    sourceSegments.length === 1 && CATCH_ALL_SEGMENT.test(sourceSegments[0]!)
   const segments: string[] = []
   const canonical: string[] = []
 
@@ -67,6 +65,8 @@ export function pagePathToRoute(relativePath: string): Omit<ScannedPage, 'file'>
     relativePath,
     route: `/${segments.join('/')}`.replace(/\/$/, '') || '/',
     canonicalRoute: `/${canonical.join('/')}`.replace(/\/$/, '') || '/',
-    renderer
+    // Decided after removing route groups and `index`, so `(site)/[...].tsx` and
+    // `[...]/index.tsx` also claim the renderer and collide with a root `[...].tsx`.
+    renderer: canonical.length === 1 && canonical[0] === '**'
   }
 }

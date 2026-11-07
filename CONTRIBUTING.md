@@ -18,9 +18,11 @@ packages/
   ts-html-plugin/        @kitajs/ts-html-plugin  Deprecated XSS detection for TS 6
   fastify-html-plugin/   @kitajs/fastify-html-plugin  Fastify integration
   express-html-plugin/   @kitajs/express-html-plugin  Express integration
+  h3-html-plugin/        @kitajs/h3-html-plugin  H3 integration
+  nitro-html-plugin/     @kitajs/nitro-html-plugin  Nitro server/pages module
   docs/                  @kitajs/docs-html       Documentation site
 benchmarks/              Performance benchmarks
-examples/                Usage examples (fastify-htmx, http-server)
+examples/                Usage examples (fastify-htmx, http-server, h3-signal-room, nitro-night-atlas)
 ```
 
 ## Commands
@@ -61,13 +63,13 @@ pnpm -F @kitajs/docs-html dev        # Dev server on port 1229
 pnpm -F @kitajs/docs-html preview
 ```
 
-The library packages (`html`, `cli`, `ts-html-plugin`, `fastify-html-plugin`, and
-`express-html-plugin`) use `tsgo -p tsconfig.build.json` for building and
-`vitest --coverage --run` for testing (with `--typecheck` everywhere except `cli`). The
-docs package uses Rspress. TypeScript 7.1 (the `next` nightly pinned in the default
-catalog) is the workspace default. Only code that needs the TypeScript 6 JavaScript API
-uses the `ts6` catalog: `ts-html-plugin`, the docs site (twoslash, TypeDoc) and the root
-(`prettier-plugin-organize-imports`).
+The library packages (`html`, `cli`, `ts-html-plugin`, `fastify-html-plugin`,
+`express-html-plugin`, `h3-html-plugin`, and `nitro-html-plugin`) use
+`tsgo -p tsconfig.build.json` for building and `vitest --coverage --run` for testing (with
+`--typecheck` everywhere except `cli`). The docs package uses Rspress. TypeScript 7.1 (the
+`next` nightly pinned in the default catalog) is the workspace default. Only code that
+needs the TypeScript 6 JavaScript API uses the `ts6` catalog: `ts-html-plugin`, the docs
+site (twoslash, TypeDoc) and the root (`prettier-plugin-organize-imports`).
 
 ### Formatting
 

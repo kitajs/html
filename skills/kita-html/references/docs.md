@@ -20,6 +20,8 @@ any bundled summary when the two disagree.
 - Error boundaries: `https://html.kitajs.org/guide/async/error-boundaries.md`
 - Fastify integration: `https://html.kitajs.org/integrations/frameworks/fastify.md`
 - Express integration: `https://html.kitajs.org/integrations/frameworks/express.md`
+- H3 integration: `https://html.kitajs.org/integrations/frameworks/h3.md`
+- Nitro integration: `https://html.kitajs.org/integrations/frameworks/nitro.md`
 - Elysia integration: `https://html.kitajs.org/integrations/frameworks/elysia.md`
 
 ## LLM-ready endpoints

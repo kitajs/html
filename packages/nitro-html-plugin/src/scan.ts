@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { glob } from 'tinyglobby'
 import { pagePathToRoute } from './routes.js'
 import type { ScannedPage } from './types.js'
@@ -30,7 +31,7 @@ export async function scanPages(pagesDir: string, ignore: string[] = []) {
   })
   const pages: ScannedPage[] = files
     .map((file) => {
-      const relativePath = file.slice(pagesDir.length + 1).replaceAll('\\', '/')
+      const relativePath = path.relative(pagesDir, file).replaceAll('\\', '/')
       return { file, ...pagePathToRoute(relativePath) }
     })
     .sort((a, b) => a.relativePath.localeCompare(b.relativePath))

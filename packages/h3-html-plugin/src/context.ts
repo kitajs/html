@@ -31,9 +31,19 @@ export function getKitaContext(
   event: H3Event,
   genRequestId?: (event: H3Event) => string | number
 ): H3KitaHtmlContext {
-  return (event.context.kitaHtml ??= {
-    requestId: genRequestId?.(event) ?? defaultRequestId()
-  })
+  if (event.context.kitaHtml) {
+    return event.context.kitaHtml
+  }
+
+  const requestId = genRequestId ? genRequestId(event) : defaultRequestId()
+
+  // renderToStream replaces an empty ID with its own counter, which would detach the
+  // state from this request and skip abort and HEAD cleanup.
+  if (requestId === '' || requestId === undefined || requestId === null) {
+    throw new TypeError('`genRequestId` must return a non-empty string or a number.')
+  }
+
+  return (event.context.kitaHtml = { requestId })
 }
 
 declare module 'h3' {

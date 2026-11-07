@@ -13,20 +13,21 @@ lazy Nitro v3 route. A root catch-all page becomes Nitro's lowest-priority rende
 
 ## Setup
 
-:::danger XSS Protection Required
+:::danger XSS protection required
 
-Configure `@kitajs/ts-html-plugin` before rendering user-controlled values. See
-[Getting Started](/guide/getting-started) for the required TypeScript and XSS scanner
-setup.
+You must set up [`kita-html check`](/guide/xss/cli-scanner) from `@kitajs/html-cli` before
+using this plugin to avoid XSS vulnerabilities. See the
+[Getting started](/guide/getting-started) guide for complete setup instructions including
+TypeScript configuration and XSS detection.
 
 :::
 
 <PackageManagerTabs
   command={{
-    npm: 'npm i @kitajs/nitro-html-plugin nitro',
-    yarn: 'yarn add @kitajs/nitro-html-plugin nitro',
-    pnpm: 'pnpm add @kitajs/nitro-html-plugin nitro',
-    bun: 'bun add @kitajs/nitro-html-plugin nitro'
+    npm: 'npm i @kitajs/nitro-html-plugin@next nitro',
+    yarn: 'yarn add @kitajs/nitro-html-plugin@next nitro',
+    pnpm: 'pnpm add @kitajs/nitro-html-plugin@next nitro',
+    bun: 'bun add @kitajs/nitro-html-plugin@next nitro'
   }}
 />
 
@@ -75,16 +76,18 @@ Files and directories beginning with `_`, test files, and declaration files are 
 Equivalent routes are rejected at build time, including routes that differ only by a
 dynamic parameter name or route group.
 
-Each page receives its own virtual lazy handler. Nitro route rules, middleware, and
-prerendering continue to apply. Explicit API and route handlers have priority over the
-renderer.
+Each page receives its own virtual lazy handler for GET and HEAD. HEAD requests render the
+page once to apply its status and headers, then return an empty body. Nitro route rules,
+middleware, and prerendering continue to apply. Explicit API and route handlers have
+priority over the renderer.
 
 Restart `nitro dev` after adding or deleting page files. Existing page files continue to
 rebuild normally when edited.
 
 ## Catch-All Renderer
 
-Add one root `[...].tsx` or `[...name].tsx` page to handle unmatched routes:
+Add one page that resolves to the root catch-all, such as `[...].tsx`, `[...name].tsx`, or
+`(site)/[...].tsx`, to handle unmatched routes. More than one is rejected at build time:
 
 ```tsx title="server/pages/[...].tsx"
 import { escapeHtml } from '@kitajs/html'
@@ -101,9 +104,10 @@ export default function App(event: H3Event) {
 }
 ```
 
-The renderer accepts GET and HEAD and preserves status 200 unless the page changes it.
-Other methods receive 405. A named root catch-all does not create a stable route
-parameter; read the unmatched path from `event.url.pathname`.
+The renderer accepts GET and HEAD and preserves status 200 unless the page changes it. Set
+`event.res.status = 404` when it acts as a not-found page. Other methods receive 405. A
+named root catch-all does not create a stable route parameter; read the unmatched path
+from `event.url.pathname`.
 
 Convention pages use the factory-safe H3 adapter and always stream. `AutoSuspense` works
 without additional options, including boundaries created after an asynchronous page

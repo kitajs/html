@@ -1,5 +1,6 @@
 import { AutoSuspense, Suspense, SuspenseRoot } from '@kitajs/html/suspense'
-import { H3 } from 'h3'
+import { defineHandler, H3 } from 'h3'
+import { serve } from 'h3/node'
 import { setTimeout } from 'node:timers/promises'
 import { afterEach, describe, expect, test } from 'vitest'
 import { defineKitaHandler, h3KitaHtml } from '../src/index.js'
@@ -77,7 +78,77 @@ describe('event.html()', () => {
   })
 })
 
+describe('h3KitaHtml({ autoSuspense: true })', () => {
+  test('provides the request id to AutoSuspense across awaits', async () => {
+    const app = new H3().register(h3KitaHtml({ autoSuspense: true }))
+    app.get('/', async (event) => {
+      await setTimeout(1)
+      return event.html(
+        <AutoSuspense fallback="loading">{setTimeout(1, 'loaded')}</AutoSuspense>
+      )
+    })
+
+    const html = await (await app.fetch(new Request('http://localhost/'))).text()
+    expect(html).toContain('id="B:req-')
+    expect(html).toContain('loaded')
+  })
+
+  test('rejects an empty generated request id', async () => {
+    const app = new H3().register(h3KitaHtml({ genRequestId: () => '' }))
+    app.get('/', (event) => event.html(<div>never</div>))
+
+    const response = await app.fetch(new Request('http://localhost/'))
+    expect(response.status).toBe(500)
+  })
+})
+
 describe('defineKitaHandler()', () => {
+  test('handles a thrown undefined like a plain H3 handler', async () => {
+    const plain = defineHandler(() => {
+      throw undefined
+    })
+    const handler = defineKitaHandler(() => {
+      throw undefined
+    })
+
+    const expected = await plain.fetch('/')
+    const response = await handler.fetch('/')
+
+    expect(response.status).toBe(expected.status)
+    // Without rethrowing, the body would be a stream that fails on first read.
+    await expect(response.text()).resolves.toBe(await expected.text())
+  })
+
+  test('releases state when the client leaves before the handler runs', async () => {
+    const child = Promise.withResolvers<string>()
+    const app = new H3()
+    app.use(async () => {
+      await setTimeout(60)
+    })
+    app.get(
+      '/',
+      defineKitaHandler(() => (
+        <AutoSuspense fallback="loading">{child.promise}</AutoSuspense>
+      ))
+    )
+
+    const server = serve(app, { port: 0, hostname: '127.0.0.1', silent: true })
+    await server.ready()
+
+    try {
+      const controller = new AbortController()
+      const request = fetch(server.url!, { signal: controller.signal }).catch(() => {})
+      await setTimeout(20)
+      controller.abort()
+      await request
+
+      await expect.poll(() => SuspenseRoot.requests.size, { timeout: 2000 }).toBe(0)
+    } finally {
+      child.resolve('late')
+      await server.close(true)
+    }
+  })
+
   test('uses H3 error handling for synchronous render errors', async () => {
     const handler = defineKitaHandler(() => {
       throw new Error('render failed')

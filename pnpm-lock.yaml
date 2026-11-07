@@ -564,9 +564,9 @@ importers:
       '@kitajs/html':
         specifier: workspace:*
         version: link:../../packages/html
-      '@kitajs/ts-html-plugin':
+      '@kitajs/html-cli':
         specifier: workspace:*
-        version: link:../../packages/ts-html-plugin
+        version: link:../../packages/cli
       '@types/node':
         specifier: 'catalog:'
         version: 24.12.2
@@ -615,12 +615,12 @@ importers:
       '@kitajs/html':
         specifier: workspace:*
         version: link:../../packages/html
+      '@kitajs/html-cli':
+        specifier: workspace:*
+        version: link:../../packages/cli
       '@kitajs/nitro-html-plugin':
         specifier: workspace:*
         version: link:../../packages/nitro-html-plugin
-      '@kitajs/ts-html-plugin':
-        specifier: workspace:*
-        version: link:../../packages/ts-html-plugin
       '@types/node':
         specifier: 'catalog:'
         version: 24.12.2
@@ -855,9 +855,9 @@ importers:
 
   packages/h3-html-plugin:
     dependencies:
-      '@kitajs/ts-html-plugin':
+      '@kitajs/html-cli':
         specifier: workspace:^
-        version: link:../ts-html-plugin
+        version: link:../cli
     devDependencies:
       '@kitajs/html':
         specifier: workspace:^
@@ -932,9 +932,9 @@ importers:
       '@kitajs/h3-html-plugin':
         specifier: workspace:^
         version: link:../h3-html-plugin
-      '@kitajs/ts-html-plugin':
+      '@kitajs/html-cli':
         specifier: workspace:^
-        version: link:../ts-html-plugin
+        version: link:../cli
       tinyglobby:
         specifier: 'catalog:'
         version: 0.2.17

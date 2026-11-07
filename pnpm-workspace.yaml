@@ -37,13 +37,17 @@ versioning:
     - '@kitajs/bench-html-vhtml'
     - '@kitajs/docs-html'
     - '@kitajs/example-fastify-htmx'
+    - '@kitajs/example-h3-signal-room'
     - '@kitajs/example-http-server'
+    - '@kitajs/example-nitro-night-atlas'
   # Prerelease line for v5, graduate with `pnpm lane main --filter <pkg>`
   lanes:
     '@kitajs/express-html-plugin': next
     '@kitajs/fastify-html-plugin': next
+    '@kitajs/h3-html-plugin': next
     '@kitajs/html-cli': next
     '@kitajs/html': next
+    '@kitajs/nitro-html-plugin': next
     '@kitajs/ts-html-plugin': next
 
 catalog:

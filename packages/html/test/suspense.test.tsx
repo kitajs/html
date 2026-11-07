@@ -58,6 +58,34 @@ describe('renderToStream', () => {
     expect(result).toContain('loaded')
   })
 
+  test('relays every boundary failure under an async root without unhandled errors', async () => {
+    const unhandled = vi.fn()
+    process.on('unhandledRejection', unhandled)
+
+    try {
+      const stream = renderToStream(async (rid) => {
+        await Promise.resolve()
+
+        return (
+          <div>
+            <Suspense rid={rid} fallback="first">
+              {setTimeout(5).then(() => Promise.reject(new Error('first')))}
+            </Suspense>
+            <Suspense rid={rid} fallback="second">
+              {setTimeout(10).then(() => Promise.reject(new Error('second')))}
+            </Suspense>
+          </div>
+        )
+      })
+
+      await expect(text(stream)).rejects.toThrow('first')
+      await setTimeout(20)
+      expect(unhandled).not.toHaveBeenCalled()
+    } finally {
+      process.off('unhandledRejection', unhandled)
+    }
+  })
+
   test('closes a pending root stream when its response is aborted', async () => {
     const root = Promise.withResolvers<void>()
     const child = Promise.withResolvers<string>()

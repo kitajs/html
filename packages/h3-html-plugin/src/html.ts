@@ -92,10 +92,10 @@ export function prepareHtml(event: H3Event, html: string) {
 /**
  * Releases request-owned Suspense state when the incoming request is aborted.
  *
- * The abort listener is removed once the renderer stream closes, whether it ended
- * normally, errored, or was destroyed, because the Suspense runtime has then already
- * settled its state. The captured `RequestData` identity prevents an older response from
- * aborting a newer request that happens to reuse the same public ID.
+ * Runtimes may create the abort signal lazily and miss a disconnect that happened before
+ * it was first read, so a renderer stream that closes before ending is also treated as an
+ * abort. The captured `RequestData` identity prevents an older response from aborting a
+ * newer request that happens to reuse the same public ID.
  *
  * @param event The event whose response lifecycle should be observed.
  * @param requestData The exact Suspense state owned by the response.
@@ -108,15 +108,24 @@ export function observeSuspense(
 ) {
   const signal = event.req.signal
 
+  if (signal.aborted) {
+    abortResponse()
+    return
+  }
+
   signal.addEventListener('abort', abortResponse, { once: true })
-  stream.once('close', clearAbortHandler)
+  stream.once('close', function onStreamClose() {
+    signal.removeEventListener('abort', abortResponse)
+
+    // The runtime destroys the body when the client already went away, which the lazily
+    // created signal may never report.
+    if (!stream.readableEnded) {
+      abortResponse()
+    }
+  })
 
   function abortResponse() {
     abortSuspenseRequest(requestData.rid, requestData)
-  }
-
-  function clearAbortHandler() {
-    signal.removeEventListener('abort', abortResponse)
   }
 }
 

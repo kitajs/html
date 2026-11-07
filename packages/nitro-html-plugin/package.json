@@ -50,11 +50,11 @@
   },
   "peerDependencies": {
     "@kitajs/html": "workspace:^",
-    "@kitajs/ts-html-plugin": "workspace:^",
-    "nitro": "3.0.260610-beta"
+    "@kitajs/html-cli": "workspace:^",
+    "nitro": "3.0.260610-beta || ^3.0.0"
   },
   "peerDependenciesMeta": {
-    "@kitajs/ts-html-plugin": {
+    "@kitajs/html-cli": {
       "optional": true
     }
   }

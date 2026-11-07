@@ -14,20 +14,21 @@ boundary after an `await`.
 
 ## Setup
 
-:::danger XSS Protection Required
+:::danger XSS protection required
 
-Configure `@kitajs/ts-html-plugin` before rendering user-controlled values. See
-[Getting Started](/guide/getting-started) for the required TypeScript and XSS scanner
-setup.
+You must set up [`kita-html check`](/guide/xss/cli-scanner) from `@kitajs/html-cli` before
+using this plugin to avoid XSS vulnerabilities. See the
+[Getting started](/guide/getting-started) guide for complete setup instructions including
+TypeScript configuration and XSS detection.
 
 :::
 
 <PackageManagerTabs
   command={{
-    npm: 'npm i @kitajs/h3-html-plugin h3',
-    yarn: 'yarn add @kitajs/h3-html-plugin h3',
-    pnpm: 'pnpm add @kitajs/h3-html-plugin h3',
-    bun: 'bun add @kitajs/h3-html-plugin h3'
+    npm: 'npm i @kitajs/h3-html-plugin@next h3',
+    yarn: 'yarn add @kitajs/h3-html-plugin@next h3',
+    pnpm: 'pnpm add @kitajs/h3-html-plugin@next h3',
+    bun: 'bun add @kitajs/h3-html-plugin@next h3'
   }}
 />
 

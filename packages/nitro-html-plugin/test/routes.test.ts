@@ -10,7 +10,9 @@ describe('pagePathToRoute', () => {
     ['files/[...path].tsx', '/files/**:path', false],
     ['(admin)/users.tsx', '/users', false],
     ['[...].tsx', '/**', true],
-    ['[...path].tsx', '/**:path', true]
+    ['[...path].tsx', '/**:path', true],
+    ['(site)/[...].tsx', '/**', true],
+    ['[...]/index.tsx', '/**', true]
   ])('maps %s to %s', (file, route, renderer) => {
     expect(pagePathToRoute(file)).toMatchObject({ route, renderer })
   })

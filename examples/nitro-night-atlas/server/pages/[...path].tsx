@@ -3,6 +3,9 @@ import type { H3Event } from 'nitro'
 import { Layout } from '../components/Layout.js'
 
 export default function Uncharted(event: H3Event) {
+  // This renderer is a not-found page, so unknown URLs must not answer 200.
+  event.res.status = 404
+
   return (
     <Layout title="Uncharted · Night Atlas">
       <main>

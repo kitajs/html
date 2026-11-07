@@ -30,6 +30,8 @@ kitajs/html/
 │   ├── ts-html-plugin/     # Deprecated XSS plugin + xss-scan for TS 6 (@kitajs/ts-html-plugin)
 │   ├── fastify-html-plugin/# Fastify integration (@kitajs/fastify-html-plugin)
 │   ├── express-html-plugin/# Express integration (@kitajs/express-html-plugin)
+│   ├── h3-html-plugin/     # H3 v2 integration (@kitajs/h3-html-plugin)
+│   ├── nitro-html-plugin/  # Nitro v3 server/pages module (@kitajs/nitro-html-plugin)
 │   └── docs/               # Documentation site (@kitajs/docs-html)
 ├── benchmarks/             # Performance benchmarks
 └── examples/               # Usage examples
@@ -46,7 +48,11 @@ kitajs/html/
     │
     ├── @kitajs/fastify-html-plugin (peer dependency)
     │
-    └── @kitajs/express-html-plugin (peer dependency)
+    ├── @kitajs/express-html-plugin (peer dependency)
+    │
+    └── @kitajs/h3-html-plugin (peer dependency)
+            ↑
+            └── @kitajs/nitro-html-plugin (dependency)
 ```
 
 The adapter packages add framework-specific HTML response glue on top of the core runtime.
@@ -171,6 +177,9 @@ supports Suspense streaming.
 
 - `packages/fastify-html-plugin/`
 - `packages/express-html-plugin/`
+- `packages/h3-html-plugin/`
+- `packages/nitro-html-plugin/` (build-time Nitro module that generates `h3-html-plugin`
+  handlers from `server/pages`)
 
 Package-specific details live in each package's own `AGENTS.md`.
 

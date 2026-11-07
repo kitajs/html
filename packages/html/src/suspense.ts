@@ -589,13 +589,15 @@ export function resolveHtmlStream(
 
   const prepended = new PassThrough()
   requestData.responseStream = prepended
-  // Node's pipe() does not forward source errors. Relay boundary failures to the response
-  // stream so framework integrations terminate the request instead of leaving an
-  // unhandled error on the internal replacement stream.
-  requestData.stream.once('error', forwardStreamError)
-  prepended.once('close', function clearResponseStream() {
-    requestData.stream.removeListener('error', forwardStreamError)
 
+  // Node's pipe() does not forward source errors. Relay boundary failures to the response
+  // stream so framework integrations terminate the request. The relay stays attached for
+  // the lifetime of the internal stream: later boundaries may still fail after the first
+  // error or after the response closed, and an internal stream without an error listener
+  // would turn those failures into process-level unhandled rejections.
+  requestData.stream.on('error', forwardStreamError)
+
+  prepended.once('close', function clearResponseStream() {
     // Do not clear a newer wrapper if a library resolved the same request data twice.
     if (requestData.responseStream === prepended) {
       requestData.responseStream = undefined

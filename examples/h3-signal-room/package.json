@@ -5,13 +5,13 @@
   "type": "module",
   "scripts": {
     "start": "tsx --watch src/server.tsx",
-    "test": "xss-scan",
+    "test": "kita-html check",
     "test-types": "tsgo --noEmit"
   },
   "dependencies": {
     "@kitajs/h3-html-plugin": "workspace:*",
     "@kitajs/html": "workspace:*",
-    "@kitajs/ts-html-plugin": "workspace:*",
+    "@kitajs/html-cli": "workspace:*",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
     "h3": "catalog:",

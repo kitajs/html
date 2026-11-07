@@ -8,5 +8,6 @@ immediately, then independent sensor readings replace their fallbacks through
 pnpm start
 ```
 
-Open `http://localhost:3000`. Use `/?station=aurora` to change the trusted station label
-rendered with Kita's `safe` attribute.
+Open `http://localhost:3000`. Use `/?station=aurora` to change the station label. The
+value comes from the query string, so it is untrusted and escaped with Kita's `safe`
+attribute.

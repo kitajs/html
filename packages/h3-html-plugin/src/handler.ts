@@ -55,6 +55,8 @@ export function defineKitaHandler(
     }
     event.res.headers.set('content-type', 'text/html; charset=utf-8')
 
+    // A flag instead of checking the error value, because `throw undefined` is legal.
+    let threw = false
     let synchronousError: unknown
     const stream = renderToStream(
       (requestId) =>
@@ -63,6 +65,7 @@ export function defineKitaHandler(
           try {
             html = render(event)
           } catch (error) {
+            threw = true
             synchronousError = error
             throw error
           }
@@ -77,7 +80,7 @@ export function defineKitaHandler(
     // renderToStream converts factory throws into stream errors after cleaning its
     // reservation. Rethrow here so failures known before a response exists use H3's normal
     // error response instead of returning a 200 stream that fails on first read.
-    if (synchronousError !== undefined) {
+    if (threw) {
       throw synchronousError
     }
 
