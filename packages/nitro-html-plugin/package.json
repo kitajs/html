@@ -1,6 +1,6 @@
 {
   "name": "@kitajs/nitro-html-plugin",
-  "version": "1.0.0-next.0",
+  "version": "5.0.0-next.0",
   "description": "A Nitro module to add convention-based @kitajs/html pages",
   "homepage": "https://github.com/kitajs/html/tree/master/packages/nitro-html-plugin#readme",
   "bugs": "https://github.com/kitajs/html/issues",
