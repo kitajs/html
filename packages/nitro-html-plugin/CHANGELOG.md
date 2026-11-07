@@ -1,6 +1,6 @@
 # @kitajs/nitro-html-plugin
 
-## 1.0.0-next.0
+## 5.0.0-next.0
 
 ### Minor Changes
 

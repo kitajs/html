@@ -1,6 +1,6 @@
 {
   "name": "@kitajs/h3-html-plugin",
-  "version": "1.0.0-next.0",
+  "version": "5.0.0-next.0",
   "description": "An H3 plugin to add support for @kitajs/html",
   "homepage": "https://github.com/kitajs/html/tree/master/packages/h3-html-plugin#readme",
   "bugs": "https://github.com/kitajs/html/issues",

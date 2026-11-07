@@ -22,7 +22,7 @@
     - fix-delayed-suspense-boundary
     - release-suspense-on-head
     - vast-elephants-doubt
-'@kitajs/h3-html-plugin@1.0.0-next.0':
+'@kitajs/h3-html-plugin@5.0.0-next.0':
   dir: packages/h3-html-plugin
   intents:
     - add-h3-nitro-html-plugins
@@ -52,7 +52,7 @@
     - shiny-horses-argue
     - sunny-mugs-design
     - wet-weeks-grow
-'@kitajs/nitro-html-plugin@1.0.0-next.0':
+'@kitajs/nitro-html-plugin@5.0.0-next.0':
   dir: packages/nitro-html-plugin
   intents:
     - add-h3-nitro-html-plugins
