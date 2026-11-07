@@ -44,6 +44,7 @@
     "@typescript/native-preview": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "nitro": "catalog:",
+    "rolldown": "catalog:",
     "tslib": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
@@ -51,7 +52,7 @@
   "peerDependencies": {
     "@kitajs/html": "workspace:^",
     "@kitajs/html-cli": "workspace:^",
-    "nitro": "3.0.260610-beta || ^3.0.0"
+    "nitro": "3.0.261103-rc || ^3.0.0"
   },
   "peerDependenciesMeta": {
     "@kitajs/html-cli": {

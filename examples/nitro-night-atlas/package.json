@@ -16,6 +16,7 @@
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
     "nitro": "catalog:",
+    "rolldown": "catalog:",
     "tslib": "catalog:",
     "typescript": "catalog:"
   }

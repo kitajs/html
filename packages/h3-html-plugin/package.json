@@ -45,7 +45,7 @@
   "peerDependencies": {
     "@kitajs/html": "workspace:^",
     "@kitajs/html-cli": "workspace:^",
-    "h3": "^2.0.1-rc.22"
+    "h3": "^2.0.8"
   },
   "peerDependenciesMeta": {
     "@kitajs/html-cli": {
