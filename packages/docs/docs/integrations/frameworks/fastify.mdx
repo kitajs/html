@@ -83,7 +83,8 @@ app.get('/dashboard', (req, reply) => {
 ```
 
 No manual stream handling is required. The plugin detects Suspense usage through the
-`SuspenseRoot` store and calls `resolveHtmlStream` internally.
+`SuspenseRoot` store and calls `resolveHtmlStream` internally. HEAD requests receive the
+headers immediately with an empty body instead of waiting for pending boundaries.
 
 To avoid passing `req.id` through the component tree, enable automatic Suspense support
 when registering the plugin:

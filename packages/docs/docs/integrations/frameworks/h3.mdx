@@ -90,7 +90,8 @@ export default defineKitaHandler(async (event) => {
 
 `defineKitaHandler()` always streams its response so it can reserve request state before
 the render callback resumes. It generates an isolated request ID and exposes it as
-`event.context.kitaHtml.requestId`.
+`event.context.kitaHtml.requestId`. HEAD requests on both APIs render once to apply staged
+status and headers, then return an empty body and release pending Suspense state.
 
 ## Runtime Support
 

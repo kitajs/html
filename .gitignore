@@ -7,6 +7,8 @@
 coverage
 dist
 node_modules
+.output
+.nitro
 packages/html/skills
 .playwright-mcp
 # pnpm publish -r --report-summary

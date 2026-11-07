@@ -92,13 +92,14 @@ export function prepareHtml(event: H3Event, html: string) {
 /**
  * Releases request-owned Suspense state when the incoming request is aborted.
  *
- * A completed renderer removes the abort listener because the Suspense runtime has
- * already removed settled state. The captured `RequestData` identity prevents an older
- * response from aborting a newer request that happens to reuse the same public ID.
+ * The abort listener is removed once the renderer stream closes, whether it ended
+ * normally, errored, or was destroyed, because the Suspense runtime has then already
+ * settled its state. The captured `RequestData` identity prevents an older response from
+ * aborting a newer request that happens to reuse the same public ID.
  *
  * @param event The event whose response lifecycle should be observed.
  * @param requestData The exact Suspense state owned by the response.
- * @param stream The renderer stream whose completion ends abort observation.
+ * @param stream The renderer stream whose closure ends abort observation.
  */
 export function observeSuspense(
   event: H3Event,
@@ -108,7 +109,7 @@ export function observeSuspense(
   const signal = event.req.signal
 
   signal.addEventListener('abort', abortResponse, { once: true })
-  stream.once('end', clearAbortHandler)
+  stream.once('close', clearAbortHandler)
 
   function abortResponse() {
     abortSuspenseRequest(requestData.rid, requestData)
@@ -119,11 +120,40 @@ export function observeSuspense(
   }
 }
 
+/**
+ * Discards a rendered body for HEAD requests.
+ *
+ * Runtimes do not send a body for HEAD, so a returned stream may never be consumed and
+ * its pending Suspense state would stay in `SuspenseRoot.requests` indefinitely.
+ * Rendering still runs first so status and headers staged by synchronous code are
+ * preserved.
+ *
+ * @param stream The renderer stream that would have been returned.
+ * @param requestData The exact Suspense state owned by the response, if any.
+ * @returns An empty body for the HEAD response.
+ */
+export function discardHeadBody(stream: Readable, requestData: RequestData | undefined) {
+  if (requestData) {
+    // Also destroys the stream returned by resolveHtmlStream.
+    abortSuspenseRequest(requestData.rid, requestData)
+  } else {
+    // renderToStream returns a standalone stream when no Suspense state exists.
+    stream.destroy()
+  }
+
+  return ''
+}
+
 /** Returns a root template followed by the replacement chunks owned by its request. */
 function renderStreamHtml(event: H3Event, html: JSX.Element, requestData: RequestData) {
   event.res.headers.set('content-type', 'text/html; charset=utf-8')
   event.res.headers.delete('content-length')
   const stream = resolveHtmlStream(html, requestData)
+
+  if (event.req.method === 'HEAD') {
+    return discardHeadBody(stream, requestData)
+  }
+
   observeSuspense(event, requestData, stream)
   return stream
 }

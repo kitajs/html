@@ -138,6 +138,37 @@ describe('Suspense', () => {
     expect(SuspenseRoot.requests.size).toBe(0)
   })
 
+  test('responds to HEAD without waiting for pending boundaries', async () => {
+    const app = express()
+    app.use(expressKitaHtml())
+    const child = Promise.withResolvers<string>()
+    const root = Promise.withResolvers<string>()
+
+    app.get('/', (req, res) =>
+      res.html(
+        <div>
+          <Suspense rid={req.id} fallback="loading">
+            {child.promise}
+          </Suspense>
+          {root.promise}
+        </div>
+      )
+    )
+
+    await using server = await startServer(app)
+    const res = await fetch(`${getServerUrl(server)}/`, { method: 'HEAD' })
+
+    expect(res.status).toBe(200)
+    expect(res.headers.get('content-type')).toBe('text/html; charset=utf-8')
+    expect(SuspenseRoot.requests.size).toBe(0)
+
+    // Late settlements of the root and boundary must not resurrect released state.
+    root.resolve('root')
+    child.resolve('late')
+    await setTimeout(1)
+    expect(SuspenseRoot.requests.size).toBe(0)
+  })
+
   test('AutoSuspense uses the current request id when enabled', async () => {
     const app = express()
     app.use(expressKitaHtml({ autoSuspense: true }))

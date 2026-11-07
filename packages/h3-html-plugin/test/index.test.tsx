@@ -53,6 +53,28 @@ describe('event.html()', () => {
     expect(html).toContain('data-sf')
     expect(html).toContain('loaded')
   })
+
+  test('releases pending Suspense state for HEAD requests', async () => {
+    const child = Promise.withResolvers<string>()
+    const app = new H3().register(h3KitaHtml())
+    app.all('/', (event) =>
+      event.html(
+        <Suspense rid={event.context.kitaHtml!.requestId} fallback="loading">
+          {child.promise}
+        </Suspense>
+      )
+    )
+
+    const response = await app.fetch(new Request('http://localhost/', { method: 'HEAD' }))
+
+    expect(response.status).toBe(200)
+    expect(await response.text()).toBe('')
+    expect(SuspenseRoot.requests.size).toBe(0)
+
+    // A late settlement must not resurrect the released state.
+    child.resolve('late')
+    await setTimeout(1)
+  })
 })
 
 describe('defineKitaHandler()', () => {
@@ -104,6 +126,29 @@ describe('defineKitaHandler()', () => {
     const html = await (await handler.fetch('/')).text()
     expect(html.indexOf('data-sf')).toBeLessThan(html.indexOf('data-sr'))
     expect(html).toContain('loaded')
+  })
+
+  test('releases pending Suspense state for HEAD requests', async () => {
+    const child = Promise.withResolvers<string>()
+    const handler = defineKitaHandler(async (event) => {
+      event.res.headers.set('x-page', 'rendered')
+      await setTimeout(1)
+      return <AutoSuspense fallback="loading">{child.promise}</AutoSuspense>
+    })
+
+    const response = await handler.fetch(
+      new Request('http://localhost/', { method: 'HEAD' })
+    )
+
+    expect(response.status).toBe(200)
+    expect(response.headers.get('x-page')).toBe('rendered')
+    expect(await response.text()).toBe('')
+    expect(SuspenseRoot.requests.size).toBe(0)
+
+    // The async root and child settle after the response, without resurrecting state.
+    await setTimeout(5)
+    child.resolve('late')
+    await setTimeout(1)
   })
 
   test('isolates concurrent requests', async () => {

@@ -1,7 +1,7 @@
 import { renderToStream, runWithAutoSuspense, SuspenseRoot } from '@kitajs/html/suspense'
 import { defineHandler, type H3Event } from 'h3'
 import { getKitaContext } from './context.js'
-import { observeSuspense, prepareHtml } from './html.js'
+import { discardHeadBody, observeSuspense, prepareHtml } from './html.js'
 import type { H3KitaHtmlOptions } from './plugin.js'
 import { kAutoDoctype } from './utils.js'
 
@@ -82,6 +82,10 @@ export function defineKitaHandler(
     }
 
     const requestData = SuspenseRoot.requests.get(context.requestId)
+
+    if (event.req.method === 'HEAD') {
+      return discardHeadBody(stream, requestData)
+    }
 
     // Factory rendering reserves state even before the first boundary exists. Observe the
     // exact reservation so a cancelled response cannot leak or affect a reused request ID.

@@ -1,4 +1,9 @@
-import { type RequestData, resolveHtmlStream, SuspenseRoot } from '@kitajs/html/suspense'
+import {
+  abortSuspenseRequest,
+  type RequestData,
+  resolveHtmlStream,
+  SuspenseRoot
+} from '@kitajs/html/suspense'
 import { FastifyReply } from 'fastify'
 import { isTagHtml, kAutoDoctype } from './utils'
 
@@ -85,12 +90,21 @@ function handleStreamHtml(
 ) {
   reply.type('text/html; charset=utf-8')
 
+  const stream = resolveHtmlStream(template, requestData)
+
+  if (reply.request.method === 'HEAD') {
+    // HEAD responses never carry the body, so release the state now instead of draining
+    // the stream in the background until the slowest boundary settles. Aborting also
+    // destroys the returned stream; resolveHtmlStream already observes a pending root, so
+    // no rejection is left unhandled.
+    abortSuspenseRequest(reply.request.id, requestData)
+    return reply.send()
+  }
+
   // Content-length is optional as long as the connection is closed after the response is done
   // https://www.rfc-editor.org/rfc/rfc7230#section-3.3.3
   //
   // Nodejs natively adds 'transfer-encoding: chunked' when returning a stream without content-length
   // https://nodejs.org/api/http.html#requestwritechunk-encoding-callback
-  return reply
-    .header('transfer-encoding', 'chunked')
-    .send(resolveHtmlStream(template, requestData))
+  return reply.header('transfer-encoding', 'chunked').send(stream)
 }
