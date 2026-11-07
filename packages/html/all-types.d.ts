@@ -4,10 +4,10 @@
 
 declare namespace JSX {
   interface HtmlTag {
-    [name: string]: unknown;
+    [name: string]: unknown
   }
 
   interface IntrinsicElements {
-    [name: string]: HtmlTag;
+    [name: string]: HtmlTag
   }
 }

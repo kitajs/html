@@ -1,0 +1,92 @@
+---
+description:
+  Use the Kita Html skill, llms.txt, llms-full.txt, raw Markdown pages, and project
+  instructions to give coding agents accurate Kita Html context.
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme'
+
+# AI support
+
+Kita Html provides several entry points so coding agents can understand the runtime
+without falling back to React assumptions. Use the installable skill when you want
+behavior guidance inside an agent, then use the published docs formats to provide focused
+or broad reference material.
+
+## Agent skill
+
+The `kita-html` skill is designed for coding agents that support installable skills. It
+teaches the core runtime model, XSS rules, framework adapters, async components, and
+Suspense streaming so the agent stops treating every `.tsx` file as React.
+
+Install it with:
+
+<PackageManagerTabs command="skills add kitajs/html --skill kita-html" dlx />
+
+After installation, prompt the agent normally. Useful examples:
+
+```text
+Build this Fastify page with Kita Html and stream async sections.
+```
+
+```text
+Fix this Kita TSX so user bios render safely and kita-html check passes.
+```
+
+```text
+Convert this React-style server component into Kita Html.
+```
+
+## Documentation formats
+
+- [`llms.txt`](https://html.kitajs.org/llms.txt) is the lightweight index. Use it when the
+  agent should pick the right page first.
+- [`llms-full.txt`](https://html.kitajs.org/llms-full.txt) is the full concatenated
+  documentation dump. Use it when the agent needs broad Kita Html context in a single
+  fetch.
+- Every page also has a raw Markdown version, such as
+  [getting-started.md](https://html.kitajs.org/guide/getting-started.md) or
+  [safe-attribute.md](https://html.kitajs.org/guide/xss/safe-attribute.md).
+
+## Project instructions
+
+If your editor or coding agent supports project instruction files, point it at Kita Html
+before it writes JSX.
+
+```markdown title="AGENTS.md"
+# AGENTS.md
+
+This project uses Kita Html, not React.
+
+## Docs
+
+- Kita Html index: https://html.kitajs.org/llms.txt
+- Kita Html full docs: https://html.kitajs.org/llms-full.txt
+- Getting started: https://html.kitajs.org/guide/getting-started.md
+- Safe attribute: https://html.kitajs.org/guide/xss/safe-attribute.md
+
+## Rules
+
+- `JSX.Element` is `string | Promise<string>`.
+- Children are not escaped by default.
+- Use `safe` on native elements that render untrusted text.
+- Run `kita-html check` during validation.
+```
+
+If your tool also supports a file like `AGENTS.md`, reference the same instructions there.
+The agent needs to see Kita-specific rules before it starts generating TSX.
+
+## Sharing docs with AI
+
+Share the narrowest document that answers the task.
+
+- For setup issues, share
+  [getting-started.md](https://html.kitajs.org/guide/getting-started.md).
+- For escaping questions, share
+  [safe-attribute.md](https://html.kitajs.org/guide/xss/safe-attribute.md).
+- For streaming and async behavior, share
+  [using-suspense.md](https://html.kitajs.org/guide/async/using-suspense.md).
+- For framework integration, share the matching Fastify, Express, or Elysia guide.
+- For broader assistance, start with [`llms.txt`](https://html.kitajs.org/llms.txt) and
+  move to [`llms-full.txt`](https://html.kitajs.org/llms-full.txt) only when the task
+  needs wider context.

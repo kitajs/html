@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "outDir": "dist",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@kitajs/html"
+  },
+  "include": ["src"]
+}

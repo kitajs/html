@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "benchmark": "NODE_ENV=production node --expose-gc lib/benchmark.js",
     "profile": "node lib/profile.js",
     "start": "NODE_ENV=production node --expose-gc lib/benchmark.js",
-    "pretest": "pnpm --filter=@kitajs/bench-html-kitajs --filter=@kitajs/bench-html-reactjsx --filter=@kitajs/bench-html-react build",
     "test": "node lib/react-equality.js"
   },
   "dependencies": {
@@ -20,14 +20,14 @@
     "@kitajs/bench-html-typed-html": "workspace:*",
     "@kitajs/bench-html-vhtml": "workspace:*",
     "common-tags": "1.8.2",
-    "ghtml": "3.1.2",
-    "hono": "4.11.10",
+    "ghtml": "4.0.2",
+    "hono": "4.12.18",
     "html-minifier": "4.0.0",
     "jsxte": "3.3.1",
     "mitata": "1.0.34",
-    "nano-jsx": "0.1.0",
-    "preact-render-to-string": "6.5.13",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "nano-jsx": "0.2.1",
+    "preact-render-to-string": "6.6.6",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   }
 }

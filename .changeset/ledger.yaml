@@ -1,0 +1,76 @@
+'@kitajs/express-html-plugin@5.0.0-next.0':
+  dir: packages/express-html-plugin
+  intents:
+    - add-express-html-plugin
+'@kitajs/express-html-plugin@5.0.0-next.1':
+  dir: packages/express-html-plugin
+  intents:
+    - automatic-suspense-request-ids
+    - fix-delayed-suspense-boundary
+    - release-suspense-on-head
+    - vast-elephants-doubt
+'@kitajs/fastify-html-plugin@5.0.0-next.2':
+  dir: packages/fastify-html-plugin
+  intents:
+    - eighty-taxes-jam
+    - remove-identity-value
+    - sharp-wombats-stay
+'@kitajs/fastify-html-plugin@5.0.0-next.3':
+  dir: packages/fastify-html-plugin
+  intents:
+    - automatic-suspense-request-ids
+    - fix-delayed-suspense-boundary
+    - release-suspense-on-head
+    - vast-elephants-doubt
+'@kitajs/h3-html-plugin@5.0.0-next.0':
+  dir: packages/h3-html-plugin
+  intents:
+    - add-h3-nitro-html-plugins
+'@kitajs/html-cli@5.0.0-next.0':
+  dir: packages/cli
+  intents:
+    - curly-teeth-happen
+    - dry-planes-sort
+    - strong-grapes-compare
+'@kitajs/html@5.0.0-next.1':
+  dir: packages/html
+  intents:
+    - calm-bears-remain
+    - eighty-taxes-jam
+    - remove-suspense-root-global
+    - sharp-wombats-stay
+    - slimy-wolves-buy
+    - stale-shrimps-spend
+    - update-suspense-script-protocol
+'@kitajs/html@5.0.0-next.2':
+  dir: packages/html
+  intents:
+    - add-h3-nitro-html-plugins
+    - automatic-suspense-request-ids
+    - fix-delayed-suspense-boundary
+    - fix-suspense-boundary-ids
+    - shiny-horses-argue
+    - sunny-mugs-design
+    - wet-weeks-grow
+'@kitajs/nitro-html-plugin@5.0.0-next.0':
+  dir: packages/nitro-html-plugin
+  intents:
+    - add-h3-nitro-html-plugins
+'@kitajs/ts-html-plugin@5.0.0-next.2':
+  dir: packages/ts-html-plugin
+  intents:
+    - eighty-taxes-jam
+    - fix-double-escape-self-closing
+    - fix-tsconfig-absolute-path
+    - hip-trams-roll
+    - metal-corners-type
+    - metal-hairs-juggle
+    - sharp-wombats-stay
+    - tender-regions-cough
+'@kitajs/ts-html-plugin@5.0.0-next.3':
+  dir: packages/ts-html-plugin
+  intents:
+    - eager-stars-pull
+    - fix-xss-detection-misses
+    - require-node-20-ts-plugin
+    - use-native-cli-utils

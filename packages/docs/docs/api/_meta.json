@@ -1,0 +1,28 @@
+[
+  "index",
+  {
+    "type": "dir-section-header",
+    "name": "html",
+    "label": "@kitajs/html"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "fastify",
+    "label": "@kitajs/fastify-html-plugin"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "express",
+    "label": "@kitajs/express-html-plugin"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "h3",
+    "label": "@kitajs/h3-html-plugin"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "nitro",
+    "label": "@kitajs/nitro-html-plugin"
+  }
+]

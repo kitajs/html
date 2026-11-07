@@ -1,43 +1,43 @@
-import type { default as TS, server } from 'typescript/lib/tsserverlibrary';
-import { proxyObject, recursiveDiagnoseJsxElements } from './util';
+import type { default as TS, server } from 'typescript/lib/tsserverlibrary'
+import { proxyObject, recursiveDiagnoseJsxElements } from './util'
 
-export = function initHtmlPlugin(modules: { typescript: typeof TS }) {
-  const ts = modules.typescript;
+export = function (modules: { typescript: typeof TS }) {
+  const ts = modules.typescript
 
   return {
-    create(info: server.PluginCreateInfo) {
-      const proxy = proxyObject(info.languageService);
+    create(info: Pick<server.PluginCreateInfo, 'languageService'>) {
+      const proxy = proxyObject(info.languageService)
 
       proxy.getSemanticDiagnostics = function clonedSemanticDiagnostics(filename) {
-        const diagnostics = info.languageService.getSemanticDiagnostics(filename);
+        const diagnostics = info.languageService.getSemanticDiagnostics(filename)
 
         // Not a tsx file, so don't do anything
         if (!filename.endsWith('.tsx') && !filename.endsWith('.jsx')) {
-          return diagnostics;
+          return diagnostics
         }
 
-        const program = info.languageService.getProgram();
+        const program = info.languageService.getProgram()
 
         if (!program) {
-          return diagnostics;
+          return diagnostics
         }
 
-        const source = program.getSourceFile(filename);
+        const source = program.getSourceFile(filename)
 
         if (!source) {
-          return diagnostics;
+          return diagnostics
         }
 
-        const typeChecker = program.getTypeChecker();
+        const typeChecker = program.getTypeChecker()
 
         ts.forEachChild(source, function loopSourceNodes(node) {
-          recursiveDiagnoseJsxElements(ts, node, typeChecker, diagnostics);
-        });
+          recursiveDiagnoseJsxElements(ts, node, typeChecker, diagnostics)
+        })
 
-        return diagnostics;
-      };
+        return diagnostics
+      }
 
-      return proxy;
+      return proxy
     }
-  };
-};
+  }
+}

@@ -1,9 +1,8 @@
-import assert from 'node:assert';
-import { it } from 'node:test';
-import { TSLangServer } from './util/lang-server';
+import { expect, it } from 'vitest'
+import { TSLangServer } from './util/lang-server'
 
 it('Allow correct xss usage', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname)
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export function Test() {
@@ -73,7 +72,7 @@ it('Allow correct xss usage', async () => {
         <div>{number || safeString}</div>
       </>
     );
-`;
+`
 
-  assert.strictEqual(diagnostics.body.length, 0);
-});
+  expect(diagnostics.body).toHaveLength(0)
+})

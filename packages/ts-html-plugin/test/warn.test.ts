@@ -1,10 +1,9 @@
-import assert from 'node:assert';
-import { it } from 'node:test';
-import { UnusedSafe } from '../src/errors';
-import { TSLangServer } from './util/lang-server';
+import { expect, it } from 'vitest'
+import { UnusedSafe } from '../src/errors'
+import { TSLangServer } from './util/lang-server'
 
 it('Warn on unused `safe` tags', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname)
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
@@ -18,9 +17,9 @@ it('Warn on unused `safe` tags', async () => {
         <div safe></div>
       </>
     );
-`;
+`
 
-  assert.deepStrictEqual(diagnostics.body, [
+  expect(diagnostics.body).toEqual([
     {
       start: { line: 36, offset: 14 },
       end: { line: 36, offset: 18 },
@@ -56,5 +55,5 @@ it('Warn on unused `safe` tags', async () => {
       code: UnusedSafe.code,
       category: 'warning'
     }
-  ]);
-});
+  ])
+})

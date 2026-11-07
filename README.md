@@ -10,7 +10,7 @@ repository with your friends and co-workers! </sup>
 
 <p align="center" >
   <a href="https://kitajs.org" target="_blank" rel="noopener noreferrer">
-    <img src="https://kitajs.org/logo.png" width="256" alt="Kita JS logo" />
+    <img src="https://kitajs.org/doug-pc-glasses.svg" width="256" alt="Kita JS logo" />
   </a>
 </p>
 
@@ -27,26 +27,18 @@ repository with your friends and co-workers! </sup>
 <br />
 
 <h1 align="center">
-  KitaJS Html Monorepo
+  Kita Html Monorepo
 </h1>
 
-<br />
-
-## Packages
-
-Please go to each package's README for more information.
-
-- [@kitajs/html](./packages/html#readme)
-
-- [@kitajs/ts-html-plugin](./packages/ts-html-plugin#readme)
-
-- [@kitajs/fastify-html-plugin](./packages/fastify-html-plugin#readme)
+> [!WARNING]  
+> This is the **`next`** branch, tracking the upcoming v5 release. For the latest stable
+> v4 code, switch to the [`master`](https://github.com/kitajs/html/tree/master) branch.
 
 <br />
 
-## Performance & Benchmarks
+## Documentation
 
-See the [benchmark](./benchmarks) section for more information.
+Full documentation is available at **[html.kitajs.org](https://html.kitajs.org)**.
 
 <br />
 
