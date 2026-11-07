@@ -6,6 +6,8 @@ Latest docs:
 
 - Fastify: `https://html.kitajs.org/integrations/frameworks/fastify.md`
 - Express: `https://html.kitajs.org/integrations/frameworks/express.md`
+- H3: `https://html.kitajs.org/integrations/frameworks/h3.md`
+- Nitro: `https://html.kitajs.org/integrations/frameworks/nitro.md`
 - Elysia: `https://html.kitajs.org/integrations/frameworks/elysia.md`
 - Using Suspense: `https://html.kitajs.org/guide/async/using-suspense.md`
 
@@ -66,6 +68,61 @@ app.get('/', (req, res) => {
     </html>
   )
 })
+```
+
+## H3
+
+- Install `@kitajs/h3-html-plugin` and `h3` v2.
+- Register `new H3().register(h3KitaHtml())` before routes.
+- Return `event.html(...)` from handlers.
+- For Suspense, use `rid={event.context.kitaHtml!.requestId}`, or enable
+  `h3KitaHtml({ autoSuspense: true })` and use `AutoSuspense`.
+- Use `defineKitaHandler((event) => <Page />)` when an async root creates its first
+  Suspense boundary after an `await`. `event.html(...)` receives already evaluated JSX and
+  cannot reserve that state in time.
+- Suspense needs a Node-compatible runtime.
+
+```tsx
+import { H3 } from 'h3'
+import { h3KitaHtml } from '@kitajs/h3-html-plugin'
+
+const app = new H3().register(h3KitaHtml())
+
+app.get('/', (event) =>
+  event.html(
+    <html lang="en">
+      <body>
+        <h1>Hello</h1>
+      </body>
+    </html>
+  )
+)
+```
+
+## Nitro
+
+- Install `@kitajs/nitro-html-plugin` and `nitro` v3, then add `nitroKitaHtml()` to
+  `modules` in `nitro.config.ts`.
+- Each `.tsx`/`.jsx` file in `server/pages` default-exports
+  `(event: H3Event) => JSX.Element` and becomes a lazy GET and HEAD route. `[id]` is a
+  parameter, `[...path]` a catch-all, `(group)` folders do not affect the URL, and
+  `_`-prefixed files are ignored.
+- A page resolving to the root catch-all (`[...].tsx`) is Nitro's renderer for unmatched
+  routes. Set `event.res.status = 404` when it is a not-found page.
+- `AutoSuspense` works in pages without extra options.
+- Do not write pages as Nitro route handlers with manual HTML responses.
+
+```tsx
+// server/pages/about.tsx
+export default function About() {
+  return (
+    <html lang="en">
+      <body>
+        <h1>About</h1>
+      </body>
+    </html>
+  )
+}
 ```
 
 ## Elysia

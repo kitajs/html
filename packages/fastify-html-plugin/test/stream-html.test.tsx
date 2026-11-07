@@ -156,6 +156,37 @@ describe('Suspense', () => {
     expect(SuspenseRoot.requests.size).toBe(0)
   })
 
+  test('responds to HEAD without waiting for pending boundaries', async () => {
+    await using app = fastify()
+    app.register(fastifyKitaHtml)
+    const child = Promise.withResolvers<string>()
+    const root = Promise.withResolvers<string>()
+
+    app.get('/', (req, res) =>
+      res.html(
+        <div>
+          <Suspense rid={req.id} fallback="loading">
+            {child.promise}
+          </Suspense>
+          {root.promise}
+        </div>
+      )
+    )
+
+    const res = await app.inject({ method: 'HEAD', url: '/' })
+
+    expect(res.statusCode).toBe(200)
+    expect(res.headers['content-type']).toBe('text/html; charset=utf-8')
+    expect(res.body).toBe('')
+    expect(SuspenseRoot.requests.size).toBe(0)
+
+    // Late settlements of the root and boundary must not resurrect released state.
+    root.resolve('root')
+    child.resolve('late')
+    await setTimeout(1)
+    expect(SuspenseRoot.requests.size).toBe(0)
+  })
+
   test('AutoSuspense uses the current request id when enabled', async () => {
     await using app = fastify()
     app.register(fastifyKitaHtml, { autoSuspense: true })

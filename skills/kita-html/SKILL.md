@@ -1,7 +1,7 @@
 ---
 name: kita-html
 description: |
-  Write and edit `.tsx` or `.jsx` for Kita Html instead of React. Use this whenever the user mentions Kita, KitaJS, `@kitajs/html`, `safe` attributes, `kita-html check`, `xss-scan`, `reply.html()`, `res.html()`, Suspense `rid`, async components that return HTML strings, or asks for JSX in a server-rendered templating context where JSX compiles to strings rather than a virtual DOM. Also use it when the project contains Kita config such as `jsxImportSource: "@kitajs/html"`, `@kitajs/html-cli` or `@kitajs/ts-html-plugin`, even if the user only says "TSX" or "JSX".
+  Write and edit `.tsx` or `.jsx` for Kita Html instead of React. Use this whenever the user mentions Kita, KitaJS, `@kitajs/html`, `safe` attributes, `kita-html check`, `xss-scan`, `reply.html()`, `res.html()`, `event.html()`, `defineKitaHandler`, Nitro `server/pages`, Suspense `rid`, async components that return HTML strings, or asks for JSX in a server-rendered templating context where JSX compiles to strings rather than a virtual DOM. Also use it when the project contains Kita config such as `jsxImportSource: "@kitajs/html"`, `@kitajs/html-cli` or `@kitajs/ts-html-plugin`, even if the user only says "TSX" or "JSX".
 compatibility:
   Works best when the agent can read local project files and bundled examples/references.
 license: MIT
@@ -32,7 +32,8 @@ If the user asks for `.tsx` or `.jsx` in a Kita project, write Kita code.
    - `jsxImportSource: "@kitajs/html"`
    - `@kitajs/html`
    - `@kitajs/html-cli` or the deprecated `@kitajs/ts-html-plugin`
-   - `reply.html()` or `res.html()`
+   - `reply.html()`, `res.html()`, `event.html()`, or `defineKitaHandler`
+   - `nitroKitaHtml()` in `nitro.config.ts`
    - `safe` attributes in JSX
 2. If those signals exist, stop thinking in React terms.
 3. Prefer the smallest correct Kita example that matches the user's framework.
@@ -40,6 +41,8 @@ If the user asks for `.tsx` or `.jsx` in a Kita project, write Kita code.
    front:
    - Fastify -> `@kitajs/fastify-html-plugin` with `reply.html(...)`
    - Express -> `@kitajs/express-html-plugin` with `res.html(...)`
+   - H3 -> `@kitajs/h3-html-plugin` with `event.html(...)` or `defineKitaHandler(...)`
+   - Nitro -> `@kitajs/nitro-html-plugin` with page files in `server/pages`
    - Elysia -> `@elysiajs/html`
 
 ## Core rules
@@ -54,8 +57,9 @@ If the user asks for `.tsx` or `.jsx` in a Kita project, write Kita code.
 6. Use arrays for conditional classes. Do not emit React-style object maps for `class`.
 7. Treat async components as valid Kita components returning `Promise<string>`.
 8. When using Suspense, provide a stable `rid` tied to the request.
-9. When integrating with Fastify or Express, use `reply.html(...)` or `res.html(...)`
-   instead of React SSR patterns.
+9. When integrating with Fastify, Express, or H3, use `reply.html(...)`, `res.html(...)`,
+   or `event.html(...)` instead of React SSR patterns. In Nitro, write pages in
+   `server/pages` instead of hand-written HTML route handlers.
 10. Recommend `kita-html check` (TypeScript 7.1+) in the test or CI path whenever you
     touch setup. Only suggest the deprecated `xss-scan` for projects stuck on
     TypeScript 6.
@@ -89,12 +93,18 @@ When you write Kita code:
    use `req.id` for Suspense.
 3. Express: register `expressKitaHtml()`, respond with `res.html(...)`, and use `req.id`
    for Suspense.
-4. Elysia: use `@elysiajs/html`; still recommend `kita-html check` from `@kitajs/html-cli`
+4. H3: register `h3KitaHtml()`, respond with `event.html(...)`, and use
+   `event.context.kitaHtml.requestId` for Suspense or enable `autoSuspense`. Use
+   `defineKitaHandler(...)` when an async root creates its first boundary after an
+   `await`.
+5. Nitro: add `nitroKitaHtml()` to `modules` and write pages in `server/pages`; a root
+   `[...].tsx` page is the renderer for unmatched routes.
+6. Elysia: use `@elysiajs/html`; still recommend `kita-html check` from `@kitajs/html-cli`
    for CI XSS checks.
 
-Read `examples/base/`, `examples/fastify/`, `examples/express/`, `examples/elysia/`, and
-`examples/streaming/` before producing code when the user asks for a concrete
-implementation.
+Read `examples/base/`, `examples/fastify/`, `examples/express/`, `examples/h3/`,
+`examples/nitro/`, `examples/elysia/`, and `examples/streaming/` before producing code
+when the user asks for a concrete implementation.
 
 ## Common corrections
 
@@ -105,7 +115,8 @@ immediately:
 2. Replace implicit escaping assumptions with `safe` or `escapeHtml(...)`.
 3. Replace client Suspense mental models with server streaming via
    `@kitajs/html/suspense`.
-4. Replace generic Express/Fastify HTML sending with `res.html(...)` or `reply.html(...)`.
+4. Replace generic Express/Fastify/H3 HTML sending with `res.html(...)`,
+   `reply.html(...)`, or `event.html(...)`.
 5. Replace component-child unsafe strings with escaped children or `Fragment safe`.
 
 ## Gotchas to call out
@@ -124,7 +135,7 @@ Before finishing, quickly check:
 
 1. Did I accidentally write React code instead of Kita code?
 2. Did I handle untrusted strings with `safe` or explicit escaping?
-3. If Suspense is present, is `rid` wired to the request?
+3. If Suspense is present, is `rid` wired to the request, or is `AutoSuspense` enabled?
 4. If setup changed, did I choose the right framework adapter and include
    `@kitajs/html-cli` plus `kita-html check` guidance?
 5. After the latest batch of changes, did I run `pnpm kita-html check` or the project's

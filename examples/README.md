@@ -21,18 +21,26 @@ pnpm dev
 
 Check each example's directory for specific details and implementation patterns.
 
+Featured examples:
+
+- `h3-signal-room` streams independent environmental readings through H3.
+- `nitro-night-atlas` demonstrates convention pages, dynamic routes, route groups, and a
+  catch-all Nitro renderer.
+
 ## Documentation
 
 Learn more about the packages used in these examples:
 
 - **[@kitajs/html](../packages/html/README.md)** - Core JSX runtime, async components,
   Suspense
-- **[@kitajs/ts-html-plugin](../packages/ts-html-plugin/README.md)** - XSS detection
-  (`xss-scan`) used by these examples, which run on TypeScript 6. It is deprecated; new
-  projects on TypeScript 7.1+ use [`@kitajs/html-cli`](../packages/cli/README.md) and
-  `kita-html check`
+- **[@kitajs/html-cli](../packages/cli/README.md)** - XSS detection with
+  `kita-html check`, run by each example's `test` script
 - **[@kitajs/fastify-html-plugin](../packages/fastify-html-plugin/README.md)** - Fastify
   integration
+- **[@kitajs/h3-html-plugin](../packages/h3-html-plugin/README.md)** - H3 responses and
+  factory-safe Suspense
+- **[@kitajs/nitro-html-plugin](../packages/nitro-html-plugin/README.md)** - Nitro v3 page
+  conventions and renderer integration
 
 ## Getting Help
 

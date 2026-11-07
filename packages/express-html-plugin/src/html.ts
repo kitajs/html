@@ -96,6 +96,16 @@ function handleStreamHtml(
 ) {
   const stream = resolveHtmlStream(template, requestData)
 
+  if (response.req.method === 'HEAD') {
+    // Node discards HEAD bodies but still drains piped streams, which would hold the
+    // response open until the slowest boundary settles. Aborting releases the state and
+    // destroys the returned stream; resolveHtmlStream already observes a pending root, so
+    // no rejection is left unhandled.
+    abortSuspenseRequest(response.req.id, requestData)
+    response.type('text/html; charset=utf-8').end()
+    return
+  }
+
   // Content-length is optional as long as the connection is closed after the response is done.
   // https://www.rfc-editor.org/rfc/rfc7230#section-3.3.3
   response.type('text/html; charset=utf-8').setHeader('transfer-encoding', 'chunked')

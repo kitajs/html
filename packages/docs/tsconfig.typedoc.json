@@ -11,6 +11,8 @@
   "include": [
     "../html/src/**/*",
     "../fastify-html-plugin/src/**/*",
-    "../express-html-plugin/src/**/*"
+    "../express-html-plugin/src/**/*",
+    "../h3-html-plugin/src/**/*",
+    "../nitro-html-plugin/src/**/*"
   ]
 }

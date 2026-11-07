@@ -8,3 +8,9 @@ docs/api/fastify/**/**/*.md
 docs/api/express/**/*.md
 docs/api/express/**/**/*.md
 !docs/api/express/_meta.json
+docs/api/h3/**/*.md
+docs/api/h3/**/**/*.md
+!docs/api/h3/_meta.json
+docs/api/nitro/**/*.md
+docs/api/nitro/**/**/*.md
+!docs/api/nitro/_meta.json
