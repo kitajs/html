@@ -2,6 +2,13 @@
 
 ## 5.0.0-next.1
 
+### Patch Changes
+
+- Release Suspense state immediately for HEAD requests instead of waiting for pending
+  boundaries
+
+## 5.0.0-next.1
+
 ### Major Changes
 
 - Replace the optional `@kitajs/ts-html-plugin` peer dependency with `@kitajs/html-cli`,
