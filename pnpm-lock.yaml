@@ -304,8 +304,8 @@ importers:
         specifier: 'catalog:'
         version: 7.0.0-dev.20260411.1
       hono:
-        specifier: ^4.12.18
-        version: 4.12.18
+        specifier: ^4.13.16
+        version: 4.13.16
       tslib:
         specifier: 'catalog:'
         version: 2.8.1
@@ -453,8 +453,8 @@ importers:
         specifier: 4.0.2
         version: 4.0.2
       hono:
-        specifier: 4.12.18
-        version: 4.12.18
+        specifier: 4.13.16
+        version: 4.13.16
       html-minifier:
         specifier: 4.0.0
         version: 4.0.0
@@ -3939,8 +3939,8 @@ packages:
   highlightjs-vue@1.0.0:
     resolution: {integrity: sha512-PDEfEF102G23vHmPhLyPboFCD+BkMGu+GuJe2d9/eH4FsCwvgBpnc9n0pGE+ffKdph38s6foEZiEjdgHdzp+IA==}
 
-  hono@4.12.18:
-    resolution: {integrity: sha512-RWzP96k/yv0PQfyXnWjs6zot20TqfpfsNXhOnev8d1InAxubW93L11/oNUc3tQqn2G0bSdAOBpX+2uDFHV7kdQ==}
+  hono@4.13.16:
+    resolution: {integrity: sha512-AOLOEhvrV+iH92xXCnFr/5+3KjPKcI3xP63XJtX5spAnkznPdHijlIsUTpi7/9EhWqrTCekw5c5zh1K+YsVw7A==}
     engines: {node: '>=16.9.0'}
 
   hookable@6.0.1:
@@ -9151,7 +9151,7 @@ snapshots:
 
   highlightjs-vue@1.0.0: {}
 
-  hono@4.12.18: {}
+  hono@4.13.16: {}
 
   hookable@6.0.1: {}
 
