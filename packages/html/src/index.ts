@@ -34,10 +34,12 @@ export function toKebabCase(this: void, camel: string): string {
 
   const length = camel.length
 
+  // prev starts as false so a leading uppercase letter also becomes "-x". This turns
+  // csstype vendor prefixes like WebkitTransition into -webkit-transition.
   let start = 0,
     end = 0,
     kebab = '',
-    prev = true,
+    prev = false,
     curr = isUpper(camel, 0),
     next
 
@@ -57,6 +59,12 @@ export function toKebabCase(this: void, camel: string): string {
 
   // Appends the remaining string.
   kebab += camel.slice(start, end)
+
+  // The ms vendor prefix is lowercase in camel case (msTransform), so it needs the
+  // leading hyphen added here.
+  if (kebab.startsWith('ms-')) {
+    return '-' + kebab
+  }
 
   return kebab
 }
@@ -245,8 +253,9 @@ export function styleToString(this: void, style: object | string): string {
       continue
     }
 
+    // Custom property names are case sensitive and must be kept as is.
     // @ts-expect-error - this indexing is safe.
-    result += toKebabCase(key) + ':'
+    result += (key.startsWith('--') ? key : toKebabCase(key)) + ':'
 
     // Only needs escaping when the value is a string.
     if (typeof value !== 'string') {

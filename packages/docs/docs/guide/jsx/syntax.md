@@ -41,7 +41,9 @@ const html = (
 ## Style attribute
 
 The `style` attribute accepts both strings and objects. Object keys are converted from
-camelCase to kebab-case automatically.
+camelCase to kebab-case automatically. Vendor prefixes get their leading hyphen
+(`WebkitTransition` becomes `-webkit-transition`, `msTransform` becomes `-ms-transform`),
+and custom properties such as `--mainColor` are kept exactly as written.
 
 ```tsx twoslash kita
 const html = (
