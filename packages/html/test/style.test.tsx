@@ -35,6 +35,36 @@ describe('Style', () => {
     )
   })
 
+  test('custom properties keep their name', () => {
+    expect(
+      styleToString({
+        '--myColor': 'red',
+        '--Main-BG': 'blue',
+        '--x': 1,
+        color: 'var(--myColor)'
+      })
+    ).toBe('--myColor:red;--Main-BG:blue;--x:1;color:var(--myColor);')
+  })
+
+  test('vendor prefixed properties', () => {
+    expect(
+      styleToString({
+        WebkitTransition: 'opacity 1s',
+        MozAppearance: 'none',
+        msTransform: 'none',
+        WebkitLineClamp: 2
+      })
+    ).toBe(
+      '-webkit-transition:opacity 1s;-moz-appearance:none;-ms-transform:none;-webkit-line-clamp:2;'
+    )
+
+    expect(
+      <div style={{ WebkitTransition: 'opacity 1s', msTransform: 'none' }}></div>
+    ).toMatchInlineSnapshot(
+      `"<div style="-webkit-transition:opacity 1s;-ms-transform:none;"></div>"`
+    )
+  })
+
   test('Weird values', () => {
     expect(
       styleToString({
