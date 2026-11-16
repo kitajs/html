@@ -60,6 +60,11 @@
     - fix-large-children-arrays
     - fix-thenable-children
     - remove-internal-name-helpers
+'@kitajs/html@5.0.0-next.4':
+  dir: packages/html
+  intents:
+    - angry-mugs-beg
+    - polite-ducks-turn
 '@kitajs/nitro-html-plugin@5.0.0-next.0':
   dir: packages/nitro-html-plugin
   intents:

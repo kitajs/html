@@ -1,5 +1,17 @@
 # @kitajs/html
 
+## 5.0.0-next.4
+
+### Minor Changes
+
+- Add `@kitajs/html/custom-elements` type extension that allows any dashed tag name with
+  any attribute
+
+### Patch Changes
+
+- Throw when a function is passed as an attribute value instead of rendering its unescaped
+  source
+
 ## 5.0.0-next.3
 
 ### Major Changes
