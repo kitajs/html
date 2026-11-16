@@ -1,5 +1,33 @@
 # @kitajs/html
 
+## 5.0.0-next.3
+
+### Major Changes
+
+- Fix `style` object keys to match React: CSS custom properties (`--mainColor`) keep their
+  name instead of being converted to kebab-case, vendor prefixed keys (`WebkitTransition`,
+  `msTransform`) render with a leading hyphen, and `JSX.CSSProperties` accepts custom
+  properties (#537)
+
+- Remove the internal `isUpper` and `toKebabCase` helpers from the `@kitajs/html` exports
+  and the `Html` namespace
+
+### Patch Changes
+
+- Improve rendering performance by allocating fewer intermediate strings
+
+  Tag, attribute and style property name fragments are cached, element props are read in a
+  single pass, nested children arrays are joined without copying, and async children are
+  wrapped with one promise instead of two. Style objects render up to 2.4x faster,
+  fragments and lists with siblings 2x faster and typical pages 1.2x to 1.5x faster.
+
+- Fix `RangeError: Maximum call stack size exceeded` when a children array with more than
+  ~120k items has siblings, and stop `contentsToString` from flattening the arrays it
+  receives in place
+
+- Fix children that are thenables but not native promises, such as query builders,
+  rendering as `undefined` or `[object Object]` instead of their resolved value
+
 ## 5.0.0-next.2
 
 ### Patch Changes
