@@ -195,7 +195,8 @@ Users configure their `tsconfig.json`:
 
 ### Type Extensions
 
-HTMX, Alpine.js, and Hotwire Turbo types are provided as separate `.d.ts` files:
+HTMX, Alpine.js, Hotwire Turbo, and generic custom element types are provided as separate
+`.d.ts` files:
 
 ```typescript
 /// <reference types="@kitajs/html/htmx" />
