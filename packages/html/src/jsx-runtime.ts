@@ -1,11 +1,5 @@
 import type { Children } from './index.js'
-import {
-  attributesToString,
-  contentsToString,
-  contentToString,
-  Fragment,
-  isVoidElement
-} from './index.js'
+import { Fragment, renderElement } from './index.js'
 
 /**
  * Generates a html string from an attribute name of component and it's props.
@@ -27,29 +21,7 @@ export function jsx(
     return name(attributes)
   }
 
-  // Switches the tag name when this custom `tag` is present.
-  if (name === 'tag') {
-    name = attributes.of as string
-  }
-
-  const attrs = attributesToString(attributes)
-
-  if (attributes.children === undefined) {
-    if (isVoidElement(name as string)) {
-      return `<${name}${attrs}/>`
-    }
-    return `<${name}${attrs}></${name}>`
-  }
-
-  const contents = contentToString(attributes.children, attributes.safe)
-
-  if (contents instanceof Promise) {
-    return contents.then(function resolveContents(child) {
-      return `<${name}${attrs}>${child}</${name}>`
-    })
-  }
-
-  return `<${name}${attrs}>${contents}</${name}>`
+  return renderElement(name, attributes)
 }
 
 /**
@@ -72,29 +44,7 @@ export function jsxs(
     return name(attributes)
   }
 
-  // Switches the tag name when this custom `tag` is present.
-  if (name === 'tag') {
-    name = attributes.of as string
-  }
-
-  const attrs = attributesToString(attributes)
-
-  if (attributes.children.length === 0) {
-    if (isVoidElement(name as string)) {
-      return `<${name}${attrs}/>`
-    }
-    return `<${name}${attrs}></${name}>`
-  }
-
-  const contents = contentsToString(attributes.children, attributes.safe)
-
-  if (contents instanceof Promise) {
-    return contents.then(function resolveContents(child) {
-      return `<${name}${attrs}>${child}</${name}>`
-    })
-  }
-
-  return `<${name}${attrs}>${contents}</${name}>`
+  return renderElement(name, attributes)
 }
 
 // According to the jsx-runtime spec we must export the fragment element also

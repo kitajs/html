@@ -1,12 +1,14 @@
 {
-  "name": "@kitajs/bench-html-templates",
+  "name": "@kitajs/bench-html-stress",
   "version": "1.0.0",
   "private": true,
-  "main": "dist/index.js",
+  "type": "commonjs",
   "scripts": {
-    "build": "tsgo"
+    "build": "tsgo",
+    "stress": "NODE_ENV=production node lib/run.js"
   },
   "dependencies": {
+    "@kitajs/html": "workspace:*",
     "@typescript/native-preview": "catalog:",
     "tslib": "catalog:",
     "typescript": "catalog:"

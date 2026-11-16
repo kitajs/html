@@ -17,12 +17,14 @@ declare global {
     /**
      * The index signature was removed to enable closed typing for style using CSSType.
      * You're able to use type assertion or module augmentation to add properties or an
-     * index signature of your own.
+     * index signature of your own. Custom properties (`--name`) are always accepted.
      *
      * For examples and more information, visit:
      * https://github.com/frenic/csstype#what-should-i-do-when-i-get-type-errors
      */
-    type CSSProperties = import('csstype').Properties
+    type CSSProperties = import('csstype').Properties & {
+      [property: `--${string}`]: undefined | string | number
+    }
 
     interface HtmlTag extends ElementChildrenAttribute, IntrinsicAttributes {
       accesskey?: undefined | string

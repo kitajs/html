@@ -41,13 +41,16 @@ const html = (
 ## Style attribute
 
 The `style` attribute accepts both strings and objects. Object keys are converted from
-camelCase to kebab-case automatically.
+camelCase to kebab-case automatically, and vendor prefixed keys such as `WebkitTransition`
+render as `-webkit-transition`. Custom properties (`--name`) are case sensitive and keep
+their name as written.
 
 ```tsx twoslash kita
 const html = (
   <>
     <div style="color: red" />
     <div style={{ color: 'red', fontSize: '14px' }} />
+    <div style={{ '--mainColor': 'red', color: 'var(--mainColor)' }} />
   </>
 )
 ```

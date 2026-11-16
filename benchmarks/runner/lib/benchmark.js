@@ -1,44 +1,29 @@
-import './react-equality.js'
-import './samples.js'
+import { bench, boxplot, do_not_optimize, run } from 'mitata'
+import { RunnersFn } from './runners.js'
+import { writeSamples } from './samples.js'
+import { BENCH_NAME, generatePurchases, humanFileSize } from './util.js'
 
-import { bench, boxplot, run } from 'mitata'
-import { React, RunnerType, RunnersFn } from './runners.js'
-import { generatePurchases, humanFileSize } from './util.js'
+// Samples are formatted with prettier, which is async and CPU heavy. It must finish before
+// mitata starts, otherwise it competes with the first benchmarks for the CPU.
+await writeSamples()
 
 const purchases = generatePurchases(1000)
-const reactOutput = React('1', purchases)
 
 boxplot(() => {
   for (const fn of RunnersFn) {
-    let name = fn.name
+    // Output equality with React is asserted by `pnpm test` (lib/react-equality.js)
+    const name = `${fn.name} ${humanFileSize(fn(BENCH_NAME, purchases).length)}`
 
-    if (fn.type === RunnerType.template) {
-      name = `* ${name}`
-    }
-
-    const sampleOutput = fn('1', purchases)
-
-    if (fn.type === RunnerType.jsx && sampleOutput !== reactOutput) {
-      name = `! ${name}`
-    }
-
-    name = `${name} ${humanFileSize(sampleOutput.length)}`
-
-    bench(name, () => fn('Benchmark', purchases)).baseline(fn.baseline)
+    // String concatenation in V8 creates ropes (trees of string pieces) that are only
+    // flattened when the string is read. Returning the string without reading it leaves
+    // that work out of the measurement, which favors runtimes that build deep ropes.
+    // Buffer.from does what writing the html to a socket does: flattens and encodes it.
+    bench(name, () => do_not_optimize(Buffer.from(fn(BENCH_NAME, purchases)))).baseline(
+      fn.baseline
+    )
   }
 })
 
-const footer = `
-Sizes are the final html output based on the same input.
+await run()
 
-!) Are jsx runtimes that produces different output from React for the same input ⚠️
-
-*) Are template engines, which usually lacks syntax highlighting and intellisense:
-   https://github.com/kitajs/html/blob/master/benchmarks/templates/normal.tsx
-
-`.trimEnd()
-
-run().then(
-  () => console.log(footer),
-  (err) => console.error(err)
-)
+console.log('\nSizes are the final html output based on the same input.')

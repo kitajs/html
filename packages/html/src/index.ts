@@ -3,63 +3,20 @@ import './jsx.js'
 /// <reference path="./suspense.ts" />
 /// <reference path="./error-boundary.ts" />
 
+import {
+  attributePrefix,
+  escapeQuotes,
+  isThenable,
+  isVoidElement,
+  joinClasses,
+  styleProperty,
+  tagParts,
+  type TagParts
+} from './helpers.js'
+
+export { isVoidElement }
+
 const ESCAPED_REGEX = /[<"'&]/
-const CAMEL_REGEX = /[a-z][A-Z]/
-
-/**
- * Returns true if the character at the given index is an uppercase character.
- *
- * @param input The string to check.
- * @param index The index of the character to check.
- * @returns If the character at the given index is an uppercase character.
- * @internal
- */
-export function isUpper(this: void, input: string, index: number): boolean {
-  const code = input.charCodeAt(index)
-  return code >= 65 /* A */ && code <= 90 /* Z */
-}
-
-/**
- * Converts a camel cased string to a kebab cased string.
- *
- * @param camel The camel cased string to convert.
- * @internal
- */
-export function toKebabCase(this: void, camel: string): string {
-  // This is a optimization to avoid the whole conversion process when the
-  // string does not contain any uppercase characters.
-  if (!CAMEL_REGEX.test(camel)) {
-    return camel
-  }
-
-  const length = camel.length
-
-  let start = 0,
-    end = 0,
-    kebab = '',
-    prev = true,
-    curr = isUpper(camel, 0),
-    next
-
-  for (; end < length; end++) {
-    next = isUpper(camel, end + 1)
-
-    // detects the start of a new camel case word and avoid lowercasing abbreviations.
-    if (!prev && curr && !next) {
-      // @ts-expect-error - this indexing is safe.
-      kebab += camel.slice(start, end) + '-' + camel[end].toLowerCase()
-      start = end + 1
-    }
-
-    prev = curr
-    curr = next
-  }
-
-  // Appends the remaining string.
-  kebab += camel.slice(start, end)
-
-  return kebab
-}
 
 /**
  * Tag function that escapes the given string pieces and interpolates the given values.
@@ -159,128 +116,97 @@ export let escapeHtml: (this: void, value: any) => string = (value) => {
 if (typeof Bun !== 'undefined') escapeHtml = Bun.escapeHTML
 
 /**
- * Returns true if the element is a html void element.
- *
- * @param tag The name of the element to check.
- * @returns If the element is a html void element.
- */
-export function isVoidElement(this: void, tag: string): boolean {
-  // Ordered by most common to least common.
-  return (
-    tag === 'meta' ||
-    tag === 'link' ||
-    tag === 'img' ||
-    tag === 'br' ||
-    tag === 'input' ||
-    tag === 'hr' ||
-    tag === 'area' ||
-    tag === 'base' ||
-    tag === 'col' ||
-    tag === 'command' ||
-    tag === 'embed' ||
-    tag === 'keygen' ||
-    tag === 'param' ||
-    tag === 'source' ||
-    tag === 'track' ||
-    tag === 'wbr'
-  )
-}
-
-/**
  * Transforms an object of style attributes into a html style string.
+ *
+ * Keys are converted from camelCase to kebab-case, except custom properties (`--name`),
+ * which are case sensitive and kept as written.
  *
  * @param style A record of literal values to use as style attributes or a string.
  * @returns The generated html style string.
  * @internal
  */
 export function styleToString(this: void, style: object | string): string {
-  // Faster escaping process that only looks for the " character.
   // As we use the " character to wrap the style string, we need to escape it.
   if (typeof style === 'string') {
-    let end = style.indexOf('"')
-
-    // This is a optimization to avoid having to look twice for the " character.
-    // And make the loop already start in the middle
-    if (end === -1) {
-      return style
-    }
-
-    const length = style.length
-
-    let escaped = '',
-      start = 0
-
-    // Escapes double quotes to be used inside attributes
-    // Faster than using regex
-    // https://jsperf.app/kakihu
-    for (; end < length; end++) {
-      if (style[end] === '"') {
-        escaped += style.slice(start, end) + '&#34;'
-        start = end + 1
-      }
-    }
-
-    // Appends the remaining string.
-    escaped += style.slice(start, end)
-
-    return escaped
+    return escapeQuotes(style)
   }
 
-  const keys = Object.keys(style),
-    length = keys.length
+  let result = ''
 
-  let key,
-    value,
-    end,
-    start,
-    index = 0,
-    result = ''
-
-  for (; index < length; index++) {
-    key = keys[index]
+  for (const key of Object.keys(style)) {
     // @ts-expect-error - this indexing is safe.
-    value = style[key]
+    const value = style[key]
 
     if (value === null || value === undefined) {
       continue
     }
 
-    // @ts-expect-error - this indexing is safe.
-    result += toKebabCase(key) + ':'
-
     // Only needs escaping when the value is a string.
-    if (typeof value !== 'string') {
-      result += value.toString() + ';'
-      continue
-    }
-
-    end = value.indexOf('"')
-
-    // This is a optimization to avoid having to look twice for the " character.
-    // And make the loop already start in the middle
-    if (end === -1) {
-      result += value + ';'
-      continue
-    }
-
-    const length = value.length
-    start = 0
-
-    // Escapes double quotes to be used inside attributes
-    // Faster than using regex
-    // https://jsperf.app/kakihu
-    for (; end < length; end++) {
-      if (value[end] === '"') {
-        result += value.slice(start, end) + '&#34;'
-        start = end + 1
-      }
-    }
-
-    // Appends the remaining string.
-    result += value.slice(start, end) + ';'
+    result +=
+      styleProperty(key) +
+      ':' +
+      (typeof value === 'string' ? escapeQuotes(value) : value.toString()) +
+      ';'
   }
 
   return result
+}
+
+/**
+ * Serializes a single attribute. `children`, `safe` and `of` must be handled by the
+ * caller.
+ *
+ * @param key The attribute name.
+ * @param value The attribute value.
+ * @param attributes The object the attribute belongs to.
+ */
+function attributeToString(key: string, value: any, attributes: any): string {
+  if (value === null || value === undefined) {
+    return ''
+  }
+
+  // React className compatibility.
+  if (key === 'className') {
+    // Both were provided, so use the class attribute.
+    if (attributes.class !== undefined) {
+      return ''
+    }
+
+    key = 'class'
+  } else if (key === 'class' && Array.isArray(value)) {
+    value = joinClasses(value)
+
+    // All classes may have been disabled.
+    if (value.length === 0) {
+      return ''
+    }
+  } else if (key === 'style') {
+    return ' style="' + styleToString(value) + '"'
+  } else if (key === 'attrs') {
+    return typeof value === 'string' ? ' ' + value : attributesToString(value)
+  }
+
+  switch (typeof value) {
+    case 'string':
+      return attributePrefix(key) + escapeQuotes(value) + '"'
+
+    case 'boolean':
+      // Only add the attribute if the value is true.
+      return value ? ' ' + key : ''
+
+    case 'object':
+      // Dates are always safe
+      if (value instanceof Date) {
+        return attributePrefix(key) + value.toISOString() + '"'
+      }
+
+      // The object may have a overridden toString method.
+      // Which results in a non escaped string.
+      return attributePrefix(key) + escapeQuotes(value.toString()) + '"'
+
+    default:
+      return attributePrefix(key) + value + '"'
+  }
 }
 
 /**
@@ -295,12 +221,6 @@ export function styleToString(this: void, style: object | string): string {
  */
 export function attributesToString(this: void, attributes: object): string {
   let key,
-    value,
-    type,
-    end,
-    start,
-    classItems,
-    valueLength,
     result = ''
 
   for (key in attributes) {
@@ -310,109 +230,7 @@ export function attributesToString(this: void, attributes: object): string {
     }
 
     // @ts-expect-error - this indexing is safe.
-    value = attributes[key]
-
-    if (value === null || value === undefined) {
-      continue
-    }
-
-    // React className compatibility.
-    if (key === 'className') {
-      // @ts-expect-error - both were provided, so use the class attribute.
-      if (attributes.class !== undefined) {
-        continue
-      }
-
-      key = 'class'
-    } else if (key === 'class' && Array.isArray(value)) {
-      classItems = value
-      valueLength = value.length
-
-      // Reuses the value variable
-      value = ''
-
-      for (let i = 0; i < valueLength; i++) {
-        if (classItems[i] && classItems[i].length > 0) {
-          if (value) {
-            value += ' ' + classItems[i].trim()
-          } else {
-            value += classItems[i].trim()
-          }
-        }
-      }
-
-      // All attributes may have been disabled.
-      if (value.length === 0) {
-        continue
-      }
-    } else if (key === 'style') {
-      result += ` style="${styleToString(value)}"`
-      continue
-    } else if (key === 'attrs') {
-      if (typeof value === 'string') {
-        result += ' ' + value
-      } else {
-        result += attributesToString(value)
-      }
-
-      continue
-    }
-
-    type = typeof value
-
-    if (type === 'boolean') {
-      // Only add the attribute if the value is true.
-      if (value) {
-        result += ' ' + key
-      }
-
-      continue
-    }
-
-    if (type !== 'string') {
-      // Non objects are
-      if (type !== 'object') {
-        result += ` ${key}="${value}"`
-        continue
-      }
-
-      // Dates are always safe
-      if (value instanceof Date) {
-        result += ` ${key}="${value.toISOString()}"`
-        continue
-      }
-
-      // The object may have a overridden toString method.
-      // Which results in a non escaped string.
-      value = value.toString()
-    }
-
-    end = value.indexOf('"')
-
-    // This is a optimization to avoid having to look twice for the " character.
-    // And make the loop already start in the middle
-    if (end === -1) {
-      result += ` ${key}="${value}"`
-      continue
-    }
-
-    result += ` ${key}="`
-
-    valueLength = value.length
-    start = 0
-
-    // Escapes double quotes to be used inside attributes
-    // Faster than using regex
-    // https://jsperf.app/kakihu
-    for (; end < valueLength; end++) {
-      if (value[end] === '"') {
-        result += value.slice(start, end) + '&#34;'
-        start = end + 1
-      }
-    }
-
-    // Appends the remaining string.
-    result += value.slice(start, end) + '"'
+    result += attributeToString(key, attributes[key], attributes)
   }
 
   return result
@@ -435,7 +253,8 @@ export type Component<T = {}> = (this: void, props: PropsWithChildren<T>) => JSX
 /**
  * Joins raw string html elements into a single html string.
  *
- * A raw html fragment is just an array of strings, this method concatenates them.
+ * A raw html fragment is just an array of strings, this method concatenates them. The
+ * given array is never modified.
  *
  * @param contents An maybe nested array of strings to concatenate.
  * @param escape If it should escape the contents before concatenating them. Default is
@@ -447,7 +266,8 @@ export function contentsToString(
   contents: Children[],
   escape?: boolean
 ): JSX.Element {
-  let length = contents.length
+  const length = contents.length
+
   let result = ''
 
   for (let index = 0; index < length; index++) {
@@ -462,25 +282,28 @@ export function contentsToString(
         result += content
         continue
       case 'boolean':
+      case 'undefined':
         continue
     }
 
-    if (!content) {
+    if (content === null) {
       continue
     }
 
     if (Array.isArray(content)) {
-      contents.splice(index--, 1, ...content)
-      length += content.length - 1
-      continue
+      // Escaping happens once, over the whole result.
+      const inner = contentsToString(content)
+
+      if (typeof inner === 'string') {
+        result += inner
+        continue
+      }
+
+      return resolveContents(result, inner, contents, index + 1, escape)
     }
 
     if (typeof content.then === 'function') {
-      // @ts-ignore - Type instantiation is excessively deep and possibly infinite.
-      return Promise.all(contents.slice(index)).then(function resolveContents(resolved) {
-        resolved.unshift(result)
-        return contentsToString(resolved, escape)
-      })
+      return resolveContents(result, content, contents, index + 1, escape)
     }
 
     throw new Error('Objects are not valid as a KitaJSX child')
@@ -493,6 +316,34 @@ export function contentsToString(
   }
 
   return result
+}
+
+/**
+ * Waits for the first pending content and everything after it, then joins the result.
+ *
+ * @param prefix The already joined contents before the pending one.
+ * @param pending The first unresolved content.
+ * @param contents The contents being joined.
+ * @param from The index of the first content after `pending`.
+ * @param escape If the final result should be escaped.
+ */
+function resolveContents(
+  prefix: string,
+  pending: Children,
+  contents: Children[],
+  from: number,
+  escape: boolean | undefined
+): Promise<string> {
+  const rest: Children[] = [prefix, pending]
+
+  for (let index = from; index < contents.length; index++) {
+    rest.push(contents[index])
+  }
+
+  // @ts-expect-error - Type instantiation is excessively deep and possibly infinite.
+  return Promise.all(rest).then(function resolveRest(resolved) {
+    return contentsToString(resolved, escape)
+  })
 }
 
 /**
@@ -518,10 +369,11 @@ export function contentToString(
     case 'bigint':
       return content.toString()
     case 'boolean':
+    case 'undefined':
       return ''
   }
 
-  if (!content) {
+  if (content === null) {
     return ''
   }
 
@@ -530,12 +382,118 @@ export function contentToString(
   }
 
   if (typeof content.then === 'function') {
-    return content.then(function resolveContent(resolved) {
+    // Promise.resolve returns native promises as is and converts other thenables, so
+    // callers can rely on `typeof result === 'string'` to detect sync results.
+    return Promise.resolve(content).then(function resolveContent(resolved) {
       return contentToString(resolved, escape)
     })
   }
 
   throw new Error('Objects are not valid as a KitaJSX child')
+}
+
+/**
+ * Wraps rendered contents with the given tag.
+ *
+ * @param tag The tag to wrap the contents with.
+ * @param attrs The serialized attributes.
+ * @param contents The rendered contents.
+ */
+function wrapContents(tag: TagParts, attrs: string, contents: JSX.Element): JSX.Element {
+  if (typeof contents === 'string') {
+    return tag.open + attrs + '>' + contents + tag.close
+  }
+
+  return contents.then(function resolveContents(resolved) {
+    return tag.open + attrs + '>' + resolved + tag.close
+  })
+}
+
+/**
+ * Renders an intrinsic element.
+ *
+ * @param name The tag name.
+ * @param attrs The serialized attributes.
+ * @param children The element children, `undefined` renders an empty element.
+ * @param safe If the children should be escaped.
+ */
+function renderTag(
+  name: string,
+  attrs: string,
+  children: Children,
+  safe: boolean | undefined
+): JSX.Element {
+  const tag = tagParts(name)
+
+  // Empty children only matter for void elements, others render the same either way.
+  if (
+    children === undefined ||
+    (tag.void && Array.isArray(children) && children.length === 0)
+  ) {
+    if (tag.void) {
+      return tag.open + attrs + '/>'
+    }
+
+    return tag.open + attrs + '>' + tag.close
+  }
+
+  // Async children are resolved once and wrapped in the same step, instead of chaining
+  // one promise in contentToString and another one to wrap it.
+  if (isThenable(children)) {
+    return Promise.resolve(children).then(function resolveChildren(resolved) {
+      return wrapContents(tag, attrs, contentToString(resolved, safe))
+    })
+  }
+
+  return wrapContents(tag, attrs, contentToString(children, safe))
+}
+
+/**
+ * Renders an intrinsic element from its JSX props.
+ *
+ * Reads `children`, `safe` and `of` in the same pass that serializes the attributes,
+ * instead of looking them up separately on every props object shape.
+ *
+ * @param name The tag name.
+ * @param attributes The element props.
+ * @internal
+ */
+export function renderElement(
+  this: void,
+  name: string,
+  attributes: PropsWithChildren<any>
+): JSX.Element {
+  // Switches the tag name when this custom `tag` is present.
+  if (name === 'tag') {
+    name = attributes.of
+  }
+
+  let key,
+    children,
+    safe,
+    attrs = ''
+
+  // Keyed access with the for-in key uses V8's enum cache, named access (`.children`)
+  // would be a megamorphic lookup as every element has a different props shape.
+  for (key in attributes) {
+    if (key === 'children') {
+      children = attributes[key]
+      continue
+    }
+
+    if (key === 'safe') {
+      safe = attributes[key]
+      continue
+    }
+
+    if (key === 'of') {
+      continue
+    }
+
+    attrs += attributeToString(key, attributes[key], attributes)
+  }
+
+  return renderTag(name, attrs, children, safe)
 }
 
 /**
@@ -572,24 +530,12 @@ export function createElement(
     name = attributes.of as string
   }
 
-  const attrs = hasAttrs ? attributesToString(attributes) : ''
-
-  if (children.length === 0) {
-    if (isVoidElement(name as string)) {
-      return `<${name}${attrs}/>`
-    }
-    return `<${name}${attrs}></${name}>`
-  }
-
-  const contentsStr = contentsToString(children, hasAttrs && attributes.safe)
-
-  if (typeof contentsStr === 'string') {
-    return `<${name}${attrs}>${contentsStr}</${name}>`
-  }
-
-  return contentsStr.then(function resolveContents(contents) {
-    return `<${name}${attrs}>${contents}</${name}>`
-  })
+  return renderTag(
+    name,
+    hasAttrs ? attributesToString(attributes) : '',
+    children.length === 0 ? undefined : children,
+    hasAttrs && attributes.safe === true
+  )
 }
 
 /**
@@ -608,7 +554,7 @@ export function createElement(
 export function Fragment(
   props: PropsWithChildren<Pick<JSX.HtmlTag, 'safe'>>
 ): JSX.Element {
-  return contentsToString([props.children], props.safe)
+  return contentToString(props.children, props.safe)
 }
 
 /** @deprecated Here for interop with `preact` and many build systems. */
@@ -638,14 +584,15 @@ export const e: typeof escape = escape
  * @see https://github.com/kitajs/html
  * @see https://www.npmjs.com/package/@kitajs/html
  */
-export const Html: Omit<typeof import('./index.js'), 'Html' | 'default'> = {
+export const Html: Omit<
+  typeof import('./index.js'),
+  'Html' | 'default' | 'renderElement'
+> = {
   escape,
   e,
   escapeHtml,
   isVoidElement,
   attributesToString,
-  toKebabCase,
-  isUpper,
   styleToString,
   createElement,
   h,

@@ -19,6 +19,7 @@
     "format": "prettier --write .",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky",
+    "stress": "turbo run stress",
     "test": "turbo run test",
     "test-types": "turbo run test-types"
   },
@@ -26,7 +27,7 @@
     "@arthurfiorette/prettier-config": "^1.0.12",
     "@kitajs/html": "workspace:*",
     "husky": "^9.1.7",
-    "prettier": "^3.8.2",
+    "prettier": "catalog:",
     "prettier-plugin-jsdoc": "^1.8.0",
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-packagejson": "^3.0.2",
