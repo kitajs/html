@@ -63,6 +63,7 @@ catalog:
   h3: ^2.0.8
   jsdom: ^30.0.0
   nitro: 3.0.261103-rc
+  prettier: ^3.8.2
   react: ^19.2.8
   react-dom: ^19.2.8
   rolldown: ^1.3.0

@@ -17,7 +17,7 @@
     "@kitajs/bench-html-reactjsx": "workspace:*",
     "mitata": "1.0.34",
     "preact-render-to-string": "6.6.6",
-    "prettier": "^3.8.2",
+    "prettier": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
   }

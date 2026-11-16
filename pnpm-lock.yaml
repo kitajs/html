@@ -209,6 +209,9 @@ catalogs:
     nitro:
       specifier: 3.0.261103-rc
       version: 3.0.261103-rc
+    prettier:
+      specifier: ^3.8.2
+      version: 3.8.2
     react:
       specifier: ^19.2.8
       version: 19.2.8
@@ -252,7 +255,7 @@ importers:
         specifier: ^9.1.7
         version: 9.1.7
       prettier:
-        specifier: ^3.8.2
+        specifier: 'catalog:'
         version: 3.8.2
       prettier-plugin-jsdoc:
         specifier: ^1.8.0
@@ -397,7 +400,7 @@ importers:
         specifier: 6.6.6
         version: 6.6.6(preact@10.28.2)
       prettier:
-        specifier: ^3.8.2
+        specifier: 'catalog:'
         version: 3.8.2
       react:
         specifier: 'catalog:'
