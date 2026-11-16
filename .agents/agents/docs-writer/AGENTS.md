@@ -74,7 +74,8 @@ concepts to understand:
 - Packages: `@kitajs/html` (core), `@kitajs/html-cli` (`kita-html check`),
   `@kitajs/ts-html-plugin` (deprecated XSS detection for TypeScript 6),
   `@kitajs/fastify-html-plugin` (Fastify integration)
-- `@elysiajs/html` is an external Elysia integration maintained by the same author
+- `@elysia/html` is the Elysia integration, maintained in the `elysiajs` organization and
+  documented at https://elysiajs.com/plugins/html
 
 ## TypeDoc API Docs
 

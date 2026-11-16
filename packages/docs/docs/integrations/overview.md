@@ -13,7 +13,7 @@ server, and AdonisJS all accept strings directly in their response methods.
 Official plugins are available for [Fastify](/integrations/frameworks/fastify) and
 [Express](/integrations/frameworks/express). They set the content type header, inject the
 doctype, and support Suspense streaming. [Elysia](/integrations/frameworks/elysia)
-provides its own `@elysiajs/html` plugin.
+provides the same features through its own `@elysia/html` plugin.
 
 For frontend libraries that use custom HTML attributes, Kita Html provides TypeScript type
 definitions that enable autocomplete and type checking for HTMX, Alpine.js, and Hotwire

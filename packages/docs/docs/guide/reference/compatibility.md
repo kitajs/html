@@ -34,7 +34,7 @@ in `tsconfig.json`.
 ## Frameworks
 
 Official [framework integrations](/integrations/overview) exist for Fastify (4.x and 5.x)
-and Express (4.x and 5.x). Elysia supports Kita Html through `@elysiajs/html`. Kita Html
+and Express (4.x and 5.x). Elysia 2 supports Kita Html through `@elysia/html`. Kita Html
 also works with any framework that accepts strings: Hono, Bun's built-in server, AdonisJS,
 and others. Send the string or stream directly in the response body.
 

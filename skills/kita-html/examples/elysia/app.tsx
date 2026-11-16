@@ -1,4 +1,4 @@
-import { html } from '@elysiajs/html'
+import { html } from '@elysia/html'
 import { Elysia } from 'elysia'
 
 new Elysia()
