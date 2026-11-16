@@ -22,6 +22,10 @@
     - fix-delayed-suspense-boundary
     - release-suspense-on-head
     - vast-elephants-doubt
+'@kitajs/fastify-html-plugin@5.0.0-next.4':
+  dir: packages/fastify-html-plugin
+  intents:
+    - lucky-tigers-sip
 '@kitajs/h3-html-plugin@5.0.0-next.0':
   dir: packages/h3-html-plugin
   intents:
@@ -32,6 +36,10 @@
     - curly-teeth-happen
     - dry-planes-sort
     - strong-grapes-compare
+'@kitajs/html-cli@5.0.0-next.1':
+  dir: packages/cli
+  intents:
+    - lucky-tigers-sip
 '@kitajs/html@5.0.0-next.1':
   dir: packages/html
   intents:
@@ -87,3 +95,7 @@
     - fix-xss-detection-misses
     - require-node-20-ts-plugin
     - use-native-cli-utils
+'@kitajs/ts-html-plugin@5.0.0-next.4':
+  dir: packages/ts-html-plugin
+  intents:
+    - lucky-tigers-sip

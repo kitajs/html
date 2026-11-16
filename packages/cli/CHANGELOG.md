@@ -1,5 +1,11 @@
 # @kitajs/html-cli
 
+## 5.0.0-next.1
+
+### Patch Changes
+
+- Update dependencies
+
 ## 5.0.0-next.0
 
 ### Major Changes

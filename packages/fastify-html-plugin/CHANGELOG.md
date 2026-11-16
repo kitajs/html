@@ -1,5 +1,11 @@
 # @kitajs/fastify-html-plugin
 
+## 5.0.0-next.4
+
+### Patch Changes
+
+- Update dependencies
+
 ## 5.0.0-next.3
 
 ### Patch Changes
