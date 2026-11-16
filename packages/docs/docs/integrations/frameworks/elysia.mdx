@@ -1,54 +1,167 @@
 ---
 description:
-  Use Kita Html with Elysia through @elysiajs/html, including setup, response handling,
-  configuration, and XSS tooling.
+  Render JSX with Elysia through @elysia/html, stream automatic or explicit Suspense, send
+  HTML with status codes, and control automatic doctype injection.
 ---
 
 import { PackageManagerTabs } from '@rspress/core/theme'
 
 # Elysia
 
-[`@elysiajs/html`](https://elysiajs.com/plugins/html) integrates Kita Html with
-[Elysia](https://elysiajs.com/). The plugin is maintained by the Elysia team and uses
-`@kitajs/html` as its JSX runtime.
+[`@elysia/html`](https://elysiajs.com/plugins/html) is the official Elysia plugin for Kita
+Html. It is maintained in the Elysia organization and handles content type headers,
+Suspense streaming, and automatic doctype injection.
 
 ## Setup
 
+:::danger XSS protection required
+
+You must set up [`kita-html check`](/guide/xss/cli-scanner) from `@kitajs/html-cli` before
+using this plugin to avoid XSS vulnerabilities. See the
+[Getting started](/guide/getting-started) guide for complete setup instructions including
+TypeScript configuration and XSS detection.
+
+:::
+
 <PackageManagerTabs
   command={{
-    npm: 'npm i @elysiajs/html',
-    yarn: 'yarn add @elysiajs/html',
-    pnpm: 'pnpm add @elysiajs/html',
-    bun: 'bun add @elysiajs/html'
+    npm: 'npm i @elysia/html@rc @kitajs/html@next elysia@rc',
+    yarn: 'yarn add @elysia/html@rc @kitajs/html@next elysia@rc',
+    pnpm: 'pnpm add @elysia/html@rc @kitajs/html@next elysia@rc',
+    bun: 'bun add @elysia/html@rc @kitajs/html@next elysia@rc'
   }}
 />
 
+`@kitajs/html` is a required peer dependency. The plugin and your components must share
+one copy of it, because Suspense state lives in that module.
+
+Register the plugin before your routes:
+
 ```tsx
 import { Elysia } from 'elysia'
-import { html } from '@elysiajs/html'
+import { html } from '@elysia/html'
 
-const app = new Elysia()
-  .use(html())
-  .get('/', () => (
-    <html>
-      <body>
-        <h1>Hello from Elysia</h1>
-      </body>
-    </html>
-  ))
-  .listen(3000)
+const app = new Elysia().use(html()).listen(3000)
 ```
 
-The plugin automatically sets `Content-Type: text/html; charset=utf8`, prepends the
-doctype, and converts JSX output into a response.
+## Sending HTML
 
-## Configuration
+Return JSX from a route. The plugin detects HTML strings and sends them with
+`Content-Type: text/html; charset=utf-8`.
 
-The plugin accepts options for content type, auto-detection, and doctype behavior. Refer
-to the [Elysia HTML plugin documentation](https://elysiajs.com/plugins/html) for the full
-configuration reference and up-to-date usage examples.
+```tsx
+app.get('/', () => <div>Hello World</div>)
+```
 
-## XSS protection
+The `html()` function in the context sends the same response explicitly, and keeps working
+when the `autoDetect` option is disabled.
 
-The same XSS protection tooling applies. Install `@kitajs/html-cli` alongside
-`@elysiajs/html` and run [`kita-html check`](/guide/xss/cli-scanner) in CI.
+```tsx
+app.get('/profile/:id', ({ html, params }) => html(<UserProfile id={params.id} />))
+```
+
+HTML passed to Elysia's `status()` keeps its status code and receives the HTML content
+type. A `content-type` set through `set.headers` takes precedence over the plugin.
+
+```tsx
+import { status } from 'elysia'
+
+app.get('/missing', () => status(404, <h1>Not found</h1>))
+```
+
+## Suspense streaming
+
+When the JSX tree contains `Suspense` components, the plugin switches from a buffered
+response to a stream. Use the `rid` from the context as the Suspense `rid`.
+
+```tsx
+import { Suspense } from '@kitajs/html/suspense'
+
+app.get('/dashboard', ({ rid }) => (
+  <Suspense rid={rid} fallback={<div>Loading...</div>}>
+    <AsyncDashboard />
+  </Suspense>
+))
+```
+
+The plugin generates `rid` as `req-1`, `req-2`, and so on, with the numeric part encoded
+in base 36. Pass `genRequestId` to generate your own, and keep the value short and trusted
+because it is written into the HTML.
+
+To avoid passing `rid` through the component tree, enable automatic Suspense support:
+
+```tsx
+import { AutoSuspense } from '@kitajs/html/suspense'
+
+app.use(html({ autoSuspense: true }))
+
+app.get('/dashboard', () => (
+  <AutoSuspense fallback={<div>Loading...</div>}>
+    <AsyncDashboard />
+  </AutoSuspense>
+))
+```
+
+The plugin wraps Elysia's `fetch`, so every hook and component of a request shares the
+same request ID. Rendering `AutoSuspense` without `autoSuspense: true` throws an error.
+
+When an async component wraps the boundaries, pass the tree to `html()` instead of
+returning it. Elysia awaits returned values, so a boundary that resolves before the async
+component would lose its content. When the first boundary is only created after an
+`await`, pass a render function instead. It always streams the response, and
+`AutoSuspense` works inside it without the `autoSuspense` option.
+
+```tsx
+app.get('/dashboard', ({ html }) =>
+  html(async () => {
+    const user = await loadUser()
+
+    return (
+      <AutoSuspense fallback={<div>Loading...</div>}>
+        <Dashboard user={user} />
+      </AutoSuspense>
+    )
+  })
+)
+```
+
+HEAD requests receive the headers with an empty body, and client disconnects release
+pending boundaries immediately.
+
+## Error handling
+
+Use `Suspense`'s `catch` prop or an `ErrorBoundary` to handle async errors. A streamed
+response cannot be replaced after its first bytes are sent.
+
+```tsx
+import { ErrorBoundary } from '@kitajs/html/error-boundary'
+import { Suspense } from '@kitajs/html/suspense'
+
+app.get('/dashboard', ({ rid }) => (
+  <ErrorBoundary catch={(error) => <div safe>Error: {String(error)}</div>}>
+    <Suspense rid={rid} fallback={<div>Loading...</div>}>
+      <AsyncDashboard />
+    </Suspense>
+  </ErrorBoundary>
+))
+```
+
+See the [Error boundaries](/guide/async/error-boundaries) guide for details on error
+handling patterns.
+
+## Auto-doctype
+
+By default, the plugin prepends `<!doctype html>` to responses that start with an `<html>`
+tag. To disable this:
+
+```tsx
+app.use(html({ autoDoctype: false }))
+```
+
+The [Elysia HTML plugin documentation](https://elysiajs.com/plugins/html) lists every
+option, including `contentType` and the `isHtml` detection function.
+
+## Compatibility
+
+The plugin requires Elysia 2 and Kita Html 5. Suspense relies on Node streams and
+`AsyncLocalStorage`, which Bun provides.

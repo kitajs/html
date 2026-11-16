@@ -43,7 +43,7 @@ If the user asks for `.tsx` or `.jsx` in a Kita project, write Kita code.
    - Express -> `@kitajs/express-html-plugin` with `res.html(...)`
    - H3 -> `@kitajs/h3-html-plugin` with `event.html(...)` or `defineKitaHandler(...)`
    - Nitro -> `@kitajs/nitro-html-plugin` with page files in `server/pages`
-   - Elysia -> `@elysiajs/html`
+   - Elysia -> `@elysia/html` with returned JSX or `html(...)`
 
 ## Core rules
 
@@ -99,8 +99,10 @@ When you write Kita code:
    `await`.
 5. Nitro: add `nitroKitaHtml()` to `modules` and write pages in `server/pages`; a root
    `[...].tsx` page is the renderer for unmatched routes.
-6. Elysia: use `@elysiajs/html`; still recommend `kita-html check` from `@kitajs/html-cli`
-   for CI XSS checks.
+6. Elysia: register `html()` from `@elysia/html`, return JSX or use `html(...)`, and use
+   the `rid` from the context for Suspense or enable `autoSuspense`. Use
+   `html(async () => ...)` when an async root creates its first boundary after an `await`.
+   Still recommend `kita-html check` from `@kitajs/html-cli` for CI XSS checks.
 
 Read `examples/base/`, `examples/fastify/`, `examples/express/`, `examples/h3/`,
 `examples/nitro/`, `examples/elysia/`, and `examples/streaming/` before producing code

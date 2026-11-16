@@ -127,21 +127,31 @@ export default function About() {
 
 ## Elysia
 
-- Use `@elysiajs/html`.
-- Elysia handles HTML responses and doctype behavior.
+- Install `@elysia/html` and `@kitajs/html` (required peer dependency). Requires Elysia 2.
+- Register `html()`, then return JSX from routes or call `html(...)` from the context.
+- For Suspense, use `rid={rid}` with `rid` from the context, or enable `autoSuspense` and
+  use `AutoSuspense`.
+- When an async component wraps the boundaries, pass the tree to `html(...)` instead of
+  returning it. When the first boundary is created after an `await`, use
+  `html(async () => ...)`.
+- `status(404, <h1>Not found</h1>)` is sent as HTML.
 - Recommend `@kitajs/html-cli` separately so the project still runs `kita-html check` in
   CI.
 
 ```tsx
 import { Elysia } from 'elysia'
-import { html } from '@elysiajs/html'
+import { html } from '@elysia/html'
+import { Suspense } from '@kitajs/html/suspense'
 
 new Elysia()
   .use(html())
-  .get('/', () => (
+  .get('/', ({ rid }) => (
     <html lang="en">
       <body>
         <h1>Hello from Elysia</h1>
+        <Suspense rid={rid} fallback={<p>Loading...</p>}>
+          <AsyncStats />
+        </Suspense>
       </body>
     </html>
   ))
