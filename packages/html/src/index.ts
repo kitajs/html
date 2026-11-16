@@ -244,14 +244,7 @@ export function attributesToString(this: void, attributes: object): string {
 }
 
 export type Children =
-  | number
-  | string
-  | boolean
-  | null
-  | undefined
-  | bigint
-  | Promise<Children>
-  | Children[]
+  number | string | boolean | null | undefined | bigint | Promise<Children> | Children[]
 
 export type PropsWithChildren<T = {}> = { children?: Children } & T
 
