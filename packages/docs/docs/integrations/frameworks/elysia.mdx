@@ -102,13 +102,12 @@ app.get('/dashboard', () => (
 ))
 ```
 
-The plugin wraps Elysia's `fetch`, so hooks, the route handler, and async components share
-the same request ID. Rendering `AutoSuspense` without `autoSuspense: true` throws an
-error.
+The plugin wraps Elysia's `fetch`, so every hook and component of a request shares the
+same request ID. Rendering `AutoSuspense` without `autoSuspense: true` throws an error.
 
-Elysia awaits a route's return value before the plugin receives it. When an async
-component wraps the boundaries, pass the tree to `html()` so the plugin takes ownership of
-the stream before the root resolves. When the first boundary is only created after an
+When an async component wraps the boundaries, pass the tree to `html()` instead of
+returning it. Elysia awaits returned values, so a boundary that resolves before the async
+component would lose its content. When the first boundary is only created after an
 `await`, pass a render function instead. It always streams the response, and
 `AutoSuspense` works inside it without the `autoSuspense` option.
 
