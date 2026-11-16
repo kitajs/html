@@ -21,6 +21,11 @@
       "dependsOn": ["^build"],
       "outputLogs": "full"
     },
+    "stress": {
+      "cache": false,
+      "dependsOn": ["build"],
+      "outputLogs": "full"
+    },
     "start": {
       "cache": false,
       "dependsOn": ["^build"],
