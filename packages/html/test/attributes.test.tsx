@@ -81,6 +81,15 @@ describe('Attributes', () => {
     )
   })
 
+  test('Functions throw', () => {
+    expect(
+      // @ts-expect-error - event handlers must be strings
+      () => <button onclick={() => alert('x')}></button>
+    ).toThrow(
+      /Functions are not valid as a KitaJSX attribute value, received one for "onclick"/
+    )
+  })
+
   test('Popover', () => {
     expect(<div popover="auto"></div>).toMatchInlineSnapshot(
       `"<div popover="auto"></div>"`

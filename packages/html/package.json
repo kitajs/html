@@ -18,6 +18,7 @@
     ".": "./dist/index.js",
     "./all-types": "./all-types.d.ts",
     "./alpine": "./alpine.d.ts",
+    "./custom-elements": "./custom-elements.d.ts",
     "./error-boundary": "./dist/error-boundary.js",
     "./hotwire-turbo": "./hotwire-turbo.d.ts",
     "./htmx": "./htmx.d.ts",

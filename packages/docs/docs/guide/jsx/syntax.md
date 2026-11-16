@@ -105,6 +105,10 @@ Different JavaScript types serialize differently when used as children.
 Arrays are concatenated with no separator. Booleans, `null`, and `undefined` produce no
 output, matching React. `bigint` renders its digits, while React renders nothing.
 
+Functions are not valid attribute values and throw an error at render time. Event handlers
+such as `onclick` are plain HTML attributes, so pass the handler code as a string, like
+`onclick="history.back()"`.
+
 ## Void elements
 
 Void elements like `<br />`, `<img />`, `<input />`, and `<meta />` do not produce a

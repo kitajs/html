@@ -204,6 +204,13 @@ function attributeToString(key: string, value: any, attributes: any): string {
       // Which results in a non escaped string.
       return attributePrefix(key) + escapeQuotes(value.toString()) + '"'
 
+    // The source of a function is never a working handler and may contain quotes
+    // that end the attribute early.
+    case 'function':
+      throw new Error(
+        `Functions are not valid as a KitaJSX attribute value, received one for "${key}". Use a string such as onclick="handler()" instead.`
+      )
+
     default:
       return attributePrefix(key) + value + '"'
   }

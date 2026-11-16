@@ -233,9 +233,10 @@ plain ordered list instead.
 
 ## Type Extension Setup
 
-When documenting type extensions (HTMX, Alpine.js, Turbo, all-types), instruct users to
-create a `src/kita.d.ts` file with triple-slash directives. Multiple extensions go in the
-same file. Do not suggest per-file directives as the primary approach.
+When documenting type extensions (HTMX, Alpine.js, Turbo, custom-elements, all-types),
+instruct users to create a `src/kita.d.ts` file with triple-slash directives. Multiple
+extensions go in the same file. Do not suggest per-file directives as the primary
+approach.
 
 ## Markdown Compatibility
 

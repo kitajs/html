@@ -50,6 +50,26 @@ const html = <Example />
 
 :::
 
+## Any custom element
+
+Web component libraries such as MDUI or Shoelace ship many tags. Instead of declaring each
+one, add `@kitajs/html/custom-elements` to your `src/kita.d.ts` file. Every tag name that
+contains a dash, as the HTML spec requires for custom elements, becomes valid and accepts
+any attribute.
+
+```tsx twoslash kita
+/// <reference types="@kitajs/html/custom-elements" />
+
+const html = (
+  <mdui-button variant="filled" end-icon="arrow_back" onclick="history.back()">
+    Back
+  </mdui-button>
+)
+```
+
+Tags without a dash are still rejected. Elements declared in `JSX.IntrinsicElements`, like
+`user-card` above, keep their own attribute types.
+
 ## Custom attributes on all elements
 
 Extend the `HtmlTag` interface to add attributes to every native HTML element.
