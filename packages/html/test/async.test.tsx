@@ -18,6 +18,15 @@ describe('Async components', () => {
     expect(await (<Async>{1}</Async>)).toBeTruthy()
   })
 
+  test('Non native thenables', async () => {
+    // Query builders like knex are thenables but not Promise instances
+    const thenable = { then: (resolve: (value: string) => void) => resolve('<b>ok</b>') }
+
+    expect(await (<div>{thenable as unknown as Promise<string>}</div>)).toBe(
+      '<div><b>ok</b></div>'
+    )
+  })
+
   test('Child', async () => {
     const html = (
       <Sync>

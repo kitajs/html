@@ -37,7 +37,6 @@ The main file exports all core functionality:
 
 - **`escapeHtml(value)`**: Escapes HTML entities (`<`, `>`, `"`, `'`, `&`). Uses Bun's
   native `escapeHTML` when available.
-- **`toKebabCase(camel)`**: Converts camelCase to kebab-case for CSS properties.
 - **`styleToString(style)`**: Converts style objects to CSS strings.
 - **`attributesToString(attributes)`**: Serializes props to HTML attributes.
 - **`contentsToString(contents, escape?)`**: Joins children into a string, handles async.

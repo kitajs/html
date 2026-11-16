@@ -76,6 +76,17 @@ describe('Util', () => {
     expect(await result).toBe('abcd')
   })
 
+  test('Nested arrays are joined without modifying the input', () => {
+    const input = [['a', 'b'], 'c']
+
+    expect(Html.contentsToString(input)).toBe('abc')
+    expect(input).toEqual([['a', 'b'], 'c'])
+
+    // Spreading big arrays into function arguments overflows the stack
+    const list = Array.from({ length: 200_000 }, () => 'b')
+    expect(Html.contentsToString(['a', list])).toHaveLength(200_001)
+  })
+
   test('h() function', async () => {
     expect(Html.h).toBe(Html.createElement)
   })

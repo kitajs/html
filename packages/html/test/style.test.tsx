@@ -15,6 +15,28 @@ describe('Style', () => {
     )
   })
 
+  test('custom properties keep their case', () => {
+    expect(
+      <div style={{ '--mainColor': 'red', color: 'var(--mainColor)' }}></div>
+    ).toMatchInlineSnapshot(
+      `"<div style="--mainColor:red;color:var(--mainColor);"></div>"`
+    )
+  })
+
+  test('vendor prefixes get a leading hyphen', () => {
+    expect(
+      <div
+        style={{
+          WebkitTransition: 'opacity 1s',
+          MozAppearance: 'none',
+          msTransform: 'none'
+        }}
+      ></div>
+    ).toBe(
+      '<div style="-webkit-transition:opacity 1s;-moz-appearance:none;-ms-transform:none;"></div>'
+    )
+  })
+
   test('accepts undefined', () => {
     expect(<div style={{ backgroundColor: undefined }}></div>).toMatchInlineSnapshot(
       `"<div style=""></div>"`
