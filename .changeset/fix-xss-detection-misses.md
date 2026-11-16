@@ -23,5 +23,5 @@ The scanner previously stayed silent on several patterns that render raw HTML at
   rendering).
 - Suppression names were over-matched: `safetyRating`, `escaped` and functions like
   `escapeRoom()` no longer suppress diagnostics. `safe`-prefixed names now require a
-  camelCase boundary, only `escapeHtml()`/`escape()` calls and the ` e`
-  ``template tag count as escapers, and`as 'safe'` is the only accepted literal cast.
+  camelCase boundary, only `escapeHtml()`/`escape()` calls and the ` e` ``template tag
+  count as escapers, and`as 'safe'` is the only accepted literal cast.

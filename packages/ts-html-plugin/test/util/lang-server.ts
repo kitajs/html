@@ -7,8 +7,7 @@ import ts from 'typescript/lib/tsserverlibrary'
 
 /** All requests used in tests */
 export type Requests =
-  | ts.server.protocol.OpenRequest
-  | ts.server.protocol.SemanticDiagnosticsSyncRequest
+  ts.server.protocol.OpenRequest | ts.server.protocol.SemanticDiagnosticsSyncRequest
 
 try {
   statSync(require.resolve('self-ts-plugin'))
