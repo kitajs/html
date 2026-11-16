@@ -52,6 +52,14 @@
     - shiny-horses-argue
     - sunny-mugs-design
     - wet-weeks-grow
+'@kitajs/html@5.0.0-next.3':
+  dir: packages/html
+  intents:
+    - faster-rendering
+    - fix-css-custom-properties
+    - fix-large-children-arrays
+    - fix-thenable-children
+    - remove-internal-name-helpers
 '@kitajs/nitro-html-plugin@5.0.0-next.0':
   dir: packages/nitro-html-plugin
   intents:
