@@ -1,10 +1,9 @@
-import assert from 'node:assert';
-import { it } from 'node:test';
-import { DoubleEscape, Xss } from '../src/errors';
-import { TSLangServer } from './util/lang-server';
+import { expect, it } from 'vitest'
+import { DoubleEscape, Xss } from '../src/errors'
+import { TSLangServer } from './util/lang-server'
 
 it('Operators are evaluated normally', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname)
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
 
@@ -69,9 +68,9 @@ it('Operators are evaluated normally', async () => {
         <div>{new String(html) instanceof String}</div>
       </>
     );
-`;
+`
 
-  assert.deepStrictEqual(diagnostics.body, [
+  expect(diagnostics.body).toEqual([
     {
       start: { line: 40, offset: 34 },
       end: { line: 40, offset: 38 },
@@ -200,5 +199,5 @@ it('Operators are evaluated normally', async () => {
       code: Xss.code,
       category: 'error'
     }
-  ]);
-});
+  ])
+})

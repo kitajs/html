@@ -1,23 +1,34 @@
-function urlDocs(error: `k${number}`) {
-  return `https://html.kitajs.org/packages/ts-html-plugin#${error}`;
+function createError(code: number, message: string) {
+  return {
+    code,
+    message:
+      process.env.INTERNAL_DISABLE_URL_DOCS !== 'true'
+        ? `${message}\nSee https://html.kitajs.org/TS${code}`
+        : message
+  }
 }
 
-export const Xss = {
-  code: '0 K601' as any,
-  message: `Usage of xss-prone content without \`safe\` attribute. ${urlDocs('k601')}`
-};
+// 88600 is the base code for all errors in this plugin.
+// KITA in ASCII
+// 75 * 105 * 116 * 97 = 88609500
+// Simplify to 88600
 
-export const DoubleEscape = {
-  code: '0 K602' as any,
-  message: `Double escaping detected. Please remove the \`safe\` attribute. ${urlDocs('k602')}`
-};
+export const Xss = createError(
+  88601,
+  `Content may introduce an XSS vulnerability and must be marked with the \`safe\` attribute.`
+)
 
-export const ComponentXss = {
-  code: '0 K603' as any,
-  message: `Xss-prone content inside a Component, wrap it into a Html.escapeHtml() call. ${urlDocs('k603')}`
-};
+export const DoubleEscape = createError(
+  88602,
+  `The \`safe\` attribute causes this content to be escaped more than once.`
+)
 
-export const UnusedSafe = {
-  code: '0 K604' as any,
-  message: `Unused safe attribute. ${urlDocs('k604')}`
-};
+export const ComponentXss = createError(
+  88603,
+  `Content inside a Component must be escaped using escapeHtml().`
+)
+
+export const UnusedSafe = createError(
+  88604,
+  `The \`safe\` attribute is unused in this context.`
+)

@@ -1,12 +1,16 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "strict": false,
     "outDir": "dist",
+    "sourceMap": true,
+    "importHelpers": true,
+    "module": "nodenext",
+    "target": "ESNext",
+    "moduleResolution": "nodenext",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "preact",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true
+    "jsxImportSource": "preact"
   },
   "include": ["index.tsx"],
   "exclude": ["dist"]

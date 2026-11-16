@@ -1,0 +1,116 @@
+/* Kita Code Block Styles (CSS Modules) */
+
+.container {
+  margin: 16px 0;
+  position: relative; // For absolute positioning of discovery banner
+
+  /* Remove margin from nested code blocks */
+  :global(.rp-codeblock) {
+    margin: 0;
+  }
+
+  /* When HTML is shown, adjust border-radius for seamless connection */
+  &.showHtml > :global(.rp-codeblock) {
+    border-radius: var(--rp-radius) var(--rp-radius) 0 0;
+    transition: border-radius 0.2s ease-out;
+  }
+}
+
+/* Kita button - matches rspress button group pattern */
+.button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  order: -1; // Ensure button appears first (leftmost) in the button group
+
+  /* Button icon - matches rspress button icon pattern */
+  svg {
+    opacity: inherit;
+    width: 20px;
+    height: 20px;
+    transition: all 0.2s ease;
+    color: var(--rp-c-text-3);
+  }
+
+  &:hover svg {
+    color: var(--rp-c-text-2);
+  }
+
+  /* Active state - icon uses brand color */
+  &.active {
+    svg {
+      color: var(--rp-c-brand);
+    }
+
+    /* Active state on hover - keep brand color */
+    &:hover svg {
+      color: var(--rp-c-brand);
+    }
+  }
+}
+
+/* HTML Output Expandable Section - CSS Grid Animation */
+.htmlWrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition:
+    grid-template-rows 0.2s ease-out,
+    opacity 0.2s ease-out;
+  opacity: 0;
+
+  &.visible {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+.htmlContent {
+  overflow: hidden;
+
+  /* HTML output code block styling - connects to top code block */
+  :global(.rp-codeblock) {
+    margin: 0;
+    border-radius: 0 0 var(--rp-radius) var(--rp-radius);
+    border-top: 0;
+  }
+}
+
+/* Discovery Badge - top-right corner of code block */
+.discoveryBadge {
+  all: unset;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 5;
+  cursor: pointer;
+  animation: fadeIn 0.3s ease-out forwards;
+
+  /* Badge hover effect */
+  &:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+  }
+}
+
+/* Hide code block buttons when badge is visible */
+.container:has(.discoveryBadge) :global(.rp-code-button-group) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

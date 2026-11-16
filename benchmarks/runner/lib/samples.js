@@ -1,19 +1,17 @@
-import { mkdirSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
-import { RunnersFn } from './runners.js';
-import { format, generatePurchases } from './util.js';
+import { mkdir, writeFile } from 'node:fs/promises'
+import { RunnersFn } from './runners.js'
+import { BENCH_NAME, format, generatePurchases } from './util.js'
 
-const purchases = generatePurchases(1);
+/** Writes a formatted sample of each runner output to the samples directory. */
+export async function writeSamples() {
+  const purchases = generatePurchases(1)
 
-async function writeSample(fn) {
-  const html = fn('Sample', purchases);
+  await mkdir('./samples', { recursive: true })
 
-  const formatted = await format(html);
-
-  await writeFile(`./samples/${fn.name}.html`, formatted);
+  await Promise.all(
+    RunnersFn.map(async (fn) => {
+      const html = await format(fn(BENCH_NAME, purchases))
+      await writeFile(`./samples/${fn.name}.html`, html)
+    })
+  )
 }
-
-// Ensures the samples directory exists
-mkdirSync('./samples', { recursive: true });
-
-Promise.all(RunnersFn.map(writeSample)).catch(console.error);

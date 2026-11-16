@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": false,
+    // Includes ../kitajs/index.tsx so the RealWorldPage runs as one of the scenarios
+    "rootDir": "..",
+    "outDir": "dist",
+    "importHelpers": true,
+    "module": "nodenext",
+    "target": "ESNext",
+    "moduleResolution": "nodenext",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "types": ["node"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "@kitajs/html"
+  },
+  "include": ["src"],
+  "exclude": ["dist"]
+}

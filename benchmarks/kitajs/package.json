@@ -4,11 +4,12 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsgo"
   },
   "dependencies": {
     "@kitajs/html": "workspace:*",
-    "tslib": "^2.8.1",
-    "typescript": "^5.9.2"
+    "@typescript/native-preview": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:"
   }
 }

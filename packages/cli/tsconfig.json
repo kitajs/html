@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "outDir": "./dist",
+    "types": ["node"]
+  },
+  "include": ["src", "test"],
+  "exclude": ["test/fixtures"]
+}

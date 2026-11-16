@@ -1,80 +1,90 @@
 <h1>Benchmark</h1>
 
 - [Results](#results)
+- [Running](#running)
+- [Methodology](#methodology)
+- [Stress scenarios](#stress-scenarios)
 - [Versions](#versions)
-- [Information](#information)
-- [About KitaJS/Html](#about-kitajshtml)
-- [Runtime Inconsistencies](#runtime-inconsistencies)
 
 ## Results
 
+See [results.txt](./results.txt) for the latest `pnpm bench` output.
+
+## Running
+
+```sh
+pnpm bench    # RealWorldPage against other libraries
+pnpm stress   # Each Kita Html feature in isolation
+
+# cpu + heap profile of the RealWorldPage, defaults to KitaJs
+pnpm -F @kitajs/bench-html-runner profile [Runner]
+
+# cpu + heap profile of the stress scenarios matching the filters
+pnpm -F @kitajs/bench-html-stress stress --cpu-prof --heap-prof [...filters]
 ```
-Sizes are the final html output based on the same input.
 
-!) Are jsx runtimes that produces different output from React for the same input ⚠️
+Profiles are written to a `profiles/` directory inside the package and open in Chrome
+DevTools or [speedscope](https://www.speedscope.app/).
 
-*) Are template engines, which usually lacks syntax highlighting and intellisense:
-   https://github.com/kitajs/html/blob/master/benchmarks/templates/normal.tsx
+Close other heavy programs before running. On CPUs with performance and efficiency cores
+(Intel 12th gen and later, Apple Silicon), the OS may move the process between core types
+in the middle of a run, and the same code measures up to 2x slower on an efficiency core.
+Pin the process to performance cores for numbers you want to compare:
+
+```sh
+# Linux, check `lscpu --all --extended` for which CPUs are performance cores
+taskset -c 0-11 pnpm bench
+
+# Windows (cmd), the mask selects logical processors 0-11
+start /affinity 0xFFF /wait /b pnpm bench
 ```
 
-<img align=center src="./benchmark.png" alt="benchmark results" />
+Compare ratios between libraries within one run instead of absolute times across machines
+or runs.
+
+## Methodology
+
+All runners render the same `RealWorldPage` with 1000 purchases and must produce the same
+html as `ReactDOMServer.renderToStaticMarkup`. `pnpm test` asserts this, after mapping
+equivalent entity encodings (`&#39;` and `&#x27;`) to one form.
+
+Names in the input contain `&`, `<`, `>`, `"` and `'`, so every runner exercises its
+escaping path.
+
+The rendered html is passed to `Buffer.from`, which is what writing it to a socket does.
+V8 builds concatenated strings as ropes (trees of string pieces) and only flattens them
+into a single string when they are read. Without reading the output, a library that builds
+deep ropes skips work that every real response pays for, which made rope based libraries
+look up to 2.6x faster than they are.
+
+Only JSX runtimes are compared, since they all pay one function call per element and
+accept the same source code. Tagged template engines skip that cost by concatenating whole
+templates, at the price of type checking and `kita-html check`, so they measure a
+different trade-off.
+
+Prettier formats the [samples](./runner/samples) before the benchmark starts, so it does
+not compete with the first runners for the CPU.
+
+## Stress scenarios
+
+The RealWorldPage only covers string attributes, plain children and components.
+[`stress`](./stress/src/scenarios.tsx) renders one scenario per Kita Html feature
+(attributes, class arrays, style objects, escaping, fragments, lists next to siblings,
+dynamic tags, async components and Suspense streaming) in a loop and reports the median
+time per render.
+
+It has nothing to compare against. Use it to profile a single feature, or to compare a
+change by running it before and after on the same idle machine. `--time <ms>` sets how
+long each scenario runs, the default is 2000.
 
 ## Versions
 
 ```json
 {
-  "@kitajs/html": "4.2.4",
-  "common-tags": "1.8.2",
-  "ghtml": "3.0.10",
-  "html-minifier": "4.0.0",
-  "jsxte": "3.3.1",
-  "mitata": "1.0.10",
-  "nano-jsx": "0.1.0",
-  "preact-render-to-string": "6.5.11",
-  "react-dom": "18.3.1"
+  "hono": "4.12.18",
+  "mitata": "1.0.34",
+  "preact": "10.28.2",
+  "preact-render-to-string": "6.6.6",
+  "react-dom": "19.2.8"
 }
 ```
-
-## Information
-
-The `RealWorldPage` benchmark is the most meaningful since it represents a realistic
-workload scenario. _Other benchmarks serve specific purposes, such as measuring the speed
-of creating individual elements or handling attribute injection and escaping._
-
-It's essential to emphasize that all benchmarks aim for impartiality. Any perceived bias
-towards a particular library should be promptly reported, and corrective actions will be
-taken swiftly.
-
-We are committed to addressing any discrepancies or unfairness in the benchmarks promptly.
-Updates reflecting corrections will be publicly shared as soon as they are available.
-
-Feel free to reach out if you have any concerns or suggestions for improving the
-benchmarking process. Your feedback is invaluable in ensuring the fairness and accuracy of
-our comparisons.
-
-Also, feel free to contribute benchmarks for any library you're interested in by opening a
-pull request (PR). If you need assistance or wish to suggest a library for benchmarking,
-don't hesitate to open an issue.
-
-## About KitaJS/Html
-
-KitaJS/Html prioritizes performance while maintaining a user-friendly and intuitive API.
-Its design ensures not only speed but also a seamless developer experience (DX). Since
-this code may run on every request, its primary objective is speed, with a secondary focus
-on maintaining developer productivity.
-
-The library adheres to the JSX standard for its API, shielding users from the complexities
-of its internal workings. This approach allows us to optimize the underlying
-implementation extensively, including function inlining, to achieve maximum performance.
-
-## Runtime Inconsistencies
-
-I tried multiple formatters and minifiers to ensure the html output of all runtimes is
-consistent, however vhtml and common-tags aren't consistent at all, with weird behaviors
-like adding spaces between components and rendering `0` as an empty string...
-
-As react is by far the JSX standard these days, **KitaJS/Html is only required to produce
-the same output as ReactDOMServer.renderToStaticMarkup**.
-
-To be sure we are emitting a similar output and none of the libraries are emitting broken
-HTML, a realWorldPage is rendered and stored at the [samples](./runner/samples) directory.

@@ -29,128 +29,33 @@
 <br />
 <br />
 
-<h1>🖨️ Fastify KitaJS Html Plugin</h1>
+<h1>🖨️ Fastify Kita Html Plugin</h1>
 
 <p align="center">
-  <code>@kitajs/fastify-html-plugin</code> is a fastify plugin to seamlessly integrate the KitaJS Html JSX engine into your fastify application.
+  <code>@kitajs/fastify-html-plugin</code> is a Fastify plugin that adds <code>reply.html()</code> for rendering Kita Html JSX.
   <br />
   <br />
 </p>
 
-<br />
-
-- [Installing](#installing)
-- [Preview](#preview)
-- [Installing](#installing-1)
-- [Configuration](#configuration)
-- [Documentation](#documentation)
-- [API](#api)
-  - [`reply.html()`](#replyhtml)
-- [License](#license)
-
-<br />
-<br />
-
-## Installing
-
-```sh
-npm install @kitajs/fastify-html-plugin
-```
+<img align="center" src="assets/preview.png" alt="Preview of using @kitajs/fastify-html-plugin with JSX in Fastify." />
 
 <br />
 
-## Preview
+- Adds `reply.html()` for `JSX.Element` and `Promise<string>` responses
+- Sets `Content-Type: text/html; charset=utf-8`
+- Prepends `<!doctype html>` for `<html>` responses by default
+- Streams `Suspense` output by matching `req.id` with `Suspense rid={req.id}`
+- Supports Fastify 4.x and 5.x
 
-<img align="center" src="assets/preview.png" alt="Example of an error thrown by this LSP plugin." />
+Pass `{ autoDoctype: false }` when registering the plugin, or set
+`reply[kAutoDoctype] = false` on a single reply, to skip the doctype.
 
-<br />
+> [!CAUTION] Set up `kita-html check` from `@kitajs/html-cli` before using this package,
+> otherwise unescaped user input leads to XSS.
 
-## Installing
-
-> [!CAUTION]  
-> You **must have followed the `@kitajs/html`'s
-> [Installing](https://github.com/kitajs/html/tree/master/packages/html#installing)
-> guide** before continuing, otherwise you will be vulnerable to XSS attacks.
-
-```ts
-import kitaHtmlPlugin from '@kitajs/fastify-html-plugin';
-import fastify from 'fastify';
-
-const app = fastify();
-
-app.register(kitaHtmlPlugin);
-```
-
-## Configuration
-
-Every option is well documented through their respective JSDoc comments, below are the
-default options.
-
-| Name          | Description                                                                                        | Default |
-| ------------- | -------------------------------------------------------------------------------------------------- | ------- |
-| `autoDoctype` | Whether to automatically add `<!doctype html>` to a response starting with `<html>`, if not found. | `true`  |
+Documentation for this package is available at
+[html.kitajs.org](https://html.kitajs.org/integrations/frameworks/fastify).
 
 <br />
 
-## Documentation
-
-`@kitajs/html` is a `JSX` -> `string` runtime, this package seamlessly integrates with
-`fastify` to improve the developer experience while also providing faster implementations
-for this use case.
-
-- Read [`@kitajs/html` documentation](https://github.com/kitajs/html) for help with
-  templating, and all other stuff related to `<jsx />`.
-- Read
-  [`@kitajs/ts-html-plugin` documentation.](https://github.com/kitajs/html/tree/master/packages/ts-html-plugin)
-  for help setting up the **XSS** detector and IDE intellisense.
-
-<br />
-
-## API
-
-### `reply.html()`
-
-Sends the html to the browser. This method supports all types of components, including
-`<Suspense />` and `<ErrorBoundary />`.
-
-The entire component tree will be awaited before being sent to the browser as a single
-piece.
-
-When Suspense components are found, their fallback will be synchronously awaited and sent
-to the browser in the original stream, as its children are resolved, new pieces of html
-will be sent to the browser. When all `Suspense`s pending promises are resolved, the
-connection is closed normally.
-
-> [!NOTE]  
-> `req.id` must be used as the `Suspense`'s `rid` parameter
-
-If the HTML does not start with a doctype and `opts.autoDoctype` is enabled, it will be
-added automatically. The correct `Content-Type` header will also be defined.
-
-```tsx
-app
-  .get('/html', (req, reply) =>
-    reply.html(
-      <html lang="en">
-        <body>
-          <h1>Hello, world!</h1>
-        </body>
-      </html>
-    )
-  )
-  .get('/stream', (req, reply) =>
-    reply.html(
-      <Suspense rid={req.id} fallback={<div>Loading...</div>}>
-        <MyAsyncComponent />
-      </Suspense>
-    )
-  );
-```
-
-<br />
-
-## License
-
-Licensed under the **MIT**. See [`LICENSE`](LICENSE) for more informations.
-
-<br />
+Licensed under the [MIT](LICENSE).

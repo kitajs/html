@@ -1,10 +1,9 @@
-import assert from 'node:assert';
-import { it } from 'node:test';
-import { Xss } from '../src/errors';
-import { TSLangServer } from './util/lang-server';
+import { expect, it } from 'vitest'
+import { Xss } from '../src/errors'
+import { TSLangServer } from './util/lang-server'
 
 it('Ensures readme checks will throw error', async () => {
-  await using server = new TSLangServer(__dirname);
+  await using server = new TSLangServer(__dirname)
 
   const diagnostics = await server.openWithDiagnostics /* tsx */ `
     export default (
@@ -12,9 +11,9 @@ it('Ensures readme checks will throw error', async () => {
         <div>{String.name}</div>
       </>
     );
-`;
+`
 
-  assert.deepStrictEqual(diagnostics.body, [
+  expect(diagnostics.body).toEqual([
     {
       category: 'error',
       code: Xss.code,
@@ -22,5 +21,5 @@ it('Ensures readme checks will throw error', async () => {
       start: { line: 36, offset: 15 },
       text: Xss.message
     }
-  ]);
-});
+  ])
+})

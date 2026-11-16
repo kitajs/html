@@ -1,7 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "plugins": [{ "name": "self" }]
+    "plugins": [{ "name": "self-ts-plugin" }]
   },
   "include": ["**/*.tsx", "*.test.ts"]
 }
